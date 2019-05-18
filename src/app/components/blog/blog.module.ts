@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { BlogRoutingModule } from './blog-routing.module';
 import { BlogComponent } from './blog.component';
@@ -8,8 +8,8 @@ import { BlogComponent } from './blog.component';
   declarations: [BlogComponent],
   imports: [
     CommonModule,
-    BlogRoutingModule
-  ]
+    BlogRoutingModule,
+  ],
 })
 export class BlogModule {
 }

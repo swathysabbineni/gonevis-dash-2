@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { FeedRoutingModule } from './feed-routing.module';
 import { FeedComponent } from './feed.component';
@@ -8,8 +8,8 @@ import { FeedComponent } from './feed.component';
   declarations: [FeedComponent],
   imports: [
     CommonModule,
-    FeedRoutingModule
-  ]
+    FeedRoutingModule,
+  ],
 })
 export class FeedModule {
 }
