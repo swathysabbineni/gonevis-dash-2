@@ -11,6 +11,9 @@ const routes: Routes = [{
   path: 'user',
   loadChildren: './components/user/user.module#UserModule'
 }, {
+  path: 'sign-in',
+  loadChildren: './components/sign-in/sign-in.module#SignInModule'
+}, {
   path: '**',
   redirectTo: 'feed',
   pathMatch: 'full'
