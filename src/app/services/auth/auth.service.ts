@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
-import { TokenObject } from '../../interfaces/token-object';
+import { TokenObject } from '@app/interfaces/token-object';
 
 @Injectable({
   providedIn: 'root'
@@ -108,7 +108,7 @@ export class AuthService {
    * @return String observable which can be subscribed to.
    */
   signIn(payload: { username: string, password: string }): Observable<string> {
-    return this.http.post(this.apiService.baseApi + 'account/login/', payload)
+    return this.http.post(this.apiService.base.v1 + 'account/login/', payload)
       .pipe(
         map((data: any): string => {
           // Update and store token into cookies.
@@ -136,7 +136,7 @@ export class AuthService {
    * @return An observable which can be subscribed to.
    */
   signUp(payload: { email: string, username: string, password: string }): Observable<any> {
-    return this.http.post(this.apiService.baseApi + 'account/register-account-only/', payload)
+    return this.http.post(this.apiService.base.v1 + 'account/register-account-only/', payload)
       .pipe(
         catchError(ApiService.handleError)
       );
