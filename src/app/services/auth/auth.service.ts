@@ -1,10 +1,105 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { ApiService } from '../api/api.service';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  // token subject
+  private tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  // User subject
+  private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public user: Observable<any>;
 
-  constructor() {
+  constructor(private http: HttpClient, private router: Router,
+              private cookieService: CookieService, private apiService: ApiService) {
+    // If user is authenticated, then store token and user subjects with their local storage values.
+    if (this.isAuth) {
+      // Update token subject data.
+      this.tokenSubject.next(this.cookieService.get('token'));
+      // Update user subject data.
+      this.userSubject.next(JSON.parse(this.cookieService.get('user')));
+    }
+    this.user = this.userSubject.asObservable();
+  }
+
+  /**
+   * @return User subject's value.
+   */
+  public get userValue(): any {
+    return this.userSubject.value;
+  }
+
+  /**
+   * @return Token subject's value.
+   */
+  public get tokenValue(): string {
+    return this.tokenSubject.value;
+  }
+
+  /**
+   * @return Boolean which determines whether 'token' exists in cookies or not.
+   */
+  public get isAuth(): boolean {
+    return this.cookieService.check('token');
+  }
+
+  /**
+   * Delete all cookie keys and clear token subject and user subject values.
+   */
+  public unAuth(): void {
+    // Remove all cookie keys.
+    this.cookieService.deleteAll('/');
+    // Clear token subject value.
+    this.tokenSubject.next(null);
+    // Clear user subject value.
+    this.userSubject.next(null);
+  }
+
+  /**
+   * Sign in user by given username and password.
+   *
+   * @param payload Contains two keys: username and password.
+   *
+   * @return String observable which can be subscribed to.
+   */
+  signIn(payload: { username: string, password: string }): Observable<string> {
+    return this.http.post(this.apiService.baseApi + 'account/login/', payload)
+      .pipe(
+        map((data: any): string => {
+          // Update and store token into cookies.
+          this.cookieService.set('token', data.token, null, '/');
+          // Update and store user into cookies.
+          this.cookieService.set('user', JSON.stringify(data.user), null, '/');
+          // Store first blog into local storage.
+          this.cookieService.set('blog', JSON.stringify(data.user.sites[0]), null, '/');
+          // Update token subject data.
+          this.tokenSubject.next(data.token);
+          // Update user subject data.
+          this.userSubject.next(data.user);
+          // Return raw user data.
+          return data.user.username;
+        }),
+        catchError(ApiService.handleError)
+      );
+  }
+
+  /**
+   * Sign in user by given username and password.
+   *
+   * @param payload Contains two keys: username, password and email.
+   *
+   * @return An observable which can be subscribed to.
+   */
+  signUp(payload: { [key: string]: string }): Observable<any> {
+    return this.http.post(this.apiService.baseApi + 'account/register/', payload)
+      .pipe(
+        catchError(ApiService.handleError)
+      );
   }
 }
