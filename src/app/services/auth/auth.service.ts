@@ -103,12 +103,13 @@ export class AuthService {
   /**
    * Sign in user by given username and password.
    *
-   * @param payload Contains two keys: username and password.
+   * @param username User username
+   * @param password User password
    *
    * @return String observable which can be subscribed to.
    */
-  signIn(payload: { username: string, password: string }): Observable<string> {
-    return this.http.post(this.apiService.base.v1 + 'account/login/', payload)
+  signIn(username: string, password: string): Observable<string> {
+    return this.http.post(this.apiService.base.v1 + 'account/login/', { username, password })
       .pipe(
         map((data: any): string => {
           // Update and store token into cookies.
@@ -123,7 +124,7 @@ export class AuthService {
           this.userSubject.next(data.user);
           // Return raw user data.
           return data.user.username;
-        })
+        }),
       );
   }
 
