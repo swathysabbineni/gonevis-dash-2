@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ApiService } from '../api/api.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { TokenObject } from '@app/interfaces/token-object';
 
@@ -123,22 +123,22 @@ export class AuthService {
           this.userSubject.next(data.user);
           // Return raw user data.
           return data.user.username;
-        }),
-        catchError(ApiService.handleError),
+        })
       );
   }
 
   /**
-   * Sign in user by given username and password.
+   * Sign in user by given username and password
    *
-   * @param payload Contains two keys: username, password and email.
-   *
-   * @return An observable which can be subscribed to.
+   * @param email User email
+   * @param username User username
+   * @param password user password
    */
-  signUp(payload: { email: string, username: string, password: string }): Observable<any> {
-    return this.http.post(this.apiService.base.v1 + 'account/register-account-only/', payload)
-      .pipe(
-        catchError(ApiService.handleError),
-      );
+  signUp(email: string, username: string, password: string): Observable<any> {
+    return this.http.post(this.apiService.base.v1 + 'account/register-account-only/', {
+      email,
+      username,
+      password,
+    });
   }
 }
