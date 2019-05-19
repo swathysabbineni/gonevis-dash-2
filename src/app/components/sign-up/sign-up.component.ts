@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ApiError } from '../../interfaces/api-error';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth/auth.service';
+import { HttpErrorResponseApi } from '@app/models/http-error-response-api/http-error-response-api';
+import { AuthService } from '@app/services/auth/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -13,7 +13,7 @@ export class SignUpComponent implements OnInit {
   // Sign up form.
   signUpForm: FormGroup;
   // Holds API errors.
-  errors: ApiError = {};
+  error: HttpErrorResponseApi = null;
   // This variable indicates whether user is signing up or not.
   loading: boolean;
 
@@ -22,7 +22,7 @@ export class SignUpComponent implements OnInit {
     this.loading = false;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Setup sign up form.
     this.signUpForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -46,22 +46,15 @@ export class SignUpComponent implements OnInit {
     if (this.signUpForm.invalid) {
       return;
     }
-    // Update loading state.
     this.loading = true;
-    // Set needed payload.
-    const payload: { email: string, username: string, password: string } = {
-      email: this.form.email.value,
-      username: this.form.username.value,
-      password: this.form.password.value,
-    };
-    // API call.
-    this.authService.signUp(payload).subscribe((data: { username: string, email: string }): void => {
-      // Update loading state.
+    this.authService.signUp(
+      this.form.email.value,
+      this.form.username.value,
+      this.form.password.value,
+    ).subscribe((): void => {
       this.loading = false;
-    }, (errors: ApiError): void => {
-      // Set errors.
-      this.errors = errors;
-      // Update loading state.
+    }, (error: HttpErrorResponseApi): void => {
+      this.error = error;
       this.loading = false;
     });
   }
