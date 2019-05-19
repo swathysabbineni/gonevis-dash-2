@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
+import { TokenObject } from '../../interfaces/token-object';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,26 @@ export class AuthService {
    */
   public get userValue(): any {
     return this.userSubject.value;
+  }
+
+  /**
+   * Get token's expiration data.
+   *
+   * @param token JWT.
+   *
+   * @return An object which will contain an expiration date.
+   */
+  static getTokenOption(token: string): { expires: Date } {
+    // Get token object.
+    const tokenObject: TokenObject = AuthService.parseJwt(token);
+    let options: { expires: Date } = null;
+    // Set token expiration.
+    if (tokenObject) {
+      options = {
+        expires: new Date(tokenObject.exp * 1000)
+      };
+    }
+    return options;
   }
 
   /**
