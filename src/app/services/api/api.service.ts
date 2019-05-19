@@ -11,7 +11,7 @@ export class ApiService {
   /**
    * Base API endpoint URL
    */
-  readonly base: string = environment.api;
+  readonly base: { v1: string, zero: string } = environment.api;
 
   constructor(private http: HttpClient) {
   }
