@@ -7,7 +7,7 @@ import { ApiError } from '../../interfaces/api-error';
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss']
+  styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
   // Sign in form.
@@ -26,7 +26,7 @@ export class SignInComponent implements OnInit {
     // Setup login form.
     this.signInForm = this.formBuilder.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
@@ -50,7 +50,7 @@ export class SignInComponent implements OnInit {
     // Set needed payload.
     const payload: { username: string, password: string } = {
       username: this.form.username.value,
-      password: this.form.password.value
+      password: this.form.password.value,
     };
     // API call.
     this.authService.signIn(payload).subscribe((username: string): void => {

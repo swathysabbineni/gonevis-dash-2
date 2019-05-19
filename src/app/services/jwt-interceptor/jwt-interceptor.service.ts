@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class JwtInterceptorService implements HttpInterceptor {
 
@@ -20,8 +20,8 @@ export class JwtInterceptorService implements HttpInterceptor {
     if (token) {
       request = request.clone({
         setHeaders: {
-          Authorization: `JWT ${token}`
-        }
+          Authorization: `JWT ${token}`,
+        },
       });
     }
 

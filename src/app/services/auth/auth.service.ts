@@ -8,7 +8,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { TokenObject } from '@app/interfaces/token-object';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   // token subject
@@ -68,7 +68,7 @@ export class AuthService {
     // Set token expiration.
     if (tokenObject) {
       options = {
-        expires: new Date(tokenObject.exp * 1000)
+        expires: new Date(tokenObject.exp * 1000),
       };
     }
     return options;
@@ -124,7 +124,7 @@ export class AuthService {
           // Return raw user data.
           return data.user.username;
         }),
-        catchError(ApiService.handleError)
+        catchError(ApiService.handleError),
       );
   }
 
@@ -138,7 +138,7 @@ export class AuthService {
   signUp(payload: { email: string, username: string, password: string }): Observable<any> {
     return this.http.post(this.apiService.base.v1 + 'account/register-account-only/', payload)
       .pipe(
-        catchError(ApiService.handleError)
+        catchError(ApiService.handleError),
       );
   }
 }

@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth/auth.service';
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.scss']
+  styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
   // Sign up form.
@@ -27,7 +27,7 @@ export class SignUpComponent implements OnInit {
     this.signUpForm = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
@@ -52,10 +52,10 @@ export class SignUpComponent implements OnInit {
     const payload: { email: string, username: string, password: string } = {
       email: this.form.email.value,
       username: this.form.username.value,
-      password: this.form.password.value
+      password: this.form.password.value,
     };
     // API call.
-    this.authService.signUp(payload).subscribe((data: {username: string, email: string}): void => {
+    this.authService.signUp(payload).subscribe((data: { username: string, email: string }): void => {
       // Update loading state.
       this.loading = false;
     }, (errors: ApiError): void => {
