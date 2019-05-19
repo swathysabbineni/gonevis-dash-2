@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
-import { ApiError } from '../../interfaces/api-error';
+import { HttpErrorResponseApi } from '@app/models/http-error-response-api/http-error-response-api';
+import { AuthService } from '@app/services/auth/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -13,7 +13,7 @@ export class SignInComponent implements OnInit {
   // Sign in form.
   signInForm: FormGroup;
   // Holds API errors.
-  errors: ApiError = {};
+  error: HttpErrorResponseApi;
   // This variable indicates whether user is signing in or not.
   loading: boolean;
 
@@ -45,21 +45,14 @@ export class SignInComponent implements OnInit {
     if (this.signInForm.invalid) {
       return;
     }
-    // Update loading state.
     this.loading = true;
-    // Set needed payload.
-    const payload: { username: string, password: string } = {
-      username: this.form.username.value,
-      password: this.form.password.value,
-    };
-    // API call.
-    this.authService.signIn(payload).subscribe((username: string): void => {
-      // Update loading state.
+    this.authService.signIn(
+      this.form.username.value,
+      this.form.password.value,
+    ).subscribe((username: string): void => {
       this.loading = false;
-    }, (errors: ApiError): void => {
-      // Set errors.
-      this.errors = errors;
-      // Update loading state.
+    }, (errors: HttpErrorResponseApi): void => {
+      this.error = errors;
       this.loading = false;
     });
   }
