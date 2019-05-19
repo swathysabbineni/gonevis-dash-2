@@ -135,8 +135,8 @@ export class AuthService {
    *
    * @return An observable which can be subscribed to.
    */
-  signUp(payload: { [key: string]: string }): Observable<any> {
-    return this.http.post(this.apiService.baseApi + 'account/register/', payload)
+  signUp(payload: { email: string, username: string, password: string }): Observable<any> {
+    return this.http.post(this.apiService.baseApi + 'account/register-account-only/', payload)
       .pipe(
         catchError(ApiService.handleError)
       );
