@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [{
   path: 'blog',
-  loadChildren: './components/blog/blog.module#BlogModule'
+  loadChildren: './components/blog/blog.module#BlogModule',
 }, {
   path: 'feed',
-  loadChildren: './components/feed/feed.module#FeedModule'
+  loadChildren: './components/feed/feed.module#FeedModule',
 }, {
   path: 'user',
-  loadChildren: './components/user/user.module#UserModule'
+  loadChildren: './components/user/user.module#UserModule',
 }, {
   path: 'sign-in',
   loadChildren: './components/sign-in/sign-in.module#SignInModule'
@@ -19,12 +19,12 @@ const routes: Routes = [{
 }, {
   path: '**',
   redirectTo: 'feed',
-  pathMatch: 'full'
+  pathMatch: 'full',
 }];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {
 }
