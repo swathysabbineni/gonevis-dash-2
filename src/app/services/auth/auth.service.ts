@@ -112,7 +112,7 @@ export class AuthService {
       .pipe(
         map((data: any): string => {
           // Update and store token into cookies.
-          this.cookieService.set('token', data.token, null, '/');
+          this.cookieService.set('token', data.token, AuthService.getTokenOption(data.token).expires, '/');
           // Update and store user into cookies.
           this.cookieService.set('user', JSON.stringify(data.user), null, '/');
           // Store first blog into local storage.
