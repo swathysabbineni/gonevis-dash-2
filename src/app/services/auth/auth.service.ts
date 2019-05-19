@@ -37,6 +37,24 @@ export class AuthService {
   }
 
   /**
+   * Parse JWT from token.
+   *
+   * @param token JWT.
+   *
+   * @return Parsed JWT token.
+   */
+  static parseJwt(token: string): TokenObject | null {
+    const base64Url = token.split('.')[1];
+
+    if (typeof base64Url === 'undefined') {
+      return null;
+    }
+
+    const base64 = base64Url.replace('-', '+').replace('_', '/');
+    return JSON.parse(atob(base64));
+  }
+
+  /**
    * Get token's expiration data.
    *
    * @param token JWT.
