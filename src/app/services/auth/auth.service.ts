@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { TokenObject } from '@app/interfaces/token-object';
+import { AuthToken } from '@app/interfaces/auth-token';
 import { ApiService } from '@app/services/api/api.service';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -22,10 +22,15 @@ export class AuthService {
    */
   private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
+  /**
+   * Authenticated user
+   */
   user: Observable<any>;
 
-  constructor(private http: HttpClient, private router: Router,
-              private cookieService: CookieService, private apiService: ApiService) {
+  constructor(private http: HttpClient,
+              private router: Router,
+              private cookieService: CookieService,
+              private apiService: ApiService) {
     // If user is authenticated, then store token and user subjects with their local storage values
     if (this.isAuth) {
       // Update token subject data
@@ -37,20 +42,13 @@ export class AuthService {
   }
 
   /**
-   * @return User subject value
-   */
-  get userValue(): any {
-    return this.userSubject.value;
-  }
-
-  /**
    * Parse JWT from token.
    *
    * @param token JWT.
    *
    * @return Parsed JWT token.
    */
-  static parseJwt(token: string): TokenObject | null {
+  static parseJwt(token: string): AuthToken | null {
     const base64Url = token.split('.')[1];
     if (typeof base64Url === 'undefined') {
       return null;
@@ -68,12 +66,12 @@ export class AuthService {
    */
   static getTokenOption(token: string): { expires: Date } {
     // Get token object
-    const tokenObject: TokenObject = AuthService.parseJwt(token);
+    const parsedToken: AuthToken = AuthService.parseJwt(token);
     let options: { expires: Date } = null;
     // Set token expiration
-    if (tokenObject) {
+    if (parsedToken) {
       options = {
-        expires: new Date(tokenObject.exp * 1000),
+        expires: new Date(parsedToken.exp * 1000),
       };
     }
     return options;
@@ -120,7 +118,7 @@ export class AuthService {
         this.cookieService.set('token', data.token, AuthService.getTokenOption(data.token).expires, '/');
         // Update and store user into cookies
         this.cookieService.set('user', JSON.stringify(data.user), null, '/');
-        // Store first blog into local storage
+        // Store first blog into local stora ge
         this.cookieService.set('blog', JSON.stringify(data.user.sites[0]), null, '/');
         // Update token subject data
         this.tokenSubject.next(data.token);
