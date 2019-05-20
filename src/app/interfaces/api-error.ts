@@ -1,3 +1,6 @@
+/**
+ * Represent standard API error response
+ */
 export interface ApiError {
   [propName: string]: string | string[];
 
