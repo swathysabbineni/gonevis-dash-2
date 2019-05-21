@@ -55,19 +55,7 @@ export class AuthService {
    *
    * @param token JWT.
    *
-   * @return An object which will contain an expiration date.
    */
-  static getTokenOption(token: string): { expires: Date } {
-    // Get token object
-    const parsedToken: AuthToken = AuthService.parseJwt(token);
-    let options: { expires: Date } = null;
-    // Set token expiration
-    if (parsedToken) {
-      options = {
-        expires: new Date(parsedToken.exp * 1000),
-      };
-    }
-    return options;
   }
 
   /**
