@@ -68,7 +68,7 @@ export class AuthService {
   /**
    * Un-authenticate user by cleaning localStorage and cookies
    */
-  unAuth(): void {
+  signOut(): void {
     this.cookieService.deleteAll('/');
     localStorage.clear();
     this.userSubject.next(null);
@@ -86,11 +86,9 @@ export class AuthService {
     return this.http.post(this.apiService.base.v1 + 'account/login/', { username, password }).pipe(
       map((data: any): string => {
         // Store token into cookies
-        this.cookieService.set('token', data.token, AuthService.getTokenOption(data.token).expires, '/');
+        this.setToken(data.token);
         // Store user into local storage.
         localStorage.setItem('user', JSON.stringify(data.user));
-        // Store user blogs into local storage.
-        localStorage.setItem('blog', JSON.stringify(data.user.sites));
         // Update user subject data
         this.userSubject.next(data.user);
         // Return raw user data
