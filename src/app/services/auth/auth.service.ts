@@ -13,11 +13,6 @@ import { map } from 'rxjs/operators';
 export class AuthService {
 
   /**
-   * Authentication token subject
-   */
-  private tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-
-  /**
    * Authentication user subject
    */
   private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
@@ -33,10 +28,8 @@ export class AuthService {
               private apiService: ApiService) {
     // If user is authenticated, then store token and user subjects with their local storage values
     if (this.isAuth) {
-      // Update token subject data
-      this.tokenSubject.next(this.cookieService.get('token'));
       // Update user subject data
-      this.userSubject.next(JSON.parse(this.cookieService.get('user')));
+      this.userSubject.next(JSON.parse(localStorage.getItem('user')));
     }
     this.user = this.userSubject.asObservable();
   }
@@ -78,13 +71,6 @@ export class AuthService {
   }
 
   /**
-   * @return Token subject value
-   */
-  get tokenValue(): string {
-    return this.tokenSubject.value;
-  }
-
-  /**
    * @return Is user authenticated or not
    */
   get isAuth(): boolean {
@@ -95,11 +81,8 @@ export class AuthService {
    * Un-authenticate user by cleaning localStorage and cookies
    */
   unAuth(): void {
-    // Remove all cookie keys.
     this.cookieService.deleteAll('/');
-    // Clear token subject value.
-    this.tokenSubject.next(null);
-    // Clear user subject value.
+    localStorage.clear();
     this.userSubject.next(null);
   }
 
@@ -114,14 +97,12 @@ export class AuthService {
   signIn(username: string, password: string): Observable<string> {
     return this.http.post(this.apiService.base.v1 + 'account/login/', { username, password }).pipe(
       map((data: any): string => {
-        // Update and store token into cookies
+        // Store token into cookies
         this.cookieService.set('token', data.token, AuthService.getTokenOption(data.token).expires, '/');
-        // Update and store user into cookies
-        this.cookieService.set('user', JSON.stringify(data.user), null, '/');
-        // Store first blog into local stora ge
-        this.cookieService.set('blog', JSON.stringify(data.user.sites[0]), null, '/');
-        // Update token subject data
-        this.tokenSubject.next(data.token);
+        // Store user into local storage.
+        localStorage.setItem('user', JSON.stringify(data.user));
+        // Store user blogs into local storage.
+        localStorage.setItem('blog', JSON.stringify(data.user.sites));
         // Update user subject data
         this.userSubject.next(data.user);
         // Return raw user data
