@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api/http-error-response-api';
+import { CookieService } from 'ngx-cookie-service';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
@@ -10,7 +11,7 @@ import { AuthService } from '../auth/auth.service';
 })
 export class JwtInterceptorService implements HttpInterceptor {
 
-  constructor(private authService: AuthService) {
+  constructor(private cookieService: CookieService, private authService: AuthService) {
   }
 
   /**
@@ -19,8 +20,8 @@ export class JwtInterceptorService implements HttpInterceptor {
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let token: string;
-    // Get token from token subject.
-    token = this.authService.tokenValue;
+    // Get token from cookies.
+    token = this.cookieService.get('token');
     // Add authorization header with bearer token if available.
     if (token) {
       request = request.clone({
