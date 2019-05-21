@@ -41,7 +41,7 @@ export class AuthService {
    *
    * @return Parsed JWT token.
    */
-  static parseJwt(token: string): AuthToken | null {
+  private static parseJwt(token: string): AuthToken | null {
     const base64Url = token.split('.')[1];
     if (typeof base64Url === 'undefined') {
       return null;
@@ -51,18 +51,26 @@ export class AuthService {
   }
 
   /**
-   * Get token expiration data
-   *
-   * @param token JWT.
-   *
-   */
-  }
-
-  /**
    * @return Is user authenticated or not
    */
   get isAuth(): boolean {
     return this.cookieService.check('token');
+  }
+
+  /**
+   * Save/update token to localStorage
+   *
+   * @param token Authentication token
+   */
+  setToken(token: string): void {
+    this.cookieService.set('token', token, new Date(AuthService.parseJwt(token).exp * 1000), '/');
+  }
+
+  /**
+   * @returns Stored token from localStorage
+   */
+  get getToken(): string | null {
+    return this.cookieService.get('token');
   }
 
   /**
