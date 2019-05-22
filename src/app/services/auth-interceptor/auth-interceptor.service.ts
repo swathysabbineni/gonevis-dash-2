@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { HttpErrorResponseApi } from '@app/models/http-error-response-api/http-error-response-api';
+import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';

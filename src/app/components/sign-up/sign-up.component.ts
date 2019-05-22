@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpErrorResponseApi } from '@app/models/http-error-response-api/http-error-response-api';
+import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
 
 @Component({
