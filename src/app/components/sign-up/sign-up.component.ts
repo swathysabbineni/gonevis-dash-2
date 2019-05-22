@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ApiError } from '@app/interfaces/api-error';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
 
@@ -10,20 +11,23 @@ import { AuthService } from '@app/services/auth/auth.service';
   styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
-  // Sign up form.
+
+  // Sign up form
   signUpForm: FormGroup;
-  // Holds API errors.
-  error: HttpErrorResponseApi = null;
-  // This variable indicates whether user is signing up or not.
+
+  // API errors
+  error: ApiError = {};
+
+  // API loading indicator
   loading: boolean;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthService) {
-    // Update loading state.
-    this.loading = false;
+  constructor(private formBuilder: FormBuilder,
+              private router: Router,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
-    // Setup sign up form.
+    // Setup sign up form
     this.signUpForm = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', Validators.required],
@@ -32,29 +36,30 @@ export class SignUpComponent implements OnInit {
   }
 
   /**
-   * @return Sign up form controls (fields).
+   * @return Sign up form controls (fields)
    */
-  get form(): { [p: string]: AbstractControl } {
+  get f(): { [p: string]: AbstractControl } {
     return this.signUpForm.controls;
   }
 
   /**
    * Sign up user
    */
-  signUp(): void {
-    // If sign up form is invalid, then prevent code from continuing.
+  submit(): void {
+    // Validate form
     if (this.signUpForm.invalid) {
       return;
     }
     this.loading = true;
+    // API call
     this.authService.signUp(
-      this.form.email.value,
-      this.form.username.value,
-      this.form.password.value,
+      this.f.email.value,
+      this.f.username.value,
+      this.f.password.value,
     ).subscribe((): void => {
       this.loading = false;
     }, (error: HttpErrorResponseApi): void => {
-      this.error = error;
+      this.error = error.error;
       this.loading = false;
     });
   }
