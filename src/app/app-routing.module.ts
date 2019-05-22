@@ -11,6 +11,12 @@ const routes: Routes = [{
   path: 'user',
   loadChildren: './components/user/user.module#UserModule',
 }, {
+  path: 'sign-in',
+  loadChildren: './components/sign-in/sign-in.module#SignInModule',
+}, {
+  path: 'sign-up',
+  loadChildren: './components/sign-up/sign-up.module#SignUpModule',
+}, {
   path: '**',
   redirectTo: 'feed',
   pathMatch: 'full',
