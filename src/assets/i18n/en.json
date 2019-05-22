@@ -1,7 +1,9 @@
 {
-  "SIGN_IN": "Sign in",
-  "SIGN_UP": "Sign up",
+  "SIGN_IN": "Sign In",
+  "SIGN_UP": "Sign Up",
   "USERNAME": "Username",
   "PASSWORD": "Password",
-  "EMAIL": "Email"
+  "EMAIL": "Email",
+  "SUBMIT": "Submit",
+  "FORGOT_PASSWORD": "Forgot password?"
 }
