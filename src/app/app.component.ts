@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { UserAuth } from '@app/interfaces/user-auth';
-import { AuthService } from '@app/services/auth/auth.service';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { UserAuth } from '@app/interfaces/user-auth';
+import { AuthService } from '@app/services/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
@@ -18,7 +18,7 @@ export class AppComponent {
   user: UserAuth;
 
   constructor(private authService: AuthService,
-              private translate: TranslateService
+              private translate: TranslateService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private titleService: Title) {
@@ -27,7 +27,7 @@ export class AppComponent {
     this.authService.user.subscribe((user: UserAuth): void => {
       this.user = user;
     });
-    this.isCollapsed = true;=
+    this.isCollapsed = true;
     this.translate.setDefaultLang('en');
     // Set window title
     this.router.events.pipe(
