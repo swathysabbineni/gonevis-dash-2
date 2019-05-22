@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { AuthService } from '@app/services/auth/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,8 @@ export class AppComponent {
   isCollapsed: boolean;
   user: UserAuth;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private translate: TranslateService) {
+    this.translate.setDefaultLang('en');
     // Subscribe to AuthService's user changes.
     this.authService.user.subscribe((user: UserAuth): void => {
       this.user = user;
