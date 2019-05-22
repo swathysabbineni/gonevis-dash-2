@@ -1,8 +1,43 @@
-<form [formGroup]="signInForm" (ngSubmit)="signIn()">
-  <label for="username" translate>USERNAME</label>
-  <input id="username" type="text" formControlName="username" [placeholder]="'USERNAME' | translate">
-  <label for="password" translate>PASSWORD</label>
-  <input id="password" type="password" formControlName="password" [placeholder]="'PASSWORD' | translate">
-
-  <button type="submit" translate>SIGN_IN</button>
-</form>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-3">
+      <div class="card mx-auto my-5">
+        <!-- Header -->
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/sign-up" translate>SIGN_UP</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" translate>SIGN_IN</a>
+            </li>
+          </ul>
+        </div>
+        <!-- Form -->
+        <form class="card-body" [formGroup]="form" (ngSubmit)="submit()">
+          <!-- Username -->
+          <div class="form-group">
+            <input type="text" class="form-control" formControlName="username"
+                   [placeholder]="'USERNAME' | translate">
+            <span class="text-danger" *ngIf="error.username">{{ error.username[0] }}</span>
+          </div>
+          <!-- Password -->
+          <div class="form-group">
+            <input type="password" class="form-control" formControlName="password"
+                   [placeholder]="'PASSWORD' | translate">
+            <span class="text-danger" *ngIf="error.password">{{ error.password[0] }}</span>
+          </div>
+          <!-- Error -->
+          <p class="text-danger" *ngIf="error.non_field_errors">{{ error.non_field_errors[0] }}</p>
+          <!-- Submit -->
+          <button class="btn btn-primary btn-block" type="submit" [disabled]="loading" translate>SUBMIT</button>
+        </form>
+        <!-- Footer -->
+        <div class="card-footer small">
+          <!-- @todo Fix my link -->
+          <a href="#" translate>FORGOT_PASSWORD</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
