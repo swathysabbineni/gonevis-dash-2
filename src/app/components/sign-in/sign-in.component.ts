@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpErrorResponseApi } from '@app/models/http-error-response-api/http-error-response-api';
+import { ApiError } from '@app/interfaces/api-error';
+import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
 
 @Component({
@@ -10,49 +11,50 @@ import { AuthService } from '@app/services/auth/auth.service';
   styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
-  // Sign in form.
-  signInForm: FormGroup;
-  // Holds API errors.
-  error: HttpErrorResponseApi;
-  // This variable indicates whether user is signing in or not.
+
+  // Sign in form
+  form: FormGroup;
+
+  // API errors
+  error: ApiError = {};
+
+  // API loading indicator
   loading: boolean;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthService) {
-    // Update loading state.
-    this.loading = false;
+  constructor(private formBuilder: FormBuilder,
+              private router: Router,
+              private authService: AuthService) {
   }
 
-  ngOnInit() {
-    // Setup login form.
-    this.signInForm = this.formBuilder.group({
+  ngOnInit(): void {
+    // Setup the form
+    this.form = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
 
   /**
-   * @return Sign in form controls (fields).
+   * @return Sign in form controls (fields)
    */
-  get form(): { [p: string]: AbstractControl } {
-    return this.signInForm.controls;
+  get f(): { [p: string]: AbstractControl } {
+    return this.form.controls;
   }
 
   /**
-   * Sign in user
+   * Sign user in
    */
-  signIn(): void {
-    // If sign in form is invalid, then prevent code from continuing.
-    if (this.signInForm.invalid) {
+  submit(): void {
+    // Validate form
+    if (this.form.invalid) {
       return;
     }
     this.loading = true;
-    this.authService.signIn(
-      this.form.username.value,
-      this.form.password.value,
-    ).subscribe((username: string): void => {
+    // API call
+    this.authService.signIn(this.f.username.value, this.f.password.value).subscribe((): void => {
       this.loading = false;
-    }, (errors: HttpErrorResponseApi): void => {
-      this.error = errors;
+    }, (error: HttpErrorResponseApi): void => {
+      this.error = error.error;
       this.loading = false;
     });
   }
