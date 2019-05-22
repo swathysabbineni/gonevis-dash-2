@@ -19,7 +19,7 @@ export class AuthInterceptorService implements HttpInterceptor {
    * @param next The next interceptor in the chain, or the backend if no interceptors in the chain.
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token: string = this.authService.getToken();
+    const token: string = this.authService.getToken;
     // Add authorization header with bearer token if available.
     if (token) {
       request = request.clone({
