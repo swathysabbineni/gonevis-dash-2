@@ -5,6 +5,9 @@ import { FeedComponent } from './feed.component';
 const routes: Routes = [{
   path: '',
   component: FeedComponent,
+  data: {
+    title: 'Feed'
+  }
 }];
 
 @NgModule({
