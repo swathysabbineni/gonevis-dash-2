@@ -1,1 +1,52 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <a class="navbar-brand">GoNevis</a>
+  <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed"
+          [attr.aria-expanded]="!isCollapsed" aria-controls="collapse">
+    <fa-icon [icon]="['fas', 'bars']"></fa-icon>
+  </button>
+
+  <div class="collapse navbar-collapse" id="collapse" [collapse]="isCollapsed">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="feed">Feed</a>
+      </li>
+    </ul>
+    <!-- User -->
+    <ul class="navbar-nav ml-auto" *ngIf="authService.isAuth && user">
+      <li class="nav-item position-relative" dropdown>
+        <a dropdownToggle>
+          <img width="30" class="rounded-circle" [src]="user.media.thumbnail_48x48" [alt]="user.name"/>
+        </a>
+        <ul *dropdownMenu class="dropdown-menu dropdown-menu-right"
+            role="menu">
+          <!-- View account -->
+          <li role="menuitem">
+            <button class="dropdown-item">
+              View Account
+              <br>
+              <span class="text-black-50">{{ user.email }}</span>
+            </button>
+          </li>
+          <li class="dropdown-divider"></li>
+          <!-- Sign out -->
+          <li role="menuitem">
+            <button class="dropdown-item" (click)="authService.signOut()">Sign out</button>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <!-- Un-auth links -->
+    <ul class="navbar-nav ml-auto" *ngIf="!authService.isAuth">
+      <!-- Sign in -->
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="sign-in">Sign in</a>
+      </li>
+      <!-- Sign up -->
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="sign-up">Sign up</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
 <router-outlet></router-outlet>

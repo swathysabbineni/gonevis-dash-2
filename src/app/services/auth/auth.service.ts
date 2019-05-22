@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthToken } from '@app/interfaces/auth-token';
+import { UserAuth } from '@app/interfaces/user-auth';
 import { ApiService } from '@app/services/api/api.service';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -15,12 +16,12 @@ export class AuthService {
   /**
    * Authentication user subject
    */
-  private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private userSubject: BehaviorSubject<UserAuth> = new BehaviorSubject<UserAuth>(null);
 
   /**
    * Authenticated user
    */
-  user: Observable<any>;
+  user: Observable<UserAuth>;
 
   constructor(private http: HttpClient,
               private router: Router,

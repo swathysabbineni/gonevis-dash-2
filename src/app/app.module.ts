@@ -3,6 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-interceptor.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
+import { BsDropdownModule, CollapseModule } from 'ngx-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CookieService } from 'ngx-cookie-service';
@@ -27,6 +31,9 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    BsDropdownModule.forRoot(),
+    CollapseModule.forRoot(),
+    FontAwesomeModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -42,4 +49,7 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   bootstrap: [AppComponent],
 })
 export class AppModule {
+  constructor() {
+    library.add(faBars);
+  }
 }

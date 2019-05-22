@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { UserAuth } from '@app/interfaces/user-auth';
+import { AuthService } from '@app/services/auth/auth.service';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -12,10 +14,20 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class AppComponent {
   title = 'gonevis';
+  isCollapsed: boolean;
+  user: UserAuth;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private titleService: Title,
-              private translate: TranslateService) {
+  constructor(private authService: AuthService,
+              private translate: TranslateService
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private titleService: Title) {
+    this.translate.setDefaultLang('en');
+    // Subscribe to AuthService's user changes.
+    this.authService.user.subscribe((user: UserAuth): void => {
+      this.user = user;
+    });
+    this.isCollapsed = true;=
     this.translate.setDefaultLang('en');
     // Set window title
     this.router.events.pipe(
@@ -29,7 +41,6 @@ export class AppComponent {
       }),
       filter((route: ActivatedRoute): boolean => route.outlet === 'primary'),
       mergeMap((route: ActivatedRoute): Observable<Data> => route.data),
-    )
-      .subscribe((event: Data): void => this.titleService.setTitle(event.title));
+    ).subscribe((event: Data): void => this.titleService.setTitle(event.title));
   }
 }
