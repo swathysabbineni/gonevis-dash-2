@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api/http-error-response-api';
+import { CookieService } from 'ngx-cookie-service';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
@@ -8,9 +9,9 @@ import { AuthService } from '../auth/auth.service';
 @Injectable({
   providedIn: 'root',
 })
-export class JwtInterceptorService implements HttpInterceptor {
+export class AuthInterceptorService implements HttpInterceptor {
 
-  constructor(private authService: AuthService) {
+  constructor(private cookieService: CookieService, private authService: AuthService) {
   }
 
   /**
@@ -18,9 +19,7 @@ export class JwtInterceptorService implements HttpInterceptor {
    * @param next The next interceptor in the chain, or the backend if no interceptors in the chain.
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let token: string;
-    // Get token from token subject.
-    token = this.authService.tokenValue;
+    const token: string = this.authService.getToken;
     // Add authorization header with bearer token if available.
     if (token) {
       request = request.clone({
@@ -37,7 +36,7 @@ export class JwtInterceptorService implements HttpInterceptor {
       } else {
         // Auto logout if 401 response returned from api
         if (error.status === 401) {
-          this.authService.unAuth();
+          this.authService.signOut();
         }
         // The backend returned an unsuccessful response code.
         // The response body may contain clues as to what went wrong,
