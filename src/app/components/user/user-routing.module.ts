@@ -5,6 +5,9 @@ import { UserComponent } from './user.component';
 const routes: Routes = [{
   path: '',
   component: UserComponent,
+  data: {
+    title: 'User'
+  }
 }];
 
 @NgModule({

@@ -5,6 +5,9 @@ import { SignInComponent } from './sign-in.component';
 const routes: Routes = [{
   path: '',
   component: SignInComponent,
+  data: {
+    title: 'Sign in'
+  }
 }];
 
 @NgModule({
