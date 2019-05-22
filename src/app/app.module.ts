@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { JwtInterceptorService } from '@app/services/jwt-interceptor/jwt-interceptor.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-interceptor.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CookieService } from 'ngx-cookie-service';
@@ -37,7 +37,7 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   ],
   providers: [
     CookieService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
   ],
   bootstrap: [AppComponent],
 })
