@@ -92,11 +92,11 @@ export class AuthService {
    * @return String observable which can be subscribed to.
    */
   signIn(username: string, password: string): Observable<string> {
-    return this.http.post(this.apiService.base.v1 + 'account/login/', { username, password }).pipe(
+    return this.http.post(`${this.apiService.base.v1}account/login/`, { username, password }).pipe(
       map((data: any): string => {
         // Store token into cookies
         this.setToken(data.token);
-        // Store user into local storage.
+        // Store user into local storage
         localStorage.setItem('user', JSON.stringify(data.user));
         // Update user subject data
         this.userSubject.next(data.user);
