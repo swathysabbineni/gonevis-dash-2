@@ -17,6 +17,9 @@ const routes: Routes = [{
   path: 'sign-up',
   loadChildren: './components/sign-up/sign-up.module#SignUpModule',
 }, {
+  path: 'forgot-password',
+  loadChildren: './components/forgot-password/forgot-password.module#ForgotPasswordModule',
+}, {
   path: '**',
   redirectTo: 'feed',
   pathMatch: 'full',
