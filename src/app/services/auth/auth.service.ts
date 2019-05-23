@@ -113,9 +113,13 @@ export class AuthService {
    * @param username User username
    * @param password user password
    */
-  signUp(email: string, username: string, password: string): Observable<any> {
+  signUp(email: string, username: string, password: string): Observable<void> {
     return this.http.post(this.apiService.base.v1 + 'account/register-account-only/', {
       email, username, password,
-    });
+    }).pipe(
+      map((): void => {
+        this.signIn(username, password).subscribe();
+      }),
+    );
   }
 }
