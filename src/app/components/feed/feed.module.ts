@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faBookmark, faComment, faHeart, faShareSquare } from '@fortawesome/free-regular-svg-icons';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { TranslateModule } from '@ngx-translate/core';
+import { TooltipModule } from 'ngx-bootstrap';
 
 import { FeedRoutingModule } from './feed-routing.module';
 import { FeedComponent } from './feed.component';
@@ -9,7 +15,17 @@ import { FeedComponent } from './feed.component';
   imports: [
     CommonModule,
     FeedRoutingModule,
+    FontAwesomeModule,
+    TranslateModule.forChild(),
+    TooltipModule.forRoot(),
   ],
 })
 export class FeedModule {
+  constructor() {
+    library.add(faHeart);
+    library.add(faComment);
+    library.add(faBookmark);
+    library.add(faShareSquare);
+    library.add(faStar);
+  }
 }

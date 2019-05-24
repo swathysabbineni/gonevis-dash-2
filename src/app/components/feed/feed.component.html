@@ -1,3 +1,73 @@
-<p>
-  feed works!
-</p>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+
+      <!-- Post -->
+      <div class="card shadow-sm my-3" *ngFor="let i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+
+        <!-- Header -->
+        <div class="card-header d-flex">
+
+          <!-- Logo -->
+          <img src="https://picsum.photos/48{{ i }}" class="rounded-circle" alt="Logo">
+
+          <!-- Title and time since -->
+          <div class="d-flex flex-column ml-3">
+            <b>Awesomeness</b>
+            <small>12 minutes ago</small>
+          </div>
+
+          <!-- Featured -->
+          <div class="d-flex flex-column ml-auto justify-content-center text-warning"
+               [tooltip]="'FEATURED' | translate" placement="left" delay="250">
+            <fa-icon [icon]="['fas', 'star']"></fa-icon>
+          </div>
+        </div>
+
+        <!-- Cover image -->
+        <div class="card-body cover" [style.background-image]="getBackgroundImage(i)"></div>
+
+        <!-- Body -->
+        <div class="card-body">
+
+          <!-- Title -->
+          <h5 class="card-title"><a href="#">Rather Stay Quiet</a></h5>
+
+          <!-- Excerpt -->
+          <p class="card-text">
+            If I post what I want, it's a mistake.If I don't, then it's killing me from inside.
+            So what now? Blue haired girl wants to be in a relationship with me.
+            I drink too much coffee.My back still hurts.I want to shout.
+            Life goes on.Rather stay quiet.There is no point in staying in Taiwan...
+          </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer">
+
+          <!-- Like -->
+          <button class="btn btn-link">
+            <fa-icon [icon]="['far', 'heart']"></fa-icon>
+            <span>15</span>
+          </button>
+
+          <!-- Comments -->
+          <button class="btn btn-link">
+            <fa-icon [icon]="['far', 'comment']"></fa-icon>
+            <span>6</span>
+          </button>
+
+          <!-- Bookmark -->
+          <button class="btn btn-link float-right">
+            <fa-icon [icon]="['far', 'bookmark']"></fa-icon>
+          </button>
+
+          <!-- Share -->
+          <button class="btn btn-link float-right">
+            <fa-icon [icon]="['far', 'share-square']"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

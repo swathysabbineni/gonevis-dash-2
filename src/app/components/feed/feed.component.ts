@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SecurityContext } from '@angular/core';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-feed',
@@ -7,10 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FeedComponent implements OnInit {
 
-  constructor() {
+  constructor(private sanitizer: DomSanitizer) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
+  getBackgroundImage(i: number): SafeStyle {
+    return this.sanitizer.sanitize(SecurityContext.STYLE, `url(https://picsum.photos/548?${i})`);
+  }
 }
