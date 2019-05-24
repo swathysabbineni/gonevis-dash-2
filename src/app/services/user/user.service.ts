@@ -27,6 +27,6 @@ export class UserService {
    * @param password user password
    */
   resetPassword(password: string): Observable<object> {
-    return this.http.post(`${this.apiService.base.v1}account/register-account-only/`, { password });
+    return this.http.post(`${this.apiService.base.v1}account/password-reset/`, { password });
   }
 }
