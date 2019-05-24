@@ -13,6 +13,15 @@ export class UserService {
   }
 
   /**
+   * Send forgot password link.
+   *
+   * @param email User email
+   */
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiService.base.v1}account/forgot-password/`, { email });
+  }
+
+  /**
    * Reset password
    *
    * @param password user password
