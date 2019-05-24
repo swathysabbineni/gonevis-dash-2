@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
-import { AuthService } from '@app/services/auth/auth.service';
+import { UserService } from '@app/services/user/user.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -21,7 +21,7 @@ export class ForgotPasswordComponent implements OnInit {
   loading: boolean;
 
   constructor(private formBuilder: FormBuilder,
-              private authService: AuthService) {
+              private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -41,7 +41,7 @@ export class ForgotPasswordComponent implements OnInit {
     }
     this.loading = true;
     // API call
-    this.authService.forgotPassword(this.form.controls.email.value).subscribe((): void => {
+    this.userService.forgotPassword(this.form.controls.email.value).subscribe((): void => {
       this.loading = false;
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
