@@ -20,6 +20,9 @@ const routes: Routes = [{
   path: 'forgot-password',
   loadChildren: './components/forgot-password/forgot-password.module#ForgotPasswordModule',
 }, {
+  path: 'reset-password/:token',
+  loadChildren: './components/reset-password/reset-password.module#ResetPasswordModule',
+}, {
   path: '**',
   redirectTo: 'feed',
   pathMatch: 'full',
