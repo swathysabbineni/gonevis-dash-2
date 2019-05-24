@@ -1,3 +1,15 @@
 $body-bg: #edeef0;
 
 @import "~bootstrap/scss/bootstrap";
+
+.card {
+
+  .card-header {
+
+    .nav-link.active {
+      cursor: default;
+      background: white;
+      border-bottom-color: white;
+    }
+  }
+}
