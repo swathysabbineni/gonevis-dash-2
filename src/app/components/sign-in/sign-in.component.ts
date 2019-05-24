@@ -45,10 +45,6 @@ export class SignInComponent implements OnInit {
    * Sign user in
    */
   submit(): void {
-    // Validate form
-    if (this.form.invalid) {
-      return;
-    }
     this.loading = true;
     // API call
     this.authService.signIn(this.f.username.value, this.f.password.value).subscribe((): void => {
