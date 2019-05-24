@@ -35,9 +35,9 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Subscribe to active route's query params.
+    // Subscribe to active route query params.
     this.activatedRoute.queryParams.subscribe((params: Params): void => {
-      // Get and set verification token from url query param.
+      // Get and set verification token from URL query param
       this.token = params.token;
     });
     // Setup the form
@@ -62,7 +62,7 @@ export class ResetPasswordComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    // If password 1 and password 2 were not equal, then set error.
+    // If password 1 and password 2 were not equal, then set error
     if (this.f.password.value !== this.f.password2.value) {
       this.translateService.get('ERROR_PASSWORD_MISMATCH').subscribe((response: string): void => {
         this.error.non_field_errors = [response];
