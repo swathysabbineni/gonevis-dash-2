@@ -3,7 +3,9 @@
   "SIGN_UP": "Sign Up",
   "USERNAME": "Username",
   "PASSWORD": "Password",
+  "CONFIRM_PASSWORD": "Confirm password",
   "EMAIL": "Email",
   "SUBMIT": "Submit",
-  "FORGOT_PASSWORD": "Forgot password?"
+  "FORGOT_PASSWORD": "Forgot password?",
+  "ERROR_PASSWORD_MISMATCH": "Password don't match"
 }
