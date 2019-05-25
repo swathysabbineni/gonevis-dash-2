@@ -61,10 +61,6 @@ export class ResetPasswordComponent implements OnInit {
    * Reset password
    */
   submit(): void {
-    // Validate form
-    if (this.form.invalid) {
-      return;
-    }
     // If password 1 and password 2 were not equal, then set error
     if (this.f.password.value !== this.f.password2.value) {
       this.translateService.get('ERROR_PASSWORD_MISMATCH').subscribe((response: string): void => {
