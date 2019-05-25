@@ -7,7 +7,7 @@
   "EMAIL": "Email",
   "SUBMIT": "Submit",
   "FORGOT_PASSWORD": "Forgot password?",
-  "GET_RESET_LINK": "Get reset link",
+  "GET_RESET_PASSWORD_LINK": "Get Reset Password Link",
   "ERROR_PASSWORD_MISMATCH": "Passwords don't match.",
   "FEATURED": "Featured",
   "JOIN_GONEVIS": "Join GoNevis"

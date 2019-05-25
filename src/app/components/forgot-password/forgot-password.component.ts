@@ -32,7 +32,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   /**
-   * Send forgot password link.
+   * Send forgot password link
    */
   submit(): void {
     // Validate form
