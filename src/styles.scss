@@ -1,1 +1,17 @@
+$body-bg: #edeef0;
+$input-group-addon-bg: none;
+$input-group-addon-color: none;
+
 @import "~bootstrap/scss/bootstrap";
+
+.card {
+
+  .card-header {
+
+    .nav-link.active {
+      cursor: default;
+      background: white;
+      border-bottom-color: white;
+    }
+  }
+}

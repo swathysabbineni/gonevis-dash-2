@@ -13,7 +13,7 @@ import { AuthService } from '@app/services/auth/auth.service';
 export class SignUpComponent implements OnInit {
 
   // Sign up form
-  signUpForm: FormGroup;
+  form: FormGroup;
 
   // API errors
   error: ApiError = {};
@@ -28,7 +28,7 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit(): void {
     // Setup sign up form
-    this.signUpForm = this.formBuilder.group({
+    this.form = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required],
@@ -39,17 +39,13 @@ export class SignUpComponent implements OnInit {
    * @return Sign up form controls (fields)
    */
   get f(): { [p: string]: AbstractControl } {
-    return this.signUpForm.controls;
+    return this.form.controls;
   }
 
   /**
    * Sign up user
    */
   submit(): void {
-    // Validate form
-    if (this.signUpForm.invalid) {
-      return;
-    }
     this.loading = true;
     // API call
     this.authService.signUp(

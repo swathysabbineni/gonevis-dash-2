@@ -1,43 +1,65 @@
+<app-page-cover class="d-none d-md-block"></app-page-cover>
+
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-lg-3">
-      <div class="card mx-auto my-5">
-        <!-- Header -->
-        <div class="card-header">
-          <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-              <a class="nav-link active" translate>SIGN_UP</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/sign-in" translate>SIGN_IN</a>
-            </li>
-          </ul>
+    <div class="col-lg-5">
+      <div class="card shadow-lg mx-auto mb-5 mt-5 mt-md-0">
+        <!-- Body -->
+        <div class="card-body p-lg-5">
+          <!-- Title -->
+          <h4 class="text-center text-uppercase mb-5" translate>JOIN_GONEVIS</h4>
+          <!-- Form -->
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <!-- Username -->
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <fa-icon icon="envelope"></fa-icon>
+                  </span>
+                </div>
+                <input type="email" class="form-control" formControlName="email"
+                       [placeholder]="'EMAIL' | translate">
+              </div>
+              <span class="text-danger" *ngIf="error.email">{{ error.email[0] }}</span>
+            </div>
+            <!-- Username -->
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <fa-icon icon="user"></fa-icon>
+                  </span>
+                </div>
+                <input type="text" class="form-control" formControlName="username"
+                       [placeholder]="'USERNAME' | translate">
+              </div>
+              <span class="text-danger" *ngIf="error.username">{{ error.username[0] }}</span>
+            </div>
+            <!-- Password -->
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <fa-icon icon="lock"></fa-icon>
+                  </span>
+                </div>
+                <input type="password" class="form-control" formControlName="password"
+                       [placeholder]="'PASSWORD' | translate">
+              </div>
+              <span class="text-danger" *ngIf="error.password">{{ error.password[0] }}</span>
+            </div>
+            <!-- Error -->
+            <p class="text-danger" *ngIf="error.non_field_errors">{{ error.non_field_errors[0] }}</p>
+            <!-- Submit -->
+            <button class="btn btn-success btn-block" type="submit" [disabled]="loading" translate>SIGN_UP</button>
+          </form>
         </div>
-        <!-- Form -->
-        <form class="card-body" [formGroup]="signUpForm" (ngSubmit)="submit()">
-          <!-- Email -->
-          <div class="form-group">
-            <input type="email" class="form-control" formControlName="email"
-                   [placeholder]="'EMAIL' | translate">
-            <span class="text-danger" *ngIf="error.email">{{ error.email[0] }}</span>
-          </div>
-          <!-- Username -->
-          <div class="form-group">
-            <input type="text" class="form-control" formControlName="username"
-                   [placeholder]="'USERNAME' | translate">
-            <span class="text-danger" *ngIf="error.username">{{ error.username[0] }}</span>
-          </div>
-          <!-- Password -->
-          <div class="form-group">
-            <input type="password" class="form-control" formControlName="password"
-                   [placeholder]="'PASSWORD' | translate">
-            <span class="text-danger" *ngIf="error.password">{{ error.password[0] }}</span>
-          </div>
-          <!-- Error -->
-          <p class="text-danger" *ngIf="error.non_field_errors">{{ error.non_field_errors[0] }}</p>
-          <!-- Submit -->
-          <button class="btn btn-primary btn-block" type="submit" [disabled]="loading" translate>SUBMIT</button>
-        </form>
+        <!-- Footer -->
+        <div class="card-body bg-light small px-lg-5">
+          <!-- Sign up -->
+          <a routerLink="/sign-in" class="btn btn-primary float-right" translate>SIGN_IN</a>
+        </div>
       </div>
     </div>
   </div>
