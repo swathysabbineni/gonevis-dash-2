@@ -26,6 +26,9 @@ export class ResetPasswordComponent implements OnInit {
   // API loading indicator
   loading: boolean;
 
+  // Sign in route
+  readonly signInRoute: string = '/sign-in';
+
   constructor(private formBuilder: FormBuilder,
               private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -34,7 +37,7 @@ export class ResetPasswordComponent implements OnInit {
               private userService: UserService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Subscribe to active route's params.
     this.activatedRoute.params.subscribe((params: Params): void => {
       // Get and set verification token from url query param.
@@ -75,7 +78,7 @@ export class ResetPasswordComponent implements OnInit {
     // API call
     this.userService.resetPassword(this.f.password.value).subscribe((): void => {
       this.authService.signOut();
-      this.router.navigateByUrl('/sign-in');
+      this.router.navigateByUrl(this.signInRoute);
       this.loading = false;
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
