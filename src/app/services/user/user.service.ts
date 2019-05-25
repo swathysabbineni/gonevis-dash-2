@@ -17,8 +17,8 @@ export class UserService {
    *
    * @param email User email
    */
-  forgotPassword(email: string): Observable<any> {
-    return this.http.post(`${this.apiService.base.v1}account/forgot-password/`, { email });
+  forgotPassword(email: string): Observable<void> {
+    return this.http.post<void>(`${this.apiService.base.v1}account/forgot-password/`, { email });
   }
 
   /**
@@ -26,7 +26,7 @@ export class UserService {
    *
    * @param password user password
    */
-  resetPassword(password: string): Observable<object> {
-    return this.http.post(`${this.apiService.base.v1}account/register-account-only/`, { password });
+  resetPassword(password: string): Observable<void> {
+    return this.http.post<void>(`${this.apiService.base.v1}account/password-reset/`, { password });
   }
 }
