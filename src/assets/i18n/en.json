@@ -8,5 +8,5 @@
   "SUBMIT": "Submit",
   "FORGOT_PASSWORD": "Forgot password?",
   "GET_RESET_LINK": "Get reset link",
-  "ERROR_PASSWORD_MISMATCH": "Password don't match"
+  "ERROR_PASSWORD_MISMATCH": "Passwords don't match"
 }
