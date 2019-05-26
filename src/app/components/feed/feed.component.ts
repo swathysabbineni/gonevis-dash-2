@@ -54,13 +54,4 @@ export class FeedComponent implements OnInit {
   getBackgroundImage(i: number): SafeStyle {
     return this.sanitizer.sanitize(SecurityContext.STYLE, `url(https://picsum.photos/548?${i})`);
   }
-
-  /**
-   * Set current navigation
-   *
-   * @param nav Navigation to set
-   */
-  selectNab(nav: LabelIcon | string): void {
-    this.navSelected = nav;
-  }
 }
