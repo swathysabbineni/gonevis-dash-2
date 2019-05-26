@@ -21,6 +21,9 @@ export class SignInComponent implements OnInit {
   // API loading indicator
   loading: boolean;
 
+  // Feed route
+  readonly feedRoute: string = '/feed';
+
   constructor(private formBuilder: FormBuilder,
               private router: Router,
               private authService: AuthService) {
@@ -49,7 +52,7 @@ export class SignInComponent implements OnInit {
     // API call
     this.authService.signIn(this.f.username.value, this.f.password.value).subscribe((): void => {
       this.loading = false;
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl(this.feedRoute);
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
       this.loading = false;
