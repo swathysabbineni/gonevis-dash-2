@@ -7,9 +7,8 @@
       <!-- Main navs -->
       <div class="nav flex-column nav-pills my-3">
         <a class="nav-link"
-           routerLink="/feed"
            *ngFor="let nav of mainNavs"
-           (click)="selectNab(nav)"
+           [routerLink]="['/', nav.route]"
            [ngClass]="{'active shadow-sm': nav === navSelected}">
           <fa-icon [fixedWidth]="true" [icon]="nav.icon"></fa-icon>
           <span class="ml-2" translate>{{ nav.label }}</span>

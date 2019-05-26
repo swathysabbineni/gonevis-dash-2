@@ -1,6 +1,7 @@
 import { Component, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { LabelIcon } from '@app/interfaces/label-icon';
+import { ActivatedRoute, Data } from '@angular/router';
+import { RouteNav } from '@app/interfaces/route-nav';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
 
@@ -14,14 +15,17 @@ export class FeedComponent implements OnInit {
   /**
    * Main navigations
    */
-  mainNavs: LabelIcon[] = [{
+  mainNavs: RouteNav[] = [{
     label: 'EXPLORE',
+    route: 'explore',
     icon: faSearch,
   }, {
     label: 'FEED',
+    route: 'feed',
     icon: faStream,
   }, {
     label: 'BOOKMARKS',
+    route: 'bookmarks',
     icon: faBookmark,
   }];
 
@@ -40,12 +44,20 @@ export class FeedComponent implements OnInit {
   /**
    * Selected navigation/tag
    */
-  navSelected: LabelIcon | string = this.mainNavs[1];
+  navSelected: RouteNav;
 
-  constructor(private sanitizer: DomSanitizer) {
+  constructor(private sanitizer: DomSanitizer, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+    // Set selected nav
+    this.activatedRoute.data.subscribe((data: Data): void => {
+      this.mainNavs.map((nav: RouteNav): void => {
+        if (nav.route === data.route) {
+          this.navSelected = nav;
+        }
+      });
+    });
   }
 
   /**
