@@ -12,6 +12,9 @@ import { AuthService } from '@app/services/auth/auth.service';
 })
 export class SignInComponent implements OnInit {
 
+  // Sign in redirection
+  readonly feedRoute: string = '/feed';
+
   // Sign in form
   form: FormGroup;
 
@@ -20,9 +23,6 @@ export class SignInComponent implements OnInit {
 
   // API loading indicator
   loading: boolean;
-
-  // Feed route
-  readonly feedRoute: string = '/feed';
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
