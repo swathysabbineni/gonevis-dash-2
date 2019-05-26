@@ -49,6 +49,7 @@ export class SignInComponent implements OnInit {
     // API call
     this.authService.signIn(this.f.username.value, this.f.password.value).subscribe((): void => {
       this.loading = false;
+      this.router.navigateByUrl('/');
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
       this.loading = false;
