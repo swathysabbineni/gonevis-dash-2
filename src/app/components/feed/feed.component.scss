@@ -1,4 +1,11 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+
 $card-border-width: 0;
+$link-color: $secondary;
+$link-hover-color: $dark;
+$nav-pills-link-active-color: $secondary;
+$nav-pills-link-active-bg: $light;
 
 @import "~bootstrap/scss/bootstrap";
 

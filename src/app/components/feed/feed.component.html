@@ -1,9 +1,43 @@
 <div class="container">
-  <div class="row justify-content-center">
+  <div class="row">
+
+    <!-- Left -->
+    <div class="col-lg-3">
+
+      <!-- Main navs -->
+      <div class="nav flex-column nav-pills my-3">
+        <a class="nav-link"
+           routerLink="/feed"
+           *ngFor="let nav of mainNavs"
+           (click)="selectNab(nav)"
+           [ngClass]="{'active shadow-sm': nav === navSelected}">
+          <fa-icon [fixedWidth]="true" [icon]="nav.icon"></fa-icon>
+          <span class="ml-2" translate>{{ nav.label }}</span>
+        </a>
+      </div>
+
+      <!-- Tag navs title -->
+      <div class="font-weight-bold small text-secondary pl-3 mt-5">Popular Tags</div>
+
+      <!-- Tag navs -->
+      <div class="nav flex-column nav-pills my-3 small">
+        <a class="nav-link"
+           routerLink="/feed"
+           *ngFor="let nav of tagNavs"
+           (click)="selectNab(nav)"
+           [ngClass]="{'active shadow-sm': nav === navSelected}">
+          <fa-icon [fixedWidth]="true" icon="hashtag"></fa-icon>
+          <!-- @todo Use with translation -->
+          <span class="ml-2">{{ nav }}</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Middle -->
     <div class="col-lg-6">
 
       <!-- Post -->
-      <div class="card shadow-sm my-3" *ngFor="let i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+      <div class="card shadow-sm my-3" *ngFor="let i of [0, 1, 2, 3]">
 
         <!-- Header -->
         <div class="card-header d-flex">
@@ -47,24 +81,24 @@
 
           <!-- Like -->
           <button class="btn btn-link">
-            <fa-icon [icon]="['far', 'heart']"></fa-icon>
+            <fa-icon [fixedWidth]="true" [icon]="['far', 'heart']"></fa-icon>
             <span>15</span>
           </button>
 
           <!-- Comments -->
           <button class="btn btn-link">
-            <fa-icon [icon]="['far', 'comment']"></fa-icon>
+            <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
             <span>6</span>
           </button>
 
           <!-- Bookmark -->
           <button class="btn btn-link float-right">
-            <fa-icon [icon]="['far', 'bookmark']"></fa-icon>
+            <fa-icon [fixedWidth]="true" [icon]="['far', 'bookmark']"></fa-icon>
           </button>
 
           <!-- Share -->
           <button class="btn btn-link float-right">
-            <fa-icon [icon]="['far', 'share-square']"></fa-icon>
+            <fa-icon [fixedWidth]="true" [icon]="['far', 'share-square']"></fa-icon>
           </button>
         </div>
       </div>

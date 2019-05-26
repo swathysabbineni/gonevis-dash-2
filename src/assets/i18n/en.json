@@ -11,5 +11,8 @@
   "ERROR_PASSWORD_MISMATCH": "Passwords don't match.",
   "FEATURED": "Featured",
   "JOIN_GONEVIS": "Join GoNevis",
-  "RESET_PASSWORD": "Reset Password"
+  "RESET_PASSWORD": "Reset Password",
+  "EXPLORE": "Explore",
+  "BOOKMARKS": "Bookmarks",
+  "FEED": "Feed"
 }
