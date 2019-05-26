@@ -64,7 +64,10 @@ export class AuthService {
    * @param token Authentication token
    */
   setToken(token: string): void {
-    this.cookieService.set('token', token, new Date(AuthService.parseJwt(token).exp * 1000), '/');
+    const parsedJwt: AuthToken = AuthService.parseJwt(token);
+    if (parsedJwt) {
+      this.cookieService.set('token', token, new Date(parsedJwt.exp * 1000), '/');
+    }
   }
 
   /**
