@@ -12,6 +12,9 @@ import { AuthService } from '@app/services/auth/auth.service';
 })
 export class SignInComponent implements OnInit {
 
+  // Sign in redirection
+  readonly feedRoute: string = '/feed';
+
   // Sign in form
   form: FormGroup;
 
@@ -49,6 +52,7 @@ export class SignInComponent implements OnInit {
     // API call
     this.authService.signIn(this.f.username.value, this.f.password.value).subscribe((): void => {
       this.loading = false;
+      this.router.navigateByUrl(this.feedRoute);
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
       this.loading = false;
