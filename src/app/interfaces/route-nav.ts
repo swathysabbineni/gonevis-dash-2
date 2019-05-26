@@ -1,9 +1,10 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 /**
- * Represents a label-icon (Used for navs)
+ * Represents a navigation item with routing icons
  */
-export interface LabelIcon {
+export interface RouteNav {
   label: string;
+  route: string;
   icon: IconProp;
 }
