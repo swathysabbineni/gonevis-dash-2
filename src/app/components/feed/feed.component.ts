@@ -1,8 +1,10 @@
-import { Component, OnInit, SecurityContext } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { el } from '@angular/platform-browser/testing/src/browser_util';
 import { ActivatedRoute, Data } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { RouteNav } from '@app/interfaces/route-nav';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
@@ -76,9 +78,36 @@ export class FeedComponent implements OnInit {
   }
 
   /**
-   * @fixme Remove me I only exist for debug, my existence doesn't matter
+   *
+   * @param entry Entry to like
    */
-  getBackgroundImage(i: number): SafeStyle {
-    return this.sanitizer.sanitize(SecurityContext.STYLE, `url(https://picsum.photos/548?${i})`);
+  like(entry: EntryFeed): void {
+    // Check for loading
+    if (entry.loading) {
+      return;
+    }
+    entry.loading = true;
+    // Update like count
+    if (entry.is_voted) {
+      entry.vote_count--;
+    } else {
+      entry.vote_count++;
+    }
+    // Update voted
+    entry.is_voted = !entry.is_voted;
+    // API call
+    this.feedService.likeEntry(entry.id).subscribe((data: ApiResponseCreated): void => {
+      entry.is_voted = data.created;
+      entry.loading = false;
+    });
+  }
+
+  /**
+   * Bypass security and trust the given value to be safe style value (CSS).
+   *
+   * @param url Entry cover image URL
+   */
+  getBackgroundImage(url: string): SafeStyle {
+    return this.sanitizer.bypassSecurityTrustStyle(`url(${url})`);
   }
 }
