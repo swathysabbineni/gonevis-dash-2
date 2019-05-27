@@ -1,3 +1,5 @@
+import { File } from '@app/interfaces/file';
+
 export interface BlogMinimal {
   id: string;
   title: string;
