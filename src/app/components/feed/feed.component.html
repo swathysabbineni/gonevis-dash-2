@@ -35,17 +35,18 @@
     <div class="col-lg-6" *ngIf="entries">
 
       <!-- Post -->
-      <div class="card shadow-sm my-3" *ngFor="let entry of entries.results">
+      <div class="card shadow-sm my-3" *ngFor="let entry of entries">
 
         <!-- Header -->
         <div class="card-header d-flex">
 
           <!-- Logo -->
-          <img [src]="entry.user.media.thumbnail_48x48" class="rounded-circle" alt="Logo">
+          <img [src]="entry.site.media.logo.thumbnail_48x48" *ngIf="entry.site.media.logo" class="rounded-circle mr-3"
+               alt="Logo">
 
           <!-- Title and time since -->
-          <div class="d-flex flex-column ml-3">
-            <b>{{ entry.user.name }}</b>
+          <div class="d-flex flex-column">
+            <b>{{ entry.site.title }}</b>
             <small>{{ entry.published | date }}</small>
           </div>
 
@@ -76,7 +77,7 @@
           <!-- Like -->
           <button class="btn btn-link" (click)="like(entry)">
             <fa-icon [fixedWidth]="true" [icon]="['far', 'heart']" *ngIf="!entry.is_voted"></fa-icon>
-            <fa-icon [fixedWidth]="true" [icon]="['fas', 'heart']" class="text-danger" *ngIf="entry.is_voted"></fa-icon>
+            <fa-icon [fixedWidth]="true" [icon]="['fas', 'heart']" *ngIf="entry.is_voted" class="text-danger"></fa-icon>
             <span *ngIf="entry.vote_count">{{ entry.vote_count }}</span>
           </button>
 
