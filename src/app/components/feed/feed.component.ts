@@ -19,7 +19,7 @@ export class FeedComponent implements OnInit {
   /**
    * List of entries
    */
-  entries: ApiResponse<EntryFeed>;
+  entries: EntryFeed[];
 
   /**
    * Main navigations
@@ -69,7 +69,7 @@ export class FeedComponent implements OnInit {
         if (nav.route === data.route) {
           this.navSelected = nav;
           this.feedService.getEntries(this.navSelected.endpoint).subscribe((entries: ApiResponse<EntryFeed>): void => {
-            this.entries = entries;
+            this.entries = entries.results;
           });
         }
       });
