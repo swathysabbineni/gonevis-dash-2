@@ -6,5 +6,6 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 export interface RouteNav {
   label: string;
   route: string;
+  endpoint: string;
   icon: IconProp;
 }
