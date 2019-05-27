@@ -1,6 +1,9 @@
 import { Component, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute, Data } from '@angular/router';
+import { FeedService } from '@app/components/feed/feed.service';
+import { ApiResponse } from '@app/interfaces/api-response';
+import { EntryFeed } from '@app/interfaces/entry-feed';
 import { RouteNav } from '@app/interfaces/route-nav';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
@@ -13,19 +16,27 @@ import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
 export class FeedComponent implements OnInit {
 
   /**
+   * List of entries
+   */
+  entries: ApiResponse<EntryFeed>;
+
+  /**
    * Main navigations
    */
   mainNavs: RouteNav[] = [{
     label: 'EXPLORE',
     route: 'explore',
+    endpoint: 'sushial/explore/',
     icon: faSearch,
   }, {
     label: 'FEED',
     route: 'feed',
+    endpoint: 'sushial/subscribed-entries/',
     icon: faStream,
   }, {
     label: 'BOOKMARKS',
     route: 'bookmarks',
+    endpoint: 'sushial/subscribed-entries/',
     icon: faBookmark,
   }];
 
@@ -46,7 +57,8 @@ export class FeedComponent implements OnInit {
    */
   navSelected: RouteNav;
 
-  constructor(private sanitizer: DomSanitizer, private activatedRoute: ActivatedRoute) {
+  constructor(private sanitizer: DomSanitizer, private activatedRoute: ActivatedRoute,
+              private feedService: FeedService) {
   }
 
   ngOnInit(): void {
@@ -55,6 +67,9 @@ export class FeedComponent implements OnInit {
       this.mainNavs.map((nav: RouteNav): void => {
         if (nav.route === data.route) {
           this.navSelected = nav;
+          this.feedService.getEntries(this.navSelected.endpoint).subscribe((entries: ApiResponse<EntryFeed>): void => {
+            this.entries = entries;
+          });
         }
       });
     });
