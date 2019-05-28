@@ -1,0 +1,52 @@
+<app-page-cover class="d-none d-md-block"></app-page-cover>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      <form class="card shadow-lg mx-auto mb-5 mt-5 mt-md-0">
+        <div class="card-body p-lg-5">
+          <!-- Title -->
+          <h4 class="text-center text-uppercase mb-5" translate>USER_SETTING</h4>
+          <!-- Picture -->
+          <div class="form-group d-flex">
+            <div class="d-flex flex-column mr-auto pr-3">
+              <label translate>PICTURE</label>
+              <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-light">Upload</button>
+                <button type="button" class="btn btn-light">Remove</button>
+              </div>
+            </div>
+            <!-- Image -->
+            <img src="https://picsum.photos/64" class="rounded bg-secondary" alt="Picture">
+          </div>
+          <!-- Name -->
+          <div class="form-group">
+            <label for="name" translate>NAME</label>
+            <input name="name" id="name" type="text" class="form-control">
+          </div>
+          <!-- Location -->
+          <div class="form-group">
+            <label for="location" translate>LOCATION</label>
+            <input name="location" id="location" type="text" class="form-control">
+          </div>
+          <!-- About -->
+          <div class="form-group">
+            <label for="about" translate>ABOUT</label>
+            <textarea name="about" id="about" class="form-control"></textarea>
+          </div>
+          <!-- Receive email notification -->
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="receive-email-notification">
+            <label class="custom-control-label" for="receive-email-notification" translate>
+              RECEIVE_EMAIL_NOTIFICATION
+            </label>
+          </div>
+        </div>
+        <!-- Submit -->
+        <div class="card-body bg-light small px-lg-5">
+          <button class="btn btn-primary float-right" translate>SAVE_CHANGES</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

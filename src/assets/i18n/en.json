@@ -14,5 +14,12 @@
   "RESET_PASSWORD": "Reset Password",
   "EXPLORE": "Explore",
   "BOOKMARKS": "Bookmarks",
-  "FEED": "Feed"
+  "FEED": "Feed",
+  "USER_SETTING": "User Setting",
+  "PICTURE": "Picture",
+  "NAME": "Name",
+  "LOCATION": "Location",
+  "ABOUT": "About",
+  "RECEIVE_EMAIL_NOTIFICATION": "Receive email notification",
+  "SAVE_CHANGES": "Save Changes"
 }

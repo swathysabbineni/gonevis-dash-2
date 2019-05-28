@@ -1,22 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { UserComponent } from './user.component';
+import { UserSettingComponent } from './user-setting.component';
 
 const routes: Routes = [{
   path: '',
-  component: UserComponent,
+  component: UserSettingComponent,
   data: {
-    title: 'User'
+    title: 'User Settings',
   },
-  children: [{
-    path: 'setting',
-    loadChildren: './user-setting/user-setting.module#UserSettingModule'
-  }]
 }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class UserRoutingModule {
+export class UserSettingRoutingModule {
 }

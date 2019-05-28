@@ -11,6 +11,7 @@ import { BsDropdownModule, CollapseModule } from 'ngx-bootstrap';
 import { CookieService } from 'ngx-cookie-service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { UserSettingComponent } from './components/user/user-setting/user-setting.component';
 
 /**
  * Loads translations from given prefix.
