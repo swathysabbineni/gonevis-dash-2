@@ -20,7 +20,7 @@ export class FeedService {
    * @param endpoint Endpoint
    */
   getEntries(endpoint: string): Observable<ApiResponse<EntryFeed>> {
-    return this.http.get<ApiResponse<EntryFeed>>(`${this.apiService.base.v1}${endpoint}`);
+    return this.http.get<ApiResponse<EntryFeed>>(`${this.apiService.base.zero}${endpoint}`);
   }
 
   /**
@@ -30,5 +30,14 @@ export class FeedService {
    */
   likeEntry(id: string): Observable<ApiResponseCreated> {
     return this.http.post<ApiResponseCreated>(`${this.apiService.base.zero}website/entry/${id}/vote/`, null);
+  }
+
+  /**
+   * Toggle entry bookmark by user
+   *
+   * @param id Entry ID
+   */
+  bookmark(id: string): Observable<ApiResponseCreated> {
+    return this.http.post<ApiResponseCreated>(`${this.apiService.base.zero}website/entry/${id}/bookmark/`, null);
   }
 }
