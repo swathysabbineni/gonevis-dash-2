@@ -6,6 +6,7 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { RouteNav } from '@app/interfaces/route-nav';
+import { AuthService } from '@app/services/auth/auth.service';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
 
@@ -27,7 +28,7 @@ export class FeedComponent implements OnInit {
   mainNavs: RouteNav[] = [{
     label: 'EXPLORE',
     route: 'explore',
-    endpoint: 'sushial/explore/',
+    endpoint: 'website/entry/',
     icon: faSearch,
   }, {
     label: 'FEED',
@@ -37,7 +38,7 @@ export class FeedComponent implements OnInit {
   }, {
     label: 'BOOKMARKS',
     route: 'bookmarks',
-    endpoint: 'sushial/subscribed-entries/',
+    endpoint: `website/entry/${this.authService.userValue.id}/bookmarks/`,
     icon: faBookmark,
   }];
 
@@ -59,7 +60,8 @@ export class FeedComponent implements OnInit {
   navSelected: RouteNav;
 
   constructor(private sanitizer: DomSanitizer, private activatedRoute: ActivatedRoute,
-              private feedService: FeedService) {
+              private feedService: FeedService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
