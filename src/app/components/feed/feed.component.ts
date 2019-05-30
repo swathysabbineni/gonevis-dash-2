@@ -104,6 +104,25 @@ export class FeedComponent implements OnInit {
   }
 
   /**
+   *
+   * @param entry Entry to bookmark
+   */
+  bookmark(entry: EntryFeed): void {
+    // Check for loading
+    if (entry.loading) {
+      return;
+    }
+    entry.loading = true;
+    // Update is bookmarked
+    entry.is_bookmarked = !entry.is_bookmarked;
+    // API call
+    this.feedService.bookmark(entry.id).subscribe((data: ApiResponseCreated): void => {
+      entry.is_bookmarked = data.created;
+      entry.loading = false;
+    });
+  }
+
+  /**
    * Bypass security and trust the given value to be safe style value (CSS).
    *
    * @param url Entry cover image URL
