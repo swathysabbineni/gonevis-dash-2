@@ -52,6 +52,13 @@ export class AuthService {
   }
 
   /**
+   * @return User value
+   */
+  get userValue(): UserAuth {
+    return this.userSubject.value;
+  }
+
+  /**
    * @return Is user authenticated or not
    */
   get isAuth(): boolean {
