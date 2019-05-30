@@ -17,7 +17,7 @@ export class AppComponent {
   isCollapsed: boolean;
   user: UserAuth;
 
-  constructor(private authService: AuthService,
+  constructor(public authService: AuthService,
               private translate: TranslateService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
