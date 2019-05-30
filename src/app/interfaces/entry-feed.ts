@@ -4,25 +4,22 @@ import { Tag } from '@app/interfaces/tag';
 import { UserMinimal } from '@app/interfaces/user-minimal';
 
 export interface EntryFeed {
-  id: string;
-  title: string;
-  slug: string;
-  content: string;
-  excerpt: string;
-  user: UserMinimal;
   absolute_uri: string;
-  tags: Tag[];
+  active_comment_count: number;
+  can_comment: boolean;
+  content: string;
+  id: string;
+  is_bookmarked: boolean;
+  is_voted: boolean;
   media: {
     cover_image: File
   };
+  published: Date;
   site: BlogMinimal;
+  title: string;
+  user: UserMinimal;
   vote_count: number;
   view_count: number;
-  active_comment_count: number;
-  comment_enabled: boolean;
-  format: number;
-  published: Date;
-  is_voted: boolean;
 
   loading?: boolean;
 }
