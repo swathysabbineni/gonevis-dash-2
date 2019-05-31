@@ -6,6 +6,7 @@ import { faBookmark, faComment, faHeart, faShareSquare } from '@fortawesome/free
 import { faHeart as faHeartFill, faStar, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { TranslateModule } from '@ngx-translate/core';
 import { TooltipModule } from 'ngx-bootstrap';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { FeedRoutingModule } from './feed-routing.module';
 import { FeedComponent } from './feed.component';
@@ -18,6 +19,7 @@ import { FeedComponent } from './feed.component';
     FontAwesomeModule,
     TranslateModule.forChild(),
     TooltipModule.forRoot(),
+    InfiniteScrollModule
   ],
 })
 export class FeedModule {
