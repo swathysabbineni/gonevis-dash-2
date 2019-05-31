@@ -93,6 +93,7 @@ export class FeedComponent implements OnInit {
   }
 
   /**
+   * Toggle entry like for user
    *
    * @param entry Entry to like
    */
@@ -118,6 +119,7 @@ export class FeedComponent implements OnInit {
   }
 
   /**
+   * Toggle entry bookmark for user
    *
    * @param entry Entry to bookmark
    */
