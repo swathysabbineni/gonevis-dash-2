@@ -28,17 +28,17 @@ export class FeedComponent implements OnInit {
   mainNavs: RouteNav[] = [{
     label: 'EXPLORE',
     route: 'explore',
-    endpoint: 'website/entry/',
+    api: this.feedService.getExploreEntries(),
     icon: faSearch,
   }, {
     label: 'FEED',
     route: 'feed',
-    endpoint: 'sushial/subscribed-entries/',
+    api: this.feedService.getSubscribedEntries(),
     icon: faStream,
   }, {
     label: 'BOOKMARKS',
     route: 'bookmarks',
-    endpoint: `website/entry/${this.authService.userValue.id}/bookmarks/`,
+    api: this.feedService.getBookmarkedEntries(),
     icon: faBookmark,
   }];
 
@@ -59,9 +59,9 @@ export class FeedComponent implements OnInit {
    */
   navSelected: RouteNav;
 
-  constructor(private sanitizer: DomSanitizer, private activatedRoute: ActivatedRoute,
-              private feedService: FeedService,
-              private authService: AuthService) {
+  constructor(private sanitizer: DomSanitizer,
+              private activatedRoute: ActivatedRoute,
+              private feedService: FeedService) {
   }
 
   ngOnInit(): void {
@@ -70,7 +70,7 @@ export class FeedComponent implements OnInit {
       this.mainNavs.map((nav: RouteNav): void => {
         if (nav.route === data.route) {
           this.navSelected = nav;
-          this.feedService.getEntries(this.navSelected.endpoint).subscribe((entries: ApiResponse<EntryFeed>): void => {
+          this.navSelected.api.subscribe((entries: ApiResponse<EntryFeed>): void => {
             this.entries = entries.results;
           });
         }
