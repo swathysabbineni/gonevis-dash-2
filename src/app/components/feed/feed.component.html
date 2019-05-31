@@ -17,16 +17,12 @@
       </div>
 
       <!-- Tag navs title -->
-      <div class="font-weight-bold small text-secondary pl-3 mt-5">Popular Tags</div>
+      <div class="font-weight-bold small text-secondary pl-3 mt-5" translate>POPULAR_TAGS</div>
 
       <!-- Tag navs -->
       <div class="nav flex-column nav-pills my-3 small">
-        <a class="nav-link"
-           routerLink="/feed"
-           *ngFor="let nav of tagNavs"
-           [ngClass]="{'active shadow-sm': nav === navSelected}">
+        <a class="nav-link" *ngFor="let nav of tagNavs" (click)="selectTag($event)">
           <fa-icon [fixedWidth]="true" icon="hashtag"></fa-icon>
-          <!-- @todo Use with translation -->
           <span class="ml-2">{{ nav }}</span>
         </a>
       </div>
@@ -42,8 +38,8 @@
         <div class="card-header d-flex">
 
           <!-- Logo -->
-          <img [src]="entry.site.media.logo.thumbnail_48x48" *ngIf="entry.site.media.logo" class="rounded-circle mr-3"
-               alt="Logo">
+          <img [src]="entry.site.media.logo.thumbnail_48x48" *ngIf="entry.site.media.logo" class="rounded-circle mr-3">
+          <img *ngIf="!entry.site.media.logo" class="rounded-circle mr-3">
 
           <!-- Title and time since -->
           <div class="d-flex flex-column">
@@ -53,7 +49,7 @@
 
           <!-- Featured -->
           <div class="d-flex flex-column ml-auto justify-content-center text-warning"
-               [tooltip]="'FEATURED' | translate" placement="left" delay="250">
+               [tooltip]="'FEATURED' | translate" placement="left" delay="250" *ngIf="entry.featured">
             <fa-icon [icon]="['fas', 'star']"></fa-icon>
           </div>
         </div>
@@ -80,6 +76,12 @@
             <fa-icon [fixedWidth]="true" [icon]="['far', 'heart']" *ngIf="!entry.is_voted"></fa-icon>
             <fa-icon [fixedWidth]="true" [icon]="['fas', 'heart']" *ngIf="entry.is_voted" class="text-danger"></fa-icon>
             <span *ngIf="entry.vote_count">{{ entry.vote_count }}</span>
+          </button>
+
+          <!-- Views -->
+          <button class="btn btn-link">
+            <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
+            <span *ngIf="entry.view_count">{{ entry.view_count }}</span>
           </button>
 
           <!-- Comments -->

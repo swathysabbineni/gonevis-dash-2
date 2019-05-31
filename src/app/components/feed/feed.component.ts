@@ -163,4 +163,15 @@ export class FeedComponent implements OnInit {
       });
     });
   }
+
+  /**
+   * Tag selection, tho not ready yet
+   *
+   * @todo Use toast instead of alert
+   * @todo Use translation
+   * @todo Do me in back-end
+   */
+  selectTag(event): void {
+    alert('Exploring posts by tag is not yet implemented.');
+  }
 }
