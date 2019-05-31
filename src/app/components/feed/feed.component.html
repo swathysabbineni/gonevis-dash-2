@@ -89,7 +89,8 @@
 
           <!-- Bookmark -->
           <button class="btn btn-link float-right" (click)="bookmark(entry)">
-            <fa-icon [fixedWidth]="true" [icon]="['far', 'bookmark']"></fa-icon>
+            <fa-icon [fixedWidth]="true" [icon]="['far', 'bookmark']" *ngIf="!entry.is_bookmarked"></fa-icon>
+            <fa-icon [fixedWidth]="true" [icon]="['fas', 'bookmark']" *ngIf="entry.is_bookmarked"></fa-icon>
           </button>
 
           <!-- Share -->
