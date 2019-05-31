@@ -9,12 +9,47 @@ $input-group-addon-color: $dark;
 .navbar {
 
   .navbar-brand {
-
     font-weight: bold;
 
     &:active {
       position: relative;
       top: 1px;
+    }
+  }
+
+  .nav-item {
+
+    &.dropdown {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      border-radius: $border-radius;
+
+      &:hover,
+      &:focus {
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      &.show {
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      img {
+        width: 32px;
+        height: 32px;
+        border-radius: 100%;
+        margin-right: 6px;
+        margin-top: -10px;
+        margin-bottom: -8px;
+      }
+
+      span {
+        text-transform: capitalize;
+      }
+
+      .dropdown-menu {
+        text-transform: capitalize;
+      }
     }
   }
 }
