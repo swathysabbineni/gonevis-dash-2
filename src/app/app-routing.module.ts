@@ -23,6 +23,9 @@ const routes: Routes = [{
     route: 'bookmarks',
   },
 }, {
+  path: 'entry/:entryId',
+  loadChildren: './components/entry/entry.module#EntryModule',
+}, {
   path: 'user',
   loadChildren: './components/user/user.module#UserModule',
 }, {
