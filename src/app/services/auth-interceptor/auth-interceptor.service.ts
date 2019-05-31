@@ -35,7 +35,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         console.error('An error occurred:', error.error.message);
       } else {
         // Auto logout if 401 response returned from api
-        if (error.status === 401) {
+        if (error.status === 401 || error.status === 403) {
           this.authService.signOut();
         }
         // The backend returned an unsuccessful response code.

@@ -14,6 +14,11 @@ import { map } from 'rxjs/operators';
 export class AuthService {
 
   /**
+   * Sign out redirect
+   */
+  private readonly signOutRedirect: string = '/sign-in';
+
+  /**
    * Authentication user subject
    */
   private userSubject: BehaviorSubject<UserAuth> = new BehaviorSubject<UserAuth>(null);
@@ -84,6 +89,7 @@ export class AuthService {
     this.cookieService.deleteAll('/');
     localStorage.clear();
     this.userSubject.next(null);
+    this.router.navigateByUrl(this.signOutRedirect);
   }
 
   /**
