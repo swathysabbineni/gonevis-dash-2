@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faBookmark, faComment, faHeart, faShareSquare } from '@fortawesome/free-regular-svg-icons';
+import { faBookmark, faComment, faEye, faHeart, faShareSquare } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartFill, faStar, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { TranslateModule } from '@ngx-translate/core';
 import { TooltipModule } from 'ngx-bootstrap';
@@ -27,6 +27,7 @@ export class FeedModule {
     library.add(faHeart);
     library.add(faHeartFill);
     library.add(faComment);
+    library.add(faEye);
     library.add(faBookmark);
     library.add(faShareSquare);
     library.add(faStar);
