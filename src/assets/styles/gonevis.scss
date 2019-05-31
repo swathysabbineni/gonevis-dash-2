@@ -1,15 +1,23 @@
-$primary: #2980b9;
-$success: #2ecc71;
-$danger: #e74c3c;
-
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
+@import "variables";
 
 $body-bg: #edeef0;
 $input-group-addon-bg: none;
 $input-group-addon-color: $dark;
 
 @import "~bootstrap/scss/bootstrap";
+
+.navbar {
+
+  .navbar-brand {
+
+    font-weight: bold;
+
+    &:active {
+      position: relative;
+      top: 1px;
+    }
+  }
+}
 
 .card {
 
