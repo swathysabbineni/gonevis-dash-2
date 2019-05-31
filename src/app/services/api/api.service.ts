@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ApiResponse } from '@app/interfaces/api-response';
 import { environment } from '@environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +14,16 @@ export class ApiService {
    */
   readonly base: { v1: string, zero: string } = environment.api;
 
-  constructor() {
+  constructor(private http: HttpClient) {
+  }
+
+
+  /**
+   * Get endpoint
+   *
+   * @param endpoint Endpoint to get
+   */
+  getEndpoint<T>(endpoint: string): Observable<ApiResponse<T>> {
+    return this.http.get<ApiResponse<T>>(endpoint);
   }
 }
