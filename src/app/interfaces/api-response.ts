@@ -1,5 +1,5 @@
 /**
- * Represents API GET response structure
+ * Represents paginated API get response structure
  */
 export interface ApiResponse<T> {
   count: number;
