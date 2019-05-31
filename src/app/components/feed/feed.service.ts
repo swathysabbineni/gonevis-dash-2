@@ -37,7 +37,7 @@ export class FeedService {
    * Gets subscribed entries
    */
   getSubscribedEntries(): Observable<ApiResponse<EntryFeed>> {
-    return this.http.get<ApiResponse<EntryFeed>>(`${this.apiService.base.zero}sushial/subscribed-entries/`);
+    return this.http.get<ApiResponse<EntryFeed>>(`${this.apiService.base.v1}sushial/subscribed-entries/`);
   }
 
   /**
