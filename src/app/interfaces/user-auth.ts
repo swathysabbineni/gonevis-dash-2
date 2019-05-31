@@ -1,5 +1,8 @@
 import { UserBlog } from '@app/interfaces/user-blog';
 
+/**
+ * Represents authenticated user structure
+ */
 export interface UserAuth {
   email: string;
   get_absolute_uri: string;

@@ -1,3 +1,6 @@
+/**
+ * Represents media structure
+ */
 export interface Media {
   picture: string;
   thumbnail_256x256: string;

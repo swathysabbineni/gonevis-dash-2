@@ -1,3 +1,6 @@
+/**
+ * Represents user blog structure
+ */
 export interface UserBlog {
   id: string;
   media: {
