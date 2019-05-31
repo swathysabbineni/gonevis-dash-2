@@ -14,6 +14,7 @@ export interface EntryFeed {
   media: {
     cover_image: File
   };
+  featured: boolean;
   published: Date;
   site: BlogMinimal;
   title: string;
