@@ -9,11 +9,13 @@ $input-group-addon-color: $dark;
 .navbar {
 
   .navbar-brand {
-    font-weight: bold;
 
     &:active {
-      position: relative;
-      top: 1px;
+      opacity: 0.75;
+    }
+
+    img {
+      width: 48px;
     }
   }
 
