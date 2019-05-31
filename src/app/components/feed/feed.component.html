@@ -1,5 +1,6 @@
 <div class="container">
-  <div class="row">
+  <div class="row" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+       (scrolled)="loadMore(next)">
 
     <!-- Left -->
     <div class="col-lg-3">
