@@ -12,6 +12,14 @@ $nav-pills-link-active-bg: $light;
 $text-font-size: 13px;
 $text-color: $secondary;
 
+.nav-pills {
+
+  .nav-link {
+    color: $secondary;
+    cursor: pointer;
+  }
+}
+
 .card {
 
   .card-header {
