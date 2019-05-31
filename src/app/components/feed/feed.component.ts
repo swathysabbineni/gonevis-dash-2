@@ -6,7 +6,7 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { RouteNav } from '@app/interfaces/route-nav';
-import { AuthService } from '@app/services/auth/auth.service';
+import { ApiService } from '@app/services/api/api.service';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
 
@@ -18,9 +18,19 @@ import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
 export class FeedComponent implements OnInit {
 
   /**
+   * API loading indicator
+   */
+  loading: boolean;
+
+  /**
    * List of entries
    */
   entries: EntryFeed[];
+
+  /**
+   * Next page endpoint
+   */
+  next: string;
 
   /**
    * Main navigations
@@ -61,7 +71,8 @@ export class FeedComponent implements OnInit {
 
   constructor(private sanitizer: DomSanitizer,
               private activatedRoute: ActivatedRoute,
-              private feedService: FeedService) {
+              private feedService: FeedService,
+              private apiService: ApiService) {
   }
 
   ngOnInit(): void {
@@ -69,9 +80,12 @@ export class FeedComponent implements OnInit {
     this.activatedRoute.data.subscribe((data: Data): void => {
       this.mainNavs.map((nav: RouteNav): void => {
         if (nav.route === data.route) {
+          this.loading = true;
           this.navSelected = nav;
           this.navSelected.api.subscribe((entries: ApiResponse<EntryFeed>): void => {
+            this.next = entries.next;
             this.entries = entries.results;
+            this.loading = false;
           });
         }
       });
@@ -129,5 +143,24 @@ export class FeedComponent implements OnInit {
    */
   getBackgroundImage(url: string): SafeStyle {
     return this.sanitizer.bypassSecurityTrustStyle(`url(${url})`);
+  }
+
+  /**
+   * Load more
+   *
+   * @param endpoint Next page endpoint
+   */
+  loadMore(endpoint: string): void {
+    if (!this.next || this.loading) {
+      return;
+    }
+    this.loading = true;
+    this.apiService.getEndpoint<EntryFeed>(endpoint).subscribe((data: ApiResponse<EntryFeed>): void => {
+      this.next = data.next;
+      this.loading = false;
+      data.results.map((entry: EntryFeed): void => {
+        this.entries.push(entry);
+      });
+    });
   }
 }
