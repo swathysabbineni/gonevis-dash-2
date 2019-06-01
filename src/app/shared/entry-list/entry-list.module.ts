@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { EntryShareModule } from '@app/shared/entry-share/entry-share.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -22,11 +23,11 @@ import { EntryListComponent } from './entry-list.component';
   imports: [
     CommonModule,
     FontAwesomeModule,
+    RouterModule,
     TranslateModule.forChild(),
     TooltipModule.forRoot(),
     InfiniteScrollModule,
     PopoverModule.forRoot(),
-    InfiniteScrollModule,
     EntryShareModule,
   ],
   exports: [EntryListComponent],
