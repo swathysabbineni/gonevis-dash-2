@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { EntryShareModule } from '@app/shared/entry-share/entry-share.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons/faBookmark';
@@ -12,7 +13,7 @@ import { faBookmark as faBookmarkFill } from '@fortawesome/free-solid-svg-icons/
 import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
 import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 import { TranslateModule } from '@ngx-translate/core';
-import { TooltipModule } from 'ngx-bootstrap';
+import { PopoverModule, TooltipModule } from 'ngx-bootstrap';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { FeedRoutingModule } from './feed-routing.module';
@@ -27,6 +28,9 @@ import { FeedComponent } from './feed.component';
     TranslateModule.forChild(),
     TooltipModule.forRoot(),
     InfiniteScrollModule,
+    PopoverModule.forRoot(),
+    InfiniteScrollModule,
+    EntryShareModule,
   ],
 })
 export class FeedModule {
