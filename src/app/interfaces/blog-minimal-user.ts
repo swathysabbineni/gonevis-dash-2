@@ -1,4 +1,7 @@
-export interface UserBlog {
+/**
+ * Represents minimal blog structure for user
+ */
+export interface BlogMinimalUser {
   id: string;
   media: {
     logo: {

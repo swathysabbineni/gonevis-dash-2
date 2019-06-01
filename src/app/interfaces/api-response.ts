@@ -1,3 +1,6 @@
+/**
+ * Represents paginated API get response structure
+ */
 export interface ApiResponse<T> {
   count: number;
   next: string | null;

@@ -1,5 +1,8 @@
 import { File } from '@app/interfaces/file';
 
+/**
+ * Represents minimal blog structure
+ */
 export interface BlogMinimal {
   id: string;
   title: string;

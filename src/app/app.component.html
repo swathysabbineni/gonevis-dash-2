@@ -4,8 +4,11 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand navbar-dark bg-primary sticky-top">
   <div class="container">
-    <!-- Title -->
-    <a class="navbar-brand" routerLink="/feed" translate>GONEVIS</a>
+    <!-- Brand -->
+    <a class="navbar-brand" routerLink="/feed" translate>
+      <img src="../assets/img/logo.png" alt="GoNevis">
+    </a>
+    <!-- Rest of the navbar -->
     <div class="collapse navbar-collapse" id="collapse" [collapse]="isCollapsed">
       <!-- Navs when authenticated -->
       <ul class="navbar-nav ml-auto" *ngIf="authService.isAuth && user">

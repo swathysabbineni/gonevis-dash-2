@@ -4,9 +4,9 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { Observable } from 'rxjs';
 
 /**
- * Represents a navigation item with routing icons
+ * Represents a navigation with routing icons for feed
  */
-export interface RouteNav {
+export interface FeedNav {
   label: string;
   route: string;
   api: Observable<ApiResponse<EntryFeed>>;

@@ -5,7 +5,7 @@ import { FeedService } from '@app/components/feed/feed.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { EntryFeed } from '@app/interfaces/entry-feed';
-import { RouteNav } from '@app/interfaces/route-nav';
+import { FeedNav } from '@app/interfaces/feed-nav';
 import { ApiService } from '@app/services/api/api.service';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
@@ -35,7 +35,7 @@ export class FeedComponent implements OnInit {
   /**
    * Main navigations
    */
-  mainNavs: RouteNav[] = [{
+  mainNavs: FeedNav[] = [{
     label: 'EXPLORE',
     route: 'explore',
     api: this.feedService.getExploreEntries(),
@@ -67,7 +67,7 @@ export class FeedComponent implements OnInit {
   /**
    * Selected navigation/tag
    */
-  navSelected: RouteNav;
+  navSelected: FeedNav;
 
   constructor(private sanitizer: DomSanitizer,
               private activatedRoute: ActivatedRoute,
@@ -78,7 +78,7 @@ export class FeedComponent implements OnInit {
   ngOnInit(): void {
     // Set selected nav
     this.activatedRoute.data.subscribe((data: Data): void => {
-      this.mainNavs.map((nav: RouteNav): void => {
+      this.mainNavs.map((nav: FeedNav): void => {
         if (nav.route === data.route) {
           this.loading = true;
           this.navSelected = nav;
@@ -93,6 +93,7 @@ export class FeedComponent implements OnInit {
   }
 
   /**
+   * Toggle entry like for user
    *
    * @param entry Entry to like
    */
@@ -118,6 +119,7 @@ export class FeedComponent implements OnInit {
   }
 
   /**
+   * Toggle entry bookmark for user
    *
    * @param entry Entry to bookmark
    */

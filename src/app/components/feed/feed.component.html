@@ -79,9 +79,9 @@
           </button>
 
           <!-- Views -->
-          <button class="btn btn-link">
+          <button class="btn btn-link" *ngIf="entry.view_count">
             <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
-            <span *ngIf="entry.view_count">{{ entry.view_count }}</span>
+            <span>{{ entry.view_count }}</span>
           </button>
 
           <!-- Comments -->

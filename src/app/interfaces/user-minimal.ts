@@ -1,5 +1,8 @@
 import { Media } from '@app/interfaces/media';
 
+/**
+ * Represents minimal user structure
+ */
 export interface UserMinimal {
   id: string;
   username: string;

@@ -3,6 +3,9 @@ import { File } from '@app/interfaces/file';
 import { Tag } from '@app/interfaces/tag';
 import { UserMinimal } from '@app/interfaces/user-minimal';
 
+/**
+ * Represents feed entry structure
+ */
 export interface EntryFeed {
   id: string;
   site: BlogMinimal;
