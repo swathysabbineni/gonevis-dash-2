@@ -16,37 +16,19 @@ import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
 export class FeedComponent implements OnInit {
 
   /**
-   * API loading indicator
-   */
-  loading: boolean;
-
-  /**
-   * List of entries
-   */
-  entries: EntryFeed[];
-
-  /**
-   * Next page endpoint
-   */
-  next: string;
-
-  /**
    * Main navigations
    */
   mainNavs: FeedNav[] = [{
     label: 'EXPLORE',
     route: 'explore',
-    api: this.feedService.getExploreEntries(),
     icon: faSearch,
   }, {
-    label: 'FEED',
-    route: 'feed',
-    api: this.feedService.getSubscribedEntries(),
+    label: 'UPDATES',
+    route: 'updates',
     icon: faStream,
   }, {
     label: 'BOOKMARKS',
     route: 'bookmarks',
-    api: this.feedService.getBookmarkedEntries(),
     icon: faBookmark,
   }];
 
@@ -62,31 +44,10 @@ export class FeedComponent implements OnInit {
     'Story',
   ];
 
-  /**
-   * Selected navigation/tag
-   */
-  navSelected: FeedNav;
-
-  constructor(private sanitizer: DomSanitizer,
-              private activatedRoute: ActivatedRoute,
-              private feedService: FeedService) {
+  constructor() {
   }
 
   ngOnInit(): void {
-    // Set selected nav
-    this.activatedRoute.data.subscribe((data: Data): void => {
-      this.mainNavs.map((nav: FeedNav): void => {
-        if (nav.route === data.route) {
-          this.loading = true;
-          this.navSelected = nav;
-          this.navSelected.api.subscribe((entries: ApiResponse<EntryFeed>): void => {
-            this.next = entries.next;
-            this.entries = entries.results;
-            this.loading = false;
-          });
-        }
-      });
-    });
   }
 
   /**
