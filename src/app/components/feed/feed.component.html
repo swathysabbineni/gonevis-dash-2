@@ -97,7 +97,10 @@
           </button>
 
           <!-- Share -->
-          <button class="btn btn-link float-right">
+          <ng-template #shareTemplate>
+            <input type="text" class="form-control form-control-sm" readonly [value]="entry.absolute_uri">
+          </ng-template>
+          <button class="btn btn-link float-right" [popover]="shareTemplate" popoverTitle="Share">
             <fa-icon [fixedWidth]="true" [icon]="['far', 'share-square']"></fa-icon>
           </button>
         </div>

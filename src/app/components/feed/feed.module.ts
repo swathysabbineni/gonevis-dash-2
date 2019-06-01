@@ -5,7 +5,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBookmark, faComment, faEye, faHeart, faShareSquare } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartFill, faStar, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { TranslateModule } from '@ngx-translate/core';
-import { TooltipModule } from 'ngx-bootstrap';
+import { PopoverModule, TooltipModule } from 'ngx-bootstrap';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { FeedRoutingModule } from './feed-routing.module';
@@ -19,7 +19,8 @@ import { FeedComponent } from './feed.component';
     FontAwesomeModule,
     TranslateModule.forChild(),
     TooltipModule.forRoot(),
-    InfiniteScrollModule
+    PopoverModule.forRoot(),
+    InfiniteScrollModule,
   ],
 })
 export class FeedModule {
