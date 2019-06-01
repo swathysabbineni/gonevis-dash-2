@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EntryComponent } from '@app/components/entry/entry.component';
+import { EntryComponent } from '@app/components/feed/entry/entry.component';
 
 import { EntryRoutingModule } from './entry-routing.module';
 
