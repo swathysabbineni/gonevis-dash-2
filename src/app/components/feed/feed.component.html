@@ -100,7 +100,8 @@
           <ng-template #shareTemplate>
             <app-entry-share [url]="entry.absolute_uri"></app-entry-share>
           </ng-template>
-          <button class="btn btn-link float-right" [popover]="shareTemplate" popoverTitle="Share">
+          <button class="btn btn-link float-right" [popover]="shareTemplate"
+                  popoverTitle="Share" placement="left" [outsideClick]="true">
             <fa-icon [fixedWidth]="true" [icon]="['far', 'share-square']"></fa-icon>
           </button>
         </div>
