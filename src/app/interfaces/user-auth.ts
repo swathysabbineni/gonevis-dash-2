@@ -1,4 +1,4 @@
-import { UserBlog } from '@app/interfaces/user-blog';
+import { BlogMinimalUser } from '@app/interfaces/blog-minimal-user';
 
 /**
  * Represents authenticated user structure
@@ -17,7 +17,7 @@ export interface UserAuth {
   };
   name: string;
   receive_email_notification: boolean;
-  sites: UserBlog[];
+  sites: BlogMinimalUser[];
   tour: {
     files: boolean;
     main: boolean;
