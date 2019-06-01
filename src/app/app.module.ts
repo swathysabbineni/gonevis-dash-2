@@ -5,13 +5,14 @@ import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-inte
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BsDropdownModule, CollapseModule } from 'ngx-bootstrap';
 import { CookieService } from 'ngx-cookie-service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UserSettingComponent } from './components/user/user-setting/user-setting.component';
 
 /**
  * Loads translations from given prefix.
@@ -35,6 +36,8 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     FontAwesomeModule,
+    LoadingBarModule,
+    LoadingBarHttpClientModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

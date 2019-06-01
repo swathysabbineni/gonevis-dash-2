@@ -1,4 +1,8 @@
-<nav class="navbar navbar-expand navbar-dark bg-primary">
+<!-- Loading bar -->
+<ngx-loading-bar color="white"></ngx-loading-bar>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand navbar-dark bg-primary sticky-top">
   <div class="container">
     <!-- Brand -->
     <a class="navbar-brand" routerLink="/feed" translate>
@@ -6,25 +10,25 @@
     </a>
     <!-- Rest of the navbar -->
     <div class="collapse navbar-collapse" id="collapse" [collapse]="isCollapsed">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="feed" translate>FEED</a>
-        </li>
-      </ul>
       <!-- Navs when authenticated -->
       <ul class="navbar-nav ml-auto" *ngIf="authService.isAuth && user">
         <!-- User dropdown -->
-        <li class="nav-item position-relative" dropdown>
-          <a dropdownToggle>
-            <img width="30" class="rounded-circle" [src]="user.media.thumbnail_48x48" [alt]="user.name"/>
-          </a>
-          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+        <li class="nav-item dropdown" dropdown>
+          <!-- Dropdown label -->
+          <div class="nav-link dropdown-toggle" dropdownToggle>
+            <!-- User picture -->
+            <img [src]="user.media.thumbnail_48x48">
+            <!-- User name -->
+            <span>{{ user.username }}</span>
+          </div>
+          <!-- User dropdown -->
+          <ul class="dropdown-menu dropdown-menu-right" *dropdownMenu>
             <!-- View account -->
-            <li><button class="dropdown-item">View Account</button></li>
+            <li><a routerLink="/user/setting" routerLinkActive="active" class="dropdown-item" translate>SETTING</a></li>
             <!-- Separator -->
             <li class="dropdown-divider"></li>
             <!-- Sign out -->
-            <li><button class="dropdown-item" (click)="authService.signOut()">Sign out</button></li>
+            <li><button class="dropdown-item" (click)="authService.signOut()" translate>SIGN_OUT</button></li>
           </ul>
         </li>
       </ul>
