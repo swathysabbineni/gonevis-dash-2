@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
@@ -12,7 +12,7 @@ import { ApiService } from '@app/services/api/api.service';
   templateUrl: './entry-list.component.html',
   styleUrls: ['./entry-list.component.scss'],
 })
-export class EntryListComponent implements OnInit {
+export class EntryListComponent {
 
   /**
    * API loading indicator
@@ -33,9 +33,6 @@ export class EntryListComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private feedService: FeedService,
               private apiService: ApiService) {
-  }
-
-  ngOnInit() {
   }
 
   /**
