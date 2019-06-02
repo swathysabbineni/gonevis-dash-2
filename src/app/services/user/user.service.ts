@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserSettings } from '@app/interfaces/userSettings';
+import { UserSettings } from '@app/interfaces/user-settings';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { UserSettingsPatch } from '@app/interfaces/user-settings-patch';
 import { ApiService } from '@app/services/api/api.service';
