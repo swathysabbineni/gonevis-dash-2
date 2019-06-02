@@ -7,21 +7,6 @@ const routes: Routes = [{
 }, {
   path: 'feed',
   loadChildren: './components/feed/feed.module#FeedModule',
-  data: {
-    route: 'feed',
-  },
-}, {
-  path: 'explore',
-  loadChildren: './components/feed/feed.module#FeedModule',
-  data: {
-    route: 'explore',
-  },
-}, {
-  path: 'bookmarks',
-  loadChildren: './components/feed/feed.module#FeedModule',
-  data: {
-    route: 'bookmarks',
-  },
 }, {
   path: 'user',
   loadChildren: './components/user/user.module#UserModule',

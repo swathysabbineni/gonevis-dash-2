@@ -6,8 +6,34 @@ const routes: Routes = [{
   path: '',
   component: FeedComponent,
   data: {
-    title: 'Feed'
-  }
+    title: 'Feed',
+  },
+  children: [{
+    path: 'explore',
+    loadChildren: './reader/reader.module#ReaderModule',
+    data: {
+      route: 'explore'
+    }
+  }, {
+    path: 'updates',
+    loadChildren: './reader/reader.module#ReaderModule',
+    data: {
+      route: 'updates'
+    }
+  }, {
+    path: 'bookmarks',
+    loadChildren: './reader/reader.module#ReaderModule',
+    data: {
+      route: 'bookmarks'
+    }
+  }, {
+    path: 'entry/:entryId',
+    loadChildren: './entry/entry.module#EntryModule',
+  }, {
+    path: '',
+    redirectTo: 'explore',
+    pathMatch: 'full'
+  }],
 }];
 
 @NgModule({

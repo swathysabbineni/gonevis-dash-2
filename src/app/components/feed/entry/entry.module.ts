@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { EntryComponent } from '@app/components/feed/entry/entry.component';
 import { EntryShareModule } from '@app/shared/entry-share/entry-share.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -11,28 +11,22 @@ import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
 import { faShareSquare } from '@fortawesome/free-regular-svg-icons/faShareSquare';
 import { faHeart as faHeartFill } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faBookmarkFill } from '@fortawesome/free-solid-svg-icons/faBookmark';
-import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
-import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
-import { TranslateModule } from '@ngx-translate/core';
 import { PopoverModule, TooltipModule } from 'ngx-bootstrap';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { EntryListComponent } from './entry-list.component';
+
+import { EntryRoutingModule } from './entry-routing.module';
 
 @NgModule({
-  declarations: [EntryListComponent],
+  declarations: [EntryComponent],
   imports: [
     CommonModule,
-    FontAwesomeModule,
-    RouterModule,
-    TranslateModule.forChild(),
-    TooltipModule.forRoot(),
-    InfiniteScrollModule,
-    PopoverModule.forRoot(),
+    EntryRoutingModule,
     EntryShareModule,
+    FontAwesomeModule,
+    TooltipModule.forRoot(),
+    PopoverModule.forRoot(),
   ],
-  exports: [EntryListComponent],
 })
-export class EntryListModule {
+export class EntryModule {
   constructor() {
     library.add(faHeart);
     library.add(faHeartFill);
@@ -41,7 +35,5 @@ export class EntryListModule {
     library.add(faBookmark);
     library.add(faBookmarkFill);
     library.add(faShareSquare);
-    library.add(faStar);
-    library.add(faHashtag);
   }
 }

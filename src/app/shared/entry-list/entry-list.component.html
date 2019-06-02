@@ -1,8 +1,6 @@
 <!-- Posts -->
-<div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
-     (scrolled)="loadMore(next)">
-  <div class="card shadow-sm my-3"
-       *ngFor="let entry of entries">
+<div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="loadMore(next)">
+  <div class="card shadow-sm my-3" *ngFor="let entry of entries">
 
     <!-- Header -->
     <div class="card-header d-flex">
@@ -26,13 +24,13 @@
 
     <!-- Cover image -->
     <div class="card-body cover" *ngIf="entry.media.cover_image"
-         [style.background-image]="getBackgroundImage(entry.media.cover_image.file)"></div>
+         [style.background-image]="utilService.sanitizeBackgroundImage(entry.media.cover_image.file)"></div>
 
     <!-- Body -->
     <div class="card-body">
 
       <!-- Title -->
-      <h5 class="card-title"><a href="#">{{ entry.title }}</a></h5>
+      <h5 class="card-title"><a [routerLink]="['/feed', 'entry', entry.id]">{{ entry.title }}</a></h5>
 
       <!-- Excerpt -->
       <p class="card-text">{{ entry.excerpt }}</p>
