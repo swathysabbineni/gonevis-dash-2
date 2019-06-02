@@ -2,9 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [{
-  path: 'blog',
-  loadChildren: './components/blog/blog.module#BlogModule',
-}, {
   path: 'feed',
   loadChildren: './components/feed/feed.module#FeedModule',
 }, {
