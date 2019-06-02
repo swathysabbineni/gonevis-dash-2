@@ -6,12 +6,24 @@ const routes: Routes = [{
   path: '',
   component: UserComponent,
   data: {
-    title: 'User'
+    title: 'User',
   },
   children: [{
     path: 'setting',
-    loadChildren: './user-setting/user-setting.module#UserSettingModule'
-  }]
+    loadChildren: './user-setting/user-setting.module#UserSettingModule',
+  }, {
+    path: 'sign-in',
+    loadChildren: './sign-in/sign-in.module#SignInModule',
+  }, {
+    path: 'sign-up',
+    loadChildren: './sign-up/sign-up.module#SignUpModule',
+  }, {
+    path: 'forgot-password',
+    loadChildren: './forgot-password/forgot-password.module#ForgotPasswordModule',
+  }, {
+    path: 'reset-password/:token',
+    loadChildren: './reset-password/reset-password.module#ResetPasswordModule',
+  }],
 }];
 
 @NgModule({
