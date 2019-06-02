@@ -71,4 +71,13 @@ export class UserService {
       receive_email_notification: ReceiveEmailNotification,
     });
   }
+
+  /**
+   * Upload avatar
+   *
+   * @param formData Form data which includes picture and file name
+   */
+  uploadAvatar(formData: FormData): Observable<any> {
+    return this.http.patch<any>(`${this.apiService.base.v1}account/update-profile/`, formData);
+  }
 }
