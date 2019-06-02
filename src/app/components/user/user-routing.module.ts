@@ -23,6 +23,10 @@ const routes: Routes = [{
   }, {
     path: 'reset-password/:token',
     loadChildren: './reset-password/reset-password.module#ResetPasswordModule',
+  }, {
+    path: '',
+    redirectTo: 'setting',
+    pathMatch: 'full',
   }],
 }];
 
