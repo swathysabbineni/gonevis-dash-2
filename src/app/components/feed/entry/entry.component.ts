@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -31,8 +30,7 @@ export class EntryComponent implements OnInit {
    */
   comments: CommentFeed[] = [];
 
-  constructor(private sanitizer: DomSanitizer,
-              private activatedRoute: ActivatedRoute,
+  constructor(private activatedRoute: ActivatedRoute,
               private entryService: EntryService,
               private feedService: FeedService) {
   }
@@ -94,14 +92,5 @@ export class EntryComponent implements OnInit {
       this.entry.is_bookmarked = data.created;
       this.entry.loading = false;
     });
-  }
-
-  /**
-   * Bypass security and trust the given value to be safe style value (CSS).
-   *
-   * @param url Entry cover image URL
-   */
-  getBackgroundImage(url: string): SafeStyle {
-    return this.sanitizer.bypassSecurityTrustStyle(`url(${url})`);
   }
 }
