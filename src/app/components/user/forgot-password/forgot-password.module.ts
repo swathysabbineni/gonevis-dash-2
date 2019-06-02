@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ForgotPasswordComponent } from '@app/components/forgot-password/forgot-password.component';
+import { ForgotPasswordComponent } from '@app/components/user/forgot-password/forgot-password.component';
 import { PageCoverModule } from '@app/shared/page-cover/page-cover.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
