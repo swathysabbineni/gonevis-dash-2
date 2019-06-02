@@ -41,6 +41,16 @@ export class AuthService {
   }
 
   /**
+   * Set/update authenticated user data
+   *
+   * @param userData UserSettings data
+   */
+  setAuthenticatedUser(userData: UserAuth): void {
+    localStorage.setItem('user', JSON.stringify(userData));
+    this.userSubject.next(userData);
+  }
+
+  /**
    * Parse JWT from token.
    *
    * @param token JWT.
