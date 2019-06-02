@@ -50,6 +50,14 @@ export class UserService {
     return this.http.get<UserSettings>(`${this.apiService.base.v1}account/users/${this.userId}/`);
   }
 
+  /**
+   * Update profile
+   *
+   * @param about User about
+   * @param location User location
+   * @param name User name
+   * @param ReceiveEmailNotification Receive email notification
+   */
   updateProfile(
     about: string,
     location: string,
