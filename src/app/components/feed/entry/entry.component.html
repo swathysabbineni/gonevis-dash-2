@@ -1,3 +1,40 @@
-<p>
-  entry works!
-</p>
+<div *ngIf="entry">
+  <!-- Like -->
+  <button class="btn btn-link" (click)="like()">
+    <fa-icon [fixedWidth]="true" [icon]="['far', 'heart']" *ngIf="!entry.is_voted"></fa-icon>
+    <fa-icon [fixedWidth]="true" [icon]="['fas', 'heart']" *ngIf="entry.is_voted" class="text-danger"></fa-icon>
+    <span *ngIf="entry.vote_count">{{ entry.vote_count }}</span>
+  </button>
+
+  <!-- Views -->
+  <button class="btn btn-link" *ngIf="entry.view_count">
+    <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
+    <span>{{ entry.view_count }}</span>
+  </button>
+
+  <!-- Comments -->
+  <button class="btn btn-link">
+    <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
+    <span *ngIf="entry.active_comment_count">{{ entry.active_comment_count }}</span>
+  </button>
+
+  <!-- Bookmark -->
+  <button class="btn btn-link float-right" (click)="bookmark()">
+    <fa-icon [fixedWidth]="true" [icon]="['far', 'bookmark']" *ngIf="!entry.is_bookmarked"></fa-icon>
+    <fa-icon [fixedWidth]="true" [icon]="['fas', 'bookmark']" *ngIf="entry.is_bookmarked"></fa-icon>
+  </button>
+
+  <!-- Share -->
+  <ng-template #shareTemplate>
+    <app-entry-share [url]="entry.absolute_uri"></app-entry-share>
+  </ng-template>
+  <button class="btn btn-link float-right" [popover]="shareTemplate"
+          popoverTitle="Share" placement="left" [outsideClick]="true">
+    <fa-icon [fixedWidth]="true" [icon]="['far', 'share-square']"></fa-icon>
+  </button>
+</div>
+Comments
+<div *ngFor="let comment of comments">
+  <span>{{ comment.user.name }}</span>
+  <p>{{ comment.comment }}</p>
+</div>
