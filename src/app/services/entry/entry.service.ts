@@ -15,7 +15,7 @@ export class EntryService {
   }
 
   /**
-   * Get entry
+   * Load entry data
    *
    * @param id Entry ID
    */
@@ -24,7 +24,7 @@ export class EntryService {
   }
 
   /**
-   * Get entry comments
+   * Load all entry comments
    *
    * @param id Entry ID
    */
