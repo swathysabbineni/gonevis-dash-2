@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiError } from '@app/interfaces/api-error';
 import { UserSettings } from '@app/interfaces/user-settings';
 import { UserAuth } from '@app/interfaces/user-auth';
@@ -13,6 +13,12 @@ import { UserService } from '@app/services/user/user.service';
   styleUrls: ['./user-setting.component.scss'],
 })
 export class UserSettingComponent implements OnInit {
+  @ViewChild('fileElement') fileElement;
+
+  /**
+   * List of accepted file formats for avatar selection
+   */
+  acceptList = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'];
 
   user: UserSettings;
   userAuth: UserAuth;
@@ -39,6 +45,31 @@ export class UserSettingComponent implements OnInit {
     this.userService.getUser().subscribe((data: UserSettings): void => {
       this.loading = false;
       this.user = data;
+      this.loading = false;
+    });
+  }
+
+  /**
+   * On file selected
+   */
+  onFileSelected(): void {
+    this.loading = true;
+    const file: File = this.fileElement.nativeElement.files[0];
+    // Create form data
+    const formData: FormData = new FormData();
+    formData.append('picture', file);
+    formData.append('key', file.name);
+    // API call
+    this.userService.uploadAvatar(formData).subscribe((data: UserSettingsPatch): void => {
+      for (const key in data) {
+        if (this.userAuth.hasOwnProperty(key)) {
+          this.userAuth[key] = data[key];
+          this.user[key] = data[key];
+        }
+      }
+      this.authService.setAuthenticatedUser(this.userAuth);
+      this.loading = false;
+    }, () => {
       this.loading = false;
     });
   }
