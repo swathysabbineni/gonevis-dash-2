@@ -24,7 +24,7 @@
 
     <!-- Cover image -->
     <div class="card-body cover" *ngIf="entry.media.cover_image"
-         [style.background-image]="getBackgroundImage(entry.media.cover_image.file)"></div>
+         [style.background-image]="utilService.sanitizeBackgroundImage(entry.media.cover_image.file)"></div>
 
     <!-- Body -->
     <div class="card-body">

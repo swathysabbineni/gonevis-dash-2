@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { ApiService } from '@app/services/api/api.service';
+import { UtilService } from '@app/services/util/util.service';
 
 @Component({
   selector: 'app-entry-list',
@@ -29,10 +29,10 @@ export class EntryListComponent {
    */
   @Input() next: string;
 
-  constructor(private sanitizer: DomSanitizer,
-              private activatedRoute: ActivatedRoute,
+  constructor(private activatedRoute: ActivatedRoute,
               private feedService: FeedService,
-              private apiService: ApiService) {
+              private apiService: ApiService,
+              public utilService: UtilService) {
   }
 
   /**
@@ -79,15 +79,6 @@ export class EntryListComponent {
       entry.is_bookmarked = data.created;
       entry.loading = false;
     });
-  }
-
-  /**
-   * Bypass security and trust the given value to be safe style value (CSS).
-   *
-   * @param url Entry cover image URL
-   */
-  getBackgroundImage(url: string): SafeStyle {
-    return this.sanitizer.bypassSecurityTrustStyle(`url(${url})`);
   }
 
   /**
