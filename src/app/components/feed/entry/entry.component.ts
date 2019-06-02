@@ -16,18 +16,12 @@ import { EntryService } from '@app/services/entry/entry.service';
 export class EntryComponent implements OnInit {
 
   /**
-   * Entry ID
+   * ID from param which is used to load entry
    */
   private entryId: string;
 
-  /**
-   * Entry
-   */
+  error: boolean;
   entry: EntryFeed;
-
-  /**
-   * Comments
-   */
   comments: CommentFeed[] = [];
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -38,14 +32,13 @@ export class EntryComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: Params): void => {
       this.entryId = params.entryId;
-      // Get entry
       this.entryService.getEntry(this.entryId).subscribe((data: EntryFeed): void => {
         this.entry = data;
       }, (error: HttpErrorResponseApi): void => {
         if (error.status === 404) {
+          this.error = true;
         }
       });
-      // Get comments
       this.entryService.getComments(this.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
         this.comments = comments.results;
       });
