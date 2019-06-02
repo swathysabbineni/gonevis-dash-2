@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiError } from '@app/interfaces/api-error';
-import { User } from '@app/interfaces/user';
-import { UserAuth } from '@app/interfaces/user-auth';
 import { UserSettings } from '@app/interfaces/user-settings';
+import { UserAuth } from '@app/interfaces/user-auth';
+import { UserSettingsPatch } from '@app/interfaces/user-settings-patch';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
 import { UserService } from '@app/services/user/user.service';
@@ -14,7 +14,7 @@ import { UserService } from '@app/services/user/user.service';
 })
 export class UserSettingComponent implements OnInit {
 
-  user: User;
+  user: UserSettings;
   userAuth: UserAuth;
 
   /**
@@ -36,7 +36,7 @@ export class UserSettingComponent implements OnInit {
     this.authService.user.subscribe((data: UserAuth): void => {
       this.userAuth = data;
     });
-    this.userService.getUser().subscribe((data: User): void => {
+    this.userService.getUser().subscribe((data: UserSettings): void => {
       this.loading = false;
       this.user = data;
       this.loading = false;
@@ -53,7 +53,7 @@ export class UserSettingComponent implements OnInit {
       this.user.location,
       this.user.name,
       this.user.receive_email_notification,
-    ).subscribe((data: UserSettings): void => {
+    ).subscribe((data: UserSettingsPatch): void => {
       for (const key in data) {
         if (this.userAuth.hasOwnProperty(key)) {
           this.userAuth[key] = data[key];
