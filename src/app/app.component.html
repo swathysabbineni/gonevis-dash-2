@@ -17,7 +17,7 @@
           <!-- Dropdown label -->
           <div class="nav-link dropdown-toggle" dropdownToggle>
             <!-- User picture -->
-            <img [src]="user.media.thumbnail_48x48">
+            <img [src]="user.media.thumbnail_48x48" *ngIf="user.media.picture">
             <!-- User name -->
             <span>{{ user.username }}</span>
           </div>
