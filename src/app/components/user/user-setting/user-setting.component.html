@@ -13,14 +13,15 @@
               <label translate>PICTURE</label>
               <div class="btn-group btn-group-sm">
                 <input type="file" [accept]="acceptList" class="d-none" #fileElement (change)="onFileSelected()">
-                <button type="button" class="btn btn-light" [disabled]="loading"
-                        (click)="fileElement.click()">Upload</button>
-                <button type="button" class="btn btn-light" [disabled]="loading">Remove</button>
+                <button type="button" class="btn btn-light" [disabled]="loading" (click)="fileElement.click()">
+                  Upload
+                </button>
+                <button type="button" class="btn btn-light" [disabled]="loading" (click)="submit(true)">Remove</button>
               </div>
             </div>
             <!-- Image -->
-            <img [src]="user.media.thumbnail_48x48" *ngIf="user.media.picture"
-                 class="rounded bg-secondary" alt="Picture">
+            <img class="rounded bg-secondary" *ngIf="user.media.picture" [src]="user.media.thumbnail_48x48">
+            <img class="rounded bg-secondary" *ngIf="!user.media.picture">
           </div>
           <!-- Name -->
           <div class="form-group">
@@ -48,7 +49,7 @@
         </div>
         <!-- Submit -->
         <div class="card-body bg-light small px-lg-5">
-          <button class="btn btn-primary float-right" translate>SAVE_CHANGES</button>
+          <button class="btn btn-primary float-right" translate [disabled]="loading">SAVE_CHANGES</button>
         </div>
       </form>
     </div>
