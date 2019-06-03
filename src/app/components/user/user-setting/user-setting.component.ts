@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiError } from '@app/interfaces/api-error';
-import { UserSettings } from '@app/interfaces/user-settings';
 import { UserAuth } from '@app/interfaces/user-auth';
+import { UserSettings } from '@app/interfaces/user-settings';
 import { UserSettingsPatch } from '@app/interfaces/user-settings-patch';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
@@ -53,20 +53,18 @@ export class UserSettingComponent implements OnInit {
    * On file selected
    */
   onFileSelected(): void {
+    if (!this.fileElement.nativeElement.files[0]) {
+      return;
+    }
     this.loading = true;
     const file: File = this.fileElement.nativeElement.files[0];
     // Create form data
     const formData: FormData = new FormData();
     formData.append('picture', file);
     formData.append('key', file.name);
-    // API call
     this.userService.uploadAvatar(formData).subscribe((data: UserSettingsPatch): void => {
-      for (const key in data) {
-        if (this.userAuth.hasOwnProperty(key)) {
-          this.userAuth[key] = data[key];
-          this.user[key] = data[key];
-        }
-      }
+      this.userAuth.media = data.media;
+      this.user.media = data.media;
       this.authService.setAuthenticatedUser(this.userAuth);
       this.loading = false;
     }, () => {
@@ -76,15 +74,22 @@ export class UserSettingComponent implements OnInit {
 
   /**
    * Update user
+   *
+   * @param removeAvatar Remove avatar
    */
-  submit(): void {
+  submit(removeAvatar?: boolean): void {
+    const payload: UserSettingsPatch = {
+      name: this.user.name,
+      about: this.user.about,
+      location: this.user.location,
+      receive_email_notification: this.user.receive_email_notification,
+    };
+    if (removeAvatar) {
+      this.user.media.picture = null;
+      payload.picture = null;
+    }
     this.loading = true;
-    this.userService.updateProfile(
-      this.user.about,
-      this.user.location,
-      this.user.name,
-      this.user.receive_email_notification,
-    ).subscribe((data: UserSettingsPatch): void => {
+    this.userService.updateProfile(payload).subscribe((data: UserSettingsPatch): void => {
       for (const key in data) {
         if (this.userAuth.hasOwnProperty(key)) {
           this.userAuth[key] = data[key];
