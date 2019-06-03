@@ -53,23 +53,10 @@ export class UserService {
   /**
    * Update profile
    *
-   * @param about User about
-   * @param location User location
-   * @param name User name
-   * @param ReceiveEmailNotification Receive email notification
+   * @param payload User settings fields
    */
-  updateProfile(
-    about: string,
-    location: string,
-    name: string,
-    ReceiveEmailNotification: boolean,
-  ): Observable<UserSettingsPatch> {
-    return this.http.patch<UserSettingsPatch>(`${this.apiService.base.v1}account/update-profile/`, {
-      about,
-      location,
-      name,
-      receive_email_notification: ReceiveEmailNotification,
-    });
+  updateProfile(payload: UserSettingsPatch): Observable<UserSettingsPatch> {
+    return this.http.patch<UserSettingsPatch>(`${this.apiService.base.v1}account/update-profile/`, payload);
   }
 
   /**
