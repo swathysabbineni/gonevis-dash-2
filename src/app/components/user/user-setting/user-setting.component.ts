@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { UserSettings } from '@app/interfaces/user-settings';
@@ -6,6 +7,7 @@ import { UserSettingsPatch } from '@app/interfaces/user-settings-patch';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
 import { UserService } from '@app/services/user/user.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-setting',
@@ -14,6 +16,11 @@ import { UserService } from '@app/services/user/user.service';
 })
 export class UserSettingComponent implements OnInit {
   @ViewChild('fileElement') fileElement;
+
+  /**
+   * Change password form
+   */
+  form: FormGroup;
 
   /**
    * List of accepted file formats for avatar selection
@@ -33,12 +40,20 @@ export class UserSettingComponent implements OnInit {
    */
   loading: boolean;
 
-  constructor(private userService: UserService,
+  constructor(private formBuilder: FormBuilder,
+              private translateService: TranslateService,
+              private userService: UserService,
               private authService: AuthService) {
     this.loading = true;
   }
 
   ngOnInit(): void {
+    // Setup change password form
+    this.form = this.formBuilder.group({
+      oldPassword: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
+    });
     this.authService.user.subscribe((data: UserAuth): void => {
       this.userAuth = data;
     });
@@ -47,6 +62,13 @@ export class UserSettingComponent implements OnInit {
       this.user = data;
       this.loading = false;
     });
+  }
+
+  /**
+   * @return Change password form controls (fields)
+   */
+  get f(): { [p: string]: AbstractControl } {
+    return this.form.controls;
   }
 
   /**
@@ -100,6 +122,32 @@ export class UserSettingComponent implements OnInit {
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
       this.loading = false;
+    });
+  }
+
+  changePassword(): void {
+    // Is a new password
+    if (this.f.oldPassword.value === this.f.password.value) {
+      this.translateService.get('ERROR_PASSWORD_SAME').subscribe((response: string): void => {
+        this.error.non_field_errors = [response];
+      });
+      return;
+    }
+    // Check if Confirm new password and new password were matched, if so raise an error
+    if (this.f.password.value !== this.f.confirmPassword.value) {
+      this.translateService.get('ERROR_PASSWORD_MISMATCH').subscribe((response: string): void => {
+        this.error.non_field_errors = [response];
+      });
+      return;
+    }
+
+    this.loading = true;
+    this.userService.changePassword(
+      this.f.oldPassword.value,
+      this.f.password.value,
+      this.f.confirmPassword.value,
+    ).subscribe((data): void => {
+      console.log(data);
     });
   }
 }
