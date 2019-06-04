@@ -6,7 +6,7 @@ const routes: Routes = [{
   path: '',
   component: UserSettingComponent,
   data: {
-    title: 'User Settings',
+    title: 'USER_SETTINGS',
   },
 }];
 

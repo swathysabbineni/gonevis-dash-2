@@ -6,7 +6,7 @@ const routes: Routes = [{
   path: '',
   component: SignInComponent,
   data: {
-    title: 'Sign in'
+    title: 'SIGN_IN'
   }
 }];
 
