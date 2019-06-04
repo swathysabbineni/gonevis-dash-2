@@ -52,6 +52,30 @@
           <button class="btn btn-primary float-right" translate [disabled]="loading">SAVE_CHANGES</button>
         </div>
       </form>
+      <!-- Form -->
+      <form [formGroup]="form" (ngSubmit)="changePassword()">
+        <!-- Old password -->
+        <div class="form-group">
+          <input type="password" class="form-control" formControlName="oldPassword"
+                 [placeholder]="'CURRENT_PASSWORD' | translate" required>
+          <span class="text-danger" *ngIf="error.old_password">{{ error.old_password[0] }}</span>
+        </div>
+        <!-- Password -->
+        <div class="form-group">
+          <input type="password" class="form-control" formControlName="password"
+                 [placeholder]="'NEW_PASSWORD' | translate">
+          <span class="text-danger" *ngIf="error.password">{{ error.password[0] }}</span>
+        </div>
+        <!-- Confirm password -->
+        <div class="form-group">
+          <input type="password" class="form-control" formControlName="confirmPassword"
+                 [placeholder]="'CONFIRM_NEW_PASSWORD' | translate">
+        </div>
+        <!-- Error -->
+        <p class="text-danger" *ngIf="error.non_field_errors">{{ error.non_field_errors[0] }}</p>
+        <!-- Submit -->
+        <button class="btn btn-success btn-block" type="submit" [disabled]="loading" translate>CHANGE_PASSWORD</button>
+      </form>
     </div>
   </div>
 </div>
