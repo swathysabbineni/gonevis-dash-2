@@ -64,7 +64,22 @@ export class UserService {
    *
    * @param formData Form data which includes picture and file name
    */
-  uploadAvatar(formData: FormData): Observable<any> {
-    return this.http.patch<any>(`${this.apiService.base.v1}account/update-profile/`, formData);
+  uploadAvatar(formData: FormData): Observable<UserSettingsPatch> {
+    return this.http.patch<UserSettingsPatch>(`${this.apiService.base.v1}account/update-profile/`, formData);
+  }
+
+  /**
+   * Change user password
+   *
+   * @param oldPassword User current password
+   * @param password New password
+   * @param confirmPassword Confirm new password
+   */
+  changePassword(oldPassword: string, password: string, confirmPassword: string): Observable<void> {
+    return this.http.put<void>(`${this.apiService.base.v1}account/change-password/`, {
+      old_password: oldPassword,
+      password,
+      confirm_password: confirmPassword,
+    });
   }
 }
