@@ -17,7 +17,7 @@
           <!-- Dropdown label -->
           <div class="nav-link dropdown-toggle" dropdownToggle>
             <!-- User picture -->
-            <img [src]="user.media.thumbnail_48x48">
+            <img [src]="user.media.thumbnail_48x48" *ngIf="user.media.picture">
             <!-- User name -->
             <span>{{ user.username }}</span>
           </div>
@@ -36,11 +36,11 @@
       <ul class="navbar-nav ml-auto" *ngIf="!authService.isAuth">
         <!-- Sign in -->
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="sign-in" translate>SIGN_IN</a>
+          <a class="nav-link" routerLink="/user/sign-in" translate>SIGN_IN</a>
         </li>
         <!-- Sign up -->
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="sign-up" translate>JOIN_GONEVIS</a>
+          <a class="nav-link" routerLink="/user/sign-up" translate>JOIN_GONEVIS</a>
         </li>
       </ul>
     </div>

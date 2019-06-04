@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ResetPasswordComponent } from '@app/components/reset-password/reset-password.component';
+import { ResetPasswordComponent } from '@app/components/user/reset-password/reset-password.component';
 
 const routes: Routes = [{
   path: '',

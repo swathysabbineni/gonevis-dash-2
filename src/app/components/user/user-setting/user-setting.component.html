@@ -1,9 +1,9 @@
 <app-page-cover class="d-none d-md-block"></app-page-cover>
 
-<div class="container">
+<div class="container" *ngIf="user">
   <div class="row justify-content-center">
     <div class="col-lg-5">
-      <form class="card shadow-lg mx-auto mb-5 mt-5 mt-md-0">
+      <form class="card shadow-lg mx-auto mb-5 mt-5 mt-md-0" (ngSubmit)="submit()">
         <div class="card-body p-lg-5">
           <!-- Title -->
           <h4 class="text-center text-uppercase mb-5" translate>USER_SETTING</h4>
@@ -12,31 +12,36 @@
             <div class="d-flex flex-column mr-auto pr-3">
               <label translate>PICTURE</label>
               <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-light">Upload</button>
-                <button type="button" class="btn btn-light">Remove</button>
+                <input type="file" [accept]="acceptList" class="d-none" #fileElement (change)="onFileSelected()">
+                <button type="button" class="btn btn-light" [disabled]="loading" (click)="fileElement.click()">
+                  Upload
+                </button>
+                <button type="button" class="btn btn-light" [disabled]="loading" (click)="submit(true)">Remove</button>
               </div>
             </div>
             <!-- Image -->
-            <img src="https://picsum.photos/64" class="rounded bg-secondary" alt="Picture">
+            <img class="rounded bg-secondary" *ngIf="user.media.picture" [src]="user.media.thumbnail_48x48">
+            <img class="rounded bg-secondary" *ngIf="!user.media.picture">
           </div>
           <!-- Name -->
           <div class="form-group">
             <label for="name" translate>NAME</label>
-            <input name="name" id="name" type="text" class="form-control">
+            <input [(ngModel)]="user.name" name="name" id="name" type="text" class="form-control">
           </div>
           <!-- Location -->
           <div class="form-group">
             <label for="location" translate>LOCATION</label>
-            <input name="location" id="location" type="text" class="form-control">
+            <input [(ngModel)]="user.location" name="location" id="location" type="text" class="form-control">
           </div>
           <!-- About -->
           <div class="form-group">
             <label for="about" translate>ABOUT</label>
-            <textarea name="about" id="about" class="form-control"></textarea>
+            <textarea [(ngModel)]="user.about" name="about" id="about" class="form-control"></textarea>
           </div>
           <!-- Receive email notification -->
           <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="receive-email-notification">
+            <input [(ngModel)]="user.receive_email_notification" name="receive-email-notification" type="checkbox"
+                   class="custom-control-input" id="receive-email-notification">
             <label class="custom-control-label" for="receive-email-notification" translate>
               RECEIVE_EMAIL_NOTIFICATION
             </label>
@@ -44,8 +49,32 @@
         </div>
         <!-- Submit -->
         <div class="card-body bg-light small px-lg-5">
-          <button class="btn btn-primary float-right" translate>SAVE_CHANGES</button>
+          <button class="btn btn-primary float-right" translate [disabled]="loading">SAVE_CHANGES</button>
         </div>
+      </form>
+      <!-- Form -->
+      <form [formGroup]="form" (ngSubmit)="changePassword()">
+        <!-- Old password -->
+        <div class="form-group">
+          <input type="password" class="form-control" formControlName="oldPassword"
+                 [placeholder]="'CURRENT_PASSWORD' | translate" required>
+          <span class="text-danger" *ngIf="error.old_password">{{ error.old_password[0] }}</span>
+        </div>
+        <!-- Password -->
+        <div class="form-group">
+          <input type="password" class="form-control" formControlName="password"
+                 [placeholder]="'NEW_PASSWORD' | translate">
+          <span class="text-danger" *ngIf="error.password">{{ error.password[0] }}</span>
+        </div>
+        <!-- Confirm password -->
+        <div class="form-group">
+          <input type="password" class="form-control" formControlName="confirmPassword"
+                 [placeholder]="'CONFIRM_NEW_PASSWORD' | translate">
+        </div>
+        <!-- Error -->
+        <p class="text-danger" *ngIf="error.non_field_errors">{{ error.non_field_errors[0] }}</p>
+        <!-- Submit -->
+        <button class="btn btn-success btn-block" type="submit" [disabled]="loading" translate>CHANGE_PASSWORD</button>
       </form>
     </div>
   </div>
