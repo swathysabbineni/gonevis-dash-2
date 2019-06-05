@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AuthResponse } from '@app/interfaces/auth-response';
 import { UserSettings } from '@app/interfaces/user-settings';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { UserSettingsPatch } from '@app/interfaces/user-settings-patch';
@@ -81,5 +82,14 @@ export class UserService {
       password,
       confirm_password: confirmPassword,
     });
+  }
+
+  /**
+   * Verify user's email address
+   *
+   * @param token Confirmation token
+   */
+  verifyEmail(token: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiService.base.v1}account/email-confirmation/`, { token });
   }
 }
