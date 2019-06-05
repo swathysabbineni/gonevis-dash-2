@@ -27,7 +27,7 @@ export class ResetPasswordComponent implements OnInit {
   loading: boolean;
 
   // Sign in route
-  readonly signInRoute = '/sign-in';
+  readonly signInRoute = '/user/sign-in';
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
