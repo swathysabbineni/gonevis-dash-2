@@ -24,6 +24,9 @@ const routes: Routes = [{
     path: 'reset-password/:token',
     loadChildren: './reset-password/reset-password.module#ResetPasswordModule',
   }, {
+    path: 'email-confirmation/:token',
+    loadChildren: './email-confirmation/email-confirmation.module#EmailConfirmationModule',
+  }, {
     path: '',
     redirectTo: 'setting',
     pathMatch: 'full',
