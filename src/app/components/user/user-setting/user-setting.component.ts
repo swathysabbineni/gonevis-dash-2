@@ -87,12 +87,7 @@ export class UserSettingComponent implements OnInit {
       return;
     }
     this.loading = true;
-    const file: File = this.fileElement.nativeElement.files[0];
-    // Create form data
-    const formData: FormData = new FormData();
-    formData.append('picture', file);
-    formData.append('key', file.name);
-    this.userService.uploadAvatar(formData).subscribe((data: UserSettingsPatch): void => {
+    this.userService.setPicture(this.fileElement.nativeElement.files[0]).subscribe((data: UserSettingsPatch): void => {
       this.userAuth.media = data.media;
       this.user.media = data.media;
       this.authService.setAuthenticatedUser(this.userAuth);
@@ -150,7 +145,7 @@ export class UserSettingComponent implements OnInit {
     }
 
     this.loading = true;
-    this.userService.changePassword(
+    this.userService.setPassword(
       this.f.oldPassword.value,
       this.f.password.value,
       this.f.confirmPassword.value,
