@@ -14,7 +14,6 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class AppComponent {
   title = 'gonevis';
-  isCollapsed: boolean;
   user: UserAuth;
 
   constructor(public authService: AuthService,
@@ -27,7 +26,6 @@ export class AppComponent {
     this.authService.user.subscribe((user: UserAuth): void => {
       this.user = user;
     });
-    this.isCollapsed = true;
     this.translateService.setDefaultLang('en');
     // Set window title
     this.router.events.pipe(
