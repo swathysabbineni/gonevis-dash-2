@@ -12,20 +12,23 @@ const routes: Routes = [{
     path: 'explore',
     loadChildren: './reader/reader.module#ReaderModule',
     data: {
-      route: 'explore'
+      route: 'explore',
+      title: 'EXPLORE',
     }
   }, {
     path: 'updates',
     loadChildren: './reader/reader.module#ReaderModule',
     data: {
-      route: 'updates'
-    }
+      route: 'updates',
+      title: 'UPDATES',
+    },
   }, {
     path: 'bookmarks',
     loadChildren: './reader/reader.module#ReaderModule',
     data: {
-      route: 'bookmarks'
-    }
+      route: 'bookmarks',
+      title: 'BOOKMARKS',
+    },
   }, {
     path: 'entry/:entryId',
     loadChildren: './entry/entry.module#EntryModule',

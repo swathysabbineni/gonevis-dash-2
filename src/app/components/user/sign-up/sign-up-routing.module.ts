@@ -6,7 +6,7 @@ const routes: Routes = [{
   path: '',
   component: SignUpComponent,
   data: {
-    title: 'Sign up'
+    title: 'SIGN_UP'
   }
 }];
 
