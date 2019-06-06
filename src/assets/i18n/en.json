@@ -33,5 +33,6 @@
   "LOCATION": "Location",
   "ABOUT": "About",
   "RECEIVE_EMAIL_NOTIFICATION": "Receive email notification",
+  "EMAIL_CONFIRMATION": "Email confirmation",
   "SAVE_CHANGES": "Save Changes"
 }
