@@ -21,13 +21,15 @@ export class AppComponent {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private titleService: Title) {
+    // Default language
     this.translateService.setDefaultLang('en');
-    // Subscribe to AuthService's user changes.
+
+    // Get user (and watch for changes)
     this.authService.user.subscribe((user: UserAuth): void => {
       this.user = user;
     });
-    this.translateService.setDefaultLang('en');
-    // Set window title
+
+    // Set page title, watch for page change and update title with translation
     this.router.events.pipe(
       filter((event: RouterEvent): boolean => event instanceof NavigationEnd),
       map((): ActivatedRoute => this.activatedRoute),
