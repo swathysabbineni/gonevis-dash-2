@@ -12,27 +12,27 @@ const routes: Routes = [{
     path: 'explore',
     loadChildren: './reader/reader.module#ReaderModule',
     data: {
-      route: 'explore'
-    }
+      route: 'explore',
+    },
   }, {
     path: 'updates',
     loadChildren: './reader/reader.module#ReaderModule',
     data: {
-      route: 'updates'
-    }
+      route: 'updates',
+    },
   }, {
     path: 'bookmarks',
     loadChildren: './reader/reader.module#ReaderModule',
     data: {
-      route: 'bookmarks'
-    }
+      route: 'bookmarks',
+    },
   }, {
     path: 'entry/:entryId',
     loadChildren: './entry/entry.module#EntryModule',
   }, {
     path: '',
     redirectTo: 'explore',
-    pathMatch: 'full'
+    pathMatch: 'full',
   }],
 }];
 
