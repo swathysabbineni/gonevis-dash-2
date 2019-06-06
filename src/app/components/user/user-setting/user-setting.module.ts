@@ -5,6 +5,7 @@ import { UserSettingRoutingModule } from '@app/components/user/user-setting/user
 import { UserSettingComponent } from '@app/components/user/user-setting/user-setting.component';
 import { PageCoverModule } from '@app/shared/page-cover/page-cover.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { TabsModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [UserSettingComponent],
@@ -14,6 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
     FormsModule,
     ReactiveFormsModule,
     TranslateModule.forChild(),
+    TabsModule.forRoot(),
     PageCoverModule,
   ],
 })
