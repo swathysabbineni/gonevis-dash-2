@@ -1,29 +1,28 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ResetPasswordComponent } from '@app/components/reset-password/reset-password.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ForgotPasswordComponent } from '@app/components/user/forgot-password/forgot-password.component';
 import { PageCoverModule } from '@app/shared/page-cover/page-cover.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faLock } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { ResetPasswordRoutingModule } from './reset-password-routing.module';
+import { ForgotPasswordRoutingModule } from './forgot-password-routing.module';
 
 @NgModule({
-  declarations: [ResetPasswordComponent],
+  declarations: [ForgotPasswordComponent],
   imports: [
     CommonModule,
-    FormsModule,
-    ResetPasswordRoutingModule,
+    ForgotPasswordRoutingModule,
     ReactiveFormsModule,
     TranslateModule.forChild(),
-    FontAwesomeModule,
     PageCoverModule,
+    FontAwesomeModule,
   ],
 })
-export class ResetPasswordModule {
+export class ForgotPasswordModule {
   constructor() {
-    library.add(faLock);
+    library.add(faEnvelope);
   }
 }

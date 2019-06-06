@@ -16,7 +16,7 @@ export class AuthService {
   /**
    * Sign out redirect
    */
-  private readonly signOutRedirect: string = '/sign-in';
+  private readonly signOutRedirect: string = '/user/sign-in';
 
   /**
    * Authentication user subject
@@ -38,6 +38,16 @@ export class AuthService {
       this.userSubject.next(JSON.parse(localStorage.getItem('user')));
     }
     this.user = this.userSubject.asObservable();
+  }
+
+  /**
+   * Set/update authenticated user data
+   *
+   * @param userData UserSettings data
+   */
+  setAuthenticatedUser(userData: UserAuth): void {
+    localStorage.setItem('user', JSON.stringify(userData));
+    this.userSubject.next(userData);
   }
 
   /**
