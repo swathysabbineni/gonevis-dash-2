@@ -27,7 +27,14 @@ export class UserSettingComponent implements OnInit {
    */
   acceptList = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'];
 
+  /**
+   * User setting data to auto fill the inputs with
+   */
   user: UserSettings;
+
+  /**
+   * Authenticated user data to update after settings changes
+   */
   userAuth: UserAuth;
 
   /**
@@ -44,7 +51,6 @@ export class UserSettingComponent implements OnInit {
               private translateService: TranslateService,
               private userService: UserService,
               private authService: AuthService) {
-    this.loading = true;
   }
 
   ngOnInit(): void {
@@ -54,9 +60,11 @@ export class UserSettingComponent implements OnInit {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
     });
+    // Get authenticated user data
     this.authService.user.subscribe((data: UserAuth): void => {
       this.userAuth = data;
     });
+    // Get user settings data
     this.userService.getUser().subscribe((data: UserSettings): void => {
       this.loading = false;
       this.user = data;
