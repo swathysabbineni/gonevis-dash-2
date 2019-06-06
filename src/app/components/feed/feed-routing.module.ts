@@ -14,7 +14,7 @@ const routes: Routes = [{
     data: {
       route: 'explore',
       title: 'EXPLORE',
-    }
+    },
   }, {
     path: 'updates',
     loadChildren: './reader/reader.module#ReaderModule',
@@ -35,7 +35,7 @@ const routes: Routes = [{
   }, {
     path: '',
     redirectTo: 'explore',
-    pathMatch: 'full'
+    pathMatch: 'full',
   }],
 }];
 
