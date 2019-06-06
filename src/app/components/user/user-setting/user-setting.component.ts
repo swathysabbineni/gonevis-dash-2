@@ -15,12 +15,21 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./user-setting.component.scss'],
 })
 export class UserSettingComponent implements OnInit {
+
+  /**
+   * File input reference
+   */
   @ViewChild('fileElement') fileElement;
 
   /**
    * Change password form
    */
   form: FormGroup;
+
+  /**
+   * Indicates password has changed succesfully
+   */
+  success: boolean;
 
   /**
    * List of accepted file formats for avatar selection
@@ -68,7 +77,6 @@ export class UserSettingComponent implements OnInit {
     this.userService.getUser().subscribe((data: UserSettings): void => {
       this.loading = false;
       this.user = data;
-      this.loading = false;
     });
   }
 
@@ -92,8 +100,6 @@ export class UserSettingComponent implements OnInit {
       this.user.media = data.media;
       this.authService.setAuthenticatedUser(this.userAuth);
       this.loading = false;
-    }, () => {
-      this.loading = false;
     });
   }
 
@@ -103,18 +109,22 @@ export class UserSettingComponent implements OnInit {
    * @param removePicture Indicate whether to remove user picture or not
    */
   submit(removePicture: boolean = false): void {
+    // Settings payload
     const payload: UserSettingsPatch = {
       name: this.user.name,
       about: this.user.about,
       location: this.user.location,
       receive_email_notification: this.user.receive_email_notification,
     };
+    // If removing picture, remove it from payload
     if (removePicture) {
       this.user.media.picture = null;
       payload.picture = null;
     }
     this.loading = true;
+    // API call
     this.userService.updateProfile(payload).subscribe((data: UserSettingsPatch): void => {
+      // Update local user data with the new changes from back-end
       for (const key in data) {
         if (this.userAuth.hasOwnProperty(key)) {
           this.userAuth[key] = data[key];
@@ -147,12 +157,19 @@ export class UserSettingComponent implements OnInit {
       return;
     }
     this.loading = true;
+    // API call
     this.userService.setPassword(
       this.f.oldPassword.value,
       this.f.password.value,
       this.f.confirmPassword.value,
-    ).subscribe((data): void => {
-      console.log(data);
+    ).subscribe((): void => {
+      this.error = {};
+      this.loading = false;
+      this.success = true;
+      this.form.reset();
+    }, (error: HttpErrorResponseApi): void => {
+      this.error = error.error;
+      this.loading = false;
     });
   }
 }
