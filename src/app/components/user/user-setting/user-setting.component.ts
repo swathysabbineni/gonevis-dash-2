@@ -27,7 +27,14 @@ export class UserSettingComponent implements OnInit {
    */
   acceptList = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'];
 
+  /**
+   * User setting data to auto fill the inputs with
+   */
   user: UserSettings;
+
+  /**
+   * Authenticated user data to update after settings changes
+   */
   userAuth: UserAuth;
 
   /**
@@ -44,7 +51,6 @@ export class UserSettingComponent implements OnInit {
               private translateService: TranslateService,
               private userService: UserService,
               private authService: AuthService) {
-    this.loading = true;
   }
 
   ngOnInit(): void {
@@ -54,9 +60,11 @@ export class UserSettingComponent implements OnInit {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
     });
+    // Get authenticated user data
     this.authService.user.subscribe((data: UserAuth): void => {
       this.userAuth = data;
     });
+    // Get user settings data
     this.userService.getUser().subscribe((data: UserSettings): void => {
       this.loading = false;
       this.user = data;
@@ -72,19 +80,14 @@ export class UserSettingComponent implements OnInit {
   }
 
   /**
-   * On file selected
+   * On file selected update user's picture
    */
   onFileSelected(): void {
     if (!this.fileElement.nativeElement.files[0]) {
       return;
     }
     this.loading = true;
-    const file: File = this.fileElement.nativeElement.files[0];
-    // Create form data
-    const formData: FormData = new FormData();
-    formData.append('picture', file);
-    formData.append('key', file.name);
-    this.userService.uploadAvatar(formData).subscribe((data: UserSettingsPatch): void => {
+    this.userService.setPicture(this.fileElement.nativeElement.files[0]).subscribe((data: UserSettingsPatch): void => {
       this.userAuth.media = data.media;
       this.user.media = data.media;
       this.authService.setAuthenticatedUser(this.userAuth);
@@ -97,16 +100,16 @@ export class UserSettingComponent implements OnInit {
   /**
    * Update user
    *
-   * @param removeAvatar Remove avatar
+   * @param removePicture Indicate whether to remove user picture or not
    */
-  submit(removeAvatar?: boolean): void {
+  submit(removePicture: boolean = false): void {
     const payload: UserSettingsPatch = {
       name: this.user.name,
       about: this.user.about,
       location: this.user.location,
       receive_email_notification: this.user.receive_email_notification,
     };
-    if (removeAvatar) {
+    if (removePicture) {
       this.user.media.picture = null;
       payload.picture = null;
     }
@@ -125,6 +128,9 @@ export class UserSettingComponent implements OnInit {
     });
   }
 
+  /**
+   * Change user password
+   */
   changePassword(): void {
     // Is a new password
     if (this.f.oldPassword.value === this.f.password.value) {
@@ -133,16 +139,15 @@ export class UserSettingComponent implements OnInit {
       });
       return;
     }
-    // Check if Confirm new password and new password were matched, if so raise an error
+    // Check if confirm new password and new password were matched, if so raise an error
     if (this.f.password.value !== this.f.confirmPassword.value) {
       this.translateService.get('ERROR_PASSWORD_MISMATCH').subscribe((response: string): void => {
         this.error.non_field_errors = [response];
       });
       return;
     }
-
     this.loading = true;
-    this.userService.changePassword(
+    this.userService.setPassword(
       this.f.oldPassword.value,
       this.f.password.value,
       this.f.confirmPassword.value,

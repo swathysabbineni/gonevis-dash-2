@@ -51,20 +51,24 @@ export class UserService {
   }
 
   /**
-   * Update profile
+   * Update user profile settings
    *
-   * @param payload User settings fields
+   * @param payload User settings data
    */
   updateProfile(payload: UserSettingsPatch): Observable<UserSettingsPatch> {
     return this.http.patch<UserSettingsPatch>(`${this.apiService.base.v1}account/update-profile/`, payload);
   }
 
   /**
-   * Upload avatar
+   * Change user profile image
    *
-   * @param formData Form data which includes picture and file name
+   * @param picture User picture
    */
-  uploadAvatar(formData: FormData): Observable<UserSettingsPatch> {
+  setPicture(picture: File): Observable<UserSettingsPatch> {
+    // Create form data
+    const formData: FormData = new FormData();
+    formData.append('picture', picture);
+    formData.append('key', picture.name);
     return this.http.patch<UserSettingsPatch>(`${this.apiService.base.v1}account/update-profile/`, formData);
   }
 
@@ -75,7 +79,7 @@ export class UserService {
    * @param password New password
    * @param confirmPassword Confirm new password
    */
-  changePassword(oldPassword: string, password: string, confirmPassword: string): Observable<void> {
+  setPassword(oldPassword: string, password: string, confirmPassword: string): Observable<void> {
     return this.http.put<void>(`${this.apiService.base.v1}account/change-password/`, {
       old_password: oldPassword,
       password,
