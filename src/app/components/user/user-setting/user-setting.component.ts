@@ -80,7 +80,7 @@ export class UserSettingComponent implements OnInit {
   }
 
   /**
-   * On file selected
+   * On file selected update user's picture
    */
   onFileSelected(): void {
     if (!this.fileElement.nativeElement.files[0]) {
@@ -100,16 +100,16 @@ export class UserSettingComponent implements OnInit {
   /**
    * Update user
    *
-   * @param removeAvatar Remove avatar
+   * @param removePicture Indicate whether to remove user picture or not
    */
-  submit(removeAvatar?: boolean): void {
+  submit(removePicture: boolean = false): void {
     const payload: UserSettingsPatch = {
       name: this.user.name,
       about: this.user.about,
       location: this.user.location,
       receive_email_notification: this.user.receive_email_notification,
     };
-    if (removeAvatar) {
+    if (removePicture) {
       this.user.media.picture = null;
       payload.picture = null;
     }
@@ -128,6 +128,9 @@ export class UserSettingComponent implements OnInit {
     });
   }
 
+  /**
+   * Change user password
+   */
   changePassword(): void {
     // Is a new password
     if (this.f.oldPassword.value === this.f.password.value) {
@@ -136,14 +139,13 @@ export class UserSettingComponent implements OnInit {
       });
       return;
     }
-    // Check if Confirm new password and new password were matched, if so raise an error
+    // Check if confirm new password and new password were matched, if so raise an error
     if (this.f.password.value !== this.f.confirmPassword.value) {
       this.translateService.get('ERROR_PASSWORD_MISMATCH').subscribe((response: string): void => {
         this.error.non_field_errors = [response];
       });
       return;
     }
-
     this.loading = true;
     this.userService.setPassword(
       this.f.oldPassword.value,
