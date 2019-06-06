@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SignInComponent } from './sign-in.component';
+import { EmailConfirmationComponent } from '@app/components/user/email-confirmation/email-confirmation.component';
 
 const routes: Routes = [{
   path: '',
-  component: SignInComponent,
+  component: EmailConfirmationComponent,
   data: {
-    title: 'SIGN_IN'
-  }
+    title: 'EMAIL_CONFIRMATION',
+  },
 }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SignInRoutingModule {
+export class EmailConfirmationRoutingModule {
 }

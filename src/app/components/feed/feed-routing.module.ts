@@ -13,18 +13,21 @@ const routes: Routes = [{
     loadChildren: './reader/reader.module#ReaderModule',
     data: {
       route: 'explore',
+      title: 'EXPLORE',
     },
   }, {
     path: 'updates',
     loadChildren: './reader/reader.module#ReaderModule',
     data: {
       route: 'updates',
+      title: 'UPDATES',
     },
   }, {
     path: 'bookmarks',
     loadChildren: './reader/reader.module#ReaderModule',
     data: {
       route: 'bookmarks',
+      title: 'BOOKMARKS',
     },
   }, {
     path: 'entry/:entryId',

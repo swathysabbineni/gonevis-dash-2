@@ -6,7 +6,7 @@ const routes: Routes = [{
   path: '',
   component: ForgotPasswordComponent,
   data: {
-    title: 'Forgot password',
+    title: 'FORGOT_PASSWORD_TITLE',
   },
 }];
 

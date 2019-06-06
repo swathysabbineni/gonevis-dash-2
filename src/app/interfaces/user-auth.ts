@@ -20,5 +20,5 @@ export interface UserAuth {
   receive_email_notification: boolean;
   sites: BlogMinimalUser[];
   tour: UserTour;
-  username: boolean;
+  username: string;
 }

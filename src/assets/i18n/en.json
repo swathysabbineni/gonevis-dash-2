@@ -14,6 +14,7 @@
   "SUBMIT": "Submit",
   "SETTING": "Setting",
   "FORGOT_PASSWORD": "Forgot password?",
+  "FORGOT_PASSWORD_TITLE": "Forgot password",
   "GET_RESET_PASSWORD_LINK": "Get Reset Password Link",
   "ERROR_PASSWORD_MISMATCH": "Passwords don't match.",
   "ERROR_PASSWORD_SAME": "Please, choose a new password.",
@@ -26,10 +27,12 @@
   "UPDATES": "Updates",
   "POPULAR_TAGS": "Popular Tags",
   "USER_SETTING": "User Setting",
+  "USER_SETTINGS": "User Settings",
   "PICTURE": "Picture",
   "NAME": "Name",
   "LOCATION": "Location",
   "ABOUT": "About",
   "RECEIVE_EMAIL_NOTIFICATION": "Receive email notification",
+  "EMAIL_CONFIRMATION": "Email confirmation",
   "SAVE_CHANGES": "Save Changes"
 }
