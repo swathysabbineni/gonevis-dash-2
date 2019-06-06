@@ -14,22 +14,22 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class AppComponent {
   title = 'gonevis';
-  isCollapsed: boolean;
   user: UserAuth;
 
   constructor(public authService: AuthService,
-              private translate: TranslateService,
+              private translateService: TranslateService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private titleService: Title) {
-    this.translate.setDefaultLang('en');
-    // Subscribe to AuthService's user changes.
+    // Default language
+    this.translateService.setDefaultLang('en');
+
+    // Get user (and watch for changes)
     this.authService.user.subscribe((user: UserAuth): void => {
       this.user = user;
     });
-    this.isCollapsed = true;
-    this.translate.setDefaultLang('en');
-    // Set window title
+
+    // Set page title, watch for page change and update title with translation
     this.router.events.pipe(
       filter((event: RouterEvent): boolean => event instanceof NavigationEnd),
       map((): ActivatedRoute => this.activatedRoute),
@@ -41,6 +41,10 @@ export class AppComponent {
       }),
       filter((route: ActivatedRoute): boolean => route.outlet === 'primary'),
       mergeMap((route: ActivatedRoute): Observable<Data> => route.data),
-    ).subscribe((event: Data): void => this.titleService.setTitle(event.title));
+    ).subscribe((event: Data): void => {
+      this.translateService.get(event.title).subscribe((response: string): void => {
+        this.titleService.setTitle(response);
+      });
+    });
   }
 }
