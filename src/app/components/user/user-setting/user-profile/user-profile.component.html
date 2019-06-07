@@ -1,5 +1,5 @@
 <!-- Profile -->
-<form class="card shadow-lg mx-auto mb-5 mt-5 mt-md-0" (ngSubmit)="submit()" *ngIf="user">
+<form [formGroup]="form" (ngSubmit)="submit()" class="card shadow-lg mx-auto mb-5 mt-5 mt-md-0">
   <div class="card-body p-lg-5">
     <!-- Title -->
     <h4 class="text-center text-uppercase mb-5" translate>USER_SETTINGS</h4>
@@ -16,27 +16,27 @@
         </div>
       </div>
       <!-- Image -->
-      <img class="rounded bg-secondary" *ngIf="user.media.picture" [src]="user.media.thumbnail_128x128">
-      <img class="rounded bg-secondary" *ngIf="!user.media.picture">
+      <img class="rounded bg-secondary" *ngIf="user && user.media.picture" [src]="user.media.thumbnail_128x128">
+      <img class="rounded bg-secondary" *ngIf="!user || !user.media.picture">
     </div>
     <!-- Name -->
     <div class="form-group">
       <label for="name" translate>NAME</label>
-      <input [(ngModel)]="user.name" name="name" id="name" type="text" class="form-control">
+      <input formControlName="name" name="name" id="name" type="text" class="form-control">
     </div>
     <!-- Location -->
     <div class="form-group">
       <label for="location" translate>LOCATION</label>
-      <input [(ngModel)]="user.location" name="location" id="location" type="text" class="form-control">
+      <input formControlName="location" name="location" id="location" type="text" class="form-control">
     </div>
     <!-- About -->
     <div class="form-group">
       <label for="about" translate>ABOUT</label>
-      <textarea [(ngModel)]="user.about" name="about" id="about" class="form-control"></textarea>
+      <textarea formControlName="about" name="about" id="about" class="form-control"></textarea>
     </div>
     <!-- Receive email notification -->
     <div class="custom-control custom-switch">
-      <input [(ngModel)]="user.receive_email_notification" name="receive-email-notification" type="checkbox"
+      <input formControlName="receive_email_notification" name="receive-email-notification" type="checkbox"
              class="custom-control-input" id="receive-email-notification">
       <label class="custom-control-label" for="receive-email-notification" translate>
         RECEIVE_EMAIL_NOTIFICATION

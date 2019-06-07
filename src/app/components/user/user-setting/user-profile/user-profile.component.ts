@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { UserSettings } from '@app/interfaces/user-settings';
@@ -17,14 +17,14 @@ import { TranslateService } from '@ngx-translate/core';
 export class UserProfileComponent implements OnInit {
 
   /**
+   * List of accepted file formats for avatar selection
+   */
+  readonly acceptList = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'];
+
+  /**
    * File input reference
    */
   @ViewChild('fileElement') fileElement;
-
-  /**
-   * List of accepted file formats for avatar selection
-   */
-  acceptList = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'];
 
   /**
    * User setting data to auto fill the inputs with
@@ -46,6 +46,11 @@ export class UserProfileComponent implements OnInit {
    */
   loading: boolean;
 
+  /**
+   * User settings form
+   */
+  form: FormGroup;
+
   constructor(private formBuilder: FormBuilder,
               private translateService: TranslateService,
               private userService: UserService,
@@ -53,15 +58,44 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Get authenticated user data
+    /**
+     * Setup form
+     */
+    this.form = this.formBuilder.group({
+      name: [],
+      location: [],
+      about: [],
+      receive_email_notification: [],
+    });
+    /**
+     * Get authenticated user
+     */
     this.authService.user.subscribe((data: UserAuth): void => {
       this.userAuth = data;
     });
-    // Get user settings data
+    /**
+     * Get authenticated user settings data
+     */
     this.userService.getUser().subscribe((data: UserSettings): void => {
       this.loading = false;
       this.user = data;
+      /**
+       * Setup form based on user
+       */
+      this.form.patchValue({
+        name: data.name,
+        location: data.location,
+        about: data.about,
+        receive_email_notification: data.receive_email_notification,
+      });
     });
+  }
+
+  /**
+   * @return Form controls
+   */
+  get f(): { [p: string]: AbstractControl } {
+    return this.form.controls;
   }
 
   /**
@@ -88,10 +122,10 @@ export class UserProfileComponent implements OnInit {
   submit(removePicture: boolean = false): void {
     // Settings payload
     const payload: UserSettingsPatch = {
-      name: this.user.name,
-      about: this.user.about,
-      location: this.user.location,
-      receive_email_notification: this.user.receive_email_notification,
+      name: this.f.name.value,
+      about: this.f.about.value,
+      location: this.f.location.value,
+      receive_email_notification: this.f.receive_email_notification.value,
     };
     // If removing picture, remove it from payload
     if (removePicture) {
