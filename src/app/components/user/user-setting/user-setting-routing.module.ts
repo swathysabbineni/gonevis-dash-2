@@ -8,6 +8,17 @@ const routes: Routes = [{
   data: {
     title: 'USER_SETTINGS',
   },
+  children: [{
+    path: 'profile',
+    loadChildren: './user-profile/user-profile.module#UserProfileModule',
+  }, {
+    path: 'password',
+    loadChildren: './user-password/user-password.module#UserPasswordModule',
+  }, {
+    path: '',
+    redirectTo: 'profile',
+    pathMatch: 'full',
+  }],
 }];
 
 @NgModule({
