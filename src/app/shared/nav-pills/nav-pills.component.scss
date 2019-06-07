@@ -1,0 +1,17 @@
+@import "~src/assets/styles/variables";
+
+$nav-pills-link-active-color: $secondary;
+$nav-pills-link-active-bg: $light;
+
+@import "~bootstrap/scss/bootstrap";
+
+$text-font-size: 13px;
+$text-color: $secondary;
+
+.nav-pills {
+
+  .nav-link {
+    color: $secondary;
+    cursor: pointer;
+  }
+}

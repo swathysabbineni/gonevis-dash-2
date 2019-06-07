@@ -1,95 +1,16 @@
 <app-page-cover class="d-none d-md-block"></app-page-cover>
 
-<div class="container" *ngIf="user">
-  <div class="row justify-content-center">
-    <div class="col-lg-5">
+<div class="container">
+  <div class="row">
 
-      <!-- Profile -->
-      <form class="card shadow-lg mx-auto mb-5 mt-5 mt-md-0" (ngSubmit)="submit()">
-        <div class="card-body p-lg-5">
-          <!-- Title -->
-          <h4 class="text-center text-uppercase mb-5" translate>USER_SETTINGS</h4>
-          <!-- Picture -->
-          <div class="form-group d-flex">
-            <div class="d-flex flex-column mr-auto pr-3">
-              <label translate>PICTURE</label>
-              <div class="btn-group btn-group-sm">
-                <input type="file" [accept]="acceptList" class="d-none" #fileElement (change)="onFileSelected()">
-                <button type="button" class="btn btn-light" [disabled]="loading" (click)="fileElement.click()">
-                  Upload
-                </button>
-                <button type="button" class="btn btn-light" [disabled]="loading" (click)="submit(true)">Remove</button>
-              </div>
-            </div>
-            <!-- Image -->
-            <img class="rounded bg-secondary" *ngIf="user.media.picture" [src]="user.media.thumbnail_128x128">
-            <img class="rounded bg-secondary" *ngIf="!user.media.picture">
-          </div>
-          <!-- Name -->
-          <div class="form-group">
-            <label for="name" translate>NAME</label>
-            <input [(ngModel)]="user.name" name="name" id="name" type="text" class="form-control">
-          </div>
-          <!-- Location -->
-          <div class="form-group">
-            <label for="location" translate>LOCATION</label>
-            <input [(ngModel)]="user.location" name="location" id="location" type="text" class="form-control">
-          </div>
-          <!-- About -->
-          <div class="form-group">
-            <label for="about" translate>ABOUT</label>
-            <textarea [(ngModel)]="user.about" name="about" id="about" class="form-control"></textarea>
-          </div>
-          <!-- Receive email notification -->
-          <div class="custom-control custom-switch">
-            <input [(ngModel)]="user.receive_email_notification" name="receive-email-notification" type="checkbox"
-                   class="custom-control-input" id="receive-email-notification">
-            <label class="custom-control-label" for="receive-email-notification" translate>
-              RECEIVE_EMAIL_NOTIFICATION
-            </label>
-          </div>
-        </div>
-        <!-- Submit -->
-        <div class="card-body bg-light small px-lg-5">
-          <button class="btn btn-primary float-right" [disabled]="loading" translate>SAVE_CHANGES</button>
-        </div>
-      </form>
+    <!-- Left -->
+    <div class="col-lg-3">
+      <app-nav-pills [navPills]="sidebarNavs"></app-nav-pills>
+    </div>
 
-      <!-- Password -->
-      <form class="card shadow-lg mx-auto mb-5 mt-5 mt-md-0" [formGroup]="form" (ngSubmit)="changePassword()">
-        <div class="card-body p-lg-5">
-          <!-- Title -->
-          <h4 class="text-center text-uppercase mb-5" translate>CHANGE_PASSWORD</h4>
-          <!-- Current password -->
-          <div class="form-group">
-            <label for="oldPassword" translate>CURRENT_PASSWORD</label>
-            <input type="password" class="form-control" name="oldPassword" id="oldPassword"
-                   formControlName="oldPassword">
-            <span class="text-danger" *ngIf="error.old_password">{{ error.old_password[0] }}</span>
-          </div>
-          <!-- New password -->
-          <div class="form-group">
-            <label for="password" translate>NEW_PASSWORD</label>
-            <input type="password" class="form-control" name="password" id="password"
-                   formControlName="password">
-            <span class="text-danger" *ngIf="error.password">{{ error.password[0] }}</span>
-          </div>
-          <!-- Conform new password -->
-          <div class="form-group">
-            <label for="confirmPassword" translate>CONFIRM_NEW_PASSWORD</label>
-            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword"
-                   formControlName="confirmPassword">
-          </div>
-          <!-- Error -->
-          <p class="text-danger" *ngIf="error.non_field_errors">{{ error.non_field_errors[0] }}</p>
-          <!-- Success -->
-          <p class="text-success" *ngIf="success" translate>PASSWORD_CHANGED</p>
-        </div>
-        <!-- Submit -->
-        <div class="card-body bg-light small px-lg-5">
-          <button class="btn btn-primary float-right" [disabled]="loading" translate>CHANGE_PASSWORD</button>
-        </div>
-      </form>
+    <!-- Middle -->
+    <div class="col-lg-6">
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>

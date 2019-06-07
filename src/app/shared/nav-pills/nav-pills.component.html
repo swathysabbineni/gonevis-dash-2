@@ -1,0 +1,10 @@
+<!-- Sidebar navs -->
+<div class="nav flex-column nav-pills my-3">
+  <a class="nav-link"
+     *ngFor="let nav of navPills"
+     [routerLink]="[nav.route]"
+     [routerLinkActive]="'active shadow-sm'">
+    <fa-icon [fixedWidth]="true" [icon]="nav.icon"></fa-icon>
+    <span class="ml-2" translate>{{ nav.label }}</span>
+  </a>
+</div>
