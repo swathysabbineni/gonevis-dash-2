@@ -1,8 +1,8 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 /**
- * Represents a navigation with routing icons for feed
+ * Represents a sidebar navigation with routing icons
  */
-export interface FeedNav {
+export interface SidebarNav {
   label: string;
   route: string;
   icon: IconProp;
