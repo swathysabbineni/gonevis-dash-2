@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SidebarNav } from '@app/interfaces/sidebar-nav';
+import { NavPill } from '@app/interfaces/nav-pill';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 
@@ -13,7 +13,7 @@ export class UserSettingComponent {
   /**
    * Sidebar navigations
    */
-  sidebarNavs: SidebarNav[] = [{
+  sidebarNavs: NavPill[] = [{
     label: 'PROFILE',
     route: 'profile',
     icon: faUser,
