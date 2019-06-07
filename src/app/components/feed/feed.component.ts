@@ -4,7 +4,7 @@ import { ActivatedRoute, Data } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { EntryFeed } from '@app/interfaces/entry-feed';
-import { FeedNav } from '@app/interfaces/feed-nav';
+import { SidebarNav } from '@app/interfaces/sidebar-nav';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
 
@@ -18,7 +18,7 @@ export class FeedComponent implements OnInit {
   /**
    * Main navigations
    */
-  mainNavs: FeedNav[] = [{
+  mainNavs: SidebarNav[] = [{
     label: 'EXPLORE',
     route: 'explore',
     icon: faSearch,
