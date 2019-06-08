@@ -51,9 +51,11 @@ export class AppComponent {
       filter((route: ActivatedRoute): boolean => route.outlet === 'primary'),
       mergeMap((route: ActivatedRoute): Observable<Data> => route.data),
     ).subscribe((event: Data): void => {
-      this.translateService.get(event.title).subscribe((response: string): void => {
-        this.titleService.setTitle(response);
-      });
+      if (event.title) {
+        this.translateService.get(event.title).subscribe((response: string): void => {
+          this.titleService.setTitle(response);
+        });
+      }
     });
   }
 }
