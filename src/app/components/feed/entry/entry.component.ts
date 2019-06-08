@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -16,37 +17,63 @@ import { EntryService } from '@app/services/entry/entry.service';
 export class EntryComponent implements OnInit {
 
   /**
-   * ID from param which is used to load entry
+   * Entry data
    */
-  private entryId: string;
-
-  error: boolean;
   entry: EntryFeed;
+
+  /**
+   * Entry comments data
+   */
   comments: CommentFeed[] = [];
+
+  /**
+   * Entry load error indicator
+   */
+  error: boolean;
+
+  /**
+   * Entry loading indicator
+   */
+  loading: boolean;
 
   constructor(private activatedRoute: ActivatedRoute,
               private entryService: EntryService,
-              private feedService: FeedService) {
+              private feedService: FeedService,
+              private titleService: Title) {
   }
 
   ngOnInit(): void {
+    /**
+     * Get entry ID from URL param
+     */
     this.activatedRoute.params.subscribe((params: Params): void => {
-      this.entryId = params.entryId;
-      this.entryService.getEntry(this.entryId).subscribe((data: EntryFeed): void => {
+      /**
+       * Load entry
+       */
+      this.entryService.getEntry(params.entryId).subscribe((data: EntryFeed): void => {
+        this.loading = false;
         this.entry = data;
+        /**
+         * Set entry title as window title
+         */
+        this.titleService.setTitle(this.entry.title);
       }, (error: HttpErrorResponseApi): void => {
+        this.loading = false;
         if (error.status === 404) {
           this.error = true;
         }
       });
-      this.entryService.getComments(this.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
+      /**
+       * Load entry comments
+       */
+      this.entryService.getComments(params.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
         this.comments = comments.results;
       });
     });
   }
 
   /**
-   * Toggle entry like for user
+   * Like or unlike entry for user
    */
   like(): void {
     // Check for loading
@@ -70,7 +97,7 @@ export class EntryComponent implements OnInit {
   }
 
   /**
-   * Toggle entry bookmark for user
+   * Bookmark or un-bookmark entry for user
    */
   bookmark(): void {
     // Check for loading
