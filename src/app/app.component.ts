@@ -13,7 +13,10 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'gonevis';
+
+  /**
+   * Authenticated user data
+   */
   user: UserAuth;
 
   constructor(public authService: AuthService,
@@ -21,15 +24,21 @@ export class AppComponent {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private titleService: Title) {
-    // Default language
+    /**
+     * Set the default language
+     */
     this.translateService.setDefaultLang('en');
 
-    // Get user (and watch for changes)
+    /**
+     * Get authenticated user data (and watch for changes)
+     */
     this.authService.user.subscribe((user: UserAuth): void => {
       this.user = user;
     });
 
-    // Set page title, watch for page change and update title with translation
+    /**
+     * Watch for page changes then update window title with translation
+     */
     this.router.events.pipe(
       filter((event: RouterEvent): boolean => event instanceof NavigationEnd),
       map((): ActivatedRoute => this.activatedRoute),
