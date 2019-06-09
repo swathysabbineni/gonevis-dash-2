@@ -1,12 +1,12 @@
 import { UserMinimal } from '@app/interfaces/user-minimal';
 
 /**
- * Represents feed comment structure
+ * Represents comment data structure of entry from feed
  */
 export interface CommentFeed {
-  comment: string;
-  created: Date;
   id: string;
-  updated: Date;
   user: UserMinimal;
+  comment: string;
+  created: string;
+  updated: string;
 }
