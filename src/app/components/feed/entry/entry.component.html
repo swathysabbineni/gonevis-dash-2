@@ -45,6 +45,21 @@
             <a href="#" class="text-primary font-weight-bold">{{ comment.user.name }}</a>
             <!-- Comment date -->
             <small class="text-secondary ml-2">{{ comment.created | date }}</small>
+            <!-- Comment buttons -->
+            <div class="btn-group btn-group-sm float-right">
+              <!-- Like -->
+              <button class="btn btn-link">
+                <fa-icon icon="heart"></fa-icon>
+              </button>
+              <!-- Edit -->
+              <button class="btn btn-link">
+                <fa-icon icon="edit"></fa-icon>
+              </button>
+              <!-- Delete -->
+              <button class="btn btn-link">
+                <fa-icon icon="trash"></fa-icon>
+              </button>
+            </div>
           </div>
           <!-- Comment content -->
           <div class="small white-space-pre-line">{{ comment.comment }}</div>
