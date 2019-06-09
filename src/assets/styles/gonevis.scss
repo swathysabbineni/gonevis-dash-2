@@ -100,14 +100,18 @@ $link-hover-decoration: none;
 
   .card-body {
 
-    a {
-      color: $text-color;
-      text-decoration: none;
+    .card-text,
+    .card-title {
+      a {
+        color: $text-color;
+        text-decoration: none;
 
-      &:hover,
-      &:focus {
-        color: $dark;
+        &:hover,
+        &:focus {
+          color: $dark;
+        }
       }
+
     }
 
     p {
