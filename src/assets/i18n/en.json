@@ -37,5 +37,6 @@
   "ABOUT": "About",
   "RECEIVE_EMAIL_NOTIFICATION": "Receive email notification",
   "EMAIL_CONFIRMATION": "Email confirmation",
-  "SAVE_CHANGES": "Save Changes"
+  "SAVE_CHANGES": "Save Changes",
+  "ENTER_COMMENT": "Write a comment"
 }
