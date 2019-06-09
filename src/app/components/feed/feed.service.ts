@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { ApiService } from '@app/services/api/api.service';
@@ -21,8 +20,13 @@ export class FeedService {
   constructor(private http: HttpClient,
               private authService: AuthService,
               private apiService: ApiService) {
+    /**
+     * Get authenticated user ID (and watch for changes)
+     */
     this.authService.user.subscribe((data: UserAuth): void => {
-      this.userId = data.id;
+      if (data) {
+        this.userId = data.id;
+      }
     });
   }
 
@@ -45,23 +49,5 @@ export class FeedService {
    */
   getBookmarkedEntries(): Observable<ApiResponse<EntryFeed>> {
     return this.http.get<ApiResponse<EntryFeed>>(`${this.apiService.base.zero}website/entry/${this.userId}/bookmarks/`);
-  }
-
-  /**
-   * Toggle entry like by user
-   *
-   * @param id Entry ID
-   */
-  likeEntry(id: string): Observable<ApiResponseCreated> {
-    return this.http.post<ApiResponseCreated>(`${this.apiService.base.zero}website/entry/${id}/vote/`, null);
-  }
-
-  /**
-   * Toggle entry bookmark by user
-   *
-   * @param id Entry ID
-   */
-  bookmark(id: string): Observable<ApiResponseCreated> {
-    return this.http.post<ApiResponseCreated>(`${this.apiService.base.zero}website/entry/${id}/bookmark/`, null);
   }
 }

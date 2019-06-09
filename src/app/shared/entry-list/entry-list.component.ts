@@ -5,6 +5,7 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { ApiService } from '@app/services/api/api.service';
+import { EntryService } from '@app/services/entry/entry.service';
 import { UtilService } from '@app/services/util/util.service';
 
 @Component({
@@ -30,7 +31,7 @@ export class EntryListComponent {
   @Input() next: string;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private feedService: FeedService,
+              private entryService: EntryService,
               private apiService: ApiService,
               public utilService: UtilService) {
   }
@@ -55,7 +56,7 @@ export class EntryListComponent {
     // Update voted
     entry.is_voted = !entry.is_voted;
     // API call
-    this.feedService.likeEntry(entry.id).subscribe((data: ApiResponseCreated): void => {
+    this.entryService.like(entry.id).subscribe((data: ApiResponseCreated): void => {
       entry.is_voted = data.created;
       entry.loading = false;
     });
@@ -75,7 +76,7 @@ export class EntryListComponent {
     // Update is bookmarked
     entry.is_bookmarked = !entry.is_bookmarked;
     // API call
-    this.feedService.bookmark(entry.id).subscribe((data: ApiResponseCreated): void => {
+    this.entryService.bookmark(entry.id).subscribe((data: ApiResponseCreated): void => {
       entry.is_bookmarked = data.created;
       entry.loading = false;
     });

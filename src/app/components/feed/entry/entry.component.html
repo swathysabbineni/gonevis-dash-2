@@ -1,40 +1,55 @@
-<div *ngIf="entry">
-  <!-- Like -->
-  <button class="btn btn-link" (click)="like()">
-    <fa-icon [fixedWidth]="true" [icon]="['far', 'heart']" *ngIf="!entry.is_voted"></fa-icon>
-    <fa-icon [fixedWidth]="true" [icon]="['fas', 'heart']" *ngIf="entry.is_voted" class="text-danger"></fa-icon>
-    <span *ngIf="entry.vote_count">{{ entry.vote_count }}</span>
-  </button>
+<!-- Entry -->
+<app-entry-list [entries]="[entry]" *ngIf="entry"></app-entry-list>
 
-  <!-- Views -->
-  <button class="btn btn-link" *ngIf="entry.view_count">
-    <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
-    <span>{{ entry.view_count }}</span>
-  </button>
+<!-- Comment section -->
+<div class="card shadow-sm my-3" *ngIf="comments">
 
-  <!-- Comments -->
-  <button class="btn btn-link">
-    <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
-    <span *ngIf="entry.active_comment_count">{{ entry.active_comment_count }}</span>
-  </button>
+  <!-- Comment form -->
+  <form class="card-header bg-light" [formGroup]="form" (ngSubmit)="comment()">
+    <div class="media">
+      <!-- Comment user (current user) -->
+      <img class="rounded-circle mr-3 bg-secondary" *ngIf="!user.media">
+      <img class="rounded-circle mr-3 bg-secondary" *ngIf="user.media"
+           [src]="user.media.thumbnail_48x48">
+      <!-- Comment input and button -->
+      <div class="media-body">
+        <div class="input-group">
+          <!-- Comment input -->
+          <textarea name="comment" rows="2" class="form-control" [placeholder]="'ENTER_COMMENT' | translate"
+                    formControlName="comment" autocomplete="off" [class.is-invalid]="errors.comment"></textarea>
+          <!-- Comment button -->
+          <div class="input-group-append">
+            <button class="btn btn-primary" [disabled]="loading">
+              <fa-icon icon="paper-plane"></fa-icon>
+            </button>
+          </div>
+        </div>
+        <!-- Errors -->
+        <p class="text-danger" *ngIf="errors.comment">{{ errors.comment[0] }}</p>
+      </div>
+    </div>
+  </form>
 
-  <!-- Bookmark -->
-  <button class="btn btn-link float-right" (click)="bookmark()">
-    <fa-icon [fixedWidth]="true" [icon]="['far', 'bookmark']" *ngIf="!entry.is_bookmarked"></fa-icon>
-    <fa-icon [fixedWidth]="true" [icon]="['fas', 'bookmark']" *ngIf="entry.is_bookmarked"></fa-icon>
-  </button>
-
-  <!-- Share -->
-  <ng-template #shareTemplate>
-    <app-entry-share [url]="entry.absolute_uri"></app-entry-share>
-  </ng-template>
-  <button class="btn btn-link float-right" [popover]="shareTemplate"
-          popoverTitle="Share" placement="left" [outsideClick]="true">
-    <fa-icon [fixedWidth]="true" [icon]="['far', 'share-square']"></fa-icon>
-  </button>
-</div>
-Comments
-<div *ngFor="let comment of comments">
-  <span>{{ comment.user.name }}</span>
-  <p>{{ comment.comment }}</p>
+  <!-- Comment list -->
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item" *ngFor="let comment of comments">
+      <div class="media">
+        <!-- Comment user image -->
+        <img class="rounded-circle mr-3 bg-secondary" *ngIf="!comment.user.media">
+        <img class="rounded-circle mr-3 bg-secondary" *ngIf="comment.user.media"
+             [src]="comment.user.media.thumbnail_48x48">
+        <!-- Comment -->
+        <div class="media-body">
+          <div>
+            <!-- Comment user name -->
+            <a href="#" class="text-primary font-weight-bold">{{ comment.user.name }}</a>
+            <!-- Comment date -->
+            <small class="text-secondary ml-2">{{ comment.created | date }}</small>
+          </div>
+          <!-- Comment content -->
+          <div class="small white-space-pre-line">{{ comment.comment }}</div>
+        </div>
+      </div>
+    </li>
+  </ul>
 </div>

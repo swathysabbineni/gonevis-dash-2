@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
+import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { CommentFeed } from '@app/interfaces/comment-feed';
 import { EntryFeed } from '@app/interfaces/entry-feed';
+import { UserAuth } from '@app/interfaces/user-auth';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
+import { AuthService } from '@app/services/auth/auth.service';
 import { EntryService } from '@app/services/entry/entry.service';
 
 @Component({
@@ -15,6 +18,11 @@ import { EntryService } from '@app/services/entry/entry.service';
   styleUrls: ['./entry.component.scss'],
 })
 export class EntryComponent implements OnInit {
+
+  /**
+   * Authenticated user data
+   */
+  user: UserAuth;
 
   /**
    * Entry data
@@ -32,17 +40,41 @@ export class EntryComponent implements OnInit {
   error: boolean;
 
   /**
-   * Entry loading indicator
+   * Comment form
+   */
+  form: FormGroup;
+
+  /**
+   * Comment errors
+   */
+  errors: ApiError = {};
+
+  /**
+   * Comment loading indicator
    */
   loading: boolean;
 
   constructor(private activatedRoute: ActivatedRoute,
+              private authService: AuthService,
               private entryService: EntryService,
               private feedService: FeedService,
-              private titleService: Title) {
+              private titleService: Title,
+              private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
+    /**
+     * Setup comment form
+     */
+    this.form = this.formBuilder.group({
+      comment: ['', Validators.minLength(3)],
+    });
+    /**
+     * Get authenticated user data
+     */
+    this.authService.user.subscribe((data: UserAuth): void => {
+      this.user = data;
+    });
     /**
      * Get entry ID from URL param
      */
@@ -51,14 +83,12 @@ export class EntryComponent implements OnInit {
        * Load entry
        */
       this.entryService.getEntry(params.entryId).subscribe((data: EntryFeed): void => {
-        this.loading = false;
         this.entry = data;
         /**
          * Set entry title as window title
          */
         this.titleService.setTitle(this.entry.title);
       }, (error: HttpErrorResponseApi): void => {
-        this.loading = false;
         if (error.status === 404) {
           this.error = true;
         }
@@ -66,51 +96,26 @@ export class EntryComponent implements OnInit {
       /**
        * Load entry comments
        */
-      this.entryService.getComments(params.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
+      this.entryService.getEntryComments(params.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
         this.comments = comments.results;
       });
     });
   }
 
   /**
-   * Like or unlike entry for user
+   * Comment for the current entry by the current user
    */
-  like(): void {
-    // Check for loading
-    if (this.entry.loading) {
-      return;
-    }
-    this.entry.loading = true;
-    // Update like count
-    if (this.entry.is_voted) {
-      this.entry.vote_count--;
-    } else {
-      this.entry.vote_count++;
-    }
-    // Update voted
-    this.entry.is_voted = !this.entry.is_voted;
-    // API call
-    this.feedService.likeEntry(this.entry.id).subscribe((data: ApiResponseCreated): void => {
-      this.entry.is_voted = data.created;
-      this.entry.loading = false;
-    });
-  }
-
-  /**
-   * Bookmark or un-bookmark entry for user
-   */
-  bookmark(): void {
-    // Check for loading
-    if (this.entry.loading) {
-      return;
-    }
-    this.entry.loading = true;
-    // Update is bookmarked
-    this.entry.is_bookmarked = !this.entry.is_bookmarked;
-    // API call
-    this.feedService.bookmark(this.entry.id).subscribe((data: ApiResponseCreated): void => {
-      this.entry.is_bookmarked = data.created;
-      this.entry.loading = false;
+  comment(): void {
+    this.loading = true;
+    this.entryService.commentEntry(this.entry.id, this.form.controls.comment.value).subscribe((data: CommentFeed) => {
+      this.loading = false;
+      this.errors = {};
+      this.form.reset();
+      this.comments.unshift(data);
+      this.entry.active_comment_count++;
+    }, (error: HttpErrorResponseApi) => {
+      this.loading = false;
+      this.errors = error.error;
     });
   }
 }
