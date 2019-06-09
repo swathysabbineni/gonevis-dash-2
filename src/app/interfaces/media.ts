@@ -1,5 +1,5 @@
 /**
- * Represents media structure
+ * Represents media data structure
  */
 export interface Media {
   picture: string;
