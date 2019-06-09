@@ -58,7 +58,7 @@ export class EntryService {
    * @param id Entry ID
    * @param comment Comment content
    */
-  commentEntry(id: string, comment: string): Observable<CommentFeed> {
+  comment(id: string, comment: string): Observable<CommentFeed> {
     return this.http.post<CommentFeed>(`${this.apiService.base.zero}website/entry/${id}/comment/`, {
       comment,
       object_id: ObjectType.ENTRY,

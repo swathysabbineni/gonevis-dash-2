@@ -107,7 +107,7 @@ export class EntryComponent implements OnInit {
    */
   comment(): void {
     this.loading = true;
-    this.entryService.commentEntry(this.entry.id, this.form.controls.comment.value).subscribe((data: CommentFeed) => {
+    this.entryService.comment(this.entry.id, this.form.controls.comment.value).subscribe((data: CommentFeed) => {
       this.loading = false;
       this.errors = {};
       this.form.reset();
