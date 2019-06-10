@@ -13,6 +13,7 @@ import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
 import { CommentService } from '@app/services/comment/comment.service';
 import { EntryService } from '@app/services/entry/entry.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-entry',
@@ -57,12 +58,13 @@ export class EntryComponent implements OnInit {
   loading: boolean;
 
   constructor(private activatedRoute: ActivatedRoute,
+              private titleService: Title,
+              private formBuilder: FormBuilder,
+              private translateService: TranslateService,
               private authService: AuthService,
               private entryService: EntryService,
               private feedService: FeedService,
-              private commentService: CommentService,
-              private titleService: Title,
-              private formBuilder: FormBuilder) {
+              private commentService: CommentService) {
   }
 
   ngOnInit(): void {
@@ -144,6 +146,9 @@ export class EntryComponent implements OnInit {
    * @param index Comment index in list
    */
   removeComment(id: string, index: number): void {
+    if (!confirm(this.translateService.instant('REMOVE_COMMENT_PROMPT'))) {
+      return;
+    }
     this.loading = true;
     this.commentService.remove(id).subscribe((): void => {
       this.comments.splice(index, 1);
