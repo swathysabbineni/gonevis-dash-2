@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ObjectType } from '@app/enums/object-type';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { CommentFeed } from '@app/interfaces/comment-feed';
@@ -50,18 +49,5 @@ export class EntryService {
    */
   bookmark(id: string): Observable<ApiResponseCreated> {
     return this.http.post<ApiResponseCreated>(`${this.apiService.base.zero}website/entry/${id}/bookmark/`, null);
-  }
-
-  /**
-   * Comment on an entry
-   *
-   * @param id Entry ID
-   * @param comment Comment content
-   */
-  comment(id: string, comment: string): Observable<CommentFeed> {
-    return this.http.post<CommentFeed>(`${this.apiService.base.zero}website/entry/${id}/comment/`, {
-      comment,
-      object_id: ObjectType.ENTRY,
-    });
   }
 }
