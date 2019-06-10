@@ -32,7 +32,7 @@
 
   <!-- Comment list -->
   <ul class="list-group list-group-flush">
-    <li class="list-group-item" *ngFor="let comment of comments">
+    <li class="list-group-item" *ngFor="let comment of comments; let index = index">
       <div class="media">
         <!-- Comment user image -->
         <img class="rounded-circle mr-3 bg-secondary" *ngIf="!comment.user.media">
@@ -48,15 +48,15 @@
             <!-- Comment buttons -->
             <div class="btn-group btn-group-sm float-right">
               <!-- Like -->
-              <button class="btn btn-link" (click)="likeComment(comment)">
+              <button class="btn btn-link" [disabled]="loading" (click)="likeComment(comment)">
                 <fa-icon icon="heart"></fa-icon>
               </button>
               <!-- Edit -->
-              <button class="btn btn-link">
+              <button class="btn btn-link" [disabled]="loading">
                 <fa-icon icon="edit"></fa-icon>
               </button>
               <!-- Delete -->
-              <button class="btn btn-link">
+              <button class="btn btn-link" [disabled]="loading" (click)="removeComment(comment.id, index)">
                 <fa-icon icon="trash"></fa-icon>
               </button>
             </div>
