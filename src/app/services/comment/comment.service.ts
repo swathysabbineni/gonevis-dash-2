@@ -36,4 +36,13 @@ export class CommentService {
   like(id: string): Observable<ApiResponseCreated> {
     return this.http.post<ApiResponseCreated>(`${this.apiService.base.v1}sushial/comment/${id}/vote/`, null);
   }
+
+  /**
+   * Remove comment
+   *
+   * @param id Comment ID
+   */
+  remove(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiService.base.v1}sushial/comment/${id}/`);
+  }
 }
