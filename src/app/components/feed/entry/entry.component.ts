@@ -136,4 +136,21 @@ export class EntryComponent implements OnInit {
       this.errors = error.error;
     });
   }
+
+  /**
+   * Like or unlike comment for user
+   *
+   * @param id Commend ID
+   * @param index Comment index in list
+   */
+  removeComment(id: string, index: number): void {
+    this.loading = true;
+    this.commentService.remove(id).subscribe((): void => {
+      this.comments.splice(index, 1);
+      this.loading = false;
+    }, (error: HttpErrorResponseApi) => {
+      this.loading = false;
+      this.errors = error.error;
+    });
+  }
 }
