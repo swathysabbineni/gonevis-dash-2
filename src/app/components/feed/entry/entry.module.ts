@@ -13,6 +13,8 @@ import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
 import { faShareSquare } from '@fortawesome/free-regular-svg-icons/faShareSquare';
 import { faHeart as faHeartFill, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faBookmarkFill } from '@fortawesome/free-solid-svg-icons/faBookmark';
+import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateModule } from '@ngx-translate/core';
 import { PopoverModule, TooltipModule } from 'ngx-bootstrap';
 
@@ -43,5 +45,7 @@ export class EntryModule {
     library.add(faBookmarkFill);
     library.add(faShareSquare);
     library.add(faPaperPlane);
+    library.add(faEdit);
+    library.add(faTrash);
   }
 }
