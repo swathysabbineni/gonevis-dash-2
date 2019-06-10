@@ -5,11 +5,13 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { CommentFeed } from '@app/interfaces/comment-feed';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
+import { CommentService } from '@app/services/comment/comment.service';
 import { EntryService } from '@app/services/entry/entry.service';
 
 @Component({
@@ -58,6 +60,7 @@ export class EntryComponent implements OnInit {
               private authService: AuthService,
               private entryService: EntryService,
               private feedService: FeedService,
+              private commentService: CommentService,
               private titleService: Title,
               private formBuilder: FormBuilder) {
   }
@@ -107,12 +110,27 @@ export class EntryComponent implements OnInit {
    */
   comment(): void {
     this.loading = true;
-    this.entryService.comment(this.entry.id, this.form.controls.comment.value).subscribe((data: CommentFeed) => {
+    this.commentService.comment(this.entry.id, this.form.controls.comment.value).subscribe((data: CommentFeed) => {
       this.loading = false;
       this.errors = {};
       this.form.reset();
       this.comments.unshift(data);
       this.entry.active_comment_count++;
+    }, (error: HttpErrorResponseApi) => {
+      this.loading = false;
+      this.errors = error.error;
+    });
+  }
+
+  /**
+   * Like or unlike comment for user
+   *
+   * @param comment Comment object
+   */
+  likeComment(comment: CommentFeed): void {
+    this.loading = true;
+    this.commentService.like(comment.id).subscribe((data: ApiResponseCreated) => {
+      this.loading = false;
     }, (error: HttpErrorResponseApi) => {
       this.loading = false;
       this.errors = error.error;
