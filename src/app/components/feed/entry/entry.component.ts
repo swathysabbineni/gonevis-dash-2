@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -19,6 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
   selector: 'app-entry',
   templateUrl: './entry.component.html',
   styleUrls: ['./entry.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntryComponent implements OnInit {
 
@@ -36,6 +37,11 @@ export class EntryComponent implements OnInit {
    * Entry comments data
    */
   comments: CommentFeed[] = [];
+
+  /**
+   * Highlighted comment
+   */
+  highlightedComment: string;
 
   /**
    * Entry load error indicator
@@ -58,6 +64,7 @@ export class EntryComponent implements OnInit {
   loading: boolean;
 
   constructor(private activatedRoute: ActivatedRoute,
+              private changeDetectorRef: ChangeDetectorRef,
               private titleService: Title,
               private formBuilder: FormBuilder,
               private translateService: TranslateService,
@@ -65,6 +72,14 @@ export class EntryComponent implements OnInit {
               private entryService: EntryService,
               private feedService: FeedService,
               private commentService: CommentService) {
+  }
+
+  /**
+   * Scroll to comment
+   */
+  private static scrollToComment(): void {
+    const element: Element = document.getElementsByClassName('highlighted')[0];
+    element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
   }
 
   ngOnInit(): void {
@@ -93,17 +108,34 @@ export class EntryComponent implements OnInit {
          * Set entry title as window title
          */
         this.titleService.setTitle(this.entry.title);
+
+        /**
+         * Load entry comments
+         */
+        this.entryService.getEntryComments(params.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
+          this.comments = comments.results;
+          this.changeDetectorRef.detectChanges();
+          if (this.comments.some((comment: CommentFeed): boolean => comment.id === this.highlightedComment)) {
+            EntryComponent.scrollToComment();
+          }
+        });
       }, (error: HttpErrorResponseApi): void => {
         if (error.status === 404) {
           this.error = true;
         }
       });
-      /**
-       * Load entry comments
-       */
-      this.entryService.getEntryComments(params.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
-        this.comments = comments.results;
-      });
+    });
+    /**
+     * Get highlighted comment ID from URL query param
+     */
+    this.activatedRoute.queryParams.subscribe((params: Params): void => {
+      this.highlightedComment = params.comment;
+      if (this.comments.length) {
+        if (this.comments.some((comment: CommentFeed): boolean => comment.id === this.highlightedComment)) {
+          this.changeDetectorRef.detectChanges();
+          EntryComponent.scrollToComment();
+        }
+      }
     });
   }
 
