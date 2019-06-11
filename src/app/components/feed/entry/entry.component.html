@@ -32,7 +32,8 @@
 
   <!-- Comment list -->
   <ul class="list-group list-group-flush">
-    <li class="list-group-item" *ngFor="let comment of comments; let index = index">
+    <li class="list-group-item" *ngFor="let comment of comments; let index = index"
+        [class.highlighted]="highlightedComment === comment.id">
       <div class="media">
         <!-- Comment user image -->
         <img class="rounded-circle mr-3 bg-secondary" *ngIf="!comment.user.media">
@@ -44,7 +45,11 @@
             <!-- Comment user name -->
             <a href="#" class="text-primary font-weight-bold">{{ comment.user.name }}</a>
             <!-- Comment date -->
-            <small class="text-secondary ml-2">{{ comment.created | date }}</small>
+            <a class="text-primary font-weight-bold small ml-2" *ngIf="entry"
+               [routerLink]="['/feed', 'entry', entry.id]"
+               [queryParams]="{ comment: comment.id }">
+              {{ comment.created | date }}
+            </a>
             <!-- Comment buttons -->
             <div class="btn-group btn-group-sm float-right">
               <!-- Like -->
