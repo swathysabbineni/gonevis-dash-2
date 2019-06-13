@@ -54,7 +54,9 @@
             <div class="btn-group btn-group-sm float-right">
               <!-- Like -->
               <button class="btn btn-link" [disabled]="loading" (click)="likeComment(comment)">
-                <fa-icon icon="heart"></fa-icon>
+                <fa-icon [fixedWidth]="true" [icon]="['far', 'heart']" *ngIf="!comment.is_voted"></fa-icon>
+                <fa-icon [fixedWidth]="true" [icon]="['fas', 'heart']" *ngIf="comment.is_voted"
+                         class="text-danger"></fa-icon>
               </button>
               <!-- Edit -->
               <button class="btn btn-link" [disabled]="loading">
