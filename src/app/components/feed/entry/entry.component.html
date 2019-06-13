@@ -5,30 +5,9 @@
 <div class="card shadow-sm my-3" *ngIf="comments">
 
   <!-- Comment form -->
-  <form class="card-header bg-light" [formGroup]="form" (ngSubmit)="comment()">
-    <div class="media">
-      <!-- Comment user (current user) -->
-      <img class="rounded-circle mr-3 bg-secondary" *ngIf="!user.media">
-      <img class="rounded-circle mr-3 bg-secondary" *ngIf="user.media"
-           [src]="user.media.thumbnail_48x48">
-      <!-- Comment input and button -->
-      <div class="media-body">
-        <div class="input-group">
-          <!-- Comment input -->
-          <textarea name="comment" rows="2" class="form-control" [placeholder]="'ENTER_COMMENT' | translate"
-                    formControlName="comment" autocomplete="off" [class.is-invalid]="errors.comment"></textarea>
-          <!-- Comment button -->
-          <div class="input-group-append">
-            <button class="btn btn-primary" [disabled]="loading">
-              <fa-icon icon="paper-plane"></fa-icon>
-            </button>
-          </div>
-        </div>
-        <!-- Errors -->
-        <p class="text-danger" *ngIf="errors.comment">{{ errors.comment[0] }}</p>
-      </div>
-    </div>
-  </form>
+  <app-comment-form [comment]="commentForm"
+                    [entryId]="entry.id"
+                    (formSubmitted)="onCommentSubmit($event)" *ngIf="entry"></app-comment-form>
 
   <!-- Comment list -->
   <ul class="list-group list-group-flush">
