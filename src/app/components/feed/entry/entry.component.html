@@ -38,7 +38,12 @@
                          class="text-danger"></fa-icon>
               </button>
               <!-- Edit -->
-              <button class="btn btn-link" [disabled]="loading">
+              <ng-template #editTemplate>
+                <app-comment-form [commentId]="comment.id" [comment]="comment.comment"
+                                  entryId=""></app-comment-form>
+              </ng-template>
+              <button class="btn btn-link" [disabled]="loading" [popover]="editTemplate"
+                      popoverTitle="Edit" placement="top" outsideClick="true" container="body">
                 <fa-icon icon="edit"></fa-icon>
               </button>
               <!-- Delete -->
