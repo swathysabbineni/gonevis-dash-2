@@ -164,6 +164,7 @@ export class EntryComponent implements OnInit {
   likeComment(comment: CommentFeed): void {
     this.loading = true;
     this.commentService.like(comment.id).subscribe((data: ApiResponseCreated) => {
+      comment.is_voted = data.created;
       this.loading = false;
     }, (error: HttpErrorResponseApi) => {
       this.loading = false;
