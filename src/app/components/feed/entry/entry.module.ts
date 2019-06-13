@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EntryComponent } from '@app/components/feed/entry/entry.component';
+import { CommentFormModule } from '@app/shared/comment-form/comment-form.module';
 import { EntryListModule } from '@app/shared/entry-list/entry-list.module';
 import { EntryShareModule } from '@app/shared/entry-share/entry-share.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -33,6 +34,7 @@ import { EntryRoutingModule } from './entry-routing.module';
     PopoverModule.forRoot(),
     TranslateModule.forChild(),
     EntryListModule,
+    CommentFormModule
   ],
 })
 export class EntryModule {
