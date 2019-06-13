@@ -45,4 +45,14 @@ export class CommentService {
   remove(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiService.base.v1}sushial/comment/${id}/`);
   }
+
+  /**
+   * Edit comment
+   *
+   * @param id Comment ID
+   * @param comment Edited comment
+   */
+  edit(id: string, comment: string): Observable<CommentFeed> {
+    return this.http.put<CommentFeed>(`${this.apiService.base.v1}sushial/comment/${id}/`, { comment });
+  }
 }
