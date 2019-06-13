@@ -19,7 +19,6 @@ import { TranslateService } from '@ngx-translate/core';
   selector: 'app-entry',
   templateUrl: './entry.component.html',
   styleUrls: ['./entry.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntryComponent implements OnInit {
 
@@ -63,6 +62,11 @@ export class EntryComponent implements OnInit {
    */
   loading: boolean;
 
+  /**
+   * Comment
+   */
+  commentForm: string;
+
   constructor(private activatedRoute: ActivatedRoute,
               private changeDetectorRef: ChangeDetectorRef,
               private titleService: Title,
@@ -83,18 +87,6 @@ export class EntryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Setup comment form
-     */
-    this.form = this.formBuilder.group({
-      comment: ['', Validators.minLength(3)],
-    });
-    /**
-     * Get authenticated user data
-     */
-    this.authService.user.subscribe((data: UserAuth): void => {
-      this.user = data;
-    });
     /**
      * Get entry ID from URL param
      */
@@ -140,33 +132,16 @@ export class EntryComponent implements OnInit {
   }
 
   /**
-   * Comment for the current entry by the current user
-   */
-  comment(): void {
-    this.loading = true;
-    this.commentService.comment(this.entry.id, this.form.controls.comment.value).subscribe((data: CommentFeed) => {
-      this.loading = false;
-      this.errors = {};
-      this.form.reset();
-      this.comments.unshift(data);
-      this.entry.active_comment_count++;
-    }, (error: HttpErrorResponseApi) => {
-      this.loading = false;
-      this.errors = error.error;
-    });
-  }
-
-  /**
    * Like or unlike comment for user
    *
    * @param comment Comment object
    */
   likeComment(comment: CommentFeed): void {
     this.loading = true;
-    this.commentService.like(comment.id).subscribe((data: ApiResponseCreated) => {
+    this.commentService.like(comment.id).subscribe((data: ApiResponseCreated): void => {
       comment.is_voted = data.created;
       this.loading = false;
-    }, (error: HttpErrorResponseApi) => {
+    }, (error: HttpErrorResponseApi): void => {
       this.loading = false;
       this.errors = error.error;
     });
@@ -190,5 +165,15 @@ export class EntryComponent implements OnInit {
       this.loading = false;
       this.errors = error.error;
     });
+  }
+
+  /**
+   * On comment created
+   *
+   * @param event Data response
+   */
+  onCommentSubmit(event: CommentFeed): void {
+    this.comments.unshift(event);
+    this.entry.active_comment_count++;
   }
 }
