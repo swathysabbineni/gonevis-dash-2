@@ -7,6 +7,7 @@ export interface CommentFeed {
   id: string;
   is_voted: boolean;
   user: UserMinimal;
+  is_voted: boolean;
   comment: string;
   created: string;
   updated: string;
