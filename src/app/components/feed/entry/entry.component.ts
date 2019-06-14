@@ -69,7 +69,7 @@ export class EntryComponent implements OnInit {
   loading: boolean;
 
   /**
-   * Comment
+   * Comment to submit
    */
   commentForm: string;
 
@@ -115,8 +115,15 @@ export class EntryComponent implements OnInit {
           this.comments = comments.results;
           this.next = comments.next;
           this.changeDetectorRef.detectChanges();
-          if (this.comments.some((comment: CommentFeed): boolean => comment.id === this.highlightedComment)) {
-            EntryComponent.scrollToComment();
+          if (this.highlightedComment) {
+            if (this.comments.some((comment: CommentFeed): boolean => comment.id === this.highlightedComment)) {
+              EntryComponent.scrollToComment();
+            } else {
+              this.commentService.getComment(params.entryId, this.highlightedComment).subscribe(
+                (comment: CommentFeed): void => {
+                  this.comments.unshift(comment);
+                });
+            }
           }
         });
       }, (error: HttpErrorResponseApi): void => {
@@ -198,7 +205,11 @@ export class EntryComponent implements OnInit {
     this.apiService.getEndpoint<CommentFeed>(endpoint).subscribe((data: ApiResponse<CommentFeed>): void => {
       this.next = data.next;
       this.loading = false;
-      data.results.map((comment: CommentFeed): void => {
+      data.results.map((comment: CommentFeed, index: number): void => {
+        if (comment.id === this.highlightedComment) {
+          data.results.splice(index, 1);
+          return;
+        }
         this.comments.push(comment);
       });
     });
