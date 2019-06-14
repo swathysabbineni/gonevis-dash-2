@@ -1,4 +1,5 @@
 import { BlogMinimalUser } from '@app/interfaces/blog-minimal-user';
+import { Media } from '@app/interfaces/media';
 import { UserTour } from '@app/interfaces/user-tour';
 
 /**
@@ -10,12 +11,7 @@ export interface UserAuth {
   has_verified_email: boolean;
   id: string;
   is_active: boolean;
-  media: {
-    picture: string;
-    thumbnail_48x48: string;
-    thumbnail_128x128: string;
-    thumbnail_256x256: string;
-  };
+  media: Media;
   name: string;
   receive_email_notification: boolean;
   sites: BlogMinimalUser[];
