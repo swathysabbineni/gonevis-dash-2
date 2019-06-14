@@ -16,6 +16,16 @@ export class CommentService {
   }
 
   /**
+   * Get a single comment
+   *
+   * @param id Entry ID
+   * @param commentId Comment ID
+   */
+  getComment(id: string, commentId: string): Observable<CommentFeed> {
+    return this.http.get<CommentFeed>(`${this.apiService.base.zero}website/entry/${id}/comment/${commentId}/`);
+  }
+
+  /**
    * Comment on an entry
    *
    * @param id Entry ID
