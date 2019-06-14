@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
@@ -10,6 +10,7 @@ import { CommentFeed } from '@app/interfaces/comment-feed';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
+import { ApiService } from '@app/services/api/api.service';
 import { AuthService } from '@app/services/auth/auth.service';
 import { CommentService } from '@app/services/comment/comment.service';
 import { EntryService } from '@app/services/entry/entry.service';
@@ -36,6 +37,11 @@ export class EntryComponent implements OnInit {
    * Entry comments data
    */
   comments: CommentFeed[] = [];
+
+  /**
+   * Next page endpoint
+   */
+  next: string;
 
   /**
    * Highlighted comment
@@ -72,6 +78,7 @@ export class EntryComponent implements OnInit {
               private titleService: Title,
               private formBuilder: FormBuilder,
               private translateService: TranslateService,
+              private apiService: ApiService,
               private authService: AuthService,
               private entryService: EntryService,
               private feedService: FeedService,
@@ -106,6 +113,7 @@ export class EntryComponent implements OnInit {
          */
         this.entryService.getEntryComments(params.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
           this.comments = comments.results;
+          this.next = comments.next;
           this.changeDetectorRef.detectChanges();
           if (this.comments.some((comment: CommentFeed): boolean => comment.id === this.highlightedComment)) {
             EntryComponent.scrollToComment();
@@ -175,5 +183,24 @@ export class EntryComponent implements OnInit {
   onCommentSubmit(event: CommentFeed): void {
     this.comments.unshift(event);
     this.entry.active_comment_count++;
+  }
+
+  /**
+   * Load more
+   *
+   * @param endpoint Next page endpoint
+   */
+  loadMore(endpoint: string): void {
+    if (!this.next || this.loading) {
+      return;
+    }
+    this.loading = true;
+    this.apiService.getEndpoint<CommentFeed>(endpoint).subscribe((data: ApiResponse<CommentFeed>): void => {
+      this.next = data.next;
+      this.loading = false;
+      data.results.map((comment: CommentFeed): void => {
+        this.comments.push(comment);
+      });
+    });
   }
 }
