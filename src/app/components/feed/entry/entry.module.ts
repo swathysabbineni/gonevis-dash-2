@@ -18,6 +18,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateModule } from '@ngx-translate/core';
 import { PopoverModule, TooltipModule } from 'ngx-bootstrap';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { EntryRoutingModule } from './entry-routing.module';
 
@@ -34,7 +35,8 @@ import { EntryRoutingModule } from './entry-routing.module';
     PopoverModule.forRoot(),
     TranslateModule.forChild(),
     EntryListModule,
-    CommentFormModule
+    CommentFormModule,
+    InfiniteScrollModule,
   ],
 })
 export class EntryModule {
