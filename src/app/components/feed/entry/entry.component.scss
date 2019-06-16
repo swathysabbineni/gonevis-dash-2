@@ -1,1 +1,6 @@
 @import "~src/assets/styles/gonevis";
+
+.list-group-item.highlighted {
+  box-shadow: 0 0 0 5px transparentize($success, 0.3);
+  z-index: 1;
+}

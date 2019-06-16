@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { CommentFeed } from '@app/interfaces/comment-feed';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
+import { ApiService } from '@app/services/api/api.service';
 import { AuthService } from '@app/services/auth/auth.service';
+import { CommentService } from '@app/services/comment/comment.service';
 import { EntryService } from '@app/services/entry/entry.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-entry',
@@ -35,6 +39,16 @@ export class EntryComponent implements OnInit {
   comments: CommentFeed[] = [];
 
   /**
+   * Next page endpoint
+   */
+  next: string;
+
+  /**
+   * Highlighted comment
+   */
+  highlightedComment: string;
+
+  /**
    * Entry load error indicator
    */
   error: boolean;
@@ -54,27 +68,32 @@ export class EntryComponent implements OnInit {
    */
   loading: boolean;
 
+  /**
+   * Comment to submit
+   */
+  commentForm: string;
+
   constructor(private activatedRoute: ActivatedRoute,
+              private changeDetectorRef: ChangeDetectorRef,
+              private titleService: Title,
+              private formBuilder: FormBuilder,
+              private translateService: TranslateService,
+              private apiService: ApiService,
               private authService: AuthService,
               private entryService: EntryService,
               private feedService: FeedService,
-              private titleService: Title,
-              private formBuilder: FormBuilder) {
+              private commentService: CommentService) {
+  }
+
+  /**
+   * Scroll to comment
+   */
+  private static scrollToComment(): void {
+    const element: Element = document.getElementsByClassName('highlighted')[0];
+    element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
   }
 
   ngOnInit(): void {
-    /**
-     * Setup comment form
-     */
-    this.form = this.formBuilder.group({
-      comment: ['', Validators.minLength(3)],
-    });
-    /**
-     * Get authenticated user data
-     */
-    this.authService.user.subscribe((data: UserAuth): void => {
-      this.user = data;
-    });
     /**
      * Get entry ID from URL param
      */
@@ -88,34 +107,111 @@ export class EntryComponent implements OnInit {
          * Set entry title as window title
          */
         this.titleService.setTitle(this.entry.title);
+
+        /**
+         * Load entry comments
+         */
+        this.entryService.getEntryComments(params.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
+          this.comments = comments.results;
+          this.next = comments.next;
+          this.changeDetectorRef.detectChanges();
+          if (this.highlightedComment) {
+            if (this.comments.some((comment: CommentFeed): boolean => comment.id === this.highlightedComment)) {
+              EntryComponent.scrollToComment();
+            } else {
+              this.commentService.getComment(params.entryId, this.highlightedComment).subscribe(
+                (comment: CommentFeed): void => {
+                  this.comments.unshift(comment);
+                });
+            }
+          }
+        });
       }, (error: HttpErrorResponseApi): void => {
         if (error.status === 404) {
           this.error = true;
         }
       });
-      /**
-       * Load entry comments
-       */
-      this.entryService.getEntryComments(params.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
-        this.comments = comments.results;
-      });
+    });
+    /**
+     * Get highlighted comment ID from URL query param
+     */
+    this.activatedRoute.queryParams.subscribe((params: Params): void => {
+      this.highlightedComment = params.comment;
+      if (this.comments.length) {
+        if (this.comments.some((comment: CommentFeed): boolean => comment.id === this.highlightedComment)) {
+          this.changeDetectorRef.detectChanges();
+          EntryComponent.scrollToComment();
+        }
+      }
     });
   }
 
   /**
-   * Comment for the current entry by the current user
+   * Like or unlike comment for user
+   *
+   * @param comment Comment object
    */
-  comment(): void {
+  likeComment(comment: CommentFeed): void {
     this.loading = true;
-    this.entryService.comment(this.entry.id, this.form.controls.comment.value).subscribe((data: CommentFeed) => {
+    this.commentService.like(comment.id).subscribe((data: ApiResponseCreated): void => {
+      comment.is_voted = data.created;
       this.loading = false;
-      this.errors = {};
-      this.form.reset();
-      this.comments.unshift(data);
-      this.entry.active_comment_count++;
+    }, (error: HttpErrorResponseApi): void => {
+      this.loading = false;
+      this.errors = error.error;
+    });
+  }
+
+  /**
+   * Like or unlike comment for user
+   *
+   * @param id Commend ID
+   * @param index Comment index in list
+   */
+  removeComment(id: string, index: number): void {
+    if (!confirm(this.translateService.instant('REMOVE_COMMENT_PROMPT'))) {
+      return;
+    }
+    this.loading = true;
+    this.commentService.remove(id).subscribe((): void => {
+      this.comments.splice(index, 1);
+      this.loading = false;
     }, (error: HttpErrorResponseApi) => {
       this.loading = false;
       this.errors = error.error;
+    });
+  }
+
+  /**
+   * On comment created
+   *
+   * @param event Data response
+   */
+  onCommentSubmit(event: CommentFeed): void {
+    this.comments.unshift(event);
+    this.entry.active_comment_count++;
+  }
+
+  /**
+   * Load more
+   *
+   * @param endpoint Next page endpoint
+   */
+  loadMore(endpoint: string): void {
+    if (!this.next || this.loading) {
+      return;
+    }
+    this.loading = true;
+    this.apiService.getEndpoint<CommentFeed>(endpoint).subscribe((data: ApiResponse<CommentFeed>): void => {
+      this.next = data.next;
+      this.loading = false;
+      data.results.map((comment: CommentFeed, index: number): void => {
+        if (comment.id === this.highlightedComment) {
+          data.results.splice(index, 1);
+          return;
+        }
+        this.comments.push(comment);
+      });
     });
   }
 }

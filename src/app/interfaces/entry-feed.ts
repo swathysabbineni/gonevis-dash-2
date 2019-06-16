@@ -1,6 +1,5 @@
-import { BlogMinimal } from '@app/interfaces/blog-minimal';
+import { BlogMinimalFeed } from '@app/interfaces/blog-minimal-feed';
 import { File } from '@app/interfaces/file';
-import { Tag } from '@app/interfaces/tag';
 import { UserMinimal } from '@app/interfaces/user-minimal';
 
 /**
@@ -8,20 +7,20 @@ import { UserMinimal } from '@app/interfaces/user-minimal';
  */
 export interface EntryFeed {
   id: string;
-  site: BlogMinimal;
+  site: BlogMinimalFeed;
   user: UserMinimal;
-  absolute_uri: string;
-  active_comment_count: number;
-  can_comment: boolean;
+  title: string;
   content: string;
+  excerpt: string;
   media: {
     cover_image: File
   };
+  absolute_uri: string;
+  active_comment_count: number;
+  can_comment: boolean;
+  published: Date;
   is_bookmarked: boolean;
   is_voted: boolean;
-  featured: boolean;
-  published: Date;
-  title: string;
   vote_count: number;
   view_count: number;
 

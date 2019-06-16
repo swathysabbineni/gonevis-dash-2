@@ -5,6 +5,7 @@ import { UserMinimal } from '@app/interfaces/user-minimal';
  */
 export interface CommentFeed {
   id: string;
+  is_voted: boolean;
   user: UserMinimal;
   is_voted: boolean;
   comment: string;
