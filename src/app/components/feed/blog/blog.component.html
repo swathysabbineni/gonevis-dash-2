@@ -1,0 +1,10 @@
+<div *ngIf="blog">
+  {{ blog.title }}
+  <br>
+  Followers {{ blog.followers_count }}
+  <br>
+  user: name - {{ blog.user.name }}, username - {{ blog.user.username }}
+</div>
+
+<!-- Post -->
+<app-entry-list [entries]="entries" [next]="next"></app-entry-list>
