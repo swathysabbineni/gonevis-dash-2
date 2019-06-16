@@ -28,14 +28,13 @@ export class AuthInterceptorService implements HttpInterceptor {
         },
       });
     }
-
     return next.handle(request).pipe(catchError((error: HttpErrorResponse): Observable<never> => {
       if (error.error instanceof ErrorEvent) {
         // A client-side or network error occurred. Handle it accordingly.
         console.error('An error occurred:', error.error.message);
       } else {
-        // Auto logout if 401 response returned from api
-        if (error.status === 401 || error.status === 403) {
+        // Sign out if 401 response
+        if (error.status === 401) {
           this.authService.signOut();
         }
         // The backend returned an unsuccessful response code.
