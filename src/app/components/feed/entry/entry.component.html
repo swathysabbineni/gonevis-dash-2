@@ -7,14 +7,15 @@
      *ngIf="comments">
 
   <!-- Comment form -->
-  <app-comment-form [comment]="commentForm"
+  <app-comment-form [commentContent]="commentForm"
                     [entryId]="entry.id"
-                    (formSubmitted)="onCommentSubmit($event)" *ngIf="entry"></app-comment-form>
+                    (formSubmitted)="onCommentSubmit($event)"
+                    *ngIf="entry"></app-comment-form>
 
   <!-- Comment list -->
   <ul class="list-group list-group-flush">
     <li class="list-group-item" *ngFor="let comment of comments; let index = index"
-        [class.highlighted]="highlightedComment === comment.id">
+        [class.highlighted]="commentHighlighted === comment.id">
       <div class="media">
         <!-- Comment user image -->
         <img class="rounded-circle mr-3 bg-secondary" *ngIf="!comment.user.media">
@@ -41,7 +42,7 @@
               </button>
               <!-- Edit -->
               <ng-template #editTemplate>
-                <app-comment-form [commentId]="comment.id" [comment]="comment.comment"
+                <app-comment-form [commentId]="comment.id" [commentContent]="comment.comment"
                                   entryId=""></app-comment-form>
               </ng-template>
               <button class="btn btn-link" [disabled]="loading" [popover]="editTemplate"

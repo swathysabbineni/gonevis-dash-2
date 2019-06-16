@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
@@ -17,8 +16,7 @@ import { EntryService } from '@app/services/entry/entry.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-entry',
-  templateUrl: './entry.component.html',
+  selector: 'app-entry', templateUrl: './entry.component.html',
   styleUrls: ['./entry.component.scss'],
 })
 export class EntryComponent implements OnInit {
@@ -39,14 +37,9 @@ export class EntryComponent implements OnInit {
   comments: CommentFeed[] = [];
 
   /**
-   * Next page endpoint
+   * Highlighted comment ID
    */
-  next: string;
-
-  /**
-   * Highlighted comment
-   */
-  highlightedComment: string;
+  commentHighlighted: string;
 
   /**
    * Entry load error indicator
@@ -54,9 +47,9 @@ export class EntryComponent implements OnInit {
   error: boolean;
 
   /**
-   * Comment form
+   * Next page endpoint for comments
    */
-  form: FormGroup;
+  next: string;
 
   /**
    * Comment errors
@@ -76,7 +69,6 @@ export class EntryComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
               private changeDetectorRef: ChangeDetectorRef,
               private titleService: Title,
-              private formBuilder: FormBuilder,
               private translateService: TranslateService,
               private apiService: ApiService,
               private authService: AuthService,
@@ -95,6 +87,12 @@ export class EntryComponent implements OnInit {
 
   ngOnInit(): void {
     /**
+     * Get highlighted comment ID from URL query param
+     */
+    this.activatedRoute.queryParams.subscribe((params: Params): void => {
+      this.commentHighlighted = params.comment;
+    });
+    /**
      * Get entry ID from URL param
      */
     this.activatedRoute.params.subscribe((params: Params): void => {
@@ -107,22 +105,32 @@ export class EntryComponent implements OnInit {
          * Set entry title as window title
          */
         this.titleService.setTitle(this.entry.title);
-
         /**
          * Load entry comments
          */
         this.entryService.getEntryComments(params.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
+          // Store comments
           this.comments = comments.results;
+          // Store next page endpoint for comments
           this.next = comments.next;
+          // Watch for view update
           this.changeDetectorRef.detectChanges();
-          if (this.highlightedComment) {
-            if (this.comments.some((comment: CommentFeed): boolean => comment.id === this.highlightedComment)) {
+          // If there's highlighted comment in query params
+          if (this.commentHighlighted) {
+            // FInd highlighted comments in current comment list (page)
+            if (this.comments.some((comment: CommentFeed): boolean => comment.id === this.commentHighlighted)) {
+              // Scroll to the highlighted comment
               EntryComponent.scrollToComment();
             } else {
-              this.commentService.getComment(params.entryId, this.highlightedComment).subscribe(
+              // Get the comment separately since it doesn't exist in the current comment list page
+              this.commentService.getComment(params.entryId, this.commentHighlighted).subscribe(
                 (comment: CommentFeed): void => {
+                  // Add the highlighted comment to the top of the list
                   this.comments.unshift(comment);
-                });
+                  // Scroll to the highlighted comment
+                  EntryComponent.scrollToComment();
+                },
+              );
             }
           }
         });
@@ -131,18 +139,6 @@ export class EntryComponent implements OnInit {
           this.error = true;
         }
       });
-    });
-    /**
-     * Get highlighted comment ID from URL query param
-     */
-    this.activatedRoute.queryParams.subscribe((params: Params): void => {
-      this.highlightedComment = params.comment;
-      if (this.comments.length) {
-        if (this.comments.some((comment: CommentFeed): boolean => comment.id === this.highlightedComment)) {
-          this.changeDetectorRef.detectChanges();
-          EntryComponent.scrollToComment();
-        }
-      }
     });
   }
 
@@ -206,7 +202,7 @@ export class EntryComponent implements OnInit {
       this.next = data.next;
       this.loading = false;
       data.results.map((comment: CommentFeed, index: number): void => {
-        if (comment.id === this.highlightedComment) {
+        if (comment.id === this.commentHighlighted) {
           data.results.splice(index, 1);
           return;
         }
