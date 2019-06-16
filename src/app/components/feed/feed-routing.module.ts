@@ -33,6 +33,9 @@ const routes: Routes = [{
     path: 'entry/:entryId',
     loadChildren: './entry/entry.module#EntryModule',
   }, {
+    path: 'blog/:blogId',
+    loadChildren: './blog/blog.module#BlogModule',
+  }, {
     path: '',
     redirectTo: 'explore',
     pathMatch: 'full',
