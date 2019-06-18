@@ -7,10 +7,7 @@
      *ngIf="comments">
 
   <!-- Comment form -->
-  <app-comment-form [comment]="null"
-                    [entryId]="entry.id"
-                    (formSubmitted)="onCommentSubmit($event)"
-                    *ngIf="entry"></app-comment-form>
+  <app-comment-form [entryId]="entry.id" (formSubmitted)="onCommentSubmit($event)" *ngIf="entry"></app-comment-form>
 
   <!-- Comment list -->
   <ul class="list-group list-group-flush">
