@@ -87,9 +87,19 @@ export class CommentFormComponent implements AfterViewInit {
    */
   submit(): void {
     this.loading = true;
-    const id: string = this.entryId ? this.entryId : this.comment.id;
-    const call: string = this.entryId ? 'comment' : 'edit';
-
+    // ID required for making API call
+    let id: string;
+    // Method name to call at CommentService
+    let call: string;
+    // Check whether user is editing comment or submitting new comment
+    if (this.entryId) {
+      id = this.entryId;
+      call = 'comment';
+    } else {
+      id = this.comment.id;
+      call = 'edit';
+    }
+    // API call
     this.commentService[call](id, this.f.comment.value).subscribe((data: CommentFeed): void => {
       this.formSubmitted.next({ comment: data, isEdit: call === 'edit' });
       this.f.comment.setValue(call === 'edit' ? data.comment : '');
