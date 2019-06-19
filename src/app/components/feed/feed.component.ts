@@ -1,9 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Data } from '@angular/router';
-import { FeedService } from '@app/components/feed/feed.service';
-import { ApiResponse } from '@app/interfaces/api-response';
-import { EntryFeed } from '@app/interfaces/entry-feed';
 import { NavPill } from '@app/interfaces/nav-pill';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';

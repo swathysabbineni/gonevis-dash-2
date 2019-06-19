@@ -1,5 +1,5 @@
 <!-- Comment form -->
-<form class="card-header bg-light" (ngSubmit)="handleSubmit()">
+<form class="card-header bg-light" [formGroup]="form" (ngSubmit)="submit()">
   <div class="media">
     <!-- Comment user (current user) -->
     <img class="rounded-circle mr-3 bg-secondary" *ngIf="!user.media">
@@ -10,7 +10,7 @@
       <div class="input-group">
         <!-- Comment input -->
         <textarea name="comment" rows="2" class="form-control" [placeholder]="'ENTER_COMMENT' | translate"
-                  autocomplete="off" [(ngModel)]="commentContent" [class.is-invalid]="errors.comment"></textarea>
+                  autocomplete="off" formControlName="comment" [class.is-invalid]="errors.comment"></textarea>
         <!-- Comment button -->
         <div class="input-group-append">
           <button class="btn btn-primary">

@@ -7,10 +7,7 @@
      *ngIf="comments">
 
   <!-- Comment form -->
-  <app-comment-form [commentContent]="commentForm"
-                    [entryId]="entry.id"
-                    (formSubmitted)="onCommentSubmit($event)"
-                    *ngIf="entry"></app-comment-form>
+  <app-comment-form [entryId]="entry.id" (formSubmitted)="onCommentSubmit($event)" *ngIf="entry"></app-comment-form>
 
   <!-- Comment list -->
   <ul class="list-group list-group-flush">
@@ -40,15 +37,16 @@
                 <fa-icon [fixedWidth]="true" [icon]="['fas', 'heart']" *ngIf="comment.is_voted"
                          class="text-danger"></fa-icon>
               </button>
-              <!-- Edit -->
-              <ng-template #editTemplate>
-                <app-comment-form [commentId]="comment.id" [commentContent]="comment.comment"
-                                  entryId=""></app-comment-form>
-              </ng-template>
-              <button class="btn btn-link" [disabled]="loading" [popover]="editTemplate"
-                      popoverTitle="Edit" placement="top" outsideClick="true" container="body">
-                <fa-icon icon="edit"></fa-icon>
-              </button>
+              <div *ngIf="comment.user.id === user.id">
+                <!-- Edit -->
+                <ng-template #editTemplate>
+                  <app-comment-form [comment]="comment" (formSubmitted)="onCommentSubmit($event)"></app-comment-form>
+                </ng-template>
+                <button class="btn btn-link" [disabled]="loading" [popover]="editTemplate"
+                        popoverTitle="Edit" placement="top" outsideClick="true" container="body">
+                  <fa-icon icon="edit"></fa-icon>
+                </button>
+              </div>
               <!-- Delete -->
               <button class="btn btn-link" [disabled]="loading" (click)="removeComment(comment.id, index)">
                 <fa-icon icon="trash"></fa-icon>

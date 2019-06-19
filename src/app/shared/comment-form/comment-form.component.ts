@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { CommentFeed } from '@app/interfaces/comment-feed';
+import { CommentFormEvent } from '@app/interfaces/comment-form-event';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
@@ -12,12 +13,32 @@ import { CommentService } from '@app/services/comment/comment.service';
   templateUrl: './comment-form.component.html',
   styleUrls: ['./comment-form.component.scss'],
 })
-export class CommentFormComponent {
+export class CommentFormComponent implements AfterViewInit {
+
+  /**
+   * Entry ID of the comment
+   */
+  @Input() entryId: string;
+
+  /**
+   * Comment content for both editing and creating comment
+   */
+  @Input() comment: CommentFeed;
+
+  /**
+   * Form submission event
+   */
+  @Output() formSubmitted: EventEmitter<CommentFormEvent> = new EventEmitter<CommentFormEvent>();
 
   /**
    * Authenticated user data
    */
   user: UserAuth;
+
+  /**
+   * Comment form
+   */
+  form: FormGroup;
 
   /**
    * Comment errors
@@ -29,26 +50,6 @@ export class CommentFormComponent {
    */
   loading: boolean;
 
-  /**
-   * Entry ID of the comment
-   */
-  @Input() entryId: string;
-
-  /**
-   * Comment ID is required for editing
-   */
-  @Input() commentId: string;
-
-  /**
-   * Comment content for both editing and creating comment
-   */
-  @Input() commentContent: string;
-
-  /**
-   * Form submission event
-   */
-  @Output() formSubmitted: EventEmitter<CommentFeed> = new EventEmitter<CommentFeed>();
-
   constructor(private formBuilder: FormBuilder,
               private changeDetectorRef: ChangeDetectorRef,
               private authService: AuthService,
@@ -59,17 +60,26 @@ export class CommentFormComponent {
     this.authService.user.subscribe((data: UserAuth): void => {
       this.user = data;
     });
+
+    // Setup comment form
+    this.form = this.formBuilder.group({
+      comment: ['', [Validators.required, Validators.minLength(3)]],
+    });
+  }
+
+  ngAfterViewInit(): void {
+    // If editing
+    if (this.comment) {
+      this.f.comment.setValue(this.comment.comment);
+      this.changeDetectorRef.detectChanges();
+    }
   }
 
   /**
-   * Handle comment submit
+   * @return Change password form controls (fields)
    */
-  handleSubmit(): void {
-    if (this.entryId) {
-      this.submit();
-    } else {
-      this.edit();
-    }
+  private get f(): { [p: string]: AbstractControl } {
+    return this.form.controls;
   }
 
   /**
@@ -77,25 +87,22 @@ export class CommentFormComponent {
    */
   submit(): void {
     this.loading = true;
-    this.commentService.comment(this.entryId, this.commentContent).subscribe((data: CommentFeed): void => {
-      this.formSubmitted.next(data);
-      this.commentContent = '';
-      this.loading = false;
-      this.errors = {};
-    }, (error: HttpErrorResponseApi): void => {
-      this.loading = false;
-      this.errors = error.error;
-    });
-  }
-
-  /**
-   * Edit comment
-   */
-  edit(): void {
-    this.loading = true;
-    this.commentService.edit(this.commentId, this.commentContent).subscribe((data: CommentFeed): void => {
-      this.formSubmitted.next(data);
-      this.commentContent = data.comment;
+    // ID required for making API call
+    let id: string;
+    // Method name to call at CommentService
+    let call: string;
+    // Check whether user is editing comment or submitting new comment
+    if (this.entryId) {
+      id = this.entryId;
+      call = 'comment';
+    } else {
+      id = this.comment.id;
+      call = 'edit';
+    }
+    // API call
+    this.commentService[call](id, this.f.comment.value).subscribe((data: CommentFeed): void => {
+      this.formSubmitted.next({ comment: data, isEdit: call === 'edit' });
+      this.f.comment.setValue(call === 'edit' ? data.comment : '');
       this.loading = false;
       this.errors = {};
     }, (error: HttpErrorResponseApi): void => {

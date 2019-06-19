@@ -6,6 +6,7 @@ import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { CommentFeed } from '@app/interfaces/comment-feed';
+import { CommentFormEvent } from '@app/interfaces/comment-form-event';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
@@ -61,11 +62,6 @@ export class EntryComponent implements OnInit {
    */
   loading: boolean;
 
-  /**
-   * Comment to submit
-   */
-  commentForm: string;
-
   constructor(private activatedRoute: ActivatedRoute,
               private changeDetectorRef: ChangeDetectorRef,
               private titleService: Title,
@@ -86,6 +82,13 @@ export class EntryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    /**
+     * Get authenticated user
+     */
+    this.authService.user.subscribe((user: UserAuth): void => {
+      this.user = user;
+    });
+
     /**
      * Get highlighted comment ID from URL query param
      */
@@ -179,13 +182,22 @@ export class EntryComponent implements OnInit {
   }
 
   /**
-   * On comment created
+   * On comment created/edited
    *
    * @param event Data response
    */
-  onCommentSubmit(event: CommentFeed): void {
-    this.comments.unshift(event);
-    this.entry.active_comment_count++;
+  onCommentSubmit(event: CommentFormEvent): void {
+    if (event.isEdit) {
+      this.comments.map((comment: CommentFeed): void => {
+        if (comment.id === event.comment.id) {
+          comment.comment = event.comment.comment;
+          comment.updated = event.comment.updated;
+        }
+      });
+    } else {
+      this.comments.unshift(event.comment);
+      this.entry.active_comment_count++;
+    }
   }
 
   /**
