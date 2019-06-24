@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserPasswordRoutingModule } from '@app/components/user/user-setting/user-password/user-password-routing.module';
 import { UserPasswordComponent } from '@app/components/user/user-setting/user-password/user-password.component';
 import { PageCoverModule } from '@app/shared/page-cover/page-cover.module';
+import { PasswordStrengthModule } from '@app/shared/password-strength/password-strength.module';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
@@ -15,6 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
     ReactiveFormsModule,
     TranslateModule.forChild(),
     PageCoverModule,
+    PasswordStrengthModule
   ],
 })
 export class UserPasswordModule {
