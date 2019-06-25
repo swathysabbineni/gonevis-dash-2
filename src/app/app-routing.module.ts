@@ -3,6 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from '@app/services/auth-guard/auth-guard.service';
 
 const routes: Routes = [{
+  path: 'dash',
+  loadChildren: './components/dash/dash.module#DashModule',
+  canLoad: [AuthGuardService],
+},{
   path: 'feed',
   loadChildren: './components/feed/feed.module#FeedModule',
   canLoad: [AuthGuardService],
