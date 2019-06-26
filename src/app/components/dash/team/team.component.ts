@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { TeamService } from '@app/components/dash/team/team.service';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiError } from '@app/interfaces/api-error';
-import { ParamsObject } from '@app/interfaces/params-object';
+import { Params } from '@app/interfaces/params';
 import { Team } from '@app/interfaces/team';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { TranslateService } from '@ngx-translate/core';
@@ -38,7 +38,7 @@ export class TeamComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private translateService: TranslateService,
               private teamService: TeamService) {
-    this.translateService.get(['OWNER', 'ADMINISTRATOR', 'EDITOR']).subscribe((translate: ParamsObject): void => {
+    this.translateService.get(['OWNER', 'ADMINISTRATOR', 'EDITOR']).subscribe((translate: Params): void => {
       this.roles.push({
         color: 'text-primary',
         label: translate.OWNER as string,
