@@ -1,3 +1,3 @@
-export interface ParamsObject {
+export interface Params {
   [param: string]: string | string[];
 }
