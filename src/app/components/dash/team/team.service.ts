@@ -29,7 +29,7 @@ export class TeamService {
    * @param email Email address
    * @param role Member's role in blog
    */
-  inviteMember(email: string, role: TeamRoles): Observable<void> {
+  teamPromote(email: string, role: TeamRoles): Observable<void> {
     return this.http.put<void>(`${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/promote-user/`, {
       email,
       role,
