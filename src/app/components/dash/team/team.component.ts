@@ -5,6 +5,8 @@ import { TeamRoles } from '@app/enums/team-roles';
 import { ApiError } from '@app/interfaces/api-error';
 import { Params } from '@app/interfaces/params';
 import { Team } from '@app/interfaces/team';
+import { TeamMember } from '@app/interfaces/team-member';
+import { UserTeam } from '@app/interfaces/user-team';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -79,12 +81,15 @@ export class TeamComponent implements OnInit {
     });
   }
 
+  /**
+   * Invite new member
+   */
   invite(): void {
     // Validate form
     if (this.form.invalid) {
       return;
     }
-    this.teamService.inviteMember(this.f.email.value, this.f.role.value).subscribe((): void => {
+    this.teamService.teamPromote(this.f.email.value, this.f.role.value).subscribe((): void => {
       this.getTeam();
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
@@ -92,7 +97,21 @@ export class TeamComponent implements OnInit {
   }
 
   /**
-   * Get team statuses
+   * Change team member role
+   *
+   * @param member Team member
+   */
+  setRole(member: TeamMember<UserTeam>): void {
+    // @Todo Update once backend is fixed.
+    this.teamService.teamPromote(member.user.email, member.role).subscribe((data): void => {
+      console.log(data);
+    }, (error: HttpErrorResponseApi): void => {
+      this.error = error.error;
+    });
+  }
+
+  /**
+   * Get team roles
    */
   teamRoles() {
     return TeamRoles;
