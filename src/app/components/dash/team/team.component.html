@@ -6,6 +6,22 @@
       {{ member.user.get_full_name }}
       <span [classList]="roles[member.role].color">{{ roles[member.role].label }}</span>
     </p>
+    <!-- Promote member -->
+    <div class="btn-group" dropdown *ngIf="member.role !== teamRoles().OWNER">
+      <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
+        {{ roles[member.role].label }}
+      </button>
+      <div *dropdownMenu class="dropdown-menu" role="menu">
+        <h6 class="dropdown-header" translate>CHANGE_ROLE</h6>
+        <button class="dropdown-item" [class.active]="member.role === teamRoles().EDITOR" (click)="setRole(member)">
+          {{ roles[teamRoles().EDITOR].label }}
+        </button>
+        <button class="dropdown-item" [class.active]="member.role === teamRoles().ADMINISTRATOR"
+                (click)="setRole(member)">
+          {{ roles[teamRoles().ADMINISTRATOR].label }}
+        </button>
+      </div>
+    </div>
   </div>
   Pending members
   <div *ngFor="let member of team.team_pending">
