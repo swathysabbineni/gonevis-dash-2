@@ -28,8 +28,8 @@
   </small>
   <label>
     <select formControlName="role">
-      <option [ngValue]="teamRoles.EDITOR">{{ roles[teamRoles.EDITOR].label }}</option>
-      <option [ngValue]="teamRoles.ADMINISTRATOR">{{ roles[teamRoles.ADMINISTRATOR].label }}</option>
+      <option [ngValue]="teamRoles().EDITOR">{{ roles[teamRoles().EDITOR].label }}</option>
+      <option [ngValue]="teamRoles().ADMINISTRATOR">{{ roles[teamRoles().ADMINISTRATOR].label }}</option>
     </select>
   </label>
   <button type="submit">Invite</button>

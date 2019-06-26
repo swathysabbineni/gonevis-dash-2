@@ -94,7 +94,7 @@ export class TeamComponent implements OnInit {
   /**
    * Get team statuses
    */
-  get teamRoles() {
+  teamRoles() {
     return TeamRoles;
   }
 }
