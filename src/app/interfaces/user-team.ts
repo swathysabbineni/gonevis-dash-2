@@ -10,4 +10,5 @@ export interface UserTeam {
   media: Media;
   name: string;
   username: string;
+  id: string;
 }
