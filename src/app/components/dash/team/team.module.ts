@@ -14,7 +14,7 @@ import { TeamRoutingModule } from './team-routing.module';
     TeamRoutingModule,
     ReactiveFormsModule,
     TranslateModule.forChild(),
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
   ],
 })
 export class TeamModule {
