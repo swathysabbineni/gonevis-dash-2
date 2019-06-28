@@ -21,6 +21,7 @@
           {{ roles[teamRoles().ADMINISTRATOR].label }}
         </button>
       </div>
+      <button *ngIf="member.role !== teamRoles().OWNER" (click)="removeMember(member, false)">Remove</button>
     </div>
   </div>
   Pending members
@@ -31,6 +32,7 @@
       <span [classList]="roles[member.role].color">{{ roles[member.role].label }}</span>
       <span class="text-muted">Pending</span>
     </p>
+    <button *ngIf="member.role !== teamRoles().OWNER" (click)="removeMember(member, true)">Remove</button>
   </div>
 </div>
 

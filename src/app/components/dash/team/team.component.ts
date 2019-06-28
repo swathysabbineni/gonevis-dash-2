@@ -6,6 +6,7 @@ import { ApiError } from '@app/interfaces/api-error';
 import { Params } from '@app/interfaces/params';
 import { Team } from '@app/interfaces/team';
 import { TeamMember } from '@app/interfaces/team-member';
+import { UserSettings } from '@app/interfaces/user-settings';
 import { UserTeam } from '@app/interfaces/user-team';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { TranslateService } from '@ngx-translate/core';
@@ -106,6 +107,37 @@ export class TeamComponent implements OnInit {
     this.teamService.teamPromote(member.user.email, member.role).subscribe((data): void => {
       console.log(data);
     }, (error: HttpErrorResponseApi): void => {
+      this.error = error.error;
+    });
+  }
+
+  /**
+   * Remove member from team
+   *
+   * @param member Member to remove
+   * @param isPending Determine whether member is pending or not
+   */
+  removeMember(member: TeamMember<UserTeam | UserSettings>, isPending: boolean): void {
+    let title: string;
+    let payload: Params;
+    // Check if member is pending
+    if (isPending) {
+      member.user = member.user as UserSettings;
+      title = member.email;
+      payload = {
+        email: member.email,
+      };
+    } else {
+      member.user = member.user as UserTeam;
+      title = member.user.get_full_name;
+      payload = {
+        team_member_id: member.user.id,
+      };
+    }
+    if (!confirm(this.translateService.instant('REMOVE_TEAM_MEMBER_PROMPT', { title }))) {
+      return;
+    }
+    this.teamService.removeMember(payload, isPending).subscribe(null, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
     });
   }
