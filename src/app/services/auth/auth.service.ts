@@ -5,6 +5,7 @@ import { AuthResponse } from '@app/interfaces/auth-response';
 import { AuthToken } from '@app/interfaces/auth-token';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { ApiService } from '@app/services/api/api.service';
+import { BlogService } from '@app/services/blog/blog.service';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -35,20 +36,17 @@ export class AuthService {
               private apiService: ApiService) {
     // If user is authenticated, then store token and user subjects with their local storage values
     if (this.isAuth) {
+      const userData: UserAuth = JSON.parse(localStorage.getItem('user'));
       // Update user subject data
-      this.userSubject.next(JSON.parse(localStorage.getItem('user')));
+      this.userSubject.next(userData);
+      // Set current blog
+      if (BlogService.currentBlog) {
+        BlogService.currentBlog = BlogService.currentBlog;
+      } else {
+        BlogService.currentBlog = userData.sites[0];
+      }
     }
     this.user = this.userSubject.asObservable();
-  }
-
-  /**
-   * Set/update authenticated user data
-   *
-   * @param userData UserSettings data
-   */
-  setAuthenticatedUser(userData: UserAuth): void {
-    localStorage.setItem('user', JSON.stringify(userData));
-    this.userSubject.next(userData);
   }
 
   /**
@@ -65,6 +63,16 @@ export class AuthService {
     }
     const base64 = base64Url.replace('-', '+').replace('_', '/');
     return JSON.parse(atob(base64));
+  }
+
+  /**
+   * Set/update authenticated user data
+   *
+   * @param userData UserSettings data
+   */
+  setAuthenticatedUser(userData: UserAuth): void {
+    localStorage.setItem('user', JSON.stringify(userData));
+    this.userSubject.next(userData);
   }
 
   /**
@@ -120,6 +128,8 @@ export class AuthService {
         localStorage.setItem('user', JSON.stringify(data.user));
         // Update user subject data
         this.userSubject.next(data.user);
+        // Store current blog into local storage
+        BlogService.currentBlog = data.user.sites[0];
         // Return raw user data
         return data.user.username;
       }),
