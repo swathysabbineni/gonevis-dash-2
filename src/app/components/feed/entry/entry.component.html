@@ -24,8 +24,7 @@
             <!-- Comment user name -->
             <a href="#" class="text-primary font-weight-bold">{{ comment.user.name }}</a>
             <!-- Comment date -->
-            <a class="text-primary font-weight-bold small ml-2" *ngIf="entry"
-               [routerLink]="['/feed', 'entry', entry.id]"
+            <a class="small ml-1" *ngIf="entry" [routerLink]="['/feed', 'entry', entry.id]"
                [queryParams]="{ comment: comment.id }">
               {{ comment.created | date }}
             </a>
@@ -54,7 +53,7 @@
             </div>
           </div>
           <!-- Comment content -->
-          <div class="small white-space-pre-line">{{ comment.comment }}</div>
+          <div class="white-space-pre-line">{{ comment.comment }}</div>
         </div>
       </div>
     </li>
