@@ -16,7 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
     ReactiveFormsModule,
     TranslateModule.forChild(),
     PageCoverModule,
-    PasswordStrengthModule
+    PasswordStrengthModule,
   ],
 })
 export class UserPasswordModule {
