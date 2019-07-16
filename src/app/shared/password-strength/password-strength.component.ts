@@ -30,7 +30,7 @@ export class PasswordStrengthComponent implements OnChanges {
     percentage: 40,
   }, {
     label: 'Good',
-    color: null,
+    color: '',
     percentage: 60,
   }, {
     label: 'Strong',
