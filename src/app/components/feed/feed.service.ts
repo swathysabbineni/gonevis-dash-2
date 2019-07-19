@@ -31,10 +31,15 @@ export class FeedService {
   }
 
   /**
-   * Get explore entries
+   * Get entries with filters
+   *
+   * @param blog Filter by blog ID (in blog)
+   * @param user Filter by user ID (by author)
    */
-  getExploreEntries(): Observable<ApiResponse<EntryFeed>> {
-    return this.http.get<ApiResponse<EntryFeed>>(`${this.apiService.base.zero}website/entry/`);
+  getEntries(blog: string = '', user: string = ''): Observable<ApiResponse<EntryFeed>> {
+    return this.http.get<ApiResponse<EntryFeed>>(`${this.apiService.base.zero}website/entry/`, {
+      params: { blog, user },
+    });
   }
 
   /**
@@ -48,6 +53,8 @@ export class FeedService {
    * Get user bookmarked entries
    */
   getBookmarkedEntries(): Observable<ApiResponse<EntryFeed>> {
-    return this.http.get<ApiResponse<EntryFeed>>(`${this.apiService.base.zero}website/entry/${this.userId}/bookmarks/`);
+    return this.http.get<ApiResponse<EntryFeed>>(
+      `${this.apiService.base.zero}website/entry/${this.userId}/bookmarks/`,
+    );
   }
 }

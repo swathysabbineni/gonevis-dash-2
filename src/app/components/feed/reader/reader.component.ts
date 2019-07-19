@@ -31,20 +31,20 @@ export class ReaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Set selected nav
     this.activatedRoute.data.subscribe((data: Data): void => {
-      let call = 'getExploreEntries';
-      this.loading = true;
-      if (data.route === 'updates') {
-        call = 'getSubscribedEntries';
-      } else if (data.route === 'bookmarks') {
-        call = 'getBookmarkedEntries';
-      }
-      this.feedService[call]().subscribe((entries: ApiResponse<EntryFeed>): void => {
+      const onLoadEntries = (entries: ApiResponse<EntryFeed>): void => {
         this.next = entries.next;
         this.entries = entries.results;
         this.loading = false;
-      });
+      };
+      this.loading = true;
+      if (data.route === 'updates') {
+        this.feedService.getSubscribedEntries().subscribe(onLoadEntries);
+      } else if (data.route === 'bookmarks') {
+        this.feedService.getBookmarkedEntries().subscribe(onLoadEntries);
+      } else {
+        this.feedService.getEntries().subscribe(onLoadEntries);
+      }
     });
   }
 }

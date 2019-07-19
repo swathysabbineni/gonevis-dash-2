@@ -40,21 +40,20 @@ export class BlogComponent implements OnInit {
    */
   errors: ApiError = {};
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
               private blogService: BlogService,
               private feedService: FeedService) {
   }
 
   ngOnInit(): void {
     this.loading = true;
-    this.activatedRoute.params.subscribe((params: Params): void => {
+    this.route.params.subscribe((params: Params): void => {
       this.blogService.getBlog(params.blogId).subscribe((data: BlogFeed): void => {
         this.blog = data;
-
         /**
-         * Load entries
+         * Get entries of this blog
          */
-        this.feedService.getExploreEntries().subscribe((entries: ApiResponse<EntryFeed>): void => {
+        this.feedService.getEntries(params.blogId).subscribe((entries: ApiResponse<EntryFeed>): void => {
           this.next = entries.next;
           this.entries = entries.results;
           this.loading = false;
