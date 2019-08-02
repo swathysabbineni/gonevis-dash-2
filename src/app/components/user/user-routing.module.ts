@@ -12,25 +12,25 @@ const routes: Routes = [{
   },
   children: [{
     path: 'setting',
-    loadChildren: './user-setting/user-setting.module#UserSettingModule',
+    loadChildren: () => import('./user-setting/user-setting.module').then(m => m.UserSettingModule),
     canLoad: [AuthGuardService],
   }, {
     path: 'sign-in',
-    loadChildren: './sign-in/sign-in.module#SignInModule',
+    loadChildren: () => import('./sign-in/sign-in.module').then(m => m.SignInModule),
     canLoad: [AnonymousGuardService],
   }, {
     path: 'sign-up',
-    loadChildren: './sign-up/sign-up.module#SignUpModule',
+    loadChildren: () => import('./sign-up/sign-up.module').then(m => m.SignUpModule),
     canLoad: [AnonymousGuardService],
   }, {
     path: 'forgot-password',
-    loadChildren: './forgot-password/forgot-password.module#ForgotPasswordModule',
+    loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
   }, {
     path: 'reset-password/:token',
-    loadChildren: './reset-password/reset-password.module#ResetPasswordModule',
+    loadChildren: () => import('./reset-password/reset-password.module').then(m => m.ResetPasswordModule),
   }, {
     path: 'email-confirmation/:token',
-    loadChildren: './email-confirmation/email-confirmation.module#EmailConfirmationModule',
+    loadChildren: () => import('./email-confirmation/email-confirmation.module').then(m => m.EmailConfirmationModule),
   }, {
     path: '',
     redirectTo: 'setting',

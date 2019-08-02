@@ -5,10 +5,7 @@ import { DashComponent } from '@app/components/dash/dash.component';
 const routes: Routes = [{
   path: '',
   component: DashComponent,
-  children: [{
-    path: 'team',
-    loadChildren: './team/team.module#TeamModule'
-  }]
+  children: []
 }];
 
 @NgModule({

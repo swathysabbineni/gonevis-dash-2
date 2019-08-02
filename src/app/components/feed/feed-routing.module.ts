@@ -10,31 +10,31 @@ const routes: Routes = [{
   },
   children: [{
     path: 'explore',
-    loadChildren: './reader/reader.module#ReaderModule',
+    loadChildren: () => import('./reader/reader.module').then(m => m.ReaderModule),
     data: {
       route: 'explore',
       title: 'EXPLORE',
     },
   }, {
     path: 'updates',
-    loadChildren: './reader/reader.module#ReaderModule',
+    loadChildren: () => import('./reader/reader.module').then(m => m.ReaderModule),
     data: {
       route: 'updates',
       title: 'UPDATES',
     },
   }, {
     path: 'bookmarks',
-    loadChildren: './reader/reader.module#ReaderModule',
+    loadChildren: () => import('./reader/reader.module').then(m => m.ReaderModule),
     data: {
       route: 'bookmarks',
       title: 'BOOKMARKS',
     },
   }, {
     path: 'entry/:entryId',
-    loadChildren: './entry/entry.module#EntryModule',
+    loadChildren: () => import('./entry/entry.module').then(m => m.EntryModule),
   }, {
     path: 'blog/:blogId',
-    loadChildren: './blog/blog.module#BlogModule',
+    loadChildren: () => import('./blog/blog.module').then(m => m.BlogModule),
   }, {
     path: '',
     redirectTo: 'explore',
