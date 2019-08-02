@@ -4,15 +4,15 @@ import { AuthGuardService } from '@app/services/auth-guard/auth-guard.service';
 
 const routes: Routes = [{
   path: 'dash',
-  loadChildren: './components/dash/dash.module#DashModule',
+  loadChildren: () => import('./components/dash/dash.module').then(m => m.DashModule),
   canLoad: [AuthGuardService],
-},{
+}, {
   path: 'feed',
-  loadChildren: './components/feed/feed.module#FeedModule',
+  loadChildren: () => import('./components/feed/feed.module').then(m => m.FeedModule),
   canLoad: [AuthGuardService],
 }, {
   path: 'user',
-  loadChildren: './components/user/user.module#UserModule',
+  loadChildren: () => import('./components/user/user.module').then(m => m.UserModule),
 }, {
   path: '**',
   redirectTo: 'feed',
