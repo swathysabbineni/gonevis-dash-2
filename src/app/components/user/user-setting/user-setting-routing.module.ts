@@ -10,10 +10,10 @@ const routes: Routes = [{
   },
   children: [{
     path: 'profile',
-    loadChildren: './user-profile/user-profile.module#UserProfileModule',
+    loadChildren: () => import('./user-profile/user-profile.module').then(m => m.UserProfileModule),
   }, {
     path: 'password',
-    loadChildren: './user-password/user-password.module#UserPasswordModule',
+    loadChildren: () => import('./user-password/user-password.module').then(m => m.UserPasswordModule),
   }, {
     path: '',
     redirectTo: 'profile',
