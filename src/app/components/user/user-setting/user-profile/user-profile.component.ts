@@ -24,7 +24,7 @@ export class UserProfileComponent implements OnInit {
   /**
    * File input reference
    */
-  @ViewChild('fileElement') fileElement;
+  @ViewChild('fileElement', { static: false }) fileElement;
 
   /**
    * User setting data to auto fill the inputs with
