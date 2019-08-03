@@ -7,7 +7,7 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { CommentFeed } from '@app/interfaces/comment-feed';
 import { CommentFormEvent } from '@app/interfaces/comment-form-event';
-import { EntryFeed } from '@app/interfaces/entry-feed';
+import { Entry } from '@app/interfaces/zero/entry';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { ApiService } from '@app/services/api/api.service';
@@ -30,7 +30,7 @@ export class EntryComponent implements OnInit {
   /**
    * Entry data
    */
-  entry: EntryFeed;
+  entry: Entry;
 
   /**
    * Entry comments data
@@ -102,7 +102,7 @@ export class EntryComponent implements OnInit {
       /**
        * Load entry
        */
-      this.entryService.getEntry(params.entryId).subscribe((data: EntryFeed): void => {
+      this.entryService.getEntry(params.entryId).subscribe((data: Entry): void => {
         this.entry = data;
         /**
          * Set entry title as window title

@@ -1,4 +1,4 @@
-import { BlogMinimalUser } from '@app/interfaces/blog-minimal-user';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { Media } from '@app/interfaces/media';
 import { UserTour } from '@app/interfaces/user-tour';
 
@@ -14,7 +14,7 @@ export interface UserAuth {
   media: Media;
   name: string;
   receive_email_notification: boolean;
-  sites: BlogMinimalUser[];
+  sites: BlogMin[];
   tour: UserTour;
   username: string;
 }

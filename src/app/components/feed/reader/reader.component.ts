@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data } from '@angular/router';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { EntryFeed } from '@app/interfaces/entry-feed';
+import { Entry } from '@app/interfaces/zero/entry';
 
 @Component({
   selector: 'app-reader',
@@ -19,7 +19,7 @@ export class ReaderComponent implements OnInit {
   /**
    * List of entries
    */
-  entries: EntryFeed[];
+  entries: Entry[];
 
   /**
    * Next page endpoint
@@ -32,7 +32,7 @@ export class ReaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((data: Data): void => {
-      const onLoadEntries = (entries: ApiResponse<EntryFeed>): void => {
+      const onLoadEntries = (entries: ApiResponse<Entry>): void => {
         this.next = entries.next;
         this.entries = entries.results;
         this.loading = false;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BlogMinimalUser } from '@app/interfaces/blog-minimal-user';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -7,9 +7,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class BlogService {
 
-  private static blogSubject: BehaviorSubject<BlogMinimalUser> = new BehaviorSubject<BlogMinimalUser>(null);
+  private static blogSubject: BehaviorSubject<BlogMin> = new BehaviorSubject<BlogMin>(null);
 
-  static blog: Observable<BlogMinimalUser> = BlogService.blogSubject.asObservable();
+  static blog: Observable<BlogMin> = BlogService.blogSubject.asObservable();
 
   constructor() {
   }
@@ -19,7 +19,7 @@ export class BlogService {
    *
    * @param blog Blog data
    */
-  static set currentBlog(blog: BlogMinimalUser) {
+  static set currentBlog(blog: BlogMin) {
     localStorage.setItem('blog', JSON.stringify(blog));
     BlogService.blogSubject.next(blog);
   }
@@ -27,7 +27,7 @@ export class BlogService {
   /**
    * @return Current blog
    */
-  static get currentBlog(): BlogMinimalUser {
+  static get currentBlog(): BlogMin {
     return JSON.parse(localStorage.getItem('blog'));
   }
 }

@@ -1,13 +1,10 @@
-import { BlogMinimalFeed } from '@app/interfaces/blog-minimal-feed';
+import { BlogMin } from '@app/interfaces/zero/feed/blog-min';
 import { File } from '@app/interfaces/file';
 import { UserMinimal } from '@app/interfaces/user-minimal';
 
-/**
- * Represents feed entry structure
- */
-export interface EntryFeed {
+export interface Entry {
   id: string;
-  site: BlogMinimalFeed;
+  site: BlogMin;
   user: UserMinimal;
   title: string;
   content: string;

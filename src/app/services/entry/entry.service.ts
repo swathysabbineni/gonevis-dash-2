@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { CommentFeed } from '@app/interfaces/comment-feed';
-import { EntryFeed } from '@app/interfaces/entry-feed';
+import { Entry } from '@app/interfaces/zero/entry';
 import { ApiService } from '@app/services/api/api.service';
 import { Observable } from 'rxjs';
 
@@ -20,8 +20,8 @@ export class EntryService {
    *
    * @param id Entry ID
    */
-  getEntry(id: string): Observable<EntryFeed> {
-    return this.http.get<EntryFeed>(`${this.apiService.base.zero}website/entry/${id}/`);
+  getEntry(id: string): Observable<Entry> {
+    return this.http.get<Entry>(`${this.apiService.base.zero}website/entry/${id}/`);
   }
 
   /**

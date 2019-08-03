@@ -1,6 +1,6 @@
 import { Media } from '@app/interfaces/media';
 
-export interface BlogFeed {
+export interface Blog {
   absolute_uri: string;
   cover_image: Media;
   description: string;

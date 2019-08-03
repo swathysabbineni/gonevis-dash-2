@@ -4,8 +4,8 @@ import { BlogService } from '@app/components/feed/blog/blog.service';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { BlogFeed } from '@app/interfaces/blog-feed';
-import { EntryFeed } from '@app/interfaces/entry-feed';
+import { Blog } from '@app/interfaces/zero/blog';
+import { Entry } from '@app/interfaces/zero/entry';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 
 @Component({
@@ -23,12 +23,12 @@ export class BlogComponent implements OnInit {
   /**
    * Blog detail
    */
-  blog: BlogFeed;
+  blog: Blog;
 
   /**
    * List of entries
    */
-  entries: EntryFeed[];
+  entries: Entry[];
 
   /**
    * Next page endpoint
@@ -48,12 +48,12 @@ export class BlogComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.route.params.subscribe((params: Params): void => {
-      this.blogService.getBlog(params.blogId).subscribe((data: BlogFeed): void => {
+      this.blogService.getBlog(params.blogId).subscribe((data: Blog): void => {
         this.blog = data;
         /**
          * Get entries of this blog
          */
-        this.feedService.getEntries(params.blogId).subscribe((entries: ApiResponse<EntryFeed>): void => {
+        this.feedService.getEntries(params.blogId).subscribe((entries: ApiResponse<Entry>): void => {
           this.next = entries.next;
           this.entries = entries.results;
           this.loading = false;

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BlogFeed } from '@app/interfaces/blog-feed';
+import { Blog } from '@app/interfaces/zero/blog';
 import { ApiService } from '@app/services/api/api.service';
 import { Observable } from 'rxjs';
 
@@ -18,7 +18,7 @@ export class BlogService {
    *
    * @param id Blog ID
    */
-  getBlog(id: string): Observable<BlogFeed> {
-    return this.http.get<BlogFeed>(`${this.apiService.base.zero}website/site/${id}`);
+  getBlog(id: string): Observable<Blog> {
+    return this.http.get<Blog>(`${this.apiService.base.zero}website/site/${id}`);
   }
 }

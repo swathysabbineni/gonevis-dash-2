@@ -1,6 +1,6 @@
 import { Media } from '@app/interfaces/media';
 
-export interface BlogMinimalFeed {
+export interface BlogMin {
   id: string;
   logo: Media;
   title: string;

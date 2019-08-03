@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
-import { EntryFeed } from '@app/interfaces/entry-feed';
+import { Entry } from '@app/interfaces/zero/entry';
 import { ApiService } from '@app/services/api/api.service';
 import { EntryService } from '@app/services/entry/entry.service';
 import { UtilService } from '@app/services/util/util.service';
@@ -22,7 +22,7 @@ export class EntryListComponent {
   /**
    * List of entries
    */
-  @Input() entries: EntryFeed[];
+  @Input() entries: Entry[];
 
   /**
    * Next page endpoint
@@ -40,7 +40,7 @@ export class EntryListComponent {
    *
    * @param entry Entry to like
    */
-  like(entry: EntryFeed): void {
+  like(entry: Entry): void {
     // Check for loading
     if (entry.loading) {
       return;
@@ -66,7 +66,7 @@ export class EntryListComponent {
    *
    * @param entry Entry to bookmark
    */
-  bookmark(entry: EntryFeed): void {
+  bookmark(entry: Entry): void {
     // Check for loading
     if (entry.loading) {
       return;
@@ -91,10 +91,10 @@ export class EntryListComponent {
       return;
     }
     this.loading = true;
-    this.apiService.getEndpoint<EntryFeed>(endpoint).subscribe((data: ApiResponse<EntryFeed>): void => {
+    this.apiService.getEndpoint<Entry>(endpoint).subscribe((data: ApiResponse<Entry>): void => {
       this.next = data.next;
       this.loading = false;
-      data.results.map((entry: EntryFeed): void => {
+      data.results.map((entry: Entry): void => {
         this.entries.push(entry);
       });
     });
