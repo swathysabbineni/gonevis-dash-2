@@ -7,14 +7,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class BlogService {
 
-  /**
-   * Current blog subject
-   */
   private static blogSubject: BehaviorSubject<BlogMinimalUser> = new BehaviorSubject<BlogMinimalUser>(null);
 
-  /**
-   * Current blog
-   */
   static blog: Observable<BlogMinimalUser> = BlogService.blogSubject.asObservable();
 
   constructor() {
