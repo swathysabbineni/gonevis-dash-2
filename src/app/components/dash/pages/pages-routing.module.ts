@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { PagesComponent } from '@app/components/dash/pages/pages.component';
 
-
-const routes: Routes = [];
+const routes: Routes = [{
+  path: '',
+  component: PagesComponent,
+}];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class PagesRoutingModule { }
+export class PagesRoutingModule {
+}
