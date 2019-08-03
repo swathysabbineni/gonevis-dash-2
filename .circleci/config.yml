@@ -1,0 +1,92 @@
+version: 2.1
+
+aliases:
+  - &working_directory ~/gonevis-dash-2
+
+executors:
+  node:
+    docker:
+      - image: circleci/node:10.14-browsers
+    working_directory:  *working_directory
+
+jobs:
+  build:
+    executor: node
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-npm-wee
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - persist_to_workspace:
+          root: *working_directory
+          paths:
+            - .
+
+  jslint:
+    executor: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: *working_directory
+      - run:
+          name: code quality
+          command: npm run lint
+  test:
+    executor: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: *working_directory
+      - run:
+          name: test
+          command: npm test
+      - run:
+          name: code-coverage
+          command: 'npm run report-coverage'
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
+      - store_test_results:
+          path: test-results.xml
+
+  deploy:
+    executor: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: *working_directory
+      - run:
+          name: Deploying to Production
+          command: |
+            sudo apt -y install rsync
+            chmod u+x scripts/deploy.sh
+            ./scripts/deploy.sh
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - build
+#       - test:
+#           requires:
+#             - build
+#       - jslint:
+#           requires:
+#             - test
+      - deploy:
+          requires:
+            - build
+#             - test
+#             - jslint
+#           filters:
+#             branches:
+#               only: production
