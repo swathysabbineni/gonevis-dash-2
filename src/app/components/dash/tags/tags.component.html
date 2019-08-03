@@ -1,1 +1,14 @@
-<p>tags works!</p>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="media" *ngFor="let tag of tags">
+        <img *ngIf="tag.media.cover_image" [src]="tag.media.cover_image.thumbnail_128x128">
+        <img *ngIf="!tag.media.cover_image">
+        <div class="media-body ml-3">
+          <h5 class="mt-0">{{ tag.name }} <small class="badge badge-light">{{ tag.tagged_items_count }}</small></h5>
+          <p class="text-secondary">{{ tag.description || '#' + tag.slug }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

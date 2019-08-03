@@ -1,0 +1,11 @@
+@import "~src/assets/styles/variables";
+
+.media {
+  img {
+    width: 64px;
+    height: 64px;
+    border-radius: $border-radius;
+    border-width: 0;
+    background-color: $secondary;
+  }
+}
