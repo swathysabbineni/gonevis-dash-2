@@ -7,6 +7,7 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { BlogFeed } from '@app/interfaces/blog-feed';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
+import { UtilService } from '@app/services/util/util.service';
 
 @Component({
   selector: 'app-blog',
@@ -40,7 +41,8 @@ export class BlogComponent implements OnInit {
    */
   errors: ApiError = {};
 
-  constructor(private route: ActivatedRoute,
+  constructor(public utils: UtilService,
+              private route: ActivatedRoute,
               private blogService: BlogService,
               private feedService: FeedService) {
   }
