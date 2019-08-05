@@ -4,8 +4,8 @@ import { FeedService } from '@app/components/feed/feed.service';
 import { UserService } from '@app/components/feed/user/user.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { EntryFeed } from '@app/interfaces/entry-feed';
 import { User } from '@app/interfaces/user';
+import { Entry } from '@app/interfaces/zero/entry';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { UtilService } from '@app/services/util/util.service';
 
@@ -29,7 +29,7 @@ export class UserComponent implements OnInit {
   /**
    * List of entries
    */
-  entries: EntryFeed[];
+  entries: Entry[];
 
   /**
    * Next page endpoint
@@ -55,7 +55,7 @@ export class UserComponent implements OnInit {
         /**
          * Get entries of this user
          */
-        this.feedService.getEntries('', params.username).subscribe((entries: ApiResponse<EntryFeed>): void => {
+        this.feedService.getEntries('', params.username).subscribe((entries: ApiResponse<Entry>): void => {
           this.next = entries.next;
           this.entries = entries.results;
           this.loading = false;
