@@ -33,7 +33,10 @@
       <h5 class="card-title"><a [routerLink]="['/feed', 'entry', entry.id]">{{ entry.title }}</a></h5>
 
       <!-- Excerpt -->
-      <p class="card-text">{{ entry.excerpt }}</p>
+      <p class="card-text" *ngIf="entry.excerpt">{{ entry.excerpt }}</p>
+
+      <!-- Content -->
+      <p class="card-text" *ngIf="entry.content">{{ entry.content }}</p>
     </div>
 
     <!-- Footer -->

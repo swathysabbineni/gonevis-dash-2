@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { Entry } from '@app/interfaces/zero/entry';
 import { UserAuth } from '@app/interfaces/user-auth';
+import { Entry } from '@app/interfaces/zero/entry';
 import { ApiService } from '@app/services/api/api.service';
 import { AuthService } from '@app/services/auth/auth.service';
 import { Observable } from 'rxjs';
@@ -38,7 +38,7 @@ export class FeedService {
    */
   getEntries(blog: string = '', user: string = ''): Observable<ApiResponse<Entry>> {
     return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.zero}website/entry/`, {
-      params: { blog, user },
+      params: { site: blog, user },
     });
   }
 
