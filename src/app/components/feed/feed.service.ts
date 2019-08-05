@@ -34,11 +34,14 @@ export class FeedService {
    * Get entries with filters
    *
    * @param blog Filter by blog ID (in blog)
-   * @param user Filter by user ID (by author)
+   * @param user Filter by user username (by author)
    */
   getEntries(blog: string = '', user: string = ''): Observable<ApiResponse<Entry>> {
     return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.zero}website/entry/`, {
-      params: { site: blog, user },
+      params: {
+        site: blog,
+        user__username: user,
+      },
     });
   }
 

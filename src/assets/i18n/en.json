@@ -50,5 +50,7 @@
   "REMOVE_TEAM_MEMBER_PROMPT": "Remove from team?\n\nAre you sure you want to remove '{{ title }}' from team?",
   "ENTER_VALID_EMAIL_FORMAT": "Please enter a valid email address format",
   "PLEASE_ENTER_VALUE": "Please enter a value",
-  "DASHBOARD": "Dashboard"
+  "DASHBOARD": "Dashboard",
+  "POSTS": "Posts",
+  "COLLABORATING": "Collaborating"
 }

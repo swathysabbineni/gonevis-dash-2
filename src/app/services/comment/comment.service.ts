@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ObjectType } from '@app/enums/object-type';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
-import { CommentFeed } from '@app/interfaces/comment-feed';
+import { Comment } from '@app/interfaces/comment';
 import { ApiService } from '@app/services/api/api.service';
 import { Observable } from 'rxjs';
 
@@ -21,8 +21,8 @@ export class CommentService {
    * @param id Entry ID
    * @param commentId Comment ID
    */
-  getComment(id: string, commentId: string): Observable<CommentFeed> {
-    return this.http.get<CommentFeed>(`${this.apiService.base.zero}website/entry/${id}/comment/${commentId}/`);
+  getComment(id: string, commentId: string): Observable<Comment> {
+    return this.http.get<Comment>(`${this.apiService.base.zero}website/entry/${id}/comment/${commentId}/`);
   }
 
   /**
@@ -31,8 +31,8 @@ export class CommentService {
    * @param id Entry ID
    * @param comment Comment content
    */
-  comment(id: string, comment: string): Observable<CommentFeed> {
-    return this.http.post<CommentFeed>(`${this.apiService.base.zero}website/entry/${id}/comment/`, {
+  comment(id: string, comment: string): Observable<Comment> {
+    return this.http.post<Comment>(`${this.apiService.base.zero}website/entry/${id}/comment/`, {
       comment,
       object_id: ObjectType.ENTRY,
     });
@@ -62,7 +62,7 @@ export class CommentService {
    * @param id Comment ID
    * @param comment Edited comment
    */
-  edit(id: string, comment: string): Observable<CommentFeed> {
-    return this.http.put<CommentFeed>(`${this.apiService.base.v1}sushial/comment/${id}/`, { comment });
+  edit(id: string, comment: string): Observable<Comment> {
+    return this.http.put<Comment>(`${this.apiService.base.v1}sushial/comment/${id}/`, { comment });
   }
 }

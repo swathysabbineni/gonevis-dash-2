@@ -1,11 +1,11 @@
 import { BlogMin } from '@app/interfaces/zero/feed/blog-min';
 import { File } from '@app/interfaces/file';
-import { UserMinimal } from '@app/interfaces/user-minimal';
+import { UserMin } from '@app/interfaces/user-min';
 
 export interface Entry {
   id: string;
   site: BlogMin;
-  user: UserMinimal;
+  user: UserMin;
   title: string;
   content: string;
   excerpt: string;

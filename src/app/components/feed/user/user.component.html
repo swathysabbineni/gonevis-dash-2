@@ -1,0 +1,32 @@
+<!-- Blog -->
+<div class="card shadow-sm my-3" *ngIf="user">
+
+  <!-- Header -->
+  <div class="card-header d-flex">
+
+    <!-- Logo -->
+    <img class="rounded-sm mr-3" *ngIf="user.media.thumbnail_128x128"
+         [src]="user.media.thumbnail_128x128">
+
+    <!-- Title, date joined -->
+    <div class="d-flex flex-column">
+      <b>{{ user.display_name }}</b>
+      <span>
+        {{ user.subscribed_sites_count }} {{ 'FOLLOWING' | translate }} &bull;
+        {{ user.collaborating_sites_count }} {{ 'COLLABORATING' | translate }} &bull;
+        @{{ user.username }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="card-body">
+    <!-- About -->
+    <div class="card-text">{{ user.about }}</div>
+    <!-- Location -->
+    <div class="card-text">{{ user.location }}</div>
+  </div>
+</div>
+
+<!-- Posts -->
+<app-entry-list [entries]="entries" [next]="next"></app-entry-list>

@@ -12,7 +12,7 @@
       <b>{{ blog.title }}</b>
       <small>
         <span>{{ blog.followers_count }} {{ 'FOLLOWERS' | translate }} &bull; </span>
-        <a [routerLink]="['/user', blog.user.username]">@{{ blog.user.username }}</a>
+        <a [routerLink]="['./user', blog.user.username]">@{{ blog.user.username }}</a>
       </small>
     </div>
   </div>
