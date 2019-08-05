@@ -36,6 +36,9 @@ const routes: Routes = [{
     path: 'blog/:blogId',
     loadChildren: () => import('./blog/blog.module').then(m => m.BlogModule),
   }, {
+    path: 'user/:username',
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
+  }, {
     path: '',
     redirectTo: 'explore',
     pathMatch: 'full',

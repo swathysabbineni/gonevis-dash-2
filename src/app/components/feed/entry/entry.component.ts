@@ -5,7 +5,7 @@ import { FeedService } from '@app/components/feed/feed.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
-import { CommentFeed } from '@app/interfaces/comment-feed';
+import { Comment } from '@app/interfaces/comment';
 import { CommentFormEvent } from '@app/interfaces/comment-form-event';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { UserAuth } from '@app/interfaces/user-auth';
@@ -35,7 +35,7 @@ export class EntryComponent implements OnInit {
   /**
    * Entry comments data
    */
-  comments: CommentFeed[] = [];
+  comments: Comment[] = [];
 
   /**
    * Highlighted comment ID
@@ -111,7 +111,7 @@ export class EntryComponent implements OnInit {
         /**
          * Load entry comments
          */
-        this.entryService.getEntryComments(params.entryId).subscribe((comments: ApiResponse<CommentFeed>): void => {
+        this.entryService.getEntryComments(params.entryId).subscribe((comments: ApiResponse<Comment>): void => {
           // Store comments
           this.comments = comments.results;
           // Store next page endpoint for comments
@@ -121,13 +121,13 @@ export class EntryComponent implements OnInit {
           // If there's highlighted comment in query params
           if (this.commentHighlighted) {
             // FInd highlighted comments in current comment list (page)
-            if (this.comments.some((comment: CommentFeed): boolean => comment.id === this.commentHighlighted)) {
+            if (this.comments.some((comment: Comment): boolean => comment.id === this.commentHighlighted)) {
               // Scroll to the highlighted comment
               EntryComponent.scrollToComment();
             } else {
               // Get the comment separately since it doesn't exist in the current comment list page
               this.commentService.getComment(params.entryId, this.commentHighlighted).subscribe(
-                (comment: CommentFeed): void => {
+                (comment: Comment): void => {
                   // Add the highlighted comment to the top of the list
                   this.comments.unshift(comment);
                   // Scroll to the highlighted comment
@@ -150,7 +150,7 @@ export class EntryComponent implements OnInit {
    *
    * @param comment Comment object
    */
-  likeComment(comment: CommentFeed): void {
+  likeComment(comment: Comment): void {
     this.loading = true;
     this.commentService.like(comment.id).subscribe((data: ApiResponseCreated): void => {
       comment.is_voted = data.created;
@@ -188,7 +188,7 @@ export class EntryComponent implements OnInit {
    */
   onCommentSubmit(event: CommentFormEvent): void {
     if (event.isEdit) {
-      this.comments.map((comment: CommentFeed): void => {
+      this.comments.map((comment: Comment): void => {
         if (comment.id === event.comment.id) {
           comment.comment = event.comment.comment;
           comment.updated = event.comment.updated;
@@ -210,10 +210,10 @@ export class EntryComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.apiService.getEndpoint<CommentFeed>(endpoint).subscribe((data: ApiResponse<CommentFeed>): void => {
+    this.apiService.getEndpoint<Comment>(endpoint).subscribe((data: ApiResponse<Comment>): void => {
       this.next = data.next;
       this.loading = false;
-      data.results.map((comment: CommentFeed, index: number): void => {
+      data.results.map((comment: Comment, index: number): void => {
         if (comment.id === this.commentHighlighted) {
           data.results.splice(index, 1);
           return;

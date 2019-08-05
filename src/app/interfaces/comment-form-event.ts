@@ -1,9 +1,6 @@
-import { CommentFeed } from '@app/interfaces/comment-feed';
+import { Comment } from '@app/interfaces/comment';
 
-/**
- * Represents comment from emitted event structure
- */
 export interface CommentFormEvent {
-  comment: CommentFeed;
+  comment: Comment;
   isEdit: boolean;
 }

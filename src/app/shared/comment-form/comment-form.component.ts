@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
-import { CommentFeed } from '@app/interfaces/comment-feed';
+import { Comment } from '@app/interfaces/comment';
 import { CommentFormEvent } from '@app/interfaces/comment-form-event';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
@@ -23,7 +23,7 @@ export class CommentFormComponent implements AfterViewInit {
   /**
    * Comment content for both editing and creating comment
    */
-  @Input() comment: CommentFeed;
+  @Input() comment: Comment;
 
   /**
    * Form submission event
@@ -100,7 +100,7 @@ export class CommentFormComponent implements AfterViewInit {
       call = 'edit';
     }
     // API call
-    this.commentService[call](id, this.f.comment.value).subscribe((data: CommentFeed): void => {
+    this.commentService[call](id, this.f.comment.value).subscribe((data: Comment): void => {
       this.formSubmitted.next({ comment: data, isEdit: call === 'edit' });
       this.f.comment.setValue(call === 'edit' ? data.comment : '');
       this.loading = false;

@@ -38,7 +38,10 @@ export class FeedService {
    */
   getEntries(blog: string = '', user: string = ''): Observable<ApiResponse<EntryFeed>> {
     return this.http.get<ApiResponse<EntryFeed>>(`${this.apiService.base.zero}website/entry/`, {
-      params: { site: blog, user },
+      params: {
+        site: blog,
+        user__username: user,
+      },
     });
   }
 

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
-import { CommentFeed } from '@app/interfaces/comment-feed';
+import { Comment } from '@app/interfaces/comment';
 import { EntryFeed } from '@app/interfaces/entry-feed';
 import { ApiService } from '@app/services/api/api.service';
 import { Observable } from 'rxjs';
@@ -29,8 +29,8 @@ export class EntryService {
    *
    * @param id Entry ID
    */
-  getEntryComments(id: string): Observable<ApiResponse<CommentFeed>> {
-    return this.http.get<ApiResponse<CommentFeed>>(`${this.apiService.base.zero}website/entry/${id}/comments/`);
+  getEntryComments(id: string): Observable<ApiResponse<Comment>> {
+    return this.http.get<ApiResponse<Comment>>(`${this.apiService.base.zero}website/entry/${id}/comments/`);
   }
 
   /**
