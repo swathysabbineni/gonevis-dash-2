@@ -22,7 +22,7 @@
         <div class="media-body">
           <div>
             <!-- Comment user name -->
-            <a href="#" class="text-primary font-weight-bold">{{ comment.user.name }}</a>
+            <a href="#" class="text-primary font-weight-bold">{{ comment.user.display_name }}</a>
             <!-- Comment date -->
             <a class="small ml-1" *ngIf="entry" [routerLink]="['/feed', 'entry', entry.id]"
                [queryParams]="{ comment: comment.id }">
