@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TagsService } from '@app/components/dash/tags/tags.service';
+import { ApiResponse } from '@app/interfaces/api-response';
 import { Tag } from '@app/interfaces/v1/tag';
 
 @Component({
@@ -18,7 +19,7 @@ export class TagsComponent implements OnInit {
     /**
      * Load tags
      */
-    this.tag.getTags().subscribe(response => {
+    this.tag.getTags().subscribe((response: ApiResponse<Tag>): void => {
       this.tags = response.results;
     });
   }
