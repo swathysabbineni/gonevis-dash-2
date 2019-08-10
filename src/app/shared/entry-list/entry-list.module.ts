@@ -16,10 +16,13 @@ import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 import { TranslateModule } from '@ngx-translate/core';
 import { PopoverModule, TooltipModule } from 'ngx-bootstrap';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+
 import { EntryListComponent } from './entry-list.component';
 
 @NgModule({
-  declarations: [EntryListComponent],
+  declarations: [
+    EntryListComponent,
+  ],
   imports: [
     CommonModule,
     FontAwesomeModule,
@@ -30,7 +33,9 @@ import { EntryListComponent } from './entry-list.component';
     PopoverModule.forRoot(),
     EntryShareModule,
   ],
-  exports: [EntryListComponent],
+  exports: [
+    EntryListComponent,
+  ],
 })
 export class EntryListModule {
   constructor() {
