@@ -30,7 +30,13 @@
         </div>
         <!-- User dropdown -->
         <ul class="dropdown-menu dropdown-menu-right" *dropdownMenu>
-          <!-- View account -->
+          <!-- Profile -->
+          <li>
+            <a [routerLink]="['/feed/user', user.username]" routerLinkActive="active" class="dropdown-item" translate>
+              PROFILE
+            </a>
+          </li>
+          <!-- Settings -->
           <li><a routerLink="/user/setting" routerLinkActive="active" class="dropdown-item" translate>SETTING</a></li>
           <!-- Separator -->
           <li class="dropdown-divider"></li>
