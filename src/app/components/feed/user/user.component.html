@@ -1,4 +1,4 @@
-<!-- Blog -->
+<!-- User -->
 <div class="card shadow-sm my-3" *ngIf="user">
 
   <!-- Header -->
@@ -28,5 +28,17 @@
   </div>
 </div>
 
-<!-- Posts -->
-<app-entry-list [entries]="entries" [next]="next"></app-entry-list>
+<ul class="nav nav-pills">
+  <li class="nav-item">
+    <a class="nav-link" translate [class.active]="current === 'entries'" (click)="setCurrent('entries')">POSTS</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" translate [class.active]="current === 'blogs'" (click)="setCurrent('blogs')">BLOGS</a>
+  </li>
+</ul>
+
+<!-- User entries -->
+<app-entry-list [entries]="entries" [next]="next" *ngIf="current === 'entries'"></app-entry-list>
+
+<!-- User blogs -->
+<app-blog-list [blogs]="blogs" [next]="next" *ngIf="current === 'blogs'"></app-blog-list>
