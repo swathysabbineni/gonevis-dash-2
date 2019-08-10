@@ -1,0 +1,37 @@
+<!-- Blog -->
+<div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="loadMore(next)">
+  <div class="card shadow-sm my-3" *ngFor="let blog of blogs">
+
+    <!-- Header -->
+    <div class="card-header d-flex">
+
+      <!-- Logo -->
+      <img class="rounded-sm shadow-sm mr-3 overlay" *ngIf="blog.logo" [src]="blog.logo.thumbnail_128x128">
+
+      <!-- Title, owner and followers -->
+      <div class="d-flex flex-column">
+        <a class="font-weight-bold text-dark" [routerLink]="['/feed/blog', blog.id]">{{ blog.title }}</a>
+        <small>
+          <span>{{ blog.followers_count }} {{ 'FOLLOWERS' | translate }} &bull; </span>
+          <a [routerLink]="['/feed/user', blog.user.username]">@{{ blog.user.username }}</a>
+        </small>
+      </div>
+    </div>
+
+    <!-- Cover image -->
+    <div class="card-body cover" *ngIf="blog.cover_image"
+         [style.background-image]="utils.sanitizeBackgroundImage(blog.cover_image.file)"></div>
+
+    <!-- Description -->
+    <div class="card-body" *ngIf="blog.description">
+      <p class="card-text">{{ blog.description }}</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer text-left">
+      <!-- Follow -->
+      <button class="btn btn-sm btn-primary" *ngIf="!blog.is_following" translate>FOLLOW</button>
+      <button class="btn btn-sm btn-light" *ngIf="blog.is_following" translate>FOLLOWING</button>
+    </div>
+  </div>
+</div>
