@@ -3,8 +3,7 @@
 
 <!-- Comment section -->
 <div class="card shadow-sm my-3" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
-     (scrolled)="loadMore(next)"
-     *ngIf="comments">
+     (scrolled)="loadMore(next)" *ngIf="comments">
 
   <!-- Comment form -->
   <app-comment-form [entryId]="entry.id" (formSubmitted)="onCommentSubmit($event)" *ngIf="entry"></app-comment-form>
@@ -22,9 +21,11 @@
         <div class="media-body">
           <div>
             <!-- Comment user name -->
-            <a href="#" class="text-primary font-weight-bold">{{ comment.user.display_name }}</a>
+            <a [routerLink]="['/feed/user', comment.user.username]" class="text-primary font-weight-bold">
+              {{ comment.user.display_name }}
+            </a>
             <!-- Comment date -->
-            <a class="small ml-1" *ngIf="entry" [routerLink]="['/feed', 'entry', entry.id]"
+            <a class="small ml-1" *ngIf="entry" [routerLink]="['/feed/entry', entry.id]"
                [queryParams]="{ comment: comment.id }">
               {{ comment.created | date }}
             </a>
