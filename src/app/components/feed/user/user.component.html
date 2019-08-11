@@ -20,7 +20,7 @@
   </div>
 
   <!-- Body -->
-  <div class="card-body">
+  <div class="card-body" *ngIf="user.about || user.location">
     <!-- About -->
     <div class="card-text">{{ user.about }}</div>
     <!-- Location -->
