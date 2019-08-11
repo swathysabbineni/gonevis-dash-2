@@ -1,4 +1,5 @@
 import { Media } from '@app/interfaces/media';
+import { User } from '@app/interfaces/user';
 
 export interface Blog {
   absolute_uri: string;
@@ -10,9 +11,5 @@ export interface Blog {
   logo: Media;
   nsfw: boolean;
   title: string;
-  user: {
-    media: Media
-    name: string;
-    username: string;
-  };
+  user: User;
 }
