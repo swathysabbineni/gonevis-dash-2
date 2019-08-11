@@ -30,7 +30,7 @@
     <div class="card-body">
 
       <!-- Title -->
-      <h5 class="card-title"><a [routerLink]="['/feed', 'entry', entry.id]">{{ entry.title }}</a></h5>
+      <h5 class="card-title"><a [routerLink]="['/feed/entry', entry.id]">{{ entry.title }}</a></h5>
 
       <!-- Excerpt -->
       <p class="card-text" *ngIf="entry.excerpt">{{ entry.excerpt }}</p>
@@ -56,10 +56,10 @@
       </button>
 
       <!-- Comments -->
-      <button class="btn btn-link">
+      <a class="btn btn-link" [routerLink]="['/feed/entry', entry.id]">
         <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
         <span *ngIf="entry.active_comment_count">{{ entry.active_comment_count }}</span>
-      </button>
+      </a>
 
       <!-- Bookmark -->
       <button class="btn btn-link float-right" (click)="bookmark(entry)">
