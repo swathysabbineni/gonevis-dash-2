@@ -1,6 +1,6 @@
-import { BlogMin } from '@app/interfaces/zero/feed/blog-min';
 import { File } from '@app/interfaces/file';
 import { UserMin } from '@app/interfaces/user-min';
+import { BlogMin } from '@app/interfaces/zero/feed/blog-min';
 
 export interface Entry {
   id: string;
@@ -15,9 +15,10 @@ export interface Entry {
   absolute_uri: string;
   active_comment_count: number;
   can_comment: boolean;
-  published: Date;
+  published: string;
   is_bookmarked: boolean;
   is_voted: boolean;
+  featured: boolean;
   vote_count: number;
   view_count: number;
 
