@@ -11,7 +11,7 @@
 
       <!-- Title and time since -->
       <div class="d-flex flex-column">
-        <a [routerLink]="['/feed', 'blog', entry.site.id]"><b>{{ entry.site.title }}</b></a>
+        <a [routerLink]="['/feed/blog', entry.site.id]"><b>{{ entry.site.title }}</b></a>
         <small>{{ entry.published | date }}</small>
       </div>
 
