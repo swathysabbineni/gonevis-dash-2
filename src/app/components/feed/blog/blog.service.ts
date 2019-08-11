@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { ApiResponseFollow } from '@app/interfaces/v1/api-response-follow';
 import { Blog } from '@app/interfaces/zero/blog';
 import { ApiService } from '@app/services/api/api.service';
 import { Observable } from 'rxjs';
@@ -34,5 +35,14 @@ export class BlogService {
         user__username: user,
       },
     });
+  }
+
+  /**
+   * (Un)Follow a blog for the current user
+   *
+   * @param id Blog ID
+   */
+  followBlog(id: string): Observable<ApiResponseFollow> {
+    return this.http.post<ApiResponseFollow>(`${this.apiService.base.zero}website/site/${id}/subscribe/`, {});
   }
 }

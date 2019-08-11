@@ -1,8 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BlogService } from '@app/components/feed/blog/blog.service';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { UserAuth } from '@app/interfaces/user-auth';
+import { ApiResponseFollow } from '@app/interfaces/v1/api-response-follow';
 import { Blog } from '@app/interfaces/zero/blog';
 import { ApiService } from '@app/services/api/api.service';
+import { AuthService } from '@app/services/auth/auth.service';
 import { EntryService } from '@app/services/entry/entry.service';
 import { UtilService } from '@app/services/util/util.service';
 
@@ -11,12 +15,17 @@ import { UtilService } from '@app/services/util/util.service';
   templateUrl: './blog-list.component.html',
   styleUrls: ['./blog-list.component.scss'],
 })
-export class BlogListComponent {
+export class BlogListComponent implements OnInit {
 
   /**
    * API loading indicator
    */
   loading: boolean;
+
+  /**
+   * Current user
+   */
+  user: UserAuth;
 
   /**
    * List of blogs
@@ -29,9 +38,31 @@ export class BlogListComponent {
   @Input() next: string;
 
   constructor(private activatedRoute: ActivatedRoute,
+              private blogService: BlogService,
               private entryService: EntryService,
               private apiService: ApiService,
+              public auth: AuthService,
               public utils: UtilService) {
+  }
+
+  ngOnInit(): void {
+    /**
+     * Get current user data
+     */
+    this.auth.user.subscribe((user: UserAuth): void => {
+      this.user = user;
+    });
+  }
+
+  /**
+   * (Un)Follow a blog for the current user
+   *
+   * @param blog Blog to (un)follow
+   */
+  follow(blog: Blog): void {
+    this.blogService.followBlog(blog.id).subscribe((response: ApiResponseFollow) => {
+      blog.is_following = response.subscribed;
+    });
   }
 
   /**

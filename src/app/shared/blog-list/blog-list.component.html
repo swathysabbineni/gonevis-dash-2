@@ -28,10 +28,15 @@
     </div>
 
     <!-- Footer -->
-    <div class="card-footer text-left">
+    <div class="card-footer text-left" *ngIf="user.id !== blog.user.id">
       <!-- Follow -->
-      <button class="btn btn-sm btn-primary" *ngIf="!blog.is_following" translate>FOLLOW</button>
-      <button class="btn btn-sm btn-light" *ngIf="blog.is_following" translate>FOLLOWING</button>
+      <button class="btn btn-sm"
+              (click)="follow(blog)"
+              [class.btn-default]="blog.is_following"
+              [class.btn-primary]="!blog.is_following">
+        <span translate *ngIf="!blog.is_following">FOLLOW</span>
+        <span translate *ngIf="blog.is_following">FOLLOWING</span>
+      </button>
     </div>
   </div>
 </div>
