@@ -69,7 +69,7 @@
 
       <!-- Share -->
       <ng-template #shareTemplate>
-        <app-entry-share [url]="entry.absolute_uri"></app-entry-share>
+        <app-entry-share [entry]="entry"></app-entry-share>
       </ng-template>
       <button class="btn btn-link float-right" [popover]="shareTemplate"
               popoverTitle="Share" placement="left" [outsideClick]="true">
