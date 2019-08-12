@@ -1,1 +1,23 @@
-<p>comments works!</p>
+<div class="container">
+  <div class="card my-3" *ngFor="let comment of comments">
+    <div class="card-header">
+      <b>{{ comment.user.username }}</b> commented on <b>{{ comment.commented_object_minimal_data.title }}</b>
+    </div>
+    <div class="card-body">
+      <div class="card-text">{{ comment.comment }}</div>
+      <div class="card-text text-secondary">{{ comment.created | date }}</div>
+    </div>
+    <div class="card-footer text-secondary">
+      <div class="btn-group btn-group-sm">
+        <button class="btn btn-warning">Pending</button>
+        <button class="btn btn-success">Active</button>
+        <button class="btn btn-secondary">Hidden</button>
+      </div>
+      <div class="float-right">
+        <button class="btn btn-sm btn-danger">
+          <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
