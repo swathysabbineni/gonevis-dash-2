@@ -89,7 +89,7 @@ a {
       }
     }
 
-    span {
+    span:not(.init) {
       color: $text-color;
       font-size: $text-font-size;
     }
