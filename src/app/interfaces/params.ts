@@ -2,5 +2,5 @@
  * Represents HTTP params structure
  */
 export interface Params {
-  [param: string]: string | string[];
+  [param: string]: null | boolean | number | string | (number | string)[];
 }
