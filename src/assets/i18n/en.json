@@ -53,5 +53,9 @@
   "PLEASE_ENTER_VALUE": "Please enter a value",
   "DASHBOARD": "Dashboard",
   "POSTS": "Posts",
+  "ACTIVE": "Active",
+  "PENDING": "Pending",
+  "HIDDEN": "Hidden",
+  "COMMENTED_ON": "commented on",
   "COLLABORATING": "Collaborating"
 }
