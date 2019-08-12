@@ -6,6 +6,10 @@ import { WriteComponent } from './write.component';
 const routes: Routes = [{
   path: '',
   component: WriteComponent,
+  children: [{
+    path: ':id',
+    component: WriteComponent,
+  }],
 }];
 
 @NgModule({
