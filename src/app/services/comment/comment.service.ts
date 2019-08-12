@@ -34,7 +34,7 @@ export class CommentService {
   comment(id: string, comment: string): Observable<Comment> {
     return this.http.post<Comment>(`${this.apiService.base.zero}website/entry/${id}/comment/`, {
       comment,
-      object_id: ObjectType.ENTRY,
+      object_id: ObjectType.Entry,
     });
   }
 

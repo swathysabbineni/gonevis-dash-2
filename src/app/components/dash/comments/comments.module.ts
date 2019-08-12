@@ -4,6 +4,7 @@ import { CommentsComponent } from '@app/components/dash/comments/comments.compon
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { CommentsRoutingModule } from './comments-routing.module';
 
@@ -15,6 +16,7 @@ import { CommentsRoutingModule } from './comments-routing.module';
     CommonModule,
     CommentsRoutingModule,
     FontAwesomeModule,
+    TranslateModule.forChild(),
   ],
 })
 export class CommentsModule {

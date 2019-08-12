@@ -1,22 +1,44 @@
 <div class="container">
-  <div class="card my-3" *ngFor="let comment of comments">
-    <div class="card-header">
-      <b>{{ comment.user.username }}</b> commented on <b>{{ comment.commented_object_minimal_data.title }}</b>
-    </div>
-    <div class="card-body">
-      <div class="card-text">{{ comment.comment }}</div>
-      <div class="card-text text-secondary">{{ comment.created | date }}</div>
-    </div>
-    <div class="card-footer text-secondary">
-      <div class="btn-group btn-group-sm">
-        <button class="btn btn-warning">Pending</button>
-        <button class="btn btn-success">Active</button>
-        <button class="btn btn-secondary">Hidden</button>
-      </div>
-      <div class="float-right">
-        <button class="btn btn-sm btn-danger">
-          <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
-        </button>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm my-3" *ngFor="let comment of comments">
+        <div class="card-header">
+          <a class="text-primary font-weight-bold" [routerLink]="['/feed/user', comment.user.username]">
+            {{ comment.user.username }}
+          </a>
+          <span class="init" translate>COMMENTED_ON</span>
+          <a class="text-primary font-weight-bold" [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]">
+            {{ comment.commented_object_minimal_data.title }}
+          </a>
+          <span class="init float-right">{{ comment.created | date }}</span>
+        </div>
+        <div class="card-body">
+          <div class="card-text white-space-pre-line">{{ comment.comment }}</div>
+        </div>
+        <div class="card-footer">
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-secondary"
+                    (click)="update(comment, status.Active)"
+                    [class.active]="comment.status === status.Active" translate>
+              ACTIVE
+            </button>
+            <button class="btn btn-outline-secondary"
+                    (click)="update(comment, status.Pending)"
+                    [class.active]="comment.status === status.Pending" translate>
+              PENDING
+            </button>
+            <button class="btn btn-outline-secondary"
+                    (click)="update(comment, status.Hidden)"
+                    [class.active]="comment.status === status.Hidden" translate>
+              HIDDEN
+            </button>
+          </div>
+          <div class="float-right">
+            <button class="btn btn-sm btn-outline-danger" (click)="delete(comment)" [disabled]="comment.loading">
+              <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
