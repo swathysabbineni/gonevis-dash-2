@@ -1,46 +1,53 @@
 <div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card shadow-sm my-3" *ngFor="let comment of comments">
-        <div class="card-header">
-          <a class="text-primary font-weight-bold" [routerLink]="['/feed/user', comment.user.username]">
-            {{ comment.user.username }}
+  <table class="table rounded bg-white">
+    <tbody>
+    <tr *ngFor="let comment of comments">
+      <!-- Image -->
+      <th class="pr-0 text-center" [class.p-0]="!comment.user.media">
+        <img class="rounded-circle" *ngIf="comment.user.media" [src]="comment.user.media.thumbnail_48x48">
+      </th>
+      <!-- User, post, date and comment -->
+      <th>
+        <!-- User -->
+        <a class="text-primary font-weight-bold" [routerLink]="['/feed/user', comment.user.username]">
+          {{ comment.user.name }}
+        </a>
+        <span class="text-lowercase" translate>COMMENTED_ON</span>
+        <!-- Post -->
+        <a class="text-primary font-weight-bold"
+           [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]">
+          {{ comment.commented_object_minimal_data.title }}
+        </a>
+        <!-- Date -->
+        <span class="text-secondary"> &bull; {{ comment.created | date }}</span>
+        <!-- Comment -->
+        <div class="mt-2 white-space-pre-line">{{ comment.comment }}</div>
+      </th>
+      <!-- Buttons -->
+      <th class="text-right">
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-light" (click)="update(comment, status.Active)"
+                  [class.active]="comment.status === status.Active" translate>
+            ACTIVE
+          </button>
+          <button class="btn btn-light" (click)="update(comment, status.Pending)"
+                  [class.active]="comment.status === status.Pending" translate>
+            PENDING
+          </button>
+          <button class="btn btn-light" (click)="update(comment, status.Hidden)"
+                  [class.active]="comment.status === status.Hidden" translate>
+            HIDDEN
+          </button>
+          <a class="btn btn-light" [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]"
+             [queryParams]="{ comment: comment.id }">
+            <fa-icon [fixedWidth]="true" icon="eye"></fa-icon>
           </a>
-          <span class="init" translate>COMMENTED_ON</span>
-          <a class="text-primary font-weight-bold"
-             [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]">
-            {{ comment.commented_object_minimal_data.title }}
-          </a>
-          <span class="init float-right">{{ comment.created | date }}</span>
+          <button class="btn btn-light" (click)="delete(comment)" [disabled]="comment.loading">
+            <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+          </button>
         </div>
-        <div class="card-body">
-          <div class="card-text white-space-pre-line">{{ comment.comment }}</div>
-        </div>
-        <div class="card-footer">
-          <div class="btn-group btn-group-sm">
-            <button class="btn btn-outline-secondary"
-                    (click)="update(comment, status.Active)"
-                    [class.active]="comment.status === status.Active" translate>
-              ACTIVE
-            </button>
-            <button class="btn btn-outline-secondary"
-                    (click)="update(comment, status.Pending)"
-                    [class.active]="comment.status === status.Pending" translate>
-              PENDING
-            </button>
-            <button class="btn btn-outline-secondary"
-                    (click)="update(comment, status.Hidden)"
-                    [class.active]="comment.status === status.Hidden" translate>
-              HIDDEN
-            </button>
-          </div>
-          <div class="float-right">
-            <button class="btn btn-sm btn-outline-danger" (click)="delete(comment)" [disabled]="comment.loading">
-              <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+      </th>
+    </tr>
+    </tbody>
+  </table>
 </div>
