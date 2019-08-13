@@ -1,13 +1,21 @@
 @import "variables";
 
 $body-bg: #edeef0;
+
 $input-group-addon-bg: none;
 $input-group-addon-color: $dark;
 $list-group-border-color: $light;
+
 $card-border-width: 0;
+
 $link-color: $secondary;
 $link-hover-color: $dark;
 $link-hover-decoration: none;
+
+$table-border-color: $light;
+
+$tooltip-arrow-color: $dark;
+$tooltip-bg: $dark;
 
 @import "~bootstrap/scss/bootstrap";
 
@@ -155,6 +163,17 @@ a {
 
       span {
         padding-left: 5px;
+      }
+    }
+  }
+}
+
+.table {
+  tbody {
+    tr {
+      th {
+        font-weight: normal;
+        vertical-align: middle;
       }
     }
   }
