@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommentsComponent } from '@app/components/dash/comments/comments.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -22,5 +23,6 @@ import { CommentsRoutingModule } from './comments-routing.module';
 export class CommentsModule {
   constructor() {
     library.add(faTrash);
+    library.add(faEye);
   }
 }
