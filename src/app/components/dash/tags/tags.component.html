@@ -1,61 +1,40 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-9 py-3">
-      <table class="table rounded bg-white">
-        <tbody>
-        <tr *ngFor="let tag of tags">
-          <!-- Image -->
-          <th class="pr-0">
-            <img class="rounded" *ngIf="tag.media.cover_image" [src]="tag.media.cover_image.thumbnail_48x48">
-          </th>
-          <!-- Name, slug, usage and description -->
-          <th>
-            <!-- Name -->
-            <b>{{ tag.name }}</b>
-            <!-- Slug -->
-            <small class="text-secondary ml-2">#{{ tag.slug }}</small>
-            <!-- Usage -->
-            <span class="badge badge-secondary ml-2">{{ tag.tagged_items_count }}</span>
-            <!-- Description -->
-            <div class="small text-secondary">{{ tag.description }}</div>
-          </th>
-          <!-- Buttons -->
-          <th>
-            <div class="btn-group btn-group-sm">
-              <!-- Edit -->
-              <button class="btn btn-light text-secondary" title="Edit">
-                <fa-icon [fixedWidth]="true" icon="edit"></fa-icon>
-              </button>
-              <!-- View -->
-              <a class="btn btn-light text-secondary" title="View on blog" [href]="tag.absolute_uri" target="_blank">
-                <fa-icon [fixedWidth]="true" icon="eye"></fa-icon>
-              </a>
-              <!-- Delete -->
-              <button class="btn btn-light text-secondary" title="Delete">
-                <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
-              </button>
-            </div>
-          </th>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-md-3 py-3">
-      <form class="card">
-        <div class="card-header">Create Tag</div>
-        <div class="card-body">
-          <div class="form-group">
-            <input class="form-control" type="text" placeholder="Name">
-          </div>
-          <div class="form-group">
-            <input class="form-control" type="text" placeholder="Tag">
-          </div>
-          <div class="form-group">
-            <textarea class="form-control" placeholder="Description"></textarea>
-          </div>
-          <button class="btn btn-block btn-success">Create</button>
+  <table class="table rounded bg-white">
+    <tbody>
+    <tr *ngFor="let tag of tags">
+      <!-- Image -->
+      <th class="pr-0 text-center" [class.p-0]="!tag.media.cover_image">
+        <img class="rounded" *ngIf="tag.media.cover_image" [src]="tag.media.cover_image.thumbnail_48x48">
+      </th>
+      <!-- Name, slug, usage and description -->
+      <th>
+        <!-- Name -->
+        <b>{{ tag.name }}</b>
+        <!-- Slug -->
+        <small class="text-secondary ml-2">#{{ tag.slug }}</small>
+        <!-- Usage -->
+        <span class="badge badge-secondary ml-2">{{ tag.tagged_items_count }}</span>
+        <!-- Description -->
+        <div class="small text-secondary">{{ tag.description }}</div>
+      </th>
+      <!-- Buttons -->
+      <th class="text-right">
+        <div class="btn-group btn-group-sm">
+          <!-- Edit -->
+          <button class="btn btn-light text-secondary" title="Edit">
+            <fa-icon [fixedWidth]="true" icon="edit"></fa-icon>
+          </button>
+          <!-- View -->
+          <a class="btn btn-light text-secondary" title="View on blog" [href]="tag.absolute_uri" target="_blank">
+            <fa-icon [fixedWidth]="true" icon="eye"></fa-icon>
+          </a>
+          <!-- Delete -->
+          <button class="btn btn-light text-secondary" title="Delete">
+            <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+          </button>
         </div>
-      </form>
-    </div>
-  </div>
+      </th>
+    </tr>
+    </tbody>
+  </table>
 </div>
