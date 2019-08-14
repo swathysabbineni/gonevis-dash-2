@@ -1,6 +1,3 @@
-/**
- * Object types used for referencing
- */
 export enum ObjectType {
   None,
   Entry,
