@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Teams } from '@app/interfaces/v1/teams';
+import { Team } from '@app/interfaces/v1/team';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { Observable } from 'rxjs';
@@ -26,8 +26,8 @@ export class TeamService {
   /**
    * Get blog teams
    */
-  getTeams(): Observable<Teams> {
-    return this.http.get<Teams>(`${this.api.base.v1}tagool/tag`, {
+  getTeams(): Observable<Team> {
+    return this.http.get<Team>(`${this.api.base.v1}website/site/${BlogService.currentBlog.id}/team/`, {
       params: { site: BlogService.currentBlog.id },
     });
   }

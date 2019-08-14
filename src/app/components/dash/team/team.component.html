@@ -1,1 +1,39 @@
-<p>team works!</p>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <table class="table rounded bg-white" *ngIf="teams">
+        <tbody>
+        <tr *ngFor="let member of teams.team">
+          <!-- Image -->
+          <th class="pr-0 text-center image" [class.p-0]="!member.user.media">
+            <img class="rounded" *ngIf="member.user.media" [src]="member.user.media.thumbnail_48x48">
+          </th>
+          <!-- Name, role and email -->
+          <th>
+            <!-- Name -->
+            <a class="font-weight-bold text-dark" [routerLink]="['/feed/user', member.user.username]">
+              {{ member.user.get_full_name }}
+            </a>
+            <!-- Role and email -->
+            <div class="small">
+              <!-- Role -->
+              <span class="badge badge-primary mr-2">{{ roleNames[member.role] }}</span>
+              <!-- Email -->
+              <a target="_blank" href="mailto:{{ member.user.email }}">{{ member.user.email }}</a>
+            </div>
+          </th>
+          <!-- Buttons -->
+          <th class="text-right">
+            <div class="btn-group btn-group-sm">
+              <!-- Remove -->
+              <button class="btn btn-light text-secondary" title="Remove">
+                <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+              </button>
+            </div>
+          </th>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
