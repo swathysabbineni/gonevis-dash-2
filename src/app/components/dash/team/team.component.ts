@@ -31,4 +31,17 @@ export class TeamComponent implements OnInit {
       this.teams = data;
     });
   }
+
+  /**
+   * Remove blog team member
+   */
+  removeMember(member: TeamMember<UserMin>): void {
+    const payload = {
+      team_member_id: member.user.id
+    };
+    if (!confirm('Are you sure you want to remove this member ')) {
+      return;
+    }
+    this.teamService.removeTeamMember(payload).subscribe();
+  }
 }
