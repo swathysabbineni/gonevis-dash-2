@@ -34,9 +34,14 @@ export class TeamService {
 
   /**
    * Remove blog team member
+   *
+   * @param id Team member ID
    */
-  removeTeamMember(payload): Observable<void> {
-    return this.http.put<void>
-    (`${this.api.base.v1}website/site/${BlogService.currentBlog.id}/remove-team-member/`, payload).pipe();
+  removeTeamMember(id: string): Observable<void> {
+    return this.http.put<void>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/remove-team-member/`, {
+        team_member_id: id,
+      },
+    ).pipe();
   }
 }

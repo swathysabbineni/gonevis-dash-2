@@ -3,6 +3,7 @@
     <div class="col-md-6">
       <table class="table rounded bg-white" *ngIf="teams">
         <tbody>
+        <!-- Team members -->
         <tr *ngFor="let member of teams.team">
           <!-- Image -->
           <th class="pr-0 text-center image" [class.p-0]="!member.user.media">
@@ -23,10 +24,44 @@
             </div>
           </th>
           <!-- Buttons -->
-          <th class="text-right">
+          <th class="text-right" *ngIf="member.role !== teamRoles.Owner">
             <div class="btn-group btn-group-sm">
               <!-- Remove -->
-              <button class="btn btn-light text-secondary" title="Remove" (click)="removeMember(member)">
+              <button class="btn btn-light text-secondary" title="Remove" (click)="remove(member.user.id)">
+                <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+              </button>
+            </div>
+          </th>
+        </tr>
+        <!-- Team members pending -->
+        <tr *ngFor="let member of teams.team_pending">
+          <th></th>
+          <!-- Email, role and invited by -->
+          <th>
+            <!-- Email -->
+            <a class="font-weight-bold text-dark" [routerLink]="['/feed/user', member.user.username]">
+              {{ member.email }}
+            </a>
+            <!-- Invited by -->
+            <small class="text-secondary">
+              <span translate>INVITED_BY</span>
+              <a class="font-weight-bold text-dark" [routerLink]="['/feed/user', member.user.username]">
+                {{ member.user.get_full_name }}
+              </a>
+            </small>
+            <!-- Role and pending status -->
+            <div class="small">
+              <!-- Role -->
+              <span class="badge badge-primary mr-2">{{ roleNames[member.role] }}</span>
+              <!-- Pending status -->
+              <span class="badge badge-secondary mr-2" translate>PENDING</span>
+            </div>
+          </th>
+          <!-- Buttons -->
+          <th class="text-right" *ngIf="member.role !== teamRoles.Owner">
+            <div class="btn-group btn-group-sm">
+              <!-- Remove -->
+              <button class="btn btn-light text-secondary" title="Remove" (click)="remove(member.user.id)">
                 <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
               </button>
             </div>
