@@ -1,8 +1,7 @@
 import { TeamMember } from '@app/interfaces/v1/team-member';
-import { User } from '@app/interfaces/v1/user';
-import { UserMin } from '@app/interfaces/v1/user-min';
+import { TeamMemberPending } from '@app/interfaces/v1/team-member-pending';
 
 export interface Team {
-  team: TeamMember<UserMin>[];
-  team_pending: TeamMember<User>[];
+  team: TeamMember[];
+  team_pending: TeamMemberPending[];
 }

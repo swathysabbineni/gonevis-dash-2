@@ -7,8 +7,8 @@ export interface User {
   location: string;
   about: string;
   is_active: boolean;
-  date_joined: Date;
-  updated: Date;
+  date_joined: string;
+  updated: string;
   media: Media;
   get_full_name: string;
   get_short_name: string;
