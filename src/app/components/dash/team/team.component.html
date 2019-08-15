@@ -69,6 +69,25 @@
         </tr>
         </tbody>
       </table>
+      <!-- Invite -->
+      <form class="form-inline bg-white py-2 rounded" [formGroup]="form" (ngSubmit)="invite()">
+        <!-- Email -->
+        <div class="form-group mx-sm-2">
+          <input class="form-control" type="email" formControlName="email"
+                 [placeholder]="'EMAIL' | translate" required>
+        </div>
+        <!-- Role -->
+        <div class="form-group mx-sm-2">
+          <select class="form-control" formControlName="role">
+            <option [ngValue]="teamRoles.Administrator">{{ roleNames[teamRoles.Administrator] }}</option>
+            <option [ngValue]="teamRoles.Editor">{{ roleNames[teamRoles.Editor] }}</option>
+          </select>
+        </div>
+        <!-- Submit button -->
+          <button class="btn btn-info">
+            <fa-icon fixedWidth="true" icon="plus"></fa-icon>
+          </button>
+      </form>
     </div>
   </div>
 </div>
