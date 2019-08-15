@@ -57,5 +57,7 @@
   "PENDING": "Pending",
   "HIDDEN": "Hidden",
   "COMMENTED_ON": "commented on",
+  "INVITED_BY": "Invited by",
+  "CONFORM_REMOVE_TEAM": "Are you sure you want to remove this team member?",
   "COLLABORATING": "Collaborating"
 }
