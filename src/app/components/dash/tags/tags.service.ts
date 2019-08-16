@@ -26,4 +26,17 @@ export class TagsService {
       },
     });
   }
+
+  /**
+   * Delete tag of current blog
+   *
+   * @param slug Blog slug
+   */
+  delete(slug: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiService.base.v1}tagool/tag/${slug}`, {
+      params: {
+        site: BlogService.currentBlog.id,
+      },
+    });
+  }
 }
