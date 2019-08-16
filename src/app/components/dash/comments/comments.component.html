@@ -25,26 +25,43 @@
       </th>
       <!-- Buttons -->
       <th class="text-right">
-        <div class="btn-group btn-group-sm">
-          <button class="btn btn-light" (click)="update(comment, status.Active)"
-                  [class.active]="comment.status === status.Active" translate>
-            ACTIVE
+        <!-- Dropdown -->
+        <div class="btn-group" dropdown>
+          <button class="btn btn-light btn-sm" type="button" dropdownToggle>
+            <fa-icon icon="ellipsis-v"></fa-icon>
           </button>
-          <button class="btn btn-light" (click)="update(comment, status.Pending)"
-                  [class.active]="comment.status === status.Pending" translate>
-            PENDING
-          </button>
-          <button class="btn btn-light" (click)="update(comment, status.Hidden)"
-                  [class.active]="comment.status === status.Hidden" translate>
-            HIDDEN
-          </button>
-          <a class="btn btn-light" [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]"
-             [queryParams]="{ comment: comment.id }">
-            <fa-icon [fixedWidth]="true" icon="eye"></fa-icon>
-          </a>
-          <button class="btn btn-light" (click)="delete(comment)" [disabled]="comment.loading">
-            <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
-          </button>
+          <!-- Options -->
+          <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+            <!-- View -->
+            <a class="btn btn-light dropdown-item"
+               [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]"
+               [queryParams]="{ comment: comment.id }">
+              View
+            </a>
+            <!-- Header -->
+            <h6 class="dropdown-header">Change status</h6>
+            <!-- Active -->
+            <button class="btn btn-light dropdown-item" (click)="update(comment, status.Active)"
+                    [class.active]="comment.status === status.Active" translate>
+              ACTIVE
+            </button>
+            <!-- Pending -->
+            <button class="btn btn-light dropdown-item" (click)="update(comment, status.Pending)"
+                    [class.active]="comment.status === status.Pending" translate>
+              PENDING
+            </button>
+            <!-- Hidden -->
+            <button class="btn btn-light dropdown-item" (click)="update(comment, status.Hidden)"
+                    [class.active]="comment.status === status.Hidden" translate>
+              HIDDEN
+            </button>
+            <!-- Separated -->
+            <div class="dropdown-divider"></div>
+            <!-- Delete -->
+            <button class="btn btn-light dropdown-item" (click)="delete(comment)" [disabled]="comment.loading">
+              Delete
+            </button>
+          </div>
         </div>
       </th>
     </tr>
