@@ -18,7 +18,7 @@ export class TeamComponent implements OnInit {
   /**
    * Team members
    */
-  teams: Team;
+  team: Team;
 
   /**
    * Invite form
@@ -32,7 +32,7 @@ export class TeamComponent implements OnInit {
 
   ngOnInit(): void {
     /**
-     * Setup Form
+     * Setup invite form
      */
     this.form = this.formBuilder.group({
       email: ['', Validators.required],
@@ -41,42 +41,46 @@ export class TeamComponent implements OnInit {
     /**
      * Get teams
      */
-    this.getTeams();
+    this.getTeam();
   }
 
   /**
    * Get teams
    */
-  getTeams(): void {
+  getTeam(): void {
     this.teamService.getTeams().subscribe((data: Team): void => {
-      this.teams = data;
+      this.team = data;
     });
   }
 
   /**
    * Remove team member
    *
-   * @param id Team member ID
+   * @param idOrEmail Team member ID or email for pending
+   * @param isPending Is team member pending
    */
-  remove(id: string): void {
+  remove(idOrEmail: string, isPending?: boolean): void {
     if (!confirm(this.translate.instant('CONFORM_REMOVE_TEAM'))) {
       return;
     }
-    this.teamService.removeTeamMember(id).subscribe();
+    if (!isPending) {
+      this.teamService.remove(idOrEmail).subscribe((): void => {
+        this.getTeam();
+      });
+    } else {
+      this.teamService.removePending(idOrEmail).subscribe((): void => {
+        this.getTeam();
+      });
+    }
   }
 
   /**
    * Invite team member
    */
   invite(): void {
-    this.teamService.inviteMember(this.form.value.email, this.form.value.role).subscribe((dara) => {
-      /**
-       * Get teams
-       */
-      this.teamService.getTeams().subscribe((data: Team): void => {
-        this.teams = data;
-      });
-      this.form.reset();
+    this.teamService.invite(this.form.value.email, this.form.value.role).subscribe((): void => {
+      this.form.controls.email.reset();
+      this.getTeam();
     });
   }
 }
