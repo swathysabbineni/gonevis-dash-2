@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File } from '@app/interfaces/file';
 import { UtilService } from '@app/services/util/util.service';
+import { TranslateService } from '@ngx-translate/core';
 import { MediaService } from './media.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class MediaComponent implements OnInit {
   files: File[];
 
   constructor(public utils: UtilService,
-              private mediaService: MediaService) {
+              private mediaService: MediaService,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -27,6 +29,21 @@ export class MediaComponent implements OnInit {
   getFiles(): void {
     this.mediaService.getMedia().subscribe((response: ApiResponse<File>): void => {
       this.files = response.results;
+    });
+  }
+
+  /**
+   * Delete a file
+   *
+   * @param file File to delete
+   */
+  delete(file: File): void {
+    if (!confirm(this.translate.instant('CONFORM_DELETE_FILE'))) {
+      return;
+    }
+    file.loading = true;
+    this.mediaService.delete(file.id).subscribe((): void => {
+      this.files.splice(this.files.indexOf(file), 1);
     });
   }
 }

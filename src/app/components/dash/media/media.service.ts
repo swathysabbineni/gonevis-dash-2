@@ -23,4 +23,13 @@ export class MediaService {
       params: { site: BlogService.currentBlog.id },
     });
   }
+
+  /**
+   * delete a file
+   *
+   * @param id File ID
+   */
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.api.base.v1}dolphin/file/${id}`);
+  }
 }

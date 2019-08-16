@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
+import { TranslateModule } from '@ngx-translate/core';
+import { BsDropdownModule } from 'ngx-bootstrap';
 
 import { MediaRoutingModule } from './media-routing.module';
 import { MediaComponent } from './media.component';
@@ -16,6 +18,8 @@ import { MediaComponent } from './media.component';
     CommonModule,
     MediaRoutingModule,
     FontAwesomeModule,
+    BsDropdownModule,
+    TranslateModule,
   ],
 })
 export class MediaModule {

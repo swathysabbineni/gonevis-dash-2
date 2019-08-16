@@ -15,4 +15,8 @@ export interface File {
   is_image: boolean;
   created: string;
   updated: string;
+  /**
+   * Extra properties
+   */
+  loading: boolean;
 }
