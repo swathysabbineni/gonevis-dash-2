@@ -13,11 +13,6 @@ export class TagsComponent implements OnInit {
 
   tags: Tag[];
 
-  /**
-   * API loading indicator
-   */
-  loading: boolean;
-
   constructor(private tag: TagsService,
               private translate: TranslateService) {
   }
@@ -38,12 +33,8 @@ export class TagsComponent implements OnInit {
     if (!confirm(this.translate.instant('CONFORM_DELETE_TAG'))) {
       return;
     }
-    if (this.loading) {
-      return;
-    }
-    this.loading = true;
+    tag.loading = true;
     this.tag.delete(tag.slug).subscribe((): void => {
-      this.loading = false;
       this.tags.splice(this.tags.indexOf(tag), 1);
     });
   }

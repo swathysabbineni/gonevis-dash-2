@@ -27,4 +27,8 @@ export interface Tag {
   };
   tagged_items_count: number;
   absolute_uri: string;
+  /**
+   * Extra properties
+   */
+  loading: boolean;
 }

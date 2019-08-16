@@ -29,7 +29,7 @@
             <fa-icon [fixedWidth]="true" icon="eye"></fa-icon>
           </a>
           <!-- Delete -->
-          <button class="btn btn-light text-secondary" title="Delete" (click)="delete(tag)">
+          <button class="btn btn-light text-secondary" title="Delete" (click)="delete(tag)" [disabled]="tag.loading">
             <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
           </button>
         </div>
