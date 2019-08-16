@@ -1,10 +1,11 @@
 <div class="container">
-  <div class="row justify-content-center">
+  <div class="row justify-content-end">
+    <!-- Team -->
     <div class="col-md-6">
-      <table class="table rounded bg-white" *ngIf="teams">
+      <table class="table rounded bg-white" *ngIf="team">
         <tbody>
         <!-- Team members -->
-        <tr *ngFor="let member of teams.team">
+        <tr *ngFor="let member of team.team">
           <!-- Image -->
           <th class="pr-0 text-center image" [class.p-0]="!member.user.media">
             <img class="rounded" *ngIf="member.user.media" [src]="member.user.media.thumbnail_48x48">
@@ -34,12 +35,12 @@
           </th>
         </tr>
         <!-- Team members pending -->
-        <tr *ngFor="let member of teams.team_pending">
+        <tr *ngFor="let member of team.team_pending">
           <th></th>
           <!-- Email, role and invited by -->
           <th>
             <!-- Email -->
-            <a class="font-weight-bold text-dark" [routerLink]="['/feed/user', member.user.username]">
+            <a class="font-weight-bold text-dark" href="mailto:{{ member.email }}" target="_blank">
               {{ member.email }}
             </a>
             <!-- Invited by -->
@@ -61,7 +62,7 @@
           <th class="text-right" *ngIf="member.role !== teamRoles.Owner">
             <div class="btn-group btn-group-sm">
               <!-- Remove -->
-              <button class="btn btn-light text-secondary" title="Remove" (click)="remove(member.user.id)">
+              <button class="btn btn-light text-secondary" title="Remove" (click)="remove(member.email, true)">
                 <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
               </button>
             </div>
@@ -69,25 +70,30 @@
         </tr>
         </tbody>
       </table>
-      <!-- Invite -->
-      <form class="form-inline bg-white py-2 rounded" [formGroup]="form" (ngSubmit)="invite()">
-        <!-- Email -->
-        <div class="form-group mx-sm-2">
-          <input class="form-control" type="email" formControlName="email"
-                 [placeholder]="'EMAIL' | translate" required>
+    </div>
+    <!-- Invite -->
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-header" translate>INVITE</div>
+        <div class="card-body">
+          <form [formGroup]="form" (ngSubmit)="invite()">
+            <!-- Email -->
+            <div class="form-group">
+              <input class="form-control" type="email" formControlName="email"
+                     [placeholder]="'EMAIL' | translate" required>
+            </div>
+            <!-- Role -->
+            <div class="form-group">
+              <select class="form-control" formControlName="role">
+                <option [ngValue]="teamRoles.Administrator">{{ roleNames[teamRoles.Administrator] }}</option>
+                <option [ngValue]="teamRoles.Editor">{{ roleNames[teamRoles.Editor] }}</option>
+              </select>
+            </div>
+            <!-- Submit -->
+            <button class="btn btn-info btn-block" translate>SUBMIT</button>
+          </form>
         </div>
-        <!-- Role -->
-        <div class="form-group mx-sm-2">
-          <select class="form-control" formControlName="role">
-            <option [ngValue]="teamRoles.Administrator">{{ roleNames[teamRoles.Administrator] }}</option>
-            <option [ngValue]="teamRoles.Editor">{{ roleNames[teamRoles.Editor] }}</option>
-          </select>
-        </div>
-        <!-- Submit button -->
-          <button class="btn btn-info">
-            <fa-icon fixedWidth="true" icon="plus"></fa-icon>
-          </button>
-      </form>
+      </div>
     </div>
   </div>
 </div>
