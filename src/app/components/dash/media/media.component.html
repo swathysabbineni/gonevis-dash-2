@@ -1,1 +1,19 @@
-<p>media works!</p>
+<div class="container-fluid">
+  <div class="files">
+    <div class="row">
+      <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6" *ngFor="let file of files">
+        <div class="file rounded-sm shadow-sm my-3"
+             [style.background-image]="utils.sanitizeBackgroundImage(file.thumbnail_256x256)">
+          <div class="content p-2">
+            <div class="option">
+              <button class="btn btn-sm btn-dark">
+                <fa-icon [fixedWidth]="true" icon="ellipsis-v"></fa-icon>
+              </button>
+            </div>
+            <div class="caption rounded-sm p-2 small bg-dark text-light">{{ file.file_name }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
