@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3 col-sm-6 col-lg-3 col-xl-3" *ngFor="let entry of entries">
+      <div class="card my-3 shadow-sm post">
+        <div class="card-body">
+          <!-- Date -->
+          <span class="text-secondary text-uppercase font-weight-bold date" translate>
+            PUBLISHED &bull; {{ entry.created | date }}
+          </span>
+          <!-- Title -->
+          <h5 class="card-title">{{ entry.title }}</h5>
+          <!-- Content-->
+          <p class="card-text">{{ entry.content }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -20,10 +20,10 @@ const routes: Routes = [{
     loadChildren: () => import('./write/write.module').then(m => m.WriteModule),
   }, {
     path: 'posts',
-    loadChildren: () => import('./posts/posts.module').then(m => m.PostsModule),
+    loadChildren: () => import('./entry/entry.module').then(m => m.EntryModule),
   }, {
     path: 'pages',
-    loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
+    loadChildren: () => import('./entry/entry.module').then(m => m.EntryModule),
   }, {
     path: 'comments',
     loadChildren: () => import('./comments/comments.module').then(m => m.CommentsModule),

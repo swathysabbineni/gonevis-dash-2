@@ -2,18 +2,18 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { PostsRoutingModule } from './posts-routing.module';
-import { PostsComponent } from './posts.component';
+import { EntryRoutingModule } from './entry-routing.module';
+import { EntryComponent } from './entry.component';
 
 @NgModule({
   declarations: [
-    PostsComponent,
+    EntryComponent,
   ],
   imports: [
     CommonModule,
-    PostsRoutingModule,
-    TranslateModule,
+    EntryRoutingModule,
+    TranslateModule.forChild(),
   ],
 })
-export class PostsModule {
+export class EntryModule {
 }

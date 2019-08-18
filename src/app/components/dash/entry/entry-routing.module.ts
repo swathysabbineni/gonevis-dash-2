@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { PostsComponent } from './posts.component';
+import { EntryComponent } from 'src/app/components/dash/entry/entry.component';
 
 const routes: Routes = [{
   path: '',
-  component: PostsComponent,
+  component: EntryComponent,
 }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PostsRoutingModule {
+export class EntryRoutingModule {
 }

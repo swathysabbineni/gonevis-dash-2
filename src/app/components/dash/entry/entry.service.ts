@@ -1,28 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { Post } from '@app/interfaces/v1/post';
+import { Entry } from '@app/interfaces/v1/entry';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class PostsService {
+export class EntryService {
 
   constructor(private http: HttpClient,
               private apiService: ApiService) {
   }
 
   /**
-   * Get blog posts
+   * Get blog entries
    */
-  getPosts(): Observable<ApiResponse<Post>> {
-    return this.http.get<ApiResponse<Post>>(`${this.apiService.base.v1}website/entry`, {
+  getEntries(): Observable<ApiResponse<Entry>> {
+    return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.v1}website/entry`, {
       params: {
-        site: BlogService.currentBlog.id
-      }
+        site: BlogService.currentBlog.id,
+      },
     });
   }
 }
