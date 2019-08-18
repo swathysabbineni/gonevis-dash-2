@@ -28,7 +28,8 @@
           <th class="text-right" *ngIf="member.role !== teamRoles.Owner">
             <div class="btn-group btn-group-sm">
               <!-- Remove -->
-              <button class="btn btn-light text-secondary" title="Remove" (click)="remove(member.user.id)">
+              <button class="btn btn-light text-secondary" [title]="'REMOVE' | translate"
+                      (click)="remove(member.user.id)">
                 <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
               </button>
             </div>
@@ -62,7 +63,8 @@
           <th class="text-right" *ngIf="member.role !== teamRoles.Owner">
             <div class="btn-group btn-group-sm">
               <!-- Remove -->
-              <button class="btn btn-light text-secondary" title="Remove" (click)="remove(member.email, true)">
+              <button class="btn btn-light text-secondary" [title]="'REMOVE' | translate"
+                      (click)="remove(member.email, true)">
                 <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
               </button>
             </div>
