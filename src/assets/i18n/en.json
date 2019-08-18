@@ -63,5 +63,6 @@
   "CONFORM_DELETE_TAG": "Are you sure you want to delete this tag?",
   "CONFORM_DELETE_FILE": "Are you sure you want to delete this file?",
   "DOWNLOAD": "Download",
+  "PUBLISHED": "Published",
   "COLLABORATING": "Collaborating"
 }
