@@ -1,18 +1,51 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3 col-sm-6 col-lg-3 col-xl-3" *ngFor="let entry of entries">
-      <div class="card my-3 shadow-sm post">
-        <div class="card-body">
-          <!-- Date -->
-          <span class="text-secondary text-uppercase font-weight-bold date" translate>
-            PUBLISHED &bull; {{ entry.created | date }}
-          </span>
-          <!-- Title -->
-          <h5 class="card-title">{{ entry.title }}</h5>
-          <!-- Content-->
-          <p class="card-text">{{ entry.content }}</p>
+<div class="container">
+  <table class="table rounded bg-white">
+    <tbody>
+    <tr *ngFor="let entry of entries">
+      <!-- Select -->
+      <th class="checkbox">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" [id]="entry.id">
+          <label class="custom-control-label" [for]="entry.id"></label>
         </div>
-      </div>
-    </div>
-  </div>
+      </th>
+      <!-- Cover -->
+      <th class="pr-0 text-center" [class.p-0]="!entry.media.cover_image">
+        <img class="rounded" *ngIf="entry.media.cover_image" [src]="entry.media.cover_image.thumbnail_48x48">
+      </th>
+      <th>
+        <!-- Title -->
+        <a class="font-weight-bold">{{ entry.title }}</a>
+        <!-- Description -->
+        <div class="small text-secondary">
+          <span translate>PUBLISHED_ON</span> {{ entry.published | date }}
+        </div>
+      </th>
+      <!-- Stats -->
+      <th class="text-secondary text-right">
+        <!-- Likes -->
+        <span *ngIf="entry.vote_count" class="mr-3">
+          <fa-icon [fixedWidth]="true" [icon]="['far', 'thumbs-up']"></fa-icon>
+          {{ entry.vote_count | number }}
+        </span>
+        <!-- Comments -->
+        <span *ngIf="entry.comment_count" class="mr-3">
+          <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
+          {{ entry.comment_count | number }}
+        </span>
+        <!-- Votes -->
+        <span *ngIf="entry.view_count" class="mr-3">
+          <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
+          {{ entry.view_count | number }}
+        </span>
+      </th>
+      <!-- Options -->
+      <th class="text-right">
+        <button class="btn btn-light btn-sm">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
+      </th>
+    </tr>
+    </tbody>
+  </table>
 </div>
