@@ -5,7 +5,9 @@ import { UserMin } from '@app/interfaces/v1/user-min';
 export interface Entry {
   id: string;
   tags: TagMin[];
-  media: Media;
+  media: {
+    cover_image: Media;
+  };
   absolute_uri: string;
   site: string;
   circles: any[];
@@ -33,4 +35,8 @@ export interface Entry {
   created: string;
   updated: string;
   user: string;
+  /**
+   * Extra properties
+   */
+  loading: boolean;
 }
