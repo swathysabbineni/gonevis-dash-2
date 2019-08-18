@@ -25,4 +25,13 @@ export class EntryService {
       },
     });
   }
+
+  /**
+   * Delete a entry
+   *
+   * @param id Entry ID
+   */
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiService.base.v1}website/entry/${id}`);
+  }
 }

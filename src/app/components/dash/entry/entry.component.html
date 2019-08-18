@@ -15,4 +15,8 @@
       </div>
     </div>
   </div>
+            <!-- Delete -->
+            <button class="dropdown-item text-danger" (click)="delete(entry)" [disabled]="entry.loading" translate>
+              DELETE
+            </button>
 </div>
