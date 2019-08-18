@@ -21,15 +21,17 @@
       <th class="text-right">
         <div class="btn-group btn-group-sm">
           <!-- Edit -->
-          <button class="btn btn-light text-secondary" title="Edit">
+          <button class="btn btn-light text-secondary" [title]="'EDIT' | translate">
             <fa-icon [fixedWidth]="true" icon="edit"></fa-icon>
           </button>
           <!-- View -->
-          <a class="btn btn-light text-secondary" title="View on blog" [href]="tag.absolute_uri" target="_blank">
+          <a class="btn btn-light text-secondary" [title]="'VIEW_ON_BLOG' | translate"
+             [href]="tag.absolute_uri" target="_blank">
             <fa-icon [fixedWidth]="true" icon="eye"></fa-icon>
           </a>
           <!-- Delete -->
-          <button class="btn btn-light text-secondary" title="Delete" (click)="delete(tag)" [disabled]="tag.loading">
+          <button class="btn btn-light text-secondary" [title]="'DELETE' | translate"
+                  (click)="delete(tag)" [disabled]="tag.loading">
             <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
           </button>
         </div>
