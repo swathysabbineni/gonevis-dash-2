@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { EntryFormat } from '@app/enums/entry-format.enum';
 import { EntryStatus } from '@app/enums/entry-status.enum';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { ParamsGet } from '@app/interfaces/params-get';
 import { Entry } from '@app/interfaces/v1/entry';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
