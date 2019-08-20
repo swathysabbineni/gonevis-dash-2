@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommentStatus } from '@app/enums/comment-status';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Comment } from '@app/interfaces/v1/comment';
+import { TranslateService } from '@ngx-translate/core';
 import { CommentsService } from './comments.service';
 
 @Component({
@@ -23,7 +24,8 @@ export class CommentsComponent implements OnInit {
    */
   loading = false;
 
-  constructor(private commentsService: CommentsService) {
+  constructor(private commentsService: CommentsService,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -60,6 +62,9 @@ export class CommentsComponent implements OnInit {
    * @param comment Comment to delete
    */
   delete(comment: Comment): void {
+    if (!confirm(this.translate.instant('CONFORM_DELETE_COMMENT'))) {
+      return;
+    }
     comment.loading = true;
     this.commentsService.deleteComment(comment.id).subscribe((): void => {
       this.comments.splice(this.comments.indexOf(comment), 1);
