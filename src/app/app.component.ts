@@ -32,7 +32,7 @@ export class AppComponent {
     /**
      * Get authenticated user data (and watch for changes)
      */
-    this.authService.user.subscribe((user: UserAuth): void => {
+    AuthService.user.subscribe((user: UserAuth): void => {
       this.user = user;
     });
 

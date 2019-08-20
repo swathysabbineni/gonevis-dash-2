@@ -41,7 +41,6 @@ export class BlogListComponent implements OnInit {
               private blogService: BlogService,
               private entryService: EntryService,
               private apiService: ApiService,
-              public auth: AuthService,
               public utils: UtilService) {
   }
 
@@ -49,7 +48,7 @@ export class BlogListComponent implements OnInit {
     /**
      * Get current user data
      */
-    this.auth.user.subscribe((user: UserAuth): void => {
+    AuthService.user.subscribe((user: UserAuth): void => {
       this.user = user;
     });
   }

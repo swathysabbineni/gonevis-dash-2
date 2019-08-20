@@ -18,12 +18,11 @@ export class FeedService {
   userId: string;
 
   constructor(private http: HttpClient,
-              private authService: AuthService,
               private apiService: ApiService) {
     /**
      * Get authenticated user ID (and watch for changes)
      */
-    this.authService.user.subscribe((data: UserAuth): void => {
+    AuthService.user.subscribe((data: UserAuth): void => {
       if (data) {
         this.userId = data.id;
       }

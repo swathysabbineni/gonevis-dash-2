@@ -53,8 +53,7 @@ export class UserProfileComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private translateService: TranslateService,
-              private userService: UserService,
-              private authService: AuthService) {
+              private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -70,7 +69,7 @@ export class UserProfileComponent implements OnInit {
     /**
      * Get authenticated user
      */
-    this.authService.user.subscribe((data: UserAuth): void => {
+    AuthService.user.subscribe((data: UserAuth): void => {
       this.userAuth = data;
     });
     /**
@@ -109,7 +108,7 @@ export class UserProfileComponent implements OnInit {
     this.userService.setPicture(this.fileElement.nativeElement.files[0]).subscribe((data: UserSettingsPatch): void => {
       this.userAuth.media = data.media;
       this.user.media = data.media;
-      this.authService.setAuthenticatedUser(this.userAuth);
+      AuthService.setAuthenticatedUser(this.userAuth);
       this.loading = false;
     });
   }
@@ -141,7 +140,7 @@ export class UserProfileComponent implements OnInit {
           this.userAuth[key] = data[key];
         }
       }
-      this.authService.setAuthenticatedUser(this.userAuth);
+      AuthService.setAuthenticatedUser(this.userAuth);
       this.loading = false;
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;

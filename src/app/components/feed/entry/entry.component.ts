@@ -67,7 +67,6 @@ export class EntryComponent implements OnInit {
               private titleService: Title,
               private translateService: TranslateService,
               private apiService: ApiService,
-              private authService: AuthService,
               private entryService: EntryService,
               private feedService: FeedService,
               private commentService: CommentService) {
@@ -85,7 +84,7 @@ export class EntryComponent implements OnInit {
     /**
      * Get authenticated user
      */
-    this.authService.user.subscribe((user: UserAuth): void => {
+    AuthService.user.subscribe((user: UserAuth): void => {
       this.user = user;
     });
 
