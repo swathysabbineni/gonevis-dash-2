@@ -41,9 +41,26 @@
       </th>
       <!-- Options -->
       <th class="text-right">
-        <button class="btn btn-light btn-sm">
-          <fa-icon icon="ellipsis-v"></fa-icon>
-        </button>
+        <!-- Dropdown -->
+        <div class="btn-group" dropdown>
+          <button class="btn btn-light btn-sm" dropdownToggle>
+            <fa-icon icon="ellipsis-v"></fa-icon>
+          </button>
+          <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+            <!-- Header -->
+            <h6 class="dropdown-header" translate>Commenting enabled</h6>
+            <!-- View -->
+            <a class="dropdown-item text-secondary" [href]="entry.absolute_uri" target="_blank" translate>
+              VIEW_ON_BLOG
+            </a>
+            <!-- Separated -->
+            <div class="dropdown-divider"></div>
+            <!-- Delete -->
+            <button class="dropdown-item text-danger" (click)="delete(entry)" [disabled]="entry.loading" translate>
+              DELETE
+            </button>
+          </div>
+        </div>
       </th>
     </tr>
     </tbody>

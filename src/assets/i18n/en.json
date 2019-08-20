@@ -63,7 +63,15 @@
   "CONFORM_REMOVE_TEAM": "Are you sure you want to remove this team member?",
   "CONFORM_DELETE_TAG": "Are you sure you want to delete this tag?",
   "CONFORM_DELETE_FILE": "Are you sure you want to delete this file?",
+  "CONFORM_DELETE_ENTRY": "Are you sure you want to delete this post?",
   "DOWNLOAD": "Download",
   "PUBLISHED": "Published",
+  "CHANGE_STATUS": "Change status",
+  "DELETE": "Delete",
+  "VIEW": "View",
+  "EDIT": "Edit",
+  "VIEW_ON_BLOG": "View on blog",
+  "REMOVE": "Remove",
+  "COMMENTING_ENABLED": "Commenting enabled",
   "COLLABORATING": "Collaborating"
 }

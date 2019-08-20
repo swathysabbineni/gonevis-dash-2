@@ -7,6 +7,7 @@ import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { TranslateModule } from '@ngx-translate/core';
+import { BsDropdownModule } from 'ngx-bootstrap';
 
 import { EntryRoutingModule } from './entry-routing.module';
 import { EntryComponent } from './entry.component';
@@ -20,6 +21,7 @@ import { EntryComponent } from './entry.component';
     EntryRoutingModule,
     TranslateModule.forChild(),
     FontAwesomeModule,
+    BsDropdownModule,
   ],
 })
 export class EntryModule {

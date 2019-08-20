@@ -35,4 +35,8 @@ export interface Entry {
   created: string;
   updated: string;
   user: string;
+  /**
+   * Extra properties
+   */
+  loading: boolean;
 }
