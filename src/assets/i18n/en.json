@@ -74,5 +74,8 @@
   "VIEW_ON_BLOG": "View on blog",
   "REMOVE": "Remove",
   "COMMENTING_ENABLED": "Commenting enabled",
+  "CREATE_TAG": "Create tag",
+  "TAG": "Tag",
+  "DESCRIPTION": "Description",
   "COLLABORATING": "Collaborating"
 }
