@@ -74,5 +74,10 @@
   "VIEW_ON_BLOG": "View on blog",
   "REMOVE": "Remove",
   "COMMENTING_ENABLED": "Commenting enabled",
+  "GENERAL": "General",
+  "APPEARANCE": "Appearance",
+  "ADVANCED": "Advanced",
+  "UPGRADE": "Upgrade",
+  "BILLING": "Billing",
   "COLLABORATING": "Collaborating"
 }
