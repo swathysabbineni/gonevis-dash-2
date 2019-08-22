@@ -1,11 +1,16 @@
-<p>settings works!</p>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
 
-<p>
-  <a routerLinkActive="text-primary" routerLink="general">general </a>
-  <a routerLinkActive="text-primary" routerLink="appearance">appearance </a>
-  <a routerLinkActive="text-primary" routerLink="advanced">advanced </a>
-  <a routerLinkActive="text-primary" routerLink="upgrade">upgrade </a>
-  <a routerLinkActive="text-primary" routerLink="billing">billing </a>
-</p>
+      <!-- Tabs -->
+      <ul class="nav nav-pills">
+        <li class="nav-item" *ngFor="let tab of tabs">
+          <a class="nav-link" routerLinkActive="active" [routerLink]="tab">{{ tab.toUpperCase() | translate }}</a>
+        </li>
+      </ul>
 
-<router-outlet></router-outlet>
+      <!-- Tab content -->
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
