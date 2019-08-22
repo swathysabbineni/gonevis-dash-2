@@ -39,4 +39,17 @@ export class TagsService {
       },
     });
   }
+
+  /**
+   * Create blog tag
+   *
+   * @param name Tag name
+   * @param slug Tga slug
+   * @param description Tag description
+   */
+  create(name: string,  slug: string, description: string): Observable<Tag> {
+    return this.http.post<Tag>(`${this.apiService.base.v1}tagool/tag/`,
+      { name, slug, description,
+      site: BlogService.currentBlog.id, }).pipe();
+  }
 }

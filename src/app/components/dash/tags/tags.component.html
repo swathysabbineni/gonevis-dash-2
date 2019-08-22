@@ -1,42 +1,74 @@
 <div class="container">
-  <table class="table rounded bg-white">
-    <tbody>
-    <tr *ngFor="let tag of tags">
-      <!-- Image -->
-      <th class="pr-0 text-center" [class.p-0]="!tag.media.cover_image">
-        <img class="rounded" *ngIf="tag.media.cover_image" [src]="tag.media.cover_image.thumbnail_48x48">
-      </th>
-      <!-- Name, slug, usage and description -->
-      <th>
-        <!-- Name -->
-        <b>{{ tag.name }}</b>
-        <!-- Slug -->
-        <small class="text-secondary ml-2">#{{ tag.slug }}</small>
-        <!-- Usage -->
-        <span class="badge badge-secondary ml-2">{{ tag.tagged_items_count }}</span>
-        <!-- Description -->
-        <div class="small text-secondary">{{ tag.description }}</div>
-      </th>
-      <!-- Buttons -->
-      <th class="text-right">
-        <div class="btn-group btn-group-sm">
-          <!-- Edit -->
-          <button class="btn btn-light text-secondary" [title]="'EDIT' | translate">
-            <fa-icon [fixedWidth]="true" icon="edit"></fa-icon>
-          </button>
-          <!-- View -->
-          <a class="btn btn-light text-secondary" [title]="'VIEW_ON_BLOG' | translate"
-             [href]="tag.absolute_uri" target="_blank">
-            <fa-icon [fixedWidth]="true" icon="eye"></fa-icon>
-          </a>
-          <!-- Delete -->
-          <button class="btn btn-light text-secondary" [title]="'DELETE' | translate"
-                  (click)="delete(tag)" [disabled]="tag.loading">
-            <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
-          </button>
+  <div class="row">
+    <!-- Tags list -->
+    <div class="col-md-9">
+      <table class="table rounded bg-white">
+        <tbody>
+        <tr *ngFor="let tag of tags">
+          <!-- Image -->
+          <th class="pr-0 text-center" [class.p-0]="!tag.media.cover_image">
+            <img class="rounded" *ngIf="tag.media.cover_image" [src]="tag.media.cover_image.thumbnail_48x48">
+          </th>
+          <!-- Name, slug, usage and description -->
+          <th>
+            <!-- Name -->
+            <b>{{ tag.name }}</b>
+            <!-- Slug -->
+            <small class="text-secondary ml-2">#{{ tag.slug }}</small>
+            <!-- Usage -->
+            <span class="badge badge-secondary ml-2">{{ tag.tagged_items_count }}</span>
+            <!-- Description -->
+            <div class="small text-secondary">{{ tag.description }}</div>
+          </th>
+          <!-- Buttons -->
+          <th class="text-right">
+            <div class="btn-group btn-group-sm">
+              <!-- Edit -->
+              <button class="btn btn-light text-secondary" [title]="'EDIT' | translate">
+                <fa-icon [fixedWidth]="true" icon="edit"></fa-icon>
+              </button>
+              <!-- View -->
+              <a class="btn btn-light text-secondary" [title]="'VIEW_ON_BLOG' | translate"
+                 [href]="tag.absolute_uri" target="_blank">
+                <fa-icon [fixedWidth]="true" icon="eye"></fa-icon>
+              </a>
+              <!-- Delete -->
+              <button class="btn btn-light text-secondary" [title]="'DELETE' | translate"
+                      (click)="delete(tag)" [disabled]="tag.loading">
+                <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+              </button>
+            </div>
+          </th>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Tag -->
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-header" translate>CREATE_TAG</div>
+        <div class="card-body">
+          <form [formGroup]="form" (ngSubmit)="create()">
+            <!-- Name -->
+            <div class="form-group">
+              <input class="form-control" type="text" formControlName="name"
+                     [placeholder]="'NAME' | translate" required>
+            </div>
+            <!-- Tag name -->
+            <div class="form-group">
+              <input class="form-control" type="text" formControlName="slug"
+                     [placeholder]="'TAG' | translate">
+            </div>
+            <!-- Description -->
+            <div class="form-group">
+              <input class="form-control" type="text" formControlName="description"
+                     [placeholder]="'DESCRIPTION' | translate">
+            </div>
+            <!-- Submit -->
+            <button class="btn btn-info btn-block" translate>SUBMIT</button>
+          </form>
         </div>
-      </th>
-    </tr>
-    </tbody>
-  </table>
+      </div>
+    </div>
+  </div>
 </div>
