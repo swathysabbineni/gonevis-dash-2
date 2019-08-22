@@ -52,12 +52,11 @@ export class CommentFormComponent implements AfterViewInit {
 
   constructor(private formBuilder: FormBuilder,
               private changeDetectorRef: ChangeDetectorRef,
-              private authService: AuthService,
               private commentService: CommentService) {
     /**
      * Get authenticated user data
      */
-    this.authService.user.subscribe((data: UserAuth): void => {
+    AuthService.user.subscribe((data: UserAuth): void => {
       this.user = data;
     });
 

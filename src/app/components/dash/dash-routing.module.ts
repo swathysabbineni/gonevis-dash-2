@@ -23,6 +23,9 @@ const routes: Routes = [{
     loadChildren: () => import('./entry/entry.module').then(m => m.EntryModule),
   }, {
     path: 'pages',
+    data: {
+      pages: true,
+    },
     loadChildren: () => import('./entry/entry.module').then(m => m.EntryModule),
   }, {
     path: 'comments',

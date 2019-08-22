@@ -77,5 +77,10 @@
   "CREATE_TAG": "Create tag",
   "TAG": "Tag",
   "DESCRIPTION": "Description",
+  "GENERAL": "General",
+  "APPEARANCE": "Appearance",
+  "ADVANCED": "Advanced",
+  "UPGRADE": "Upgrade",
+  "BILLING": "Billing",
   "COLLABORATING": "Collaborating"
 }

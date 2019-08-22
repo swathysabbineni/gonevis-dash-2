@@ -18,17 +18,17 @@ export class AuthService {
   /**
    * Sign out redirect
    */
-  private readonly signOutRedirect: string = '/user/sign-in';
+  private static readonly signOutRedirect: string = '/user/sign-in';
 
   /**
    * Authentication user subject
    */
-  private userSubject: BehaviorSubject<UserAuth> = new BehaviorSubject<UserAuth>(null);
+  private static userSubject: BehaviorSubject<UserAuth> = new BehaviorSubject<UserAuth>(null);
 
   /**
    * Authenticated user
    */
-  user: Observable<UserAuth>;
+  static user: Observable<UserAuth>;
 
   constructor(private http: HttpClient,
               private router: Router,
@@ -38,7 +38,7 @@ export class AuthService {
     if (this.isAuth) {
       const userData: UserAuth = JSON.parse(localStorage.getItem('user'));
       // Update user subject data
-      this.userSubject.next(userData);
+      AuthService.userSubject.next(userData);
       // Set current blog
       if (BlogService.currentBlog) {
         BlogService.currentBlog = BlogService.currentBlog;
@@ -46,7 +46,7 @@ export class AuthService {
         BlogService.currentBlog = userData.sites[0];
       }
     }
-    this.user = this.userSubject.asObservable();
+    AuthService.user = AuthService.userSubject.asObservable();
   }
 
   /**
@@ -70,9 +70,9 @@ export class AuthService {
    *
    * @param userData UserSettings data
    */
-  setAuthenticatedUser(userData: UserAuth): void {
+  static setAuthenticatedUser(userData: UserAuth): void {
     localStorage.setItem('user', JSON.stringify(userData));
-    this.userSubject.next(userData);
+    AuthService.userSubject.next(userData);
   }
 
   /**
@@ -107,8 +107,8 @@ export class AuthService {
   signOut(): void {
     this.cookieService.deleteAll('/');
     localStorage.clear();
-    this.userSubject.next(null);
-    this.router.navigateByUrl(this.signOutRedirect);
+    AuthService.userSubject.next(null);
+    this.router.navigateByUrl(AuthService.signOutRedirect);
   }
 
   /**
@@ -127,7 +127,7 @@ export class AuthService {
         // Store user into local storage
         localStorage.setItem('user', JSON.stringify(data.user));
         // Update user subject data
-        this.userSubject.next(data.user);
+        AuthService.userSubject.next(data.user);
         // Store current blog into local storage
         BlogService.currentBlog = data.user.sites[0];
         // Return raw user data

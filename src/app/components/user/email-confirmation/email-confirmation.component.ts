@@ -40,7 +40,7 @@ export class EmailConfirmationComponent implements OnInit {
       this.userService.verifyEmail(params.token).subscribe((data: AuthResponse): void => {
         this.loading = false;
         this.authService.setToken(data.token);
-        this.authService.setAuthenticatedUser(data.user);
+        AuthService.setAuthenticatedUser(data.user);
         this.router.navigateByUrl(this.feedRoute);
       }, (error: HttpErrorResponseApi): void => {
         this.error = error.error;

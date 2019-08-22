@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { EntryFormat } from '@app/enums/entry-format.enum';
+import { EntryStatus } from '@app/enums/entry-status.enum';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Entry } from '@app/interfaces/v1/entry';
 import { ApiService } from '@app/services/api/api.service';
@@ -17,12 +19,19 @@ export class EntryService {
 
   /**
    * Get blog entries
+   *
+   * @param filter API filters
    */
-  getEntries(): Observable<ApiResponse<Entry>> {
+  getEntries(filter?: {
+    is_page?: boolean,
+    user?: string,
+    format?: EntryFormat,
+    status?: EntryStatus,
+  }): Observable<ApiResponse<Entry>> {
     return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.v1}website/entry`, {
-      params: {
+      params: Object.assign(filter, {
         site: BlogService.currentBlog.id,
-      },
+      }),
     });
   }
 

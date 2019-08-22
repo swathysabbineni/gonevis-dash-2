@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { EntryComponent } from 'src/app/components/dash/entry/entry.component';
+import { EntryComponent } from './entry.component';
 
 const routes: Routes = [{
   path: '',

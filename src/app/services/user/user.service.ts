@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthResponse } from '@app/interfaces/auth-response';
-import { UserSettings } from '@app/interfaces/user-settings';
 import { UserAuth } from '@app/interfaces/user-auth';
+import { UserSettings } from '@app/interfaces/user-settings';
 import { UserSettingsPatch } from '@app/interfaces/user-settings-patch';
 import { ApiService } from '@app/services/api/api.service';
 import { AuthService } from '@app/services/auth/auth.service';
@@ -19,10 +19,11 @@ export class UserService {
   userId: string;
 
   constructor(private http: HttpClient,
-              private apiService: ApiService,
-              private authService: AuthService) {
-    this.authService.user.subscribe((data: UserAuth): void => {
-      this.userId = data.id;
+              private apiService: ApiService) {
+    AuthService.user.subscribe((data: UserAuth): void => {
+      if (data) {
+        this.userId = data.id;
+      }
     });
   }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Entry } from '@app/interfaces/v1/entry';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,17 +12,29 @@ import { EntryService } from './entry.service';
 })
 export class EntryComponent implements OnInit {
 
+  /**
+   * Is showing posts or pages
+   * @see DashRoutingModule
+   */
+  readonly isPages: boolean = this.route.snapshot.data.pages === true;
+
+  /**
+   * List of entries (pages or posts)
+   */
   entries: Entry[];
 
   constructor(private entryService: EntryService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
     /**
      * Load entries
      */
-    this.entryService.getEntries().subscribe((response: ApiResponse<Entry>): void => {
+    this.entryService.getEntries({
+      is_page: this.isPages,
+    }).subscribe((response: ApiResponse<Entry>): void => {
       this.entries = response.results;
     });
   }

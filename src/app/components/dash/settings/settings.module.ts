@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { SettingsAdvancedComponent } from './settings-advanced/settings-advanced.component';
 import { SettingsAppearanceComponent } from './settings-appearance/settings-appearance.component';
@@ -21,6 +22,7 @@ import { SettingsComponent } from './settings.component';
   ],
   imports: [
     CommonModule,
+    TranslateModule.forChild(),
     SettingsRoutingModule,
   ],
 })

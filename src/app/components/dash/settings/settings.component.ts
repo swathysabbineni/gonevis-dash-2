@@ -1,15 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  styleUrls: ['./settings.component.scss'],
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
 
-  constructor() { }
+  /**
+   * Page tabs
+   */
+  readonly tabs: string[] = [
+    'general',
+    'appearance',
+    'advanced',
+    'upgrade',
+    'billing',
+  ];
 
-  ngOnInit() {
+  /**
+   * Selected tab
+   */
+  tabSelected = this.tabs[0];
+
+  constructor(private translate: TranslateService) {
   }
-
 }
