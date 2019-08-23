@@ -6,7 +6,9 @@ import { TeamService } from '@app/components/dash/team/team.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Comment } from '@app/interfaces/v1/comment';
 import { Entry } from '@app/interfaces/v1/entry';
+import { Metrics } from '@app/interfaces/v1/metrics';
 import { Team } from '@app/interfaces/v1/team';
+import { BlogService } from '@app/services/blog/blog.service';
 
 @Component({
   selector: 'app-main',
@@ -56,13 +58,22 @@ export class MainComponent implements OnInit {
    */
   pendingTeamMembersCount = 0;
 
+  metrics: Metrics;
+
   constructor(private commentsService: CommentsService,
               private entryService: EntryService,
               private teamService: TeamService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private blogService: BlogService) {
   }
 
   ngOnInit(): void {
+    /**
+     * Get metrics
+     */
+    this.blogService.getMetrics().subscribe((data: Metrics): void => {
+      this.metrics = data;
+    });
     /**
      * Get comments
      */

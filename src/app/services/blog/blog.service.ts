@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Metrics } from '@app/interfaces/v1/metrics';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { ApiService } from '@app/services/api/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -11,7 +14,8 @@ export class BlogService {
 
   static blog: Observable<BlogMin> = BlogService.blogSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient,
+              private apiService: ApiService) {
   }
 
   /**
@@ -29,5 +33,12 @@ export class BlogService {
    */
   static get currentBlog(): BlogMin {
     return JSON.parse(localStorage.getItem('blog'));
+  }
+
+  /**
+   * Get metrics
+   */
+  getMetrics(): Observable<Metrics> {
+    return this.http.get<Metrics>(`${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}`);
   }
 }
