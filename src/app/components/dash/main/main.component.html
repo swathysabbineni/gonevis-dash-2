@@ -2,16 +2,19 @@
   <div class="row">
     <div class="col-md-8">
       <!-- Comments -->
-      <div class="card">
+      <div class="card shadow-sm mb-4">
         <!-- Header -->
-        <div class="card-header bg-light" translate>
+        <div class="card-header bg-light font-weight-bold" translate>
           COMMENTS
           <h5 class="float-right text-white px-2 bg-primary">{{ commentsCount }}</h5>
         </div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item" *ngFor="let comment of comments">
+            <!-- Name-->
             <small class="text-secondary">{{ comment.user.name }}:</small>
+            <!-- Comment -->
             <span> {{ comment.comment }}</span>
+            <!-- Date -->
             <small class="float-right">{{ comment.created | date }}</small>
           </li>
         </ul>
