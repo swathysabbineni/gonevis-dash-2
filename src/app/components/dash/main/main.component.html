@@ -8,16 +8,16 @@
           COMMENTS
           <h5 class="float-right text-white px-2 bg-primary">{{ commentsCount }}</h5>
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item" *ngFor="let comment of comments">
+        <div class="list-group">
+          <a class="list-group-item list-group-item-action" *ngFor="let comment of comments">
             <!-- Name-->
             <small class="text-secondary">{{ comment.user.name }}:</small>
             <!-- Comment -->
             <span> {{ comment.comment }}</span>
             <!-- Date -->
             <small class="float-right">{{ comment.created | date }}</small>
-          </li>
-        </ul>
+          </a>
+        </div>
       </div>
       <!-- Posts -->
       <div class="card shadow-sm">
@@ -26,8 +26,8 @@
           POSTS
           <h5 class="float-right text-white px-2 bg-primary">{{ entriesCount }}</h5>
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item d-flex" *ngFor="let entry of entries">
+        <div class="list-group">
+          <a class="list-group-item list-group-item-action d-flex" *ngFor="let entry of entries">
             <!-- title -->
             <h6>{{ entry.title }}</h6>
             <!-- Stats -->
@@ -48,11 +48,16 @@
                 {{ entry.view_count | number }}
               </small>
             </div>
-          </li>
-        </ul>
+          </a>
+        </div>
       </div>
     </div>
     <!-- Right -->
-    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <!-- team -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light font-weight-bold" translate>TEAM</div>
+      </div>
+    </div>
   </div>
 </div>
