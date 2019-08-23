@@ -1,1 +1,23 @@
-<p>main works!</p>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <!-- Comments -->
+      <div class="card">
+        <!-- Header -->
+        <div class="card-header bg-light" translate>
+          COMMENTS
+          <h5 class="float-right text-white px-2 bg-primary">{{ commentsCount }}</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item" *ngFor="let comment of comments">
+            <small class="text-secondary">{{ comment.user.name }}:</small>
+            <span> {{ comment.comment }}</span>
+            <small class="float-right">{{ comment.created | date }}</small>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Right -->
+    <div class="col-md-4"></div>
+  </div>
+</div>
