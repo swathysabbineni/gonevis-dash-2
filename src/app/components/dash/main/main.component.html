@@ -19,6 +19,38 @@
           </li>
         </ul>
       </div>
+      <!-- Posts -->
+      <div class="card shadow-sm">
+        <!-- Header -->
+        <div class="card-header bg-light font-weight-bold" translate>
+          POSTS
+          <h5 class="float-right text-white px-2 bg-primary">{{ entriesCount }}</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex" *ngFor="let entry of entries">
+            <!-- title -->
+            <h6>{{ entry.title }}</h6>
+            <!-- Stats -->
+            <div class="text-secondary bg-light ml-auto px-2">
+              <!-- Likes -->
+              <small class="mr-2">
+                <fa-icon [fixedWidth]="true" [icon]="['far', 'thumbs-up']"></fa-icon>
+                {{ entry.vote_count | number }}
+              </small>
+              <!-- Comments -->
+              <small class="mr-2">
+                <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
+                {{ entry.comment_count | number }}
+              </small>
+              <!-- Votes -->
+              <small>
+                <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
+                {{ entry.view_count | number }}
+              </small>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
     <!-- Right -->
     <div class="col-md-4"></div>
