@@ -24,6 +24,10 @@
 
       .option {
         align-self: flex-end;
+
+        .drop {
+          position: relative;
+        }
       }
     }
 
