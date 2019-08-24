@@ -8,7 +8,7 @@
       <div class="card shadow-sm mb-4">
         <!-- Header -->
         <div class="card-header">
-          <span class="init" translate>POSTS</span>
+          <a class="init" routerLink="/dash/posts" translate>POSTS</a>
           <span class="float-right badge badge-primary text-light" *ngIf="metrics">
             {{ metrics.metrics.published_entry_count | number}}
           </span>
@@ -47,7 +47,7 @@
       <div class="card shadow-sm">
         <!-- Header -->
         <div class="card-header">
-          <span class="init" translate>COMMENTS</span>
+          <a class="init" routerLink="/dash/comments" translate>COMMENTS</a>
           <span class="float-right badge badge-primary text-light" *ngIf="metrics">
             {{ metrics.metrics.comment_count | number }}
           </span>
@@ -166,7 +166,9 @@
 
       <!-- Team -->
       <div class="card shadow-sm mb-4">
-        <div class="card-header" translate>TEAM</div>
+        <div class="card-header">
+          <a routerLink="/dash/team" translate>TEAM</a>
+        </div>
         <div class="list-group">
           <!-- Team members -->
           <div class="list-group-item d-flex">
