@@ -63,6 +63,10 @@
         </div>
       </th>
     </tr>
+    <!-- No posts -->
+    <div class="text-center py-3" *ngIf="!entries.length">
+      <h5 class="text-secondary font-italic" translate>NO_POSTS_YET</h5>
+    </div>
     </tbody>
   </table>
 </div>

@@ -30,5 +30,9 @@
         </div>
       </div>
     </div>
+    <!-- No file -->
+    <div class="bg-white rounded py-3 container" *ngIf="!files.length">
+      <h5 class="text-secondary text-center font-italic" translate>NO_FILE</h5>
+    </div>
   </div>
 </div>
