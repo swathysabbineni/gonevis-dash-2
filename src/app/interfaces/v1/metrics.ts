@@ -6,7 +6,7 @@ export interface Metrics {
       used_storage_percentage: number;
       available_storage: number;
       available_storage_percentage: number;
-      updated: Date;
+      updated: string;
     };
     comment_count: number;
     active_comment_count: number;
@@ -18,6 +18,6 @@ export interface Metrics {
     team_member_count: number;
     pending_team_member_count: number;
     subscriber_count: number;
-    updated: Date;
+    updated: string;
   };
 }
