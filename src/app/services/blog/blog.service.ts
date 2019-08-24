@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { ApiService } from '@app/services/api/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -11,7 +14,8 @@ export class BlogService {
 
   static blog: Observable<BlogMin> = BlogService.blogSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient,
+              private api: ApiService) {
   }
 
   /**
@@ -29,5 +33,14 @@ export class BlogService {
    */
   static get currentBlog(): BlogMin {
     return JSON.parse(localStorage.getItem('blog'));
+  }
+
+  /**
+   * Get blog settings
+   *
+   * @param blog Blog ID
+   */
+  getSettings(blog: string): Observable<BlogSettings> {
+    return this.http.get<BlogSettings>(`${this.api.base.v1}website/site/${blog}/settings/`);
   }
 }
