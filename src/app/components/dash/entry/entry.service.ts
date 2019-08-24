@@ -22,12 +22,12 @@ export class EntryService {
    *
    * @param filter API filters
    */
-  getEntries(filter?: {
+  getEntries(filter: {
     is_page?: boolean,
     user?: string,
     format?: EntryFormat,
     status?: EntryStatus,
-  }): Observable<ApiResponse<Entry>> {
+  } = {}): Observable<ApiResponse<Entry>> {
     return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.v1}website/entry`, {
       params: Object.assign(filter, {
         site: BlogService.currentBlog.id,
