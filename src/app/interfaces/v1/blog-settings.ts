@@ -1,6 +1,7 @@
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
 import { File } from '@app/interfaces/file';
+import { Domain } from '@app/interfaces/v1/domain';
 
 export interface BlogSettings {
   title: string;
@@ -16,11 +17,7 @@ export interface BlogSettings {
     logo: File;
   };
   url: string;
-  domains: {
-    id: number;
-    domain: string;
-    cname: string;
-  }[];
+  domains: Domain[];
   search_engine_visibility: boolean;
   absolute_uri: string;
   remove_branding: boolean;
