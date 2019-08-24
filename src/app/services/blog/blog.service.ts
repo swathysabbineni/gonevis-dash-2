@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { ApiService } from '@app/services/api/api.service';
@@ -42,5 +43,15 @@ export class BlogService {
    */
   getSettings(blog: string): Observable<BlogSettings> {
     return this.http.get<BlogSettings>(`${this.api.base.v1}website/site/${blog}/settings/`);
+  }
+
+  /**
+   * Update blog settings
+   *
+   * @param blog Blog ID
+   * @param payload Blog update data
+   */
+  updateSettings(blog: string, payload: Params): Observable<BlogSettings> {
+    return this.http.put<BlogSettings>(`${this.api.base.v1}website/site/${blog}/update-settings/`, payload);
   }
 }
