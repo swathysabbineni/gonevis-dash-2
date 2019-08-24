@@ -1,1 +1,31 @@
-<p>settings-general works!</p>
+<form class="card mb-3" [formGroup]="blogForm" (ngSubmit)="submitBlog()" *ngIf="settings">
+  <!-- Header -->
+  <div class="card-header" translate>BLOG_SETTINGS</div>
+  <!-- Body -->
+  <div class="card-body">
+    <!-- Blog headline (title) -->
+    <div class="form-group">
+      <label for="title" translate>BLOG_HEADLINE</label>
+      <input type="text" class="form-control" name="title" id="title" formControlName="title">
+      <span class="text-danger" *ngIf="blogErrors.title">{{ blogErrors.title[0] }}</span>
+    </div>
+    <!-- Blog description -->
+    <div class="form-group">
+      <label for="title" translate>BLOG_DESCRIPTION</label>
+      <textarea class="form-control" name="description" id="description" formControlName="description"
+                rows="2">
+      </textarea>
+      <small class="form-text text-muted" translate>HELP_TEXT_BLOG_DESCRIPTION</small>
+      <span class="text-danger" *ngIf="blogErrors.description">{{ blogErrors.description[0] }}</span>
+    </div>
+    <!-- Address -->
+    <div class="form-group mb-0">
+      <label translate>ADDRESS</label>
+      <a [href]="settings.absolute_uri" target="_blank" class="text-primary d-block">{{ settings.absolute_uri }}</a>
+    </div>
+  </div>
+  <!-- Footer -->
+  <div class="card-footer">
+    <button class="btn btn-primary float-right" [disabled]="blogLoading" translate>SAVE_CHANGES</button>
+  </div>
+</form>
