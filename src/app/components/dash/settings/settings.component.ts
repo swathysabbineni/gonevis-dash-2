@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings',
@@ -10,6 +9,7 @@ export class SettingsComponent {
 
   /**
    * Page tabs
+   * Tab names will be converted to uppercase and used as translation keys in view.
    */
   readonly tabs: string[] = [
     'general',
@@ -18,12 +18,4 @@ export class SettingsComponent {
     'upgrade',
     'billing',
   ];
-
-  /**
-   * Selected tab
-   */
-  tabSelected = this.tabs[0];
-
-  constructor(private translate: TranslateService) {
-  }
 }

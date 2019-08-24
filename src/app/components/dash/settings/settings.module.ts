@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SettingsAdvancedComponent } from './settings-advanced/settings-advanced.component';
@@ -22,6 +23,8 @@ import { SettingsComponent } from './settings.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     TranslateModule.forChild(),
     SettingsRoutingModule,
   ],

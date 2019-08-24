@@ -3,7 +3,7 @@
     <div class="col-lg-6">
 
       <!-- Tabs -->
-      <ul class="nav nav-pills">
+      <ul class="nav nav-pills nav-fill mb-3">
         <li class="nav-item" *ngFor="let tab of tabs">
           <a class="nav-link" routerLinkActive="active" [routerLink]="tab">{{ tab.toUpperCase() | translate }}</a>
         </li>
