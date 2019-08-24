@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
+import { Domain } from '@app/interfaces/v1/domain';
 import { BlogService } from '@app/services/blog/blog.service';
 
 @Component({
@@ -56,10 +57,16 @@ export class SettingsGeneralComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Get blog settings
-     */
+    this.getSettings();
+  }
+
+  /**
+   * Get blog settings
+   */
+  getSettings(): void {
+    this.blogLoading = true;
     this.blogService.getSettings(BlogService.currentBlog.id).subscribe((data: BlogSettings): void => {
+      this.blogLoading = false;
       this.settings = data;
       /**
        * Set initial blog form data
@@ -68,7 +75,6 @@ export class SettingsGeneralComponent implements OnInit {
         title: data.title,
         description: data.description,
       });
-      this.blogLoading = false;
     });
   }
 
@@ -78,7 +84,8 @@ export class SettingsGeneralComponent implements OnInit {
   submitBlog(): void {
     this.blogLoading = true;
     this.blogService.updateSettings(
-      BlogService.currentBlog.id, this.blogForm.value,
+      BlogService.currentBlog.id,
+      this.blogForm.value,
     ).subscribe((data: BlogSettings): void => {
       this.settings = data;
       this.blogLoading = false;
@@ -87,5 +94,44 @@ export class SettingsGeneralComponent implements OnInit {
       this.blogLoading = false;
       this.blogErrors = error.error;
     });
+  }
+
+  /**
+   * Submit blog domain form
+   */
+  submitDomain(): void {
+    this.domainsLoading = true;
+    this.blogService.addDomain(
+      BlogService.currentBlog.id,
+      this.domainsForm.value.domain,
+    ).subscribe((): void => {
+      this.getSettings();
+      this.domainsLoading = false;
+      this.domainsErrors = {};
+      this.domainsForm.reset();
+    }, (error): void => {
+      this.domainsLoading = false;
+      this.domainsErrors = error.error;
+    });
+  }
+
+  /**
+   * Remove blog domain
+   *
+   * @param domain Blog domain
+   */
+  removeDomain(domain: Domain): void {
+    this.domainsLoading = true;
+    this.blogService.removeDomain(BlogService.currentBlog.id, domain.id).subscribe((): void => {
+      this.settings.domains.splice(this.settings.domains.indexOf(domain), 1);
+      this.domainsLoading = false;
+    });
+  }
+
+  /**
+   * @returns Link of the domain
+   */
+  getDomainLink(domain: Domain): string {
+    return `//${domain.domain}`;
   }
 }
