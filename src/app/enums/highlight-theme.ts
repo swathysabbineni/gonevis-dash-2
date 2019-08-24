@@ -1,0 +1,22 @@
+/**
+ * Code block highlighting themes
+ */
+export enum HighlightTheme {
+  ATOM_ONE_DARK,
+  ATOM_ONE_LIGHT,
+  ANDROIDSTUDIO,
+  AGATE,
+  COLOR_BREWER,
+  DRACULA,
+  DEFAULT,
+  GITHUB,
+  MONOKAI_SUBLIME,
+  MONO_BLUE,
+  RAINBOW,
+  RAILSCASTS,
+  SOLARIZED_DARK,
+  SOLARIZED_LIGHT,
+  TOMORROW,
+  VS,
+  ZENBURN,
+}
