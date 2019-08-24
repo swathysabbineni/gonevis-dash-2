@@ -1,5 +1,5 @@
 /**
- * Represents HTTP params structure for GET requests
+ * API payload for GET
  */
 export interface ParamsGet {
   [param: string]: string | string[];
