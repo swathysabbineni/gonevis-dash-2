@@ -6,6 +6,7 @@ import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
 import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgMathPipesModule } from 'ngx-pipes';
 
 import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './main.component';
@@ -19,6 +20,7 @@ import { MainComponent } from './main.component';
     MainRoutingModule,
     TranslateModule,
     FontAwesomeModule,
+    NgMathPipesModule,
   ],
 })
 export class MainModule {
