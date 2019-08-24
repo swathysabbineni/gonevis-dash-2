@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
-import { Domain } from '@app/interfaces/v1/domain';
+import { Metrics } from '@app/interfaces/v1/metrics';
+import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { ApiService } from '@app/services/api/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -17,6 +18,7 @@ export class BlogService {
   static blog: Observable<BlogMin> = BlogService.blogSubject.asObservable();
 
   constructor(private http: HttpClient,
+              private apiService: ApiService,
               private api: ApiService) {
   }
 
@@ -35,6 +37,22 @@ export class BlogService {
    */
   static get currentBlog(): BlogMin {
     return JSON.parse(localStorage.getItem('blog'));
+  }
+
+  /**
+   * Get metrics
+   */
+  getMetrics(): Observable<Metrics> {
+    return this.http.get<Metrics>(`${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/metrics`);
+  }
+
+  /**
+   * Get metrics
+   */
+  getTemplateConfig(): Observable<TemplateConfig> {
+    return this.http.get<TemplateConfig>(
+      `${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/template-config`,
+    );
   }
 
   /**
