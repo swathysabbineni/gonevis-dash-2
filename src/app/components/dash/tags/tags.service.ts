@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { Params } from '@app/interfaces/params';
 import { Tag } from '@app/interfaces/v1/tag';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
@@ -41,15 +42,12 @@ export class TagsService {
   }
 
   /**
-   * Create blog tag
+   * Create tag
    *
-   * @param name Tag name
-   * @param slug Tga slug
-   * @param description Tag description
+   * @param payload Tag payload
    */
-  create(name: string,  slug: string, description: string): Observable<Tag> {
-    return this.http.post<Tag>(`${this.apiService.base.v1}tagool/tag/`,
-      { name, slug, description,
-      site: BlogService.currentBlog.id, }).pipe();
+  create(payload: Params): Observable<Tag> {
+    payload.site = BlogService.currentBlog.id;
+    return this.http.post<Tag>(`${this.apiService.base.v1}tagool/tag/`, payload).pipe();
   }
 }
