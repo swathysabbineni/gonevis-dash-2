@@ -34,9 +34,7 @@ export class BlogService {
    * @return Current blog
    */
   static get currentBlog(): BlogMin {
-    const data: BlogMin = JSON.parse(localStorage.getItem('blog'));
-    data.id = 'f089c2dc-ba37-4e53-b2d2-85ac26ca80bd';
-    return data;
+    return JSON.parse(localStorage.getItem('blog'));
   }
 
   /**
