@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { CommentsService } from '@app/components/dash/comments/comments.service';
 import { EntryService } from '@app/components/dash/entry/entry.service';
-import { TeamService } from '@app/components/dash/team/team.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Comment } from '@app/interfaces/v1/comment';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Metrics } from '@app/interfaces/v1/metrics';
-import { Team } from '@app/interfaces/v1/team';
+import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogService } from '@app/services/blog/blog.service';
 
 @Component({
@@ -18,85 +16,54 @@ import { BlogService } from '@app/services/blog/blog.service';
 export class MainComponent implements OnInit {
 
   /**
-   * Is showing posts or pages
-   * @see DashRoutingModule
-   */
-  readonly isPages: boolean = this.route.snapshot.data.pages === true;
-
-  /**
-   * List of comments
+   * List of recent blog comments
    */
   comments: Comment[];
 
   /**
-   * List of entries
+   * List of recent blog entries
    */
   entries: Entry[];
 
   /**
-   * Team members
+   * Metrics (data count, etc)
    */
-  team: Team;
-
-  /**
-   * Comments count
-   */
-  commentsCount = 0;
-
-  /**
-   * Entries count
-   */
-  entriesCount = 0;
-
-  /**
-   * Members count
-   */
-  teamMembersCount = 0;
-
-  /**
-   * Members count
-   */
-  pendingTeamMembersCount = 0;
-
   metrics: Metrics;
 
-  constructor(private commentsService: CommentsService,
+  /**
+   * Template config data
+   */
+  templateConfig: TemplateConfig;
+
+  constructor(private blogService: BlogService,
               private entryService: EntryService,
-              private teamService: TeamService,
-              private route: ActivatedRoute,
-              private blogService: BlogService) {
+              private commentsService: CommentsService) {
   }
 
   ngOnInit(): void {
     /**
-     * Get metrics
+     * Load entries
+     */
+    this.entryService.getEntries().subscribe((response: ApiResponse<Entry>): void => {
+      this.entries = response.results;
+    });
+    /**
+     * Load comments
+     */
+    this.commentsService.getComments().subscribe((response: ApiResponse<Comment>): void => {
+      this.comments = response.results;
+    });
+    /**
+     * Load metrics
      */
     this.blogService.getMetrics().subscribe((data: Metrics): void => {
       this.metrics = data;
     });
     /**
-     * Get comments
+     * Load template config
      */
-    this.commentsService.getComments().subscribe((response: ApiResponse<Comment>): void => {
-      this.comments = response.results;
-      this.commentsCount = response.count;
-    });
-    /**
-     * Load entries
-     */
-    this.entryService.getEntries({
-      is_page: this.isPages,
-    }).subscribe((response: ApiResponse<Entry>): void => {
-      this.entries = response.results;
-      this.entriesCount = response.count;
-    });
-    /**
-     * Get teams
-     */
-    this.teamService.getTeams().subscribe((data: Team): void => {
-      this.team = data;
-      this.teamMembersCount = data.team.length;
-      this.pendingTeamMembersCount = data.team_pending.length;
+    this.blogService.getTemplateConfig().subscribe((data: TemplateConfig): void => {
+      this.templateConfig = data;
     });
   }
 }
