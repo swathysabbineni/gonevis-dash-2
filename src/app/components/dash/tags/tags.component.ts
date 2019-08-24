@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TagsService } from '@app/components/dash/tags/tags.service';
+import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Tag } from '@app/interfaces/v1/tag';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,6 +22,16 @@ export class TagsComponent implements OnInit {
    * Tag form
    */
   form: FormGroup;
+
+  /**
+   * Tag form API loading indicator
+   */
+  loading: boolean;
+
+  /**
+   * Tag form API errors
+   */
+  errors: ApiError = {};
 
   constructor(private tag: TagsService,
               private translate: TranslateService,
@@ -68,10 +79,15 @@ export class TagsComponent implements OnInit {
    * Create tag for current blog
    */
   create(): void {
-    this.tag.create(this.form.value.name, this.form.value.slug, this.form.value.description)
-      .subscribe((): void => {
-        this.form.reset();
-        this.getTags();
-      });
+    this.loading = true;
+    this.tag.create(this.form.value).subscribe((): void => {
+      this.loading = false;
+      this.errors = {};
+      this.form.reset();
+      this.getTags();
+    }, (error): void => {
+      this.loading = false;
+      this.errors = error.error;
+    });
   }
 }

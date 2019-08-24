@@ -43,7 +43,7 @@
         </tbody>
       </table>
     </div>
-    <!-- Tag -->
+    <!-- Create tag -->
     <div class="col-md-3">
       <div class="card">
         <div class="card-header" translate>CREATE_TAG</div>
@@ -53,16 +53,20 @@
             <div class="form-group">
               <input class="form-control" type="text" formControlName="name"
                      [placeholder]="'NAME' | translate" required>
+              <span class="text-danger" *ngIf="errors.name">{{ errors.name[0] }}</span>
             </div>
             <!-- Tag name -->
             <div class="form-group">
               <input class="form-control" type="text" formControlName="slug"
                      [placeholder]="'TAG' | translate">
+              <span class="text-danger" *ngIf="errors.slug">{{ errors.slug[0] }}</span>
             </div>
             <!-- Description -->
             <div class="form-group">
-              <input class="form-control" type="text" formControlName="description"
-                     [placeholder]="'DESCRIPTION' | translate">
+              <textarea rows="2" class="form-control" formControlName="description"
+                        [placeholder]="'DESCRIPTION' | translate">
+              </textarea>
+              <span class="text-danger" *ngIf="errors.description">{{ errors.description[0] }}</span>
             </div>
             <!-- Submit -->
             <button class="btn btn-info btn-block" translate>SUBMIT</button>
