@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Metrics } from '@app/interfaces/v1/metrics';
+import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { ApiService } from '@app/services/api/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -42,7 +43,16 @@ export class BlogService {
    * Get metrics
    */
   getMetrics(): Observable<Metrics> {
-    return this.http.get<Metrics>(`${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}`);
+    return this.http.get<Metrics>(`${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/metrics`);
+  }
+
+  /**
+   * Get metrics
+   */
+  getTemplateConfig(): Observable<TemplateConfig> {
+    return this.http.get<TemplateConfig>(
+      `${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/template-config`,
+    );
   }
 
   /**
