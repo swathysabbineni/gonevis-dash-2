@@ -120,12 +120,12 @@
           <!-- Followers -->
           <div class="list-group-item d-flex">
             <span translate>FOLLOWERS</span>
-            <span class="ml-auto">{{ metrics.metrics.subscriber_count | number }}</span>
+            <span class="ml-auto" *ngIf="metrics">{{ metrics.metrics.subscriber_count | number }}</span>
           </div>
           <!-- Theme and layout -->
           <div class="list-group-item d-flex">
             <span translate>THEME_AND_LAYOUT</span>
-            <span class="ml-auto">{{ templateConfig.template_config.name | titlecase }}</span>
+            <span class="ml-auto" *ngIf="templateConfig">{{ templateConfig.template_config.name | titlecase }}</span>
           </div>
         </div>
       </div>
