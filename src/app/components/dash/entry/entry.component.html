@@ -1,4 +1,6 @@
 <div class="container">
+
+  <!-- Entries -->
   <table class="table rounded bg-white">
     <tbody>
     <tr *ngFor="let entry of entries">
@@ -42,7 +44,7 @@
       <!-- Options -->
       <th class="text-right">
         <!-- Dropdown -->
-        <div class="btn-group" dropdown>
+        <div class="dropdown" dropdown>
           <button class="btn btn-light btn-sm" dropdownToggle>
             <fa-icon icon="ellipsis-v"></fa-icon>
           </button>
@@ -65,4 +67,9 @@
     </tr>
     </tbody>
   </table>
+
+  <!-- No data -->
+  <div class="text-center py-3" *ngIf="!entries.length">
+    <h5 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h5>
+  </div>
 </div>

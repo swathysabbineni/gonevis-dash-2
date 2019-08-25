@@ -4,6 +4,7 @@ import { ApiError } from '@app/interfaces/api-error';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Domain } from '@app/interfaces/v1/domain';
 import { BlogService } from '@app/services/blog/blog.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings-general',
@@ -53,7 +54,8 @@ export class SettingsGeneralComponent implements OnInit {
   domainsErrors: ApiError = {};
 
   constructor(private formBuilder: FormBuilder,
-              private blogService: BlogService) {
+              private blogService: BlogService,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -118,11 +120,12 @@ export class SettingsGeneralComponent implements OnInit {
   /**
    * Remove blog domain
    *
-   * @todo Add confirm
-   *
    * @param domain Blog domain
    */
   removeDomain(domain: Domain): void {
+    if (!confirm(this.translate.instant('CONFIRM_DELETE_DOMAIN'))) {
+      return;
+    }
     this.domainsLoading = true;
     this.blogService.removeDomain(BlogService.currentBlog.id, domain.id).subscribe((): void => {
       this.settings.domains.splice(this.settings.domains.indexOf(domain), 1);

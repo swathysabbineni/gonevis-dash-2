@@ -40,6 +40,10 @@
             </div>
           </th>
         </tr>
+        <!-- No tags -->
+        <div class="text-center py-3" *ngIf="!tags.length">
+          <h5 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h5>
+        </div>
         </tbody>
       </table>
     </div>

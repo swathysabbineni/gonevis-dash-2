@@ -8,7 +8,7 @@
       <div class="card shadow-sm mb-4">
         <!-- Header -->
         <div class="card-header">
-          <span class="init" translate>POSTS</span>
+          <a class="init" routerLink="/dash/posts" translate>POSTS</a>
           <span class="float-right badge badge-primary text-light" *ngIf="metrics">
             {{ metrics.metrics.published_entry_count | number}}
           </span>
@@ -36,6 +36,10 @@
               </small>
             </div>
           </a>
+          <!-- No posts -->
+          <div class="text-center py-3" *ngIf="!entries.length">
+            <h6 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h6>
+          </div>
         </div>
       </div>
 
@@ -43,7 +47,7 @@
       <div class="card shadow-sm">
         <!-- Header -->
         <div class="card-header">
-          <span class="init" translate>COMMENTS</span>
+          <a class="init" routerLink="/dash/comments" translate>COMMENTS</a>
           <span class="float-right badge badge-primary text-light" *ngIf="metrics">
             {{ metrics.metrics.comment_count | number }}
           </span>
@@ -57,6 +61,10 @@
             <!-- Date -->
             <small class="float-right">{{ comment.created | date }}</small>
           </a>
+          <!-- No comments -->
+          <div class="text-center py-3" *ngIf="!comments.length">
+            <h6 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h6>
+          </div>
         </div>
       </div>
     </div>
@@ -158,7 +166,9 @@
 
       <!-- Team -->
       <div class="card shadow-sm mb-4">
-        <div class="card-header" translate>TEAM</div>
+        <div class="card-header">
+          <a routerLink="/dash/team" translate>TEAM</a>
+        </div>
         <div class="list-group">
           <!-- Team members -->
           <div class="list-group-item d-flex">

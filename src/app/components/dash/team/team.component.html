@@ -83,6 +83,7 @@
             <div class="form-group">
               <input class="form-control" type="email" formControlName="email"
                      [placeholder]="'EMAIL' | translate" required>
+              <span class="text-danger" *ngIf="errors.email">{{ errors.email[0] }}</span>
             </div>
             <!-- Role -->
             <div class="form-group">
