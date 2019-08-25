@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TeamService } from '@app/components/dash/team/team.service';
 import { TeamRoles } from '@app/enums/team-roles';
+import { ApiError } from '@app/interfaces/api-error';
 import { Team } from '@app/interfaces/v1/team';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -24,6 +25,16 @@ export class TeamComponent implements OnInit {
    * Invite form
    */
   form: FormGroup;
+
+  /**
+   * Invite form API loading indicator
+   */
+  loading: boolean;
+
+  /**
+   * Invite form API errors
+   */
+  errors: ApiError = {};
 
   constructor(private teamService: TeamService,
               private translate: TranslateService,
@@ -78,9 +89,15 @@ export class TeamComponent implements OnInit {
    * Invite team member
    */
   invite(): void {
+    this.loading = true;
     this.teamService.invite(this.form.value.email, this.form.value.role).subscribe((): void => {
+      this.loading = false;
+      this.errors = {};
       this.form.controls.email.reset();
       this.getTeam();
+    }, (error): void => {
+      this.loading = false;
+      this.errors = error.error;
     });
   }
 }
