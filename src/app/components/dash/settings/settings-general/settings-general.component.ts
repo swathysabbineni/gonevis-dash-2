@@ -120,8 +120,6 @@ export class SettingsGeneralComponent implements OnInit {
   /**
    * Remove blog domain
    *
-   * @todo Add confirm
-   *
    * @param domain Blog domain
    */
   removeDomain(domain: Domain): void {
