@@ -1,4 +1,5 @@
 <div class="container-fluid">
+  <!-- Files -->
   <div class="files">
     <div class="row">
       <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6" *ngFor="let file of files">
@@ -30,9 +31,10 @@
         </div>
       </div>
     </div>
-    <!-- No file -->
-    <div class="bg-white rounded py-3 container" *ngIf="!files.length">
-      <h5 class="text-secondary text-center font-italic" translate>NO_FILE</h5>
-    </div>
+  </div>
+
+  <!-- No data -->
+  <div class="bg-white rounded py-3 container" *ngIf="!files.length">
+    <h5 class="text-secondary text-center font-italic" translate>NOTHING_HERE_YET</h5>
   </div>
 </div>

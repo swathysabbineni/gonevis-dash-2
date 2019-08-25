@@ -112,10 +112,6 @@
   "ADDRESS": "Address",
   "HELP_TEXT_BLOG_DESCRIPTION": "Explain to your audience what this blog is about.",
   "NOTHING_HERE_YET": "Nothing here yet.",
-  "NO_COMMENTS_FOUND": "No comments found.",
-  "NO_POSTS_YET": "No posts yet.",
-  "NO_TAGS": "No tags yet.",
-  "NO_FILE": "It's lonely here... Go ahead and upload some files.",
   "CONFIRM_DELETE_DOMAIN": "Are you sure you want to delete this domain?",
   "COLLABORATING": "Collaborating"
 }

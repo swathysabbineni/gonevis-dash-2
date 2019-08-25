@@ -1,4 +1,6 @@
 <div class="container">
+
+  <!-- Entries -->
   <table class="table rounded bg-white">
     <tbody>
     <tr *ngFor="let entry of entries">
@@ -63,10 +65,11 @@
         </div>
       </th>
     </tr>
-    <!-- No posts -->
-    <div class="text-center py-3" *ngIf="!entries.length">
-      <h5 class="text-secondary font-italic" translate>NO_POSTS_YET</h5>
-    </div>
     </tbody>
   </table>
+
+  <!-- No data -->
+  <div class="text-center py-3" *ngIf="!entries.length">
+    <h5 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h5>
+  </div>
 </div>
