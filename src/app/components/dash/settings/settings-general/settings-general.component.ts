@@ -67,7 +67,7 @@ export class SettingsGeneralComponent implements OnInit {
    */
   getSettings(): void {
     this.blogLoading = true;
-    this.blogService.getSettings(BlogService.currentBlog.id).subscribe((data: BlogSettings): void => {
+    this.blogService.getSettings().subscribe((data: BlogSettings): void => {
       this.blogLoading = false;
       this.settings = data;
       /**
@@ -85,10 +85,7 @@ export class SettingsGeneralComponent implements OnInit {
    */
   submitBlog(): void {
     this.blogLoading = true;
-    this.blogService.updateSettings(
-      BlogService.currentBlog.id,
-      this.blogForm.value,
-    ).subscribe((data: BlogSettings): void => {
+    this.blogService.updateSettings(this.blogForm.value).subscribe((data: BlogSettings): void => {
       this.settings = data;
       this.blogLoading = false;
       this.blogErrors = {};
@@ -103,10 +100,7 @@ export class SettingsGeneralComponent implements OnInit {
    */
   submitDomain(): void {
     this.domainsLoading = true;
-    this.blogService.addDomain(
-      BlogService.currentBlog.id,
-      this.domainsForm.value.domain,
-    ).subscribe((): void => {
+    this.blogService.addDomain(this.domainsForm.value.domain).subscribe((): void => {
       this.getSettings();
       this.domainsLoading = false;
       this.domainsErrors = {};
@@ -127,7 +121,7 @@ export class SettingsGeneralComponent implements OnInit {
       return;
     }
     this.domainsLoading = true;
-    this.blogService.removeDomain(BlogService.currentBlog.id, domain.id).subscribe((): void => {
+    this.blogService.removeDomain(domain.id).subscribe((): void => {
       this.settings.domains.splice(this.settings.domains.indexOf(domain), 1);
       this.domainsLoading = false;
     });
