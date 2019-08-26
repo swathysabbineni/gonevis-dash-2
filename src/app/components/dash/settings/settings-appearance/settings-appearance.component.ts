@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { ApiError } from '@app/interfaces/api-error';
+import { FormBuilder } from '@angular/forms';
+import { HighlightTheme } from '@app/enums/highlight-theme';
+import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
-import { Domain } from '@app/interfaces/v1/domain';
+import { Template } from '@app/interfaces/v1/template';
 import { BlogService } from '@app/services/blog/blog.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings-appearance',
@@ -13,11 +13,32 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class SettingsAppearanceComponent implements OnInit {
 
+  /**
+   * @see BlogService.highlightThemes
+   */
+  readonly templatePrimaryColors: {
+    id: TemplatePrimaryColor;
+    label: string;
+    color: string
+  }[] = BlogService.templatePrimaryColor;
+
+  /**
+   * @see BlogService.highlightThemes
+   */
+  readonly highlightThemes: {
+    id: HighlightTheme;
+    label: string
+  }[] = BlogService.highlightThemes;
 
   /**
    * Blog settings data
    */
   settings: BlogSettings;
+
+  /**
+   * Available templates for blogs
+   */
+  templates: Template[];
 
   constructor(private formBuilder: FormBuilder,
               private blogService: BlogService) {
@@ -25,13 +46,19 @@ export class SettingsAppearanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSettings();
+    /**
+     * Get templates
+     */
+    this.blogService.getTemplates().subscribe((data: { templates: Template[] }): void => {
+      this.templates = data.templates;
+    });
   }
 
   /**
    * Get blog settings
    */
   getSettings(): void {
-    this.blogService.getSettings(BlogService.currentBlog.id).subscribe((data: BlogSettings): void => {
+    this.blogService.getSettings().subscribe((data: BlogSettings): void => {
       this.settings = data;
     });
   }

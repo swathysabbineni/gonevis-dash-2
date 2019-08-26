@@ -1,26 +1,15 @@
-<div class="card">
+<!-- Media -->
+<div class="card mb-3">
+  <!-- Header -->
   <div class="card-header">Media</div>
+  <!-- Body -->
   <div class="card-body">
     <div class="row">
-      <div class="col-md-6">
-        <div class="media">
-          <img class="mr-3 rounded" *ngIf="settings && settings.media.cover_image"
-               [src]="settings.media.cover_image.thumbnail_128x128" [width]="128">
-          <div class="media-body">
-            <h5 class="mt-0">Blog Cover</h5>
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-sm btn-secondary">Select</button>
-              <button class="btn btn-sm btn-outline-secondary" *ngIf="settings && settings.media.cover_image">
-                <fa-icon icon="trash"></fa-icon>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
+      <!-- Logo -->
+      <div class="col-sm-6">
         <div class="media">
           <img class="mr-3 rounded" *ngIf="settings && settings.media.logo"
-               [src]="settings.media.logo.thumbnail_128x128" [width]="128">
+               [src]="settings.media.logo.thumbnail_128x128" [width]="64">
           <div class="media-body">
             <h5 class="mt-0">Blog Logo</h5>
             <div class="btn-group btn-group-sm">
@@ -32,6 +21,52 @@
           </div>
         </div>
       </div>
+      <!-- Cover -->
+      <div class="col-sm-6">
+        <div class="media">
+          <img class="mr-3 rounded" *ngIf="settings && settings.media.cover_image"
+               [src]="settings.media.cover_image.thumbnail_128x128" [width]="64">
+          <div class="media-body">
+            <h5 class="mt-0">Blog Cover</h5>
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-sm btn-secondary">Select</button>
+              <button class="btn btn-sm btn-outline-secondary" *ngIf="settings && settings.media.cover_image">
+                <fa-icon icon="trash"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- Theme -->
+<div class="card mb-3">
+  <!-- Header -->
+  <div class="card-header">Theme</div>
+  <!-- Body -->
+  <div class="card-body">
+    <div class="form-group">
+      <label for="template_primary_color" translate>Template Primary Color</label>
+      <div class="input-group">
+        <select class="form-control" id="template_primary_color">
+          <option *ngFor="let color of templatePrimaryColors" [ngValue]="color.id">{{ color.label }}</option>
+        </select>
+        <div class="input-group-append px-4 rounded-right"
+             [ngStyle]="{'background-color': templatePrimaryColors[0].color}">
+        </div>
+      </div>
+    </div>
+    <div class="form-group mb-0">
+      <label for="highlight_theme" translate>Code Highlight Syntax Theme</label>
+      <select class="form-control" id="highlight_theme">
+        <option *ngFor="let theme of highlightThemes" [ngValue]="theme.id">{{ theme.label }}</option>
+      </select>
+    </div>
+  </div>
+  <!-- Footer -->
+  <div class="card-footer">
+    <button class="btn btn-primary float-right" translate>SAVE_CHANGES</button>
   </div>
 </div>

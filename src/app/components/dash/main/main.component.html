@@ -37,7 +37,7 @@
             </div>
           </a>
           <!-- No posts -->
-          <div class="text-center py-3" *ngIf="!entries.length">
+          <div class="text-center py-3" *ngIf="entries && !entries.length">
             <h6 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h6>
           </div>
         </div>
@@ -62,7 +62,7 @@
             <small class="float-right">{{ comment.created | date }}</small>
           </a>
           <!-- No comments -->
-          <div class="text-center py-3" *ngIf="!comments.length">
+          <div class="text-center py-3" *ngIf="comments && !comments.length">
             <h6 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h6>
           </div>
         </div>
@@ -133,7 +133,7 @@
           <!-- Theme and layout -->
           <div class="list-group-item d-flex">
             <span translate>THEME_AND_LAYOUT</span>
-            <span class="ml-auto" *ngIf="templateConfig">{{ templateConfig.template_config.name | titlecase }}</span>
+            <span class="ml-auto" *ngIf="templateConfig">{{ templateConfig.name | titlecase }}</span>
           </div>
         </div>
       </div>
