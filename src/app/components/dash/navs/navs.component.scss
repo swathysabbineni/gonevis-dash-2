@@ -6,6 +6,10 @@
       flex: 2;
     }
 
+    &[name='color'] {
+      flex: 1;
+    }
+
     &[name='label'] {
       flex: 1;
     }
