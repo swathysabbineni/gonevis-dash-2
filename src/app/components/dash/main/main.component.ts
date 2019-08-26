@@ -62,8 +62,8 @@ export class MainComponent implements OnInit {
     /**
      * Load template config
      */
-    this.blogService.getTemplateConfig().subscribe((data: TemplateConfig): void => {
-      this.templateConfig = data;
+    this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
+      this.templateConfig = data.template_config;
     });
   }
 }
