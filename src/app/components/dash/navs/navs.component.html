@@ -1,1 +1,33 @@
-<p>navigations works!</p>
+<div class="container">
+  <h2 class="my-3 font-weight-bold d-flex text-dark">
+    <!-- Title -->
+    {{ 'NAVIGATIONS' | translate }}
+    <!-- Add -->
+    <button class="btn btn-primary-text ml-auto" (click)="add()" translate>
+      <fa-icon icon="plus" [fixedWidth]="true"></fa-icon>
+      ADD_NAVIGATION
+    </button>
+  </h2>
+  <!-- Navigations -->
+  <form *ngIf="navigations" (ngSubmit)="update()" cdkDropList (cdkDropListDropped)="drop($event)">
+    <div class="d-flex align-items-center mb-3 navigation"
+         *ngFor="let navigation of navigations; let index = index" cdkDrag cdkDragLockAxis="y">
+      <!-- Drag & drop -->
+      <button class="btn btn-link" cdkDragHandle type="button">
+        <fa-icon icon="grip-lines-vertical" [fixedWidth]="true"></fa-icon>
+      </button>
+      <!-- Label -->
+      <input type="text" class="form-control form-control-lg mx-3" [(ngModel)]="navigation.label"
+             placeholder="Label" name="label" [ngModelOptions]="{ standalone: true }" required>
+      <!-- Url -->
+      <input type="text" class="form-control form-control-lg" [(ngModel)]="navigation.url"
+             placeholder="URL" name="url" [ngModelOptions]="{ standalone: true }" required>
+      <!-- Delete -->
+      <button class="btn btn-link ml-3" type="button" (click)="navigations.splice(index, 1)">
+        <fa-icon [icon]="['fas', 'trash']" [fixedWidth]="true"></fa-icon>
+      </button>
+    </div>
+    <!-- save -->
+    <button class="btn btn-primary float-right" [disabled]="loading" translate>SAVE_CHANGES</button>
+  </form>
+</div>

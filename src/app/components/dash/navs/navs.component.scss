@@ -1,0 +1,27 @@
+@import "~src/assets/styles/variables";
+
+.navigation {
+  input {
+    &[name='url'] {
+      flex: 2;
+    }
+
+    &[name='label'] {
+      flex: 1;
+    }
+  }
+}
+
+.cdk-drag-preview {
+  //box-sizing: border-box;
+  //border-radius: 4px;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating,
+.cdk-drop-list-dragging .navigation:not(.cdk-drag-placeholder) {
+  transition: $transition-base;
+}
