@@ -115,5 +115,7 @@
   "CONFIRM_DELETE_DOMAIN": "Are you sure you want to delete this domain?",
   "ADD_NAVIGATION": "Add navigation",
   "LABEL": "Label",
+  "TOOLTIP": "Tooltip",
+  "ICON_CLASS": "Icon class",
   "COLLABORATING": "Collaborating"
 }

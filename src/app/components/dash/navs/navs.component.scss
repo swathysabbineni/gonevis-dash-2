@@ -2,13 +2,22 @@
 
 .navigation {
   input {
+    &[name='color'] {
+      flex: 1;
+    }
+
+    &[name='tooltip'] {
+      flex: 1;
+    }
+
+    &[name='icon'] {
+      flex: 1;
+    }
+
     &[name='url'] {
       flex: 2;
     }
 
-    &[name='color'] {
-      flex: 1;
-    }
 
     &[name='label'] {
       flex: 1;
