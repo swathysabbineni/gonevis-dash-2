@@ -101,4 +101,22 @@ export class SettingsAppearanceComponent implements OnInit {
       this.loading = false;
     });
   }
+
+  /**
+   * Remove blog logo
+   */
+  removeLogo(): void {
+    this.blogService.removeBlogLogo(null).subscribe((): void => {
+      this.settings.media.logo = null;
+    });
+  }
+
+  /**
+   * Remove blog cover
+   */
+  removeCover(): void {
+    this.blogService.removeBlogCover(null).subscribe((): void => {
+      this.settings.media.cover_image = null;
+    });
+  }
 }
