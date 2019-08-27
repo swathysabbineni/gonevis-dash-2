@@ -1,1 +1,7 @@
-<p>write works!</p>
+<button (click)="updateEntry()">Update</button>
+<button (click)="goBack()">BACK</button>
+<input type="text" [(ngModel)]="entry.title" [required]="true">
+<quill-editor [(ngModel)]="entry.content"
+              [modules]="options"
+              placeholder="Write your article here..."
+              scrollingContainer="html, body" (onEditorCreated)="onEditorInit($event)"></quill-editor>
