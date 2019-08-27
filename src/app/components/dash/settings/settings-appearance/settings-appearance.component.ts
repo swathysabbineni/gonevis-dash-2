@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
@@ -40,11 +40,31 @@ export class SettingsAppearanceComponent implements OnInit {
    */
   templates: Template[];
 
+  /**
+   * Theme form
+   */
+  form: FormGroup;
+
+  /**
+   * Theme form API loading indicator
+   */
+  loading: boolean;
+
   constructor(private formBuilder: FormBuilder,
               private blogService: BlogService) {
   }
 
   ngOnInit(): void {
+    /**
+     * Setup theme form
+     */
+    this.form = this.formBuilder.group({
+      highlight_theme: [HighlightTheme.DEFAULT],
+      template_primary_color: [TemplatePrimaryColor.DEFAULT],
+    });
+    /**
+     * Get settings
+     */
     this.getSettings();
     /**
      * Get templates
@@ -58,8 +78,27 @@ export class SettingsAppearanceComponent implements OnInit {
    * Get blog settings
    */
   getSettings(): void {
+    this.loading = true;
     this.blogService.getSettings().subscribe((data: BlogSettings): void => {
+      this.loading = false;
       this.settings = data;
+      // /**
+      //  * Set up the theme form with default values
+      //  */
+      // this.form.patchValue({
+      //   highlight_theme: data.highlight_theme,
+      //   template_primary_color: data.template_primary_color,
+      // });
+    });
+  }
+
+  /**
+   * Update theme
+   */
+  updateTheme(): void {
+    this.loading = true;
+    this.blogService.updateTheme(this.form.value).subscribe((): void => {
+      this.loading = false;
     });
   }
 }

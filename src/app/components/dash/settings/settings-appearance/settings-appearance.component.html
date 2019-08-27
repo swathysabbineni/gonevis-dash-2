@@ -47,26 +47,29 @@
   <div class="card-header">Theme</div>
   <!-- Body -->
   <div class="card-body">
-    <div class="form-group">
-      <label for="template_primary_color" translate>Template Primary Color</label>
-      <div class="input-group">
+    <form [formGroup]="form" (ngSubmit)="updateTheme()">
+      <!-- Template primary color -->
+      <div class="form-group">
+        <label for="template_primary_color" translate>Template Primary Color</label>
         <select class="form-control" id="template_primary_color">
           <option *ngFor="let color of templatePrimaryColors" [ngValue]="color.id">{{ color.label }}</option>
         </select>
+        <!-- Selected color -->
         <div class="input-group-append px-4 rounded-right"
              [ngStyle]="{'background-color': templatePrimaryColors[0].color}">
         </div>
       </div>
-    </div>
-    <div class="form-group mb-0">
-      <label for="highlight_theme" translate>Code Highlight Syntax Theme</label>
-      <select class="form-control" id="highlight_theme">
-        <option *ngFor="let theme of highlightThemes" [ngValue]="theme.id">{{ theme.label }}</option>
-      </select>
-    </div>
-  </div>
-  <!-- Footer -->
-  <div class="card-footer">
-    <button class="btn btn-primary float-right" translate>SAVE_CHANGES</button>
+      <!-- Code Highlight -->
+      <div class="form-group">
+        <label for="highlight_theme" translate>Code Highlight Syntax Theme</label>
+        <select class="form-control" id="highlight_theme">
+          <option *ngFor="let theme of highlightThemes" [ngValue]="theme.id">{{ theme.label }}</option>
+        </select>
+      </div>
+      <!-- Submit -->
+      <div class="card-footer">
+        <button class="btn btn-primary float-right" translate>SAVE_CHANGES</button>
+      </div>
+    </form>
   </div>
 </div>

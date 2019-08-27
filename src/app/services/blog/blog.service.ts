@@ -154,4 +154,14 @@ export class BlogService {
       },
     );
   }
+
+  /**
+   * Update blog theme
+   *
+   * @param payload Blog theme
+   */
+  updateTheme(payload: Params): Observable<BlogSettings> {
+    return this.http.put<BlogSettings>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/update-settings/`, payload);
+  }
 }
