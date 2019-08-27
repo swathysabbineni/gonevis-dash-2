@@ -1,12 +1,13 @@
-import { Media } from '@app/interfaces/media';
+import { File } from '@app/interfaces/file';
 import { TagMin } from '@app/interfaces/v1/tag-min';
 import { UserMin } from '@app/interfaces/v1/user-min';
 
 export interface Entry {
   id: string;
   tags: TagMin[];
+  tag_ids?: string[];
   media: {
-    cover_image: Media;
+    cover_image: File;
   };
   absolute_uri: string;
   site: string;
@@ -38,5 +39,5 @@ export interface Entry {
   /**
    * Extra properties
    */
-  loading: boolean;
+  loading?: boolean;
 }
