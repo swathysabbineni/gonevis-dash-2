@@ -2,24 +2,22 @@
 
 .form-control {
 
-  &.color {
+  &.btn {
     flex: 1;
   }
 
-  &.tooltip {
+  &.item-tooltip,
+  &.item-icon,
+  &.item-color {
     flex: 2;
   }
 
-  &.icon {
-    flex: 2;
-  }
-
-  &.url {
-    flex: 6;
-  }
-
-  &.label {
+  &.item-label {
     flex: 4;
+  }
+
+  &.item-url {
+    flex: 6;
   }
 }
 
