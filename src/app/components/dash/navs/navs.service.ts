@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Nav } from '@app/interfaces/v1/nav';
+import { Navigation } from '@app/interfaces/v1/navigation';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { Observable } from 'rxjs';
@@ -15,11 +15,11 @@ export class NavsService {
   }
 
   /**
-   * Get blog navs
+   * Get blog navgations
    */
-  getNavs(): Observable<{navigation: Nav[]}> {
-    return this.http.get<{navigation: Nav[]}>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/navigation/`
+  getNavigations(): Observable<{ navigation: Navigation[] }> {
+    return this.http.get<{ navigation: Navigation[] }>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/navigation/`,
     );
   }
 
@@ -28,8 +28,11 @@ export class NavsService {
    *
    * @param navigation List of navigations to update
    */
-  update(navigation: Nav[]): Observable<any> {
-    const blogId: string = BlogService.currentBlog.id;
-    return this.http.put(`${this.api.base.v1}website/site/${blogId}/update-navigation/`, { navigation });
+  update(navigation: Navigation[]): Observable<{ navigation: Navigation[] }> {
+    return this.http.put<{ navigation: Navigation[] }>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/update-navigation/`, {
+        navigation,
+      },
+    );
   }
 }

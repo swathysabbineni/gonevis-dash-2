@@ -1,7 +1,7 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons/faGripLinesVertical';
@@ -18,8 +18,8 @@ import { NavsComponent } from './navs.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     NavsRoutingModule,
-    ReactiveFormsModule,
     TranslateModule,
     FontAwesomeModule,
     FormsModule,

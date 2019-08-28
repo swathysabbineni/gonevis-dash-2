@@ -1,33 +1,26 @@
 @import "~src/assets/styles/variables";
 
-.navigation {
-  input {
-    &[name='color'] {
-      flex: 1;
-    }
+.form-control {
 
-    &[name='tooltip'] {
-      flex: 1;
-    }
-
-    &[name='icon'] {
-      flex: 1;
-    }
-
-    &[name='url'] {
-      flex: 2;
-    }
-
-
-    &[name='label'] {
-      flex: 1;
-    }
+  &.color {
+    flex: 1;
   }
-}
 
-.cdk-drag-preview {
-  //box-sizing: border-box;
-  //border-radius: 4px;
+  &.tooltip {
+    flex: 2;
+  }
+
+  &.icon {
+    flex: 2;
+  }
+
+  &.url {
+    flex: 6;
+  }
+
+  &.label {
+    flex: 4;
+  }
 }
 
 .cdk-drag-placeholder {
@@ -35,6 +28,10 @@
 }
 
 .cdk-drag-animating,
-.cdk-drop-list-dragging .navigation:not(.cdk-drag-placeholder) {
+.cdk-drop-list-dragging .form-group:not(.cdk-drag-placeholder) {
   transition: $transition-base;
+}
+
+.cdk-drag-dragging {
+  display: none !important;
 }

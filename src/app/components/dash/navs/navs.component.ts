@@ -2,7 +2,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavsService } from '@app/components/dash/navs/navs.service';
-import { Nav } from '@app/interfaces/v1/nav';
+import { Navigation } from '@app/interfaces/v1/navigation';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navs',
@@ -12,9 +13,9 @@ import { Nav } from '@app/interfaces/v1/nav';
 export class NavsComponent implements OnInit {
 
   /**
-   * Navigation list
+   * List of blog navigations
    */
-  navigations: Nav[] = [];
+  navigations: Navigation[];
 
   /**
    * API loading indicator
@@ -23,20 +24,18 @@ export class NavsComponent implements OnInit {
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
-              private navsService: NavsService) {
+              private navsService: NavsService,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
-    this.loading = true;
     /**
      * Get navigations
      */
-    this.navsService.getNavs().subscribe((data: { navigation: Nav[] }): void => {
+    this.navsService.getNavigations().subscribe((data: { navigation: Navigation[] }): void => {
       this.navigations = data.navigation;
-      this.loading = false;
-
       /**
-       * Subscribe to route's query params
+       * Watch router params
        */
       if (history.state.add) {
         this.navigations.push({
@@ -53,34 +52,31 @@ export class NavsComponent implements OnInit {
   update(): void {
     this.loading = true;
     /**
-     * Update each navigation's sort number by their indexes
+     * Set navigation sorting number (based on index)
      */
-    this.navigations.map<void>((navigation: Nav, index: number): void => {
-      navigation.sort_number = index;
-    });
-    this.navsService.update(this.navigations).subscribe((data: any): void => {
+    for (const nav of this.navigations) {
+      nav.sort_number = this.navigations.indexOf(nav);
+    }
+    this.navsService.update(this.navigations).subscribe((data: { navigation: Navigation[] }): void => {
       this.navigations = data.navigation;
       this.loading = false;
     });
   }
 
   /**
-   * Create new navigation
+   * Add new navigation
    */
   add(): void {
     this.navigations.push({
-      label: 'New nav',
+      label: this.translate.instant('UNTITLED'),
       url: '/',
-      sort_number: this.navigations.length + 1,
     });
   }
 
   /**
-   * On navigation drop callback
-   *
-   * @param event On drop event
+   * On navigation drop
    */
-  drop(event: CdkDragDrop<Nav[]>): void {
+  drop(event: CdkDragDrop<Navigation[]>): void {
     moveItemInArray(this.navigations, event.previousIndex, event.currentIndex);
   }
 }

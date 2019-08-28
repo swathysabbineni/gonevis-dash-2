@@ -1,42 +1,49 @@
 <div class="container">
-  <h2 class="my-3 font-weight-bold d-flex text-dark">
+  <div class="card my-3">
+
     <!-- Title -->
-    {{ 'NAVIGATIONS' | translate }}
-    <!-- Add -->
-    <button class="btn btn-primary-text ml-auto" (click)="add()" translate>
-      <fa-icon icon="plus" [fixedWidth]="true"></fa-icon>
-      ADD_NAVIGATION
-    </button>
-  </h2>
-  <!-- Navigations -->
-  <form *ngIf="navigations" (ngSubmit)="update()" cdkDropList (cdkDropListDropped)="drop($event)">
-    <div class="d-flex align-items-center mb-3 navigation"
-         *ngFor="let navigation of navigations; let index = index" cdkDrag cdkDragLockAxis="y">
-      <!-- Drag & drop -->
-      <button class="btn btn-link" cdkDragHandle type="button">
-        <fa-icon icon="grip-lines-vertical" [fixedWidth]="true"></fa-icon>
-      </button>
-      <!-- Label -->
-      <input type="text" class="form-control form-control-lg mr-2" [(ngModel)]="navigation.label"
-             [placeholder]="'LABEL' | translate" name="label" [ngModelOptions]="{ standalone: true }" required>
-      <!-- Url -->
-      <input type="text" class="form-control form-control-lg mr-2" [(ngModel)]="navigation.url"
-             placeholder="URL" name="url" [ngModelOptions]="{ standalone: true }" required>
-      <!-- Tooltip -->
-      <input type="text" class="form-control form-control-lg mr-2" [(ngModel)]="navigation.tooltip"
-             [placeholder]="'TOOLTIP' | translate" name="tooltip" [ngModelOptions]="{ standalone: true }">
-      <!-- Tooltip -->
-      <input type="text" class="form-control form-control-lg mr-2" [(ngModel)]="navigation.icon"
-             [placeholder]="'ICON_CLASS' | translate" name="icon" [ngModelOptions]="{ standalone: true }">
-      <!-- Color -->
-      <input type="color" class="form-control form-control-lg" [(ngModel)]="navigation.color"
-      name="color" [ngModelOptions]="{ standalone: true }">
-      <!-- Delete -->
-      <button class="btn btn-link ml-3" type="button" (click)="navigations.splice(index, 1)">
-        <fa-icon [icon]="['fas', 'trash']" [fixedWidth]="true"></fa-icon>
-      </button>
+    <div class="card-header" translate>NAVIGATIONS</div>
+
+    <!-- Body -->
+    <div class="card-body" *ngIf="navigations && navigations.length" cdkDropList (cdkDropListDropped)="drop($event)">
+      <div class="d-flex align-items-center form-group" cdkDrag cdkDragLockAxis="y"
+           *ngFor="let navigation of navigations; let index = index; let last = last" [class.mb-0]="last">
+        <!-- Handle -->
+        <button class="btn btn-link mr-2" cdkDragHandle type="button">
+          <fa-icon icon="grip-lines-vertical" [fixedWidth]="true"></fa-icon>
+        </button>
+        <!-- Label -->
+        <input type="text" class="form-control mr-2" [placeholder]="'LABEL' | translate"
+               [(ngModel)]="navigation.label">
+        <!-- Url -->
+        <input type="text" class="form-control mr-2" [placeholder]="'URL' | translate"
+               [(ngModel)]="navigation.url">
+        <!-- Tooltip -->
+        <input type="text" class="form-control mr-2" [placeholder]="'TOOLTIP' | translate"
+               [(ngModel)]="navigation.tooltip">
+        <!-- Icon -->
+        <input type="text" class="form-control mr-2" [placeholder]="'ICON_CLASS' | translate"
+               [(ngModel)]="navigation.icon">
+        <!-- Color -->
+        <input type="color" class="form-control mr-2" [(ngModel)]="navigation.color">
+        <!-- Delete -->
+        <button class="btn btn-link" type="button" (click)="navigations.splice(index, 1)">
+          <fa-icon icon="trash" [fixedWidth]="true"></fa-icon>
+        </button>
+      </div>
     </div>
-    <!-- save -->
-    <button class="btn btn-primary float-right" [disabled]="loading" translate>SAVE_CHANGES</button>
-  </form>
+
+    <!-- Body (no navigations) -->
+    <div class="card-body" *ngIf="navigations && !navigations.length">
+      <div class="card-text text-secondary" translate>NOTHING_HERE</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer text-right">
+      <button class="btn btn-success mr-2" (click)="add()">
+        <fa-icon icon="plus" [fixedWidth]="true"></fa-icon>
+      </button>
+      <button class="btn btn-primary" [disabled]="loading" (click)="update()" translate>SAVE_CHANGES</button>
+    </div>
+  </div>
 </div>
