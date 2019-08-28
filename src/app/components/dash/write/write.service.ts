@@ -1,6 +1,7 @@
-import { HttpClient, HttpParams, HttpHandler } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { Params } from '@app/interfaces/params';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
 import { ApiService } from '@app/services/api/api.service';
@@ -28,11 +29,10 @@ export class WriteService {
   /**
    * Update entry
    *
-   * @param entryId Entry ID
-   * @param entry Entry data
+   * @param payload Payload
    */
-  updateEntry(entryId: string, entry): Observable<Entry> {
-    return this.http.put<Entry>(`${this.apiService.base.v1}website/entry/${entryId}/`, entry);
+  updateEntry(payload: Params): Observable<Entry> {
+    return this.http.put<Entry>(`${this.apiService.base.v1}website/entry/${payload.id}/`, payload);
   }
 
   /**
@@ -42,13 +42,16 @@ export class WriteService {
     return this.http.post<Entry>(`${this.apiService.base.v1}website/entry/`, entry);
   }
 
-
   /**
    * Get tags
+   *
+   * @param search Search text
    */
-  getTags(): Observable<ApiResponse<Tag>> {
+  getTags(search: string): Observable<ApiResponse<Tag>> {
     const httpParams: HttpParams = new HttpParams()
-      .set('site', BlogService.currentBlog.id);
+      .set('site', BlogService.currentBlog.id)
+      .set('limit', '100')
+      .set('search', search);
 
     return this.http.get<ApiResponse<Tag>>(`${this.apiService.base.v1}tagool/tag/`, { params: httpParams });
   }
