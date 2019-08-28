@@ -1,6 +1,7 @@
 @import "~src/assets/styles/variables";
 
 .form-control {
+  padding-right: $input-padding-x !important;
 
   &.btn {
     flex: 1;

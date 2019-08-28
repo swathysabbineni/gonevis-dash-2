@@ -14,19 +14,24 @@
         </button>
         <!-- Label -->
         <input type="text" class="form-control mr-2 item-label" [placeholder]="'LABEL' | translate"
-               [(ngModel)]="navigation.label">
+               [(ngModel)]="navigation.label"
+               [class.is-invalid]="errors[index] && errors[index].label">
         <!-- Url -->
         <input type="text" class="form-control mr-2 item-url" [placeholder]="'URL' | translate"
-               [(ngModel)]="navigation.url">
+               [(ngModel)]="navigation.url"
+               [class.is-invalid]="errors[index] && errors[index].url">
         <!-- Tooltip -->
         <input type="text" class="form-control mr-2 item-tooltip" [placeholder]="'TOOLTIP' | translate"
-               [(ngModel)]="navigation.tooltip">
+               [(ngModel)]="navigation.tooltip"
+               [class.is-invalid]="errors[index] && errors[index].tooltip">
         <!-- Icon -->
         <input type="text" class="form-control mr-2 item-icon" [placeholder]="'ICON_CLASS' | translate"
-               [(ngModel)]="navigation.icon">
+               [(ngModel)]="navigation.icon"
+               [class.is-invalid]="errors[index] && errors[index].icon">
         <!-- Color -->
         <input type="text" class="form-control item-color" [placeholder]="'COLOR' | translate"
-               [(ngModel)]="navigation.color">
+               [(ngModel)]="navigation.color"
+               [class.is-invalid]="errors[index] && errors[index].color">
         <!-- Delete -->
         <button class="btn btn-link" (click)="navigations.splice(index, 1)">
           <fa-icon icon="trash" [fixedWidth]="true"></fa-icon>

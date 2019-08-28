@@ -2,6 +2,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavsService } from '@app/components/dash/navs/navs.service';
+import { ApiError } from '@app/interfaces/api-error';
 import { Navigation } from '@app/interfaces/v1/navigation';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -21,6 +22,11 @@ export class NavsComponent implements OnInit {
    * API loading indicator
    */
   loading: boolean;
+
+  /**
+   * API Errors
+   */
+  errors: ApiError[] = [];
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -60,6 +66,10 @@ export class NavsComponent implements OnInit {
     this.navsService.update(this.navigations).subscribe((data: { navigation: Navigation[] }): void => {
       this.navigations = data.navigation;
       this.loading = false;
+      this.errors = [];
+    }, (error) => {
+      this.loading = false;
+      this.errors = error.error.navigation;
     });
   }
 
