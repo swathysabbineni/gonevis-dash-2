@@ -1,4 +1,4 @@
-export interface Nav {
+export interface Navigation {
   url: string;
   label: string;
   sort_number?: number;
