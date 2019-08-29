@@ -125,10 +125,13 @@
       <div class="card shadow-sm mb-4">
         <div class="card-header" translate>BLOG_OVERVIEW</div>
         <div class="list-group">
-          <!-- Followers -->
+          <!-- Subscribers -->
           <div class="list-group-item d-flex">
             <span translate>FOLLOWERS</span>
-            <span class="ml-auto" *ngIf="metrics">{{ metrics.metrics.subscriber_count | number }}</span>
+            <button class="btn ml-auto badge badge-primary text-light" *ngIf="metrics"
+                    (click)="showSubscribers()">
+              {{ metrics.metrics.subscriber_count | number }}
+            </button>
           </div>
           <!-- Theme and layout -->
           <div class="list-group-item d-flex">

@@ -113,5 +113,15 @@
   "HELP_TEXT_BLOG_DESCRIPTION": "Explain to your audience what this blog is about.",
   "NOTHING_HERE_YET": "Nothing here yet.",
   "CONFIRM_DELETE_DOMAIN": "Are you sure you want to delete this domain?",
+  "LABEL": "Label",
+  "TOOLTIP": "Tooltip",
+  "UNTITLED": "Untitled",
+  "ICON_CLASS": "Icon class",
+  "NAVIGATIONS": "Navigations",
+  "NOTHING_HERE": "There's nothing here, try adding some.",
+  "COLOR": "Color",
+  "ADD_TO_NAVIGATION": "Add to navigation",
+  "TEMPLATE_PRIMARY_COLOR": "Template Primary Color",
+  "CODE_HIGHLIGHT": "Code Highlight Syntax Theme",
   "COLLABORATING": "Collaborating"
 }

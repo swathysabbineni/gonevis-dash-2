@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
+import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Template } from '@app/interfaces/v1/template';
 import { BlogService } from '@app/services/blog/blog.service';
@@ -40,11 +41,31 @@ export class SettingsAppearanceComponent implements OnInit {
    */
   templates: Template[];
 
+  /**
+   * Theme form
+   */
+  themeForm: FormGroup;
+
+  /**
+   * Theme form API loading indicator
+   */
+  themeLoading: boolean;
+
   constructor(private formBuilder: FormBuilder,
               private blogService: BlogService) {
   }
 
   ngOnInit(): void {
+    /**
+     * Setup theme form
+     */
+    this.themeForm = this.formBuilder.group({
+      highlight_theme: [HighlightTheme.DEFAULT],
+      template_primary_color: [TemplatePrimaryColor.DEFAULT],
+    });
+    /**
+     * Get settings
+     */
     this.getSettings();
     /**
      * Get templates
@@ -58,8 +79,28 @@ export class SettingsAppearanceComponent implements OnInit {
    * Get blog settings
    */
   getSettings(): void {
+    this.themeLoading = true;
     this.blogService.getSettings().subscribe((data: BlogSettings): void => {
+      this.themeLoading = false;
       this.settings = data;
+      /**
+       * Set up the theme form with default values
+       */
+      this.themeForm.patchValue({
+        highlight_theme: data.highlight_theme,
+        template_primary_color: data.template_primary_color,
+      });
+    });
+  }
+
+  /**
+   * Update theme
+   */
+  submitSettings(payload: Params = this.themeForm.value): void {
+    this.themeLoading = true;
+    this.blogService.updateSettings(payload).subscribe((): void => {
+      this.themeLoading = false;
+      this.getSettings();
     });
   }
 }

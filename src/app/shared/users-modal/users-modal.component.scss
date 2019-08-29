@@ -1,0 +1,18 @@
+@import "~src/assets/styles/variables";
+
+.modal-body {
+
+  .table {
+
+    th {
+      transition: $transition-base;
+      padding: 10px;
+      border-top: none;
+    }
+
+    th:hover {
+      transition: ease-in-out all 0.1s;
+      background: #edeef0;
+    }
+  }
+}

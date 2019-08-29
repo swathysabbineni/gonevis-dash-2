@@ -2,9 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
+import { ApiResponse } from '@app/interfaces/api-response';
 import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Metrics } from '@app/interfaces/v1/metrics';
+import { Subscriber } from '@app/interfaces/v1/subscriber';
 import { Template } from '@app/interfaces/v1/template';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
@@ -152,6 +154,15 @@ export class BlogService {
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/remove-custom-domain/`, {
         domain_id: domain,
       },
+    );
+  }
+
+  /**
+   * Get blog subscribers
+   */
+  getSubscribers(): Observable<ApiResponse<Subscriber>> {
+    return this.http.get<ApiResponse<Subscriber>>(
+      `${this.apiService.base.zero}website/site/${BlogService.currentBlog.id}/subscribers`,
     );
   }
 }

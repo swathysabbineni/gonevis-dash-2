@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TagsService } from '@app/components/dash/tags/tags.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -35,7 +36,9 @@ export class TagsComponent implements OnInit {
 
   constructor(private tag: TagsService,
               private translate: TranslateService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -88,6 +91,24 @@ export class TagsComponent implements OnInit {
     }, (error): void => {
       this.loading = false;
       this.errors = error.error;
+    });
+  }
+
+  /**
+   * Add entry to navigations
+   *
+   * @param title Entry title
+   * @param slug Entry slug
+   */
+  addToNavigataion(name: string, slug: string): void {
+    this.router.navigate(['navs'], {
+      relativeTo: this.route.parent.parent,
+      state: {
+        add: {
+          label: name,
+          url: `/${ slug }`,
+        },
+      },
     });
   }
 }

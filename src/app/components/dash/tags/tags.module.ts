@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
@@ -25,6 +26,7 @@ import { TagsComponent } from './tags.component';
 })
 export class TagsModule {
   constructor() {
+    library.add(faBars);
     library.add(faEdit);
     library.add(faTrash);
     library.add(faEye);

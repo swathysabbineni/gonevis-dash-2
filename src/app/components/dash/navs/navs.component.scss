@@ -1,0 +1,36 @@
+@import "~src/assets/styles/variables";
+
+.form-control {
+  padding-right: $input-padding-x !important;
+
+  &.btn {
+    flex: 1;
+  }
+
+  &.item-tooltip,
+  &.item-icon,
+  &.item-color {
+    flex: 2;
+  }
+
+  &.item-label {
+    flex: 4;
+  }
+
+  &.item-url {
+    flex: 6;
+  }
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating,
+.cdk-drop-list-dragging .form-group:not(.cdk-drag-placeholder) {
+  transition: $transition-base;
+}
+
+.cdk-drag-dragging {
+  display: none !important;
+}
