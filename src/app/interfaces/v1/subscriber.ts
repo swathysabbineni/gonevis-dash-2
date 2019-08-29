@@ -5,6 +5,6 @@ export interface Subscriber {
   name: string;
   media: Media;
   location: string;
-  date_joined: Date;
+  date_joined: string;
   get_absolute_uri: string;
 }

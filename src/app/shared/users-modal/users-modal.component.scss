@@ -1,7 +1,11 @@
+@import "~src/assets/styles/variables";
+
 .modal-body {
+
   .table {
+
     th {
-      transition: ease-in-out all 0.1s;
+      transition: $transition-base;
       padding: 10px;
       border-top: none;
     }
@@ -9,17 +13,6 @@
     th:hover {
       transition: ease-in-out all 0.1s;
       background: #edeef0;
-    }
-
-    h5 {
-      font-size: 18px;
-      color: #555;
-    }
-
-    span {
-      font-size: 15px;
-      opacity: .6;
-      color: #555;
     }
   }
 }
