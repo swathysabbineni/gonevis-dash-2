@@ -82,13 +82,13 @@ export class SettingsAppearanceComponent implements OnInit {
     this.blogService.getSettings().subscribe((data: BlogSettings): void => {
       this.loading = false;
       this.settings = data;
-      // /**
-      //  * Set up the theme form with default values
-      //  */
-      // this.form.patchValue({
-      //   highlight_theme: data.highlight_theme,
-      //   template_primary_color: data.template_primary_color,
-      // });
+      /**
+       * Set up the theme form with default values
+       */
+      this.form.patchValue({
+        highlight_theme: data.highlight_theme,
+        template_primary_color: data.template_primary_color,
+      });
     });
   }
 
