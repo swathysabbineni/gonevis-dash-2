@@ -6,6 +6,10 @@
       {{ metrics.metrics.subscriber_count | number}}
     </span>
   </div>
+  <!-- Close -->
+  <button class="ml-auto btn btn-link p-0" (click)="modalRef.hide()">
+     <fa-icon [fixedWidth]="true" [icon]="['fas', 'times']"></fa-icon>
+  </button>
 </div>
 
 <!-- body -->
