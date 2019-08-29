@@ -120,5 +120,8 @@
   "NAVIGATIONS": "Navigations",
   "NOTHING_HERE": "There's nothing here, try adding some.",
   "COLOR": "Color",
+  "ADD_TO_NAVIGATION": "Add to navigation",
+  "TEMPLATE_PRIMARY_COLOR": "Template Primary Color",
+  "CODE_HIGHLIGHT": "Code Highlight Syntax Theme",
   "COLLABORATING": "Collaborating"
 }
