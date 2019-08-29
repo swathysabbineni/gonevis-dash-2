@@ -7,6 +7,8 @@ import { Entry } from '@app/interfaces/v1/entry';
 import { Metrics } from '@app/interfaces/v1/metrics';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UsersModalComponent } from '@app/shared/users-modal/users-modal.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-main',
@@ -26,6 +28,11 @@ export class MainComponent implements OnInit {
   entries: Entry[];
 
   /**
+   * Subscriber modal to show subscribers
+   */
+  subscriberModal: BsModalRef;
+
+  /**
    * Metrics (data count, etc)
    */
   metrics: Metrics;
@@ -37,7 +44,8 @@ export class MainComponent implements OnInit {
 
   constructor(private blogService: BlogService,
               private entryService: EntryService,
-              private commentsService: CommentsService) {
+              private commentsService: CommentsService,
+              private modalService: BsModalService) {
   }
 
   ngOnInit(): void {
@@ -65,5 +73,12 @@ export class MainComponent implements OnInit {
     this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
       this.templateConfig = data.template_config;
     });
+  }
+
+  /**
+   * Show modal to show blog followers
+   */
+  showSubscribers() {
+    this.subscriberModal = this.modalService.show(UsersModalComponent);
   }
 }
