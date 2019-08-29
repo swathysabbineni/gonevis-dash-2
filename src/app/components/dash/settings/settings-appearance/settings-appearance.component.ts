@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
+import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Template } from '@app/interfaces/v1/template';
 import { BlogService } from '@app/services/blog/blog.service';
@@ -43,12 +44,12 @@ export class SettingsAppearanceComponent implements OnInit {
   /**
    * Theme form
    */
-  form: FormGroup;
+  themeForm: FormGroup;
 
   /**
    * Theme form API loading indicator
    */
-  loading: boolean;
+  themeLoading: boolean;
 
   constructor(private formBuilder: FormBuilder,
               private blogService: BlogService) {
@@ -58,7 +59,7 @@ export class SettingsAppearanceComponent implements OnInit {
     /**
      * Setup theme form
      */
-    this.form = this.formBuilder.group({
+    this.themeForm = this.formBuilder.group({
       highlight_theme: [HighlightTheme.DEFAULT],
       template_primary_color: [TemplatePrimaryColor.DEFAULT],
     });
@@ -78,14 +79,14 @@ export class SettingsAppearanceComponent implements OnInit {
    * Get blog settings
    */
   getSettings(): void {
-    this.loading = true;
+    this.themeLoading = true;
     this.blogService.getSettings().subscribe((data: BlogSettings): void => {
-      this.loading = false;
+      this.themeLoading = false;
       this.settings = data;
       /**
        * Set up the theme form with default values
        */
-      this.form.patchValue({
+      this.themeForm.patchValue({
         highlight_theme: data.highlight_theme,
         template_primary_color: data.template_primary_color,
       });
@@ -95,28 +96,11 @@ export class SettingsAppearanceComponent implements OnInit {
   /**
    * Update theme
    */
-  updateTheme(): void {
-    this.loading = true;
-    this.blogService.updateTheme(this.form.value).subscribe((): void => {
-      this.loading = false;
-    });
-  }
-
-  /**
-   * Remove blog logo
-   */
-  removeLogo(): void {
-    this.blogService.removeBlogLogo(null).subscribe((): void => {
-      this.settings.media.logo = null;
-    });
-  }
-
-  /**
-   * Remove blog cover
-   */
-  removeCover(): void {
-    this.blogService.removeBlogCover(null).subscribe((): void => {
-      this.settings.media.cover_image = null;
+  submitSettings(payload: Params = this.themeForm.value): void {
+    this.themeLoading = true;
+    this.blogService.updateSettings(payload).subscribe((): void => {
+      this.themeLoading = false;
+      this.getSettings();
     });
   }
 }

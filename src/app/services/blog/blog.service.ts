@@ -154,37 +154,4 @@ export class BlogService {
       },
     );
   }
-
-  /**
-   * Update blog theme
-   *
-   * @param payload Blog theme
-   */
-  updateTheme(payload: Params): Observable<BlogSettings> {
-    return this.http.put<BlogSettings>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/update-settings/`, payload);
-  }
-
-  /**
-   * Remove blog logo
-   *
-   * @param logo Blog logo
-   */
-  removeBlogLogo(logo: null): Observable<BlogSettings> {
-    return this.http.put<BlogSettings>(
-      `${ this.api.base.v1 }website/site/${ BlogService.currentBlog.id }/update-settings/`, {logo});
-  }
-
-  /**
-   * Remove blog logo
-   *
-   * @param coverimage Blog logo
-   */
-  removeBlogCover(coverimage: null): Observable<void> {
-    return this.http.put<void>(
-      `${ this.api.base.v1 }website/site/${ BlogService.currentBlog.id }/update-settings/`, {
-        cover_image: coverimage,
-      },
-    );
-  }
 }

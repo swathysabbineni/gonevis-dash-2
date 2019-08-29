@@ -16,8 +16,8 @@
             <div class="btn-group btn-group-sm">
               <button class="btn btn-sm btn-secondary">Select</button>
               <!-- Delete logo-->
-              <button class="btn btn-sm btn-outline-secondary" (click)="removeLogo()"
-                      *ngIf="settings && settings.media.logo">
+              <button class="btn btn-sm btn-outline-secondary" *ngIf="settings && settings.media.logo"
+                      (click)="submitSettings({ logo: null })">
                 <fa-icon icon="trash"></fa-icon>
               </button>
             </div>
@@ -35,8 +35,8 @@
             <div class="btn-group btn-group-sm">
               <button class="btn btn-sm btn-secondary">Select</button>
               <!-- Delete cover -->
-              <button class="btn btn-sm btn-outline-secondary" (click)="removeCover()"
-                      *ngIf="settings && settings.media.cover_image">
+              <button class="btn btn-sm btn-outline-secondary" *ngIf="settings && settings.media.cover_image"
+                      (click)="submitSettings({ cover_image: null })">
                 <fa-icon icon="trash"></fa-icon>
               </button>
             </div>
@@ -48,33 +48,37 @@
 </div>
 
 <!-- Theme -->
-<div class="card mb-3">
+<form class="card mb-3" [formGroup]="themeForm" (ngSubmit)="submitSettings()">
   <!-- Header -->
   <div class="card-header">Theme</div>
   <!-- Body -->
   <div class="card-body">
-    <form [formGroup]="form" (ngSubmit)="updateTheme()">
-      <!-- Template primary color -->
+    <!-- Template primary color -->
+    <div class="form-group">
       <label for="template_primary_color" translate>TEMPLATE_PRIMARY_COLOR</label>
-      <div class="input-group mb-3">
+      <div class="input-group">
         <select class="custom-select" formControlName="template_primary_color" id="template_primary_color">
           <option *ngFor="let color of templatePrimaryColors" [ngValue]="color.id">{{ color.label }}</option>
         </select>
         <!-- Selected color -->
         <div class="input-group-append px-4 rounded-right"
-             [ngStyle]="{'background-color':
-             templatePrimaryColors[form.controls.template_primary_color.value].color}">
+             [ngStyle]="{'background-color': templatePrimaryColors[themeForm.controls.template_primary_color.value].color}">
         </div>
       </div>
-      <!-- Code Highlight -->
+    </div>
+    <!-- Code Highlight -->
+    <div class="form-group">
       <label for="highlight_theme" translate>CODE_HIGHLIGHT</label>
       <div class="input-group">
         <select class="custom-select" formControlName="highlight_theme" id="highlight_theme">
           <option *ngFor="let theme of highlightThemes" [ngValue]="theme.id">{{ theme.label }}</option>
         </select>
       </div>
-      <!-- Submit -->
-        <button class="btn btn-primary float-right mt-4" translate>SAVE_CHANGES</button>
-    </form>
+    </div>
   </div>
-</div>
+  <!-- Footer -->
+  <div class="card-footer text-right">
+    <!-- Submit -->
+    <button class="btn btn-primary" translate>SAVE_CHANGES</button>
+  </div>
+</form>
