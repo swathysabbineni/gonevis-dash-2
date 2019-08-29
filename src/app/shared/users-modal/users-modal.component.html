@@ -1,0 +1,31 @@
+<!-- Header -->
+<div class="modal-header">
+  <div class="d-flex align-items-center">
+    <h5 class="mb-0 mr-2">Followers</h5>
+    <span class="badge badge-primary text-light" *ngIf="metrics">
+      {{ metrics.metrics.subscriber_count | number}}
+    </span>
+  </div>
+</div>
+
+<!-- body -->
+<div class="modal-body px-0">
+  <table class="table mb-0">
+    <tbody>
+    <tr *ngFor="let subscriber of subscribers">
+      <th>
+        <a class="d-flex" [href]="subscriber.get_absolute_uri">
+          <!-- User logo -->
+          <img class="rounded-circle ml-3 mr-3" [src]="subscriber.media.thumbnail_128x128" [width]="48" alt="Profile logo">
+          <div>
+            <!-- Name -->
+            <h5 class="mb-0">{{ subscriber.name }}</h5>
+            <!-- Username -->
+            <span>@{{ subscriber.username }}</span>
+          </div>
+        </a>
+      </th>
+    </tr>
+    </tbody>
+  </table>
+</div>

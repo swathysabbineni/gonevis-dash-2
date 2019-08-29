@@ -1,3 +1,4 @@
+  modalRef: BsModalRef;
   subscribers: Subscriber[];
               private modalService: UsersModalService) {
     /**
