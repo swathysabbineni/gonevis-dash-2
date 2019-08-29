@@ -1,11 +1,13 @@
 .modal-body {
   .table {
     th {
+      transition: ease-in-out all 0.1s;
       padding: 10px;
       border-top: none;
     }
 
     th:hover {
+      transition: ease-in-out all 0.1s;
       background: #edeef0;
     }
 
