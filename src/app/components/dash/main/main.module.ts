@@ -33,7 +33,7 @@ import { MainComponent } from './main.component';
 })
 export class MainModule {
   constructor() {
-    library.add(faTimes)
+    library.add(faTimes);
     library.add(faComment);
     library.add(faThumbsUp);
     library.add(faEye);
