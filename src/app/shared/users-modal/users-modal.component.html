@@ -7,8 +7,8 @@
     </span>
   </div>
   <!-- Close -->
-  <button class="ml-auto btn btn-link p-0" (click)="modalRef.hide()">
-     <fa-icon [fixedWidth]="true" [icon]="['fas', 'times']"></fa-icon>
+  <button class="ml-auto btn btn-link p-0" (click)="modal.hide()">
+    <fa-icon [fixedWidth]="true" [icon]="['fas', 'times']"></fa-icon>
   </button>
 </div>
 
@@ -20,7 +20,7 @@
       <th>
         <a class="d-flex" [href]="subscriber.get_absolute_uri" target="_blank">
           <!-- User logo -->
-          <img class="rounded-circle ml-3 mr-3" [src]="subscriber.media.thumbnail_128x128" [width]="48" alt="Profile logo">
+          <img class="rounded-circle ml-3 mr-3" [src]="subscriber.media.thumbnail_128x128" [width]="48">
           <div>
             <!-- Name -->
             <h5 class="mb-0">{{ subscriber.name }}</h5>

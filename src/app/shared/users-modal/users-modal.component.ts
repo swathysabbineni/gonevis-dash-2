@@ -18,15 +18,14 @@ export class UsersModalComponent implements OnInit {
    */
   metrics: Metrics;
 
-  modalRef: BsModalRef;
-
   /**
    * List of subscribers
    */
   subscribers: Subscriber[];
 
   constructor(private blogService: BlogService,
-              private modalService: UsersModalService) {
+              private modalService: UsersModalService,
+              public modal: BsModalRef) {
   }
 
   ngOnInit(): void {
