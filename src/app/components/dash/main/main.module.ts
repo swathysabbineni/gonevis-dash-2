@@ -8,7 +8,7 @@ import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { TranslateModule } from '@ngx-translate/core';
-import { BsModalRef, ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap';
 import { NgMathPipesModule } from 'ngx-pipes';
 
 import { MainRoutingModule } from './main-routing.module';
