@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, HostListener, Renderer2 } from '@angular/core';
-import { Params, ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import '@app/components/dash/write/blots/divider.ts';
 import '@app/components/dash/write/blots/embed.ts';
 import '@app/components/dash/write/blots/soundcloud.ts';
@@ -7,14 +8,19 @@ import '@app/components/dash/write/blots/video.ts';
 import '@app/components/dash/write/modules/clipboard.ts';
 import { WriteService } from '@app/components/dash/write/write.service';
 import { EntryStatus } from '@app/enums/entry-status.enum';
+import { ApiResponse } from '@app/interfaces/api-response';
+import { Params } from '@app/interfaces/params';
 import { Entry } from '@app/interfaces/v1/entry';
-import { TagMin } from '@app/interfaces/v1/tag-min';
+import { Tag } from '@app/interfaces/v1/tag';
+import { BlogService } from '@app/services/blog/blog.service';
+import { TranslateService } from '@ngx-translate/core';
 import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
 import { QuillModules } from 'ngx-quill';
 import { Quill, Delta as DeltaInterface, RangeStatic } from 'quill';
 import Delta from 'quill-delta';
 import Op from 'quill/node_modules/quill-delta/dist/Op';
+import { debounceTime } from 'rxjs/operators';
 
 
 @Component({
@@ -28,6 +34,7 @@ export class WriteComponent implements OnInit {
    * Pasted video embed URL
    */
   private static pastedVideoEmbed: string;
+
   /**
    * Current entry ID
    */
@@ -39,10 +46,48 @@ export class WriteComponent implements OnInit {
   private oldEntry: Entry;
 
   /**
+   * Original entry
+   */
+  private oldForm: Params;
+
+  /**
    * Quill instance
    */
   private editor: Quill;
 
+  /**
+   * Entry status
+   */
+  readonly entryStatus = EntryStatus;
+
+  /**
+   * Tag list
+   */
+  tags: Tag[] = [];
+
+  /**
+   * Tag query form
+   */
+  tagQueryForm: FormGroup;
+
+  /**
+   * API loading indicator
+   */
+  loading: boolean;
+
+  /**
+   * Determine whether editing or creating new entry
+   */
+  isEditing: boolean;
+
+  /**
+   * Indicates whether entry changed or not
+   */
+  postChanged: boolean;
+
+  /**
+   * Quill modules
+   */
   options: QuillModules = {
     toolbar: {
       container: [
@@ -70,7 +115,19 @@ export class WriteComponent implements OnInit {
   /**
    * Entry
    */
-  entry: Entry = post;
+  entry: Entry = {
+    title: '',
+    content: '',
+    site: BlogService.currentBlog.id,
+    status: EntryStatus.Draft,
+    tags: [],
+    tag_ids: [],
+  };
+
+  /**
+   * Entry form
+   */
+  form: FormGroup;
 
   /**
    * Validate YouTube url
@@ -112,35 +169,64 @@ export class WriteComponent implements OnInit {
               private rd: Renderer2,
               private router: Router,
               private activatedRoute: ActivatedRoute,
+              private formBuilder: FormBuilder,
+              private translateService: TranslateService,
               private writeService: WriteService) {
   }
 
   ngOnInit(): void {
-    console.log(this.entry);
+    /**
+     * Setup entry form
+     */
+    this.form = this.formBuilder.group({
+      title: ['', Validators.required],
+      content: ['', Validators.required],
+      status: [EntryStatus.Draft],
+      comment_enabled: [false],
+      featured: [false],
+      is_page: [false],
+    });
+    /**
+     * Set up tag query form
+     */
+    this.tagQueryForm = this.formBuilder.group({ query: '' });
+    this.tagQueryForm.get('query').valueChanges.pipe(debounceTime(300)).subscribe((value: string): void => {
+      this.getTags(value);
+    });
+    this.getTags();
     /**
      * Make a copy of entry
      */
-    this.oldEntry = cloneDeep(this.entry);
-    if (this.activatedRoute.firstChild) {
-      /**
-       * Subscribe to current route's params
-       */
-      this.activatedRoute.firstChild.params.subscribe((params: Params): void => {
-        /**
-         * Check entry ID existence
-         */
-        if (params.id) {
-          this.id = params.id;
-          this.writeService.getEntry(params.id).subscribe((data: Entry): void => {
-            this.oldEntry = cloneDeep(data);
-            if (data.entrydraft) {
-              data = data.entrydraft;
-            }
-            this.entry = data;
-          });
-        }
-      });
-    }
+    this.oldEntry = cloneDeep(this.form.value);
+    this.oldForm = cloneDeep(this.form.value);
+    /**
+     * Subscribe to current state's params changes
+     */
+    this.activatedRoute.params.subscribe((params: Params): void => {
+      if (params.id === 'new') {
+        this.isEditing = false;
+      }
+      if (params.id && params.id !== 'new') {
+        this.getEntry(params.id.toString());
+      }
+    });
+  }
+
+  /**
+   * Update form controls
+   *
+   * @param data Entry
+   */
+  private patchForm(data: Entry): void {
+    this.form.patchValue({
+      title: data.title,
+      content: data.content,
+      status: data.status,
+      comment_enabled: data.comment_enabled,
+      featured: data.featured,
+      is_page: data.is_page,
+    });
+    this.oldForm = this.form.value;
   }
 
   /**
@@ -281,7 +367,6 @@ export class WriteComponent implements OnInit {
       });
 
       if (node.data.startsWith('https://soundcloud.com/')) {
-        console.log('s');
         this.writeService.getSoundCloud(node.data).subscribe((data) => {
           console.log(data);
         });
@@ -320,29 +405,56 @@ export class WriteComponent implements OnInit {
     });
   }
 
+  /**
+   * Get entry
+   *
+   * @param id Entry ID
+   */
+  getEntry(id: string): void {
+    this.isEditing = true;
+    this.loading = true;
+    this.id = id;
+    this.writeService.getEntry(id).subscribe((data: Entry): void => {
+      this.oldEntry = cloneDeep(data);
+      if (data.entrydraft) {
+        this.postChanged = true;
+        data = data.entrydraft;
+      }
+      this.entry = data;
+      this.patchForm(data);
+      this.editor['history'].clear();
+    });
+  }
 
   /**
    * Update entry and navigate back to posts/pages
    */
   goBack(): void {
-    let isEqual = equal(this.entry, this.oldEntry);
-    /**
-     * Check equality
-     */
-    if (this.oldEntry.entrydraft) {
-      isEqual = equal(this.entry, this.oldEntry.entrydraft);
-    }
+    const isEqual: boolean = equal(this.form.value, this.oldForm);
     if (!isEqual) {
+      let status: EntryStatus = this.form.get('status').value;
       /**
-       * Check if entry's status is published
+       * Check if entry is published
        */
-      if (this.entry.status === EntryStatus.Published) {
-        delete this.entry.status;
+      if (status === EntryStatus.Published) {
+        status = EntryStatus.UnsavedChanges;
       }
-      this.updateEntry();
-    } else {
+      this.save(status);
     }
     this.router.navigate(['/dash', 'posts']);
+  }
+
+  /**
+   * Save entry
+   *
+   * @param status Status of entry
+   */
+  save(status?: EntryStatus): void {
+    if (this.isEditing) {
+      this.updateEntry(status);
+    } else {
+      this.addEntry(status);
+    }
   }
 
   /**
@@ -350,19 +462,113 @@ export class WriteComponent implements OnInit {
    *
    * @param status Status of entry
    */
-  updateEntry(status?: number): void {
+  updateEntry(status?: EntryStatus): void {
+    this.loading = true;
     this.entry.status = status;
-    this.entry.tags.forEach((tag: TagMin): number => this.entry.tag_ids.push(tag.id));
-    this.writeService.updateEntry(this.id, this.entry).subscribe((data: Entry): void => {
+    const payload: Params = this.form.value;
+    payload.id = this.id;
+    payload.site = BlogService.currentBlog.id;
+    if (status !== undefined) {
+      payload.status = status;
+    }
+    /**
+     * Check status before updating
+     */
+    if (status === EntryStatus.UnsavedChanges) {
+      delete payload.status;
+    }
+    this.writeService.updateEntry(payload).subscribe((data: Entry): void => {
+      this.loading = false;
       this.entry = data;
       this.oldEntry = cloneDeep(data);
+      this.postChanged = !!data.entrydraft;
+      if (data.entrydraft) {
+        data = data.entrydraft;
+      }
+      this.patchForm(data);
+    }, (): void => {
+      this.loading = false;
     });
   }
 
   /**
    * Add Entry
+   *
+   * @param status Status of entry
    */
-  addEntry(): void {
+  addEntry(status?: EntryStatus): void {
+    if (this.form.get('title').value.trim() === '') {
+      this.form.get('title').setValue(`Untitled ${new Date().toDateString()}`);
+    }
+    const payload: Params = this.form.value;
+    payload.site = BlogService.currentBlog.id;
+    if (status !== undefined) {
+      payload.status = status;
+    }
+    /**
+     * Check status before updating
+     */
+    if (status === EntryStatus.UnsavedChanges) {
+      delete payload.status;
+    }
+    this.writeService.addEntry(this.form.value).subscribe((data: Entry): void => {
+      this.loading = false;
+      this.router.navigate(['../', data.id], { relativeTo: this.activatedRoute });
+    }, (): void => {
+      this.loading = false;
+    });
+  }
 
+  /**
+   * Revert changes
+   */
+  revertChanges(): void {
+    if (confirm(this.translateService.instant('DISCARD_CHANGES_PROMPT')) === false) {
+      return;
+    }
+    this.patchForm(this.oldEntry);
+    this.oldEntry.entrydraft = null;
+    this.updateEntry();
+  }
+
+  /**
+   * Get tags
+   *
+   * @param search Search text
+   */
+  getTags(search: string = ''): void {
+    this.writeService.getTags(search).subscribe((data: ApiResponse<Tag>): void => {
+      this.tags = data.results;
+    });
+  }
+
+  /**
+   * Add tag
+   *
+   * @param tag Tag to add
+   */
+  addTag(tag: Tag): void {
+    this.entry.tags.unshift(tag);
+    if (this.tagQueryForm.get('query').value !== '') {
+      this.tagQueryForm.get('query').reset('');
+    }
+  }
+
+  /**
+   * Remove tag from entry
+   *
+   * @param tagId Tag ID
+   */
+  removeTag(tagId: string): void {
+    this.entry.tags.splice(this.entry.tags.findIndex((tag: Tag): boolean => tag.id === tagId), 1);
+  }
+
+  /**
+   * @param tagId Tag ID
+   *
+   * @return Determine whether entry has given tag or not
+   */
+  isTagSelected(tagId: string): boolean {
+    return this.entry.tags.some((tag: Tag): boolean => tag.id === tagId);
   }
 }
