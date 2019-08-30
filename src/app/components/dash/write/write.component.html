@@ -1,7 +1,41 @@
-<button (click)="updateEntry()">Update</button>
+<button (click)="save(entryStatus.Published)" *ngIf="isEditing">
+  <span *ngIf="form.controls.status.value === entryStatus.Draft">Publish</span>
+  <span *ngIf="form.controls.status.value === entryStatus.Published">Update</span>
+</button>
+<button (click)="addEntry(entryStatus.Published)" *ngIf="!isEditing">Publish</button>
+<button (click)="save()">
+  <span *ngIf="isEditing">Update</span>
+  <span *ngIf="!isEditing">Submit</span>
+</button>
 <button (click)="goBack()">BACK</button>
-<input type="text" [(ngModel)]="entry.title" [required]="true">
-<quill-editor [(ngModel)]="entry.content"
-              [modules]="options"
-              placeholder="Write your article here..."
-              scrollingContainer="html, body" (onEditorCreated)="onEditorInit($event)"></quill-editor>
+<button (click)="save(entryStatus.UnsavedChanges)">UN SAVED</button>
+<button *ngIf="postChanged" (click)="revertChanges()">Revert changes</button>
+<!-- Tags -->
+<button type="button"
+        [popover]="popTemplate" popoverTitle="Tags">
+  Tags
+</button>
+<ng-template #popTemplate>
+  <div class="tags-wrapper">
+    <!-- Search form -->
+    <form [formGroup]="tagQueryForm">
+      <input type="text" placeholder="Search tags" formControlName="query">
+    </form>
+    <!-- Tag list -->
+    <p *ngFor="let tag of tags" class="d-block mb-1"
+       [class.bg-primary]="isTagSelected(tag.id)"
+       (click)="isTagSelected(tag.id) ? removeTag(tag.id) : addTag(tag)">
+      #{{ tag.slug }}
+    </p>
+  </div>
+</ng-template>
+<form [formGroup]="form">
+  <!-- Title -->
+  <input type="text" formControlName="title" placeholder="Title" [required]="true">
+  <!-- Editor -->
+  <quill-editor [formControl]="form.controls['content']"
+                [modules]="options"
+                placeholder="Write your article here..."
+                scrollingContainer="html, body" (onEditorCreated)="onEditorInit($event)"></quill-editor>
+</form>
+
