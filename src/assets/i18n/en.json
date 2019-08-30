@@ -90,5 +90,6 @@
   "BLOG_DESCRIPTION": "Blog Description",
   "ADDRESS": "Address",
   "HELP_TEXT_BLOG_DESCRIPTION": "Explain to your audience what this blog is about.",
-  "COLLABORATING": "Collaborating"
+  "COLLABORATING": "Collaborating",
+  "DISCARD_CHANGES_PROMPT": "All the changes you have not published will be lost, are you sure"
 }
