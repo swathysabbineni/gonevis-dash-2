@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PopoverModule } from 'ngx-bootstrap';
 import { QuillModule } from 'ngx-quill';
 
 import { WriteRoutingModule } from './write-routing.module';
@@ -13,8 +14,10 @@ import { WriteComponent } from './write.component';
   imports: [
     CommonModule,
     WriteRoutingModule,
-    QuillModule.forRoot(),
     FormsModule,
+    ReactiveFormsModule,
+    QuillModule.forRoot(),
+    PopoverModule.forRoot(),
   ],
 })
 export class WriteModule {
