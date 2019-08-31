@@ -5,6 +5,7 @@ import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
 import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Template } from '@app/interfaces/v1/template';
+import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogService } from '@app/services/blog/blog.service';
 
 @Component({
@@ -51,6 +52,12 @@ export class SettingsAppearanceComponent implements OnInit {
    */
   themeLoading: boolean;
 
+  /**
+   * Template config data
+   */
+  templateConfig: TemplateConfig;
+
+
   constructor(private formBuilder: FormBuilder,
               private blogService: BlogService) {
   }
@@ -67,6 +74,12 @@ export class SettingsAppearanceComponent implements OnInit {
      * Get settings
      */
     this.getSettings();
+    /**
+     * Load template config
+     */
+    this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
+      this.templateConfig = data.template_config;
+    });
     /**
      * Get templates
      */

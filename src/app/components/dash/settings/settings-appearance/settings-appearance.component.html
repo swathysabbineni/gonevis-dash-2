@@ -47,6 +47,22 @@
   </div>
 </div>
 
+<!-- Blog theme -->
+<div class="card mb-3">
+  <!-- Header -->
+  <div class="card-header">Blog Theme
+    <h6 class="float-right badge badge-primary text-light">{{ templateConfig.name | titlecase }}</h6>
+  </div>
+  <!-- body -->
+  <div class="card-body shadow-sm">
+    <carousel class="shadow-lg">
+      <slide *ngFor="let template of templates">
+        <img [src]="template.media.screen_shot" alt="first slide" style="display: block; width: 100%;">
+      </slide>
+    </carousel>
+  </div>
+</div>
+
 <!-- Theme -->
 <form class="card mb-3" [formGroup]="themeForm" (ngSubmit)="submitSettings()">
   <!-- Header -->

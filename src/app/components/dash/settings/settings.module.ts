@@ -6,6 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateModule } from '@ngx-translate/core';
+import { CarouselModule } from 'ngx-bootstrap';
 
 import { SettingsAdvancedComponent } from './settings-advanced/settings-advanced.component';
 import { SettingsAppearanceComponent } from './settings-appearance/settings-appearance.component';
@@ -32,6 +33,7 @@ import { SettingsComponent } from './settings.component';
     TranslateModule.forChild(),
     SettingsRoutingModule,
     FontAwesomeModule,
+    CarouselModule,
   ],
 })
 export class SettingsModule {
