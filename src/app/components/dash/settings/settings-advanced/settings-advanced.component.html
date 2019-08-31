@@ -1,19 +1,17 @@
 <form class="card" [formGroup]="form" (ngSubmit)="submit()">
   <!-- Header -->
-  <div class="card-header">Advanced</div>
+  <div class="card-header" translate>ADVANCED</div>
   <!-- Body -->
   <div class="card-body">
     <!-- Meta description -->
     <div class="form-group">
-      <label for="meta_description">Meta Description</label>
+      <label for="meta_description" translate>META_DESCRIPTION</label>
       <input class="form-control" formControlName="meta_description" type="text" id="meta_description">
-      <p class="font-italic">
-        Meta Description is used by some search engines to improve your blog visibility in search result.
-      </p>
+      <p class="font-italic" translate>META_DESCRIPTION_ABOUT</p>
     </div>
     <!-- Number of posts per page -->
     <div class="form-group">
-      <label for="paginate_by">Number of Posts Per Page</label>
+      <label for="paginate_by" translate>PAGINATE</label>
       <select class="custom-select" formControlName="paginate_by" id="paginate_by">
         <option *ngFor="let number of postPerPage" [ngValue]="number + 1">{{ number + 1 }}</option>
       </select>

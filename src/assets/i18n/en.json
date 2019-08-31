@@ -127,5 +127,8 @@
   "SELECT": "Select",
   "AUTHOR": "Author",
   "PREVIEW": "Preview",
+  "META_DESCRIPTION": "Meta Description",
+  "META_DESCRIPTION_ABOUT": "Meta Description is used by some search engines to improve your blog visibility in search result.",
+  "PAGINATE": "Number Of Posts Per Page.",
   "COLLABORATING": "Collaborating"
 }
