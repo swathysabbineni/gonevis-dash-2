@@ -4,7 +4,7 @@ export interface TemplateConfig {
   author: string;
   fields: {
     [fieldName: string]: {
-      type: string;
+      type: 'string' | 'boolean';
       value: boolean;
       help_text: string;
       verbose_name: string;

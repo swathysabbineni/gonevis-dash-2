@@ -78,8 +78,7 @@
         </select>
         <!-- Selected color -->
         <div class="input-group-append px-4 rounded-right"
-             [ngStyle]="{'background-color':
-             templatePrimaryColors[themeForm.controls.template_primary_color.value].color}">
+             [ngStyle]="{'background-color': getCurrentPrimaryColor()}">
         </div>
       </div>
     </div>
@@ -99,3 +98,26 @@
     <button class="btn btn-primary" translate>SAVE_CHANGES</button>
   </div>
 </form>
+
+<!-- Template config (theme options) -->
+<div class="card mb-3">
+  <!-- Header -->
+  <div class="card-header" translate>THEME_OPTIONS</div>
+  <!-- Body -->
+  <div class="card-body">
+    <!-- Fields -->
+    <div class="form-group" *ngFor="let field of templateConfig.fields | keyvalue">
+      <!-- Boolean field (switch/checkbox) -->
+      <div *ngIf="field.value.type === 'boolean'" class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" [id]="field.key">
+        <label class="custom-control-label" [for]="field.key">{{ field.value.verbose_name }}</label>
+        <small class="form-text text-muted">{{ field.value.help_text }}</small>
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <div class="card-footer text-right">
+    <!-- Submit -->
+    <button class="btn btn-primary" translate>SAVE_CHANGES</button>
+  </div>
+</div>

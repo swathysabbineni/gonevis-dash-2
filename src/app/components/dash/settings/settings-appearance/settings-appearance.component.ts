@@ -53,10 +53,9 @@ export class SettingsAppearanceComponent implements OnInit {
   themeLoading: boolean;
 
   /**
-   * Template config data
+   * Current blog theme and its config
    */
   templateConfig: TemplateConfig;
-
 
   constructor(private formBuilder: FormBuilder,
               private blogService: BlogService) {
@@ -86,6 +85,10 @@ export class SettingsAppearanceComponent implements OnInit {
     this.blogService.getTemplates().subscribe((data: { templates: Template[] }): void => {
       this.templates = data.templates;
     });
+    /**
+     * Get current theme and config
+     */
+    this.getTemplateConfig();
   }
 
   /**
@@ -107,6 +110,13 @@ export class SettingsAppearanceComponent implements OnInit {
   }
 
   /**
+   * @returns Current template primary color (used for view)
+   */
+  getCurrentPrimaryColor(): string {
+    return this.templatePrimaryColors[this.themeForm.controls.template_primary_color.value].color;
+  }
+
+  /**
    * Update theme
    */
   submitSettings(payload: Params = this.themeForm.value): void {
@@ -114,6 +124,15 @@ export class SettingsAppearanceComponent implements OnInit {
     this.blogService.updateSettings(payload).subscribe((): void => {
       this.themeLoading = false;
       this.getSettings();
+    });
+  }
+
+  /**
+   * Get blog theme and its config
+   */
+  getTemplateConfig(): void {
+    this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
+      this.templateConfig = data.template_config;
     });
   }
 }
