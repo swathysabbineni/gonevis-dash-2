@@ -14,7 +14,7 @@ export class SettingsAdvancedComponent implements OnInit {
   /**
    * Advanced form
    */
-  form: FormGroup;
+  advanceForm: FormGroup;
 
   /**
    * Blog settings data
@@ -38,9 +38,13 @@ export class SettingsAdvancedComponent implements OnInit {
     /**
      * Setup advanced form
      */
-    this.form = this.formBuilder.group({
+    this.advanceForm = this.formBuilder.group({
       meta_description: [''],
       paginate_by: [''],
+      commenting: [null],
+      voting: [null],
+      show_views_count: [null],
+      search_engine_visibility: [null],
     });
     /**
      * Get blog settings
@@ -59,9 +63,13 @@ export class SettingsAdvancedComponent implements OnInit {
       /**
        * Set up the theme form with default values
        */
-      this.form.patchValue({
+      this.advanceForm.patchValue({
         meta_description: this.settings.meta_description,
         paginate_by: this.settings.paginate_by,
+        commenting: this.settings.commenting,
+        voting: this.settings.voting,
+        show_views_count: this.settings.show_views_count,
+        search_engine_visibility: this.settings.search_engine_visibility,
       });
     });
   }
@@ -69,7 +77,7 @@ export class SettingsAdvancedComponent implements OnInit {
   /**
    * Update blog settings
    */
-  submit(payload: Params = this.form.value): void {
+  submit(payload: Params = this.advanceForm.value): void {
     this.advancedLoading = true;
     this.blogService.updateSettings(payload).subscribe((): void => {
       this.advancedLoading = false;

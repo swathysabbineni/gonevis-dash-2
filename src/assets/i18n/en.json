@@ -130,5 +130,9 @@
   "META_DESCRIPTION": "Meta Description",
   "META_DESCRIPTION_ABOUT": "Meta Description is used by some search engines to improve your blog visibility in search result.",
   "PAGINATE": "Number Of Posts Per Page.",
+  "ALLOW_COMMENTING": "Allow visitors to comment on my posts.",
+  "ALLOW-VOTING": "Allow visitors to vote on my posts.",
+  "ALLOW_SHOW_VISITED": "Show how many times my posts have been visited.",
+  "ALLOW_SEARCH_ENGINE_DISCOVER_BLOG": "Let search engine discover my blog.",
   "COLLABORATING": "Collaborating"
 }
