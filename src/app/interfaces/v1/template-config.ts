@@ -1,13 +1,8 @@
+import { TemplateConfigFields } from '@app/interfaces/v1/template-config-fields';
+
 export interface TemplateConfig {
   url: string;
   name: string;
   author: string;
-  fields: {
-    [fieldName: string]: {
-      type: 'string' | 'boolean';
-      value: boolean;
-      help_text: string;
-      verbose_name: string;
-    };
-  };
+  fields: TemplateConfigFields;
 }
