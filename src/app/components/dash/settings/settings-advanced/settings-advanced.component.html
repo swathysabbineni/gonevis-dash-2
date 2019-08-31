@@ -1,1 +1,16 @@
-<p>settings-advanced works!</p>
+<form class="card" [formGroup]="form" (ngSubmit)="submit()">
+  <!-- Header -->
+  <div class="card-header">Advanced</div>
+  <!-- Body -->
+  <div class="card-body">
+    <div class="form-group">
+      <label for="meta_description">Meta Description</label>
+      <input class="form-control" formControlName="meta_description" type="text" id="meta_description">
+    </div>
+  </div>
+  <!-- Footer -->
+  <div class="card-footer text-right">
+    <!-- Submit -->
+    <button class="btn btn-primary" translate>SAVE_CHANGES</button>
+  </div>
+</form>
