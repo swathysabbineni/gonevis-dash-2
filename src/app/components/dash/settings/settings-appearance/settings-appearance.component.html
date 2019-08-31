@@ -88,7 +88,7 @@
   <!-- Header -->
   <div class="card-header" translate>THEME_OPTIONS</div>
   <!-- Body -->
-  <div class="card-body">
+  <div class="card-body" *ngIf="templateConfig">
     <!-- Fields -->
     <div class="form-group" *ngFor="let field of templateConfig.fields | keyvalue">
       <!-- Boolean field (switch/checkbox) -->
