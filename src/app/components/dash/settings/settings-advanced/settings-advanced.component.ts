@@ -22,6 +22,11 @@ export class SettingsAdvancedComponent implements OnInit {
   settings: BlogSettings;
 
   /**
+   * Number of Posts Per Page
+   */
+  postPerPage = Array.from(Array(25).keys());
+
+  /**
    * Advanced form API loading indicator
    */
   advancedLoading: boolean;
@@ -35,6 +40,7 @@ export class SettingsAdvancedComponent implements OnInit {
      */
     this.form = this.formBuilder.group({
       meta_description: [''],
+      paginate_by: [''],
     });
     /**
      * Get blog settings
@@ -55,6 +61,7 @@ export class SettingsAdvancedComponent implements OnInit {
        */
       this.form.patchValue({
         meta_description: this.settings.meta_description,
+        paginate_by: this.settings.paginate_by,
       });
     });
   }
@@ -69,5 +76,4 @@ export class SettingsAdvancedComponent implements OnInit {
       this.getSettings();
     });
   }
-
 }

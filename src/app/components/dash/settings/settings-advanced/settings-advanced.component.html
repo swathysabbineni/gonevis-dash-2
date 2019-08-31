@@ -11,6 +11,13 @@
         Meta Description is used by some search engines to improve your blog visibility in search result.
       </p>
     </div>
+    <!-- Number of posts per page -->
+    <div class="form-group">
+      <label for="paginate_by">Number of Posts Per Page</label>
+      <select class="custom-select" formControlName="paginate_by" id="paginate_by">
+        <option *ngFor="let number of postPerPage">{{ number }}</option>
+      </select>
+    </div>
   </div>
   <!-- Footer -->
   <div class="card-footer text-right">
