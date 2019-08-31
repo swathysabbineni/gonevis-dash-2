@@ -57,6 +57,11 @@ export class SettingsAppearanceComponent implements OnInit {
    */
   templateConfig: TemplateConfig;
 
+  /**
+   * Current blog template config API loading indicator
+   */
+  templateConfigLoading: boolean;
+
   constructor(private formBuilder: FormBuilder,
               private blogService: BlogService) {
   }
@@ -125,7 +130,22 @@ export class SettingsAppearanceComponent implements OnInit {
    * Get blog theme and its config
    */
   getTemplateConfig(): void {
+    this.templateConfigLoading = true;
     this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
+      this.templateConfigLoading = false;
+      this.templateConfig = data.template_config;
+    });
+  }
+
+  /**
+   * Update blog theme configs
+   */
+  updateTemplateConfig(): void {
+    this.templateConfigLoading = true;
+    this.blogService.setTemplateConfig(
+      this.templateConfig.fields,
+    ).subscribe((data: { template_config: TemplateConfig }) => {
+      this.templateConfigLoading = false;
       this.templateConfig = data.template_config;
     });
   }

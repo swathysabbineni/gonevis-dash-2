@@ -93,15 +93,15 @@
     <div class="form-group" *ngFor="let field of templateConfig.fields | keyvalue">
       <!-- Boolean field (switch/checkbox) -->
       <div *ngIf="field.value.type === 'boolean'" class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" [id]="field.key">
+        <input type="checkbox" class="custom-control-input" [id]="field.key" [(ngModel)]="field.value.value">
         <label class="custom-control-label" [for]="field.key">{{ field.value.verbose_name }}</label>
         <small class="form-text text-muted">{{ field.value.help_text }}</small>
       </div>
     </div>
   </div>
   <!-- Footer -->
-  <div class="card-footer text-right">
+  <div class="card-footer text-right" (click)="updateTemplateConfig()">
     <!-- Submit -->
-    <button class="btn btn-primary" translate>SAVE_CHANGES</button>
+    <button class="btn btn-primary" [disabled]="templateConfigLoading" translate>SAVE_CHANGES</button>
   </div>
 </div>
