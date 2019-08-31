@@ -128,8 +128,7 @@
           <!-- Subscribers -->
           <div class="list-group-item d-flex">
             <span translate>FOLLOWERS</span>
-            <button class="btn ml-auto badge badge-primary text-light" *ngIf="metrics"
-                    (click)="showSubscribers()">
+            <button class="btn ml-auto badge badge-primary text-light" *ngIf="metrics" (click)="showSubscribers()">
               {{ metrics.metrics.subscriber_count | number }}
             </button>
           </div>
