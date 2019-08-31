@@ -9,6 +9,7 @@ import { Metrics } from '@app/interfaces/v1/metrics';
 import { Subscriber } from '@app/interfaces/v1/subscriber';
 import { Template } from '@app/interfaces/v1/template';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
+import { TemplateConfigFields } from '@app/interfaces/v1/template-config-fields';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { ApiService } from '@app/services/api/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -111,6 +112,19 @@ export class BlogService {
   getTemplateConfig(): Observable<{ template_config: TemplateConfig }> {
     return this.http.get<{ template_config: TemplateConfig }>(
       `${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/template-config`,
+    );
+  }
+
+  /**
+   * Update current template config
+   *
+   * @param fields Template config data
+   */
+  setTemplateConfig(fields: TemplateConfigFields): Observable<{ template_config: TemplateConfig }> {
+    return this.http.put<{ template_config: TemplateConfig }>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-template-config/`, {
+        config_fields: fields,
+      },
     );
   }
 
