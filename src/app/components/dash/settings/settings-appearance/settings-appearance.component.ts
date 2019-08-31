@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
@@ -7,6 +7,7 @@ import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Template } from '@app/interfaces/v1/template';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogService } from '@app/services/blog/blog.service';
+import { CarouselComponent } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-settings-appearance',
@@ -43,6 +44,12 @@ export class SettingsAppearanceComponent implements OnInit {
   templates: Template[];
 
   /**
+   * Current viewing theme index
+   */
+  @ViewChild('themeCarousel', { static: false })
+  themeCarousel: CarouselComponent;
+
+  /**
    * Theme form
    */
   themeForm: FormGroup;
@@ -62,7 +69,8 @@ export class SettingsAppearanceComponent implements OnInit {
    */
   templateConfigLoading: boolean;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private changeDetectorRef: ChangeDetectorRef,
+              private formBuilder: FormBuilder,
               private blogService: BlogService) {
   }
 
@@ -82,13 +90,19 @@ export class SettingsAppearanceComponent implements OnInit {
      * Load template config
      */
     this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
-      this.templateConfig = data.template_config;
-    });
-    /**
-     * Get templates
-     */
-    this.blogService.getTemplates().subscribe((data: { templates: Template[] }): void => {
-      this.templates = data.templates;
+      /**
+       * Get templates
+       */
+      this.blogService.getTemplates().subscribe((response: { templates: Template[] }): void => {
+        this.templates = response.templates;
+        /**
+         * Set current viewing theme
+         */
+        this.changeDetectorRef.detectChanges();
+        this.themeCarousel.activeSlide = this.templates.findIndex(
+          theme => this.templateConfig.name === theme.name,
+        );
+      });
     });
     /**
      * Get current theme and config
@@ -119,6 +133,24 @@ export class SettingsAppearanceComponent implements OnInit {
    */
   getCurrentPrimaryColor(): string {
     return this.templatePrimaryColors[this.themeForm.controls.template_primary_color.value].color;
+  }
+
+  /**
+   * @returns Current viewing theme
+   */
+  getThemeViewing(): Template {
+    return this.templates[this.themeCarousel.activeSlide];
+  }
+
+  /**
+   * Set blog template
+   */
+  setTemplate() {
+    this.themeLoading = true;
+    this.blogService.setTemplate(this.getThemeViewing().id).subscribe((): void => {
+      this.themeLoading = false;
+      this.templateConfig = this.getThemeViewing().config;
+    });
   }
 
   /**
