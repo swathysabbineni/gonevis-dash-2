@@ -15,7 +15,7 @@
     <div class="form-group">
       <label for="paginate_by">Number of Posts Per Page</label>
       <select class="custom-select" formControlName="paginate_by" id="paginate_by">
-        <option *ngFor="let number of postPerPage">{{ number }}</option>
+        <option *ngFor="let number of postPerPage" [ngValue]="number + 1">{{ number + 1 }}</option>
       </select>
     </div>
   </div>
