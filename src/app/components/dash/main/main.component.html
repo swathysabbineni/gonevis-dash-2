@@ -8,7 +8,7 @@
       <div class="card shadow-sm mb-4">
         <!-- Header -->
         <div class="card-header">
-          <a class="init" routerLink="/dash/posts" translate>POSTS</a>
+          <a class="init" routerLink="../../posts" translate>POSTS</a>
           <span class="float-right badge badge-primary text-light" *ngIf="metrics">
             {{ metrics.metrics.published_entry_count | number}}
           </span>
@@ -47,7 +47,7 @@
       <div class="card shadow-sm">
         <!-- Header -->
         <div class="card-header">
-          <a class="init" routerLink="/dash/comments" translate>COMMENTS</a>
+          <a class="init" routerLink="../../comments" translate>COMMENTS</a>
           <span class="float-right badge badge-primary text-light" *ngIf="metrics">
             {{ metrics.metrics.comment_count | number }}
           </span>
@@ -96,7 +96,9 @@
 
       <!-- Comment overview -->
       <div class="card shadow-sm mb-4">
-        <div class="card-header" translate>COMMENT_OVERVIEW</div>
+        <div class="card-header">
+          <a routerLink="../../comments" translate>COMMENT_OVERVIEW</a>
+        </div>
         <div class="list-group">
           <!-- All comments -->
           <div class="list-group-item d-flex">
@@ -123,19 +125,23 @@
 
       <!-- Blog overview -->
       <div class="card shadow-sm mb-4">
-        <div class="card-header" translate>BLOG_OVERVIEW</div>
+        <div class="card-header">
+          <a routerLink="../../settings/general" translate>BLOG_OVERVIEW</a>
+        </div>
         <div class="list-group">
           <!-- Subscribers -->
           <div class="list-group-item d-flex">
             <span translate>FOLLOWERS</span>
-            <button class="btn ml-auto badge badge-primary text-light" *ngIf="metrics" (click)="showSubscribers()">
+            <button class="ml-auto btn btn-sm btn-primary py-0" *ngIf="metrics" (click)="showSubscribers()">
               {{ metrics.metrics.subscriber_count | number }}
             </button>
           </div>
           <!-- Theme and layout -->
           <div class="list-group-item d-flex">
             <span translate>THEME_AND_LAYOUT</span>
-            <a class="ml-auto init" routerLink="/dash/settings/appearance" *ngIf="templateConfig">{{ templateConfig.name | titlecase }}</a>
+            <a class="ml-auto btn btn-sm btn-primary py-0" routerLink="../../appearance" *ngIf="templateConfig">
+              {{ templateConfig.name | uppercase }}
+            </a>
           </div>
         </div>
       </div>
@@ -169,7 +175,7 @@
       <!-- Team -->
       <div class="card shadow-sm mb-4">
         <div class="card-header">
-          <a routerLink="/dash/team" translate>TEAM</a>
+          <a routerLink="../../team" translate>TEAM</a>
         </div>
         <div class="list-group">
           <!-- Team members -->
