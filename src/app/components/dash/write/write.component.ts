@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener, Renderer2, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import '@app/components/dash/write/blots/divider.ts';
@@ -28,7 +28,7 @@ import { debounceTime } from 'rxjs/operators';
   templateUrl: './write.component.html',
   styleUrls: ['./write.component.scss'],
 })
-export class WriteComponent implements OnInit {
+export class WriteComponent implements OnInit, OnDestroy {
 
   /**
    * Pasted video embed URL
@@ -596,5 +596,9 @@ export class WriteComponent implements OnInit {
    */
   isTagSelected(tagId: string): boolean {
     return this.entry.tags.some((tag: Tag): boolean => tag.id === tagId);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.autoSaveInterval);
   }
 }
