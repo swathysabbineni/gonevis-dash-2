@@ -33,8 +33,8 @@ export class AuthInterceptorService implements HttpInterceptor {
         // A client-side or network error occurred. Handle it accordingly.
         console.error('An error occurred:', error.error.message);
       } else {
-        // Sign out if 401 response
-        if (error.status === 401) {
+        // Sign out if 403 response
+        if (error.status === 403) {
           this.authService.signOut();
         }
         // The backend returned an unsuccessful response code.
