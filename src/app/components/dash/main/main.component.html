@@ -135,7 +135,7 @@
           <!-- Theme and layout -->
           <div class="list-group-item d-flex">
             <span translate>THEME_AND_LAYOUT</span>
-            <span class="ml-auto" *ngIf="templateConfig">{{ templateConfig.name | titlecase }}</span>
+            <a class="ml-auto init" routerLink="/dash/settings/appearance" *ngIf="templateConfig">{{ templateConfig.name | titlecase }}</a>
           </div>
         </div>
       </div>
