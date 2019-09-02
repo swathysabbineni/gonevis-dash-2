@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HelpComponent } from '@app/components/dash/help/help.component';
+
+import { HelpComponent } from './help.component';
 
 const routes: Routes = [{
   path: '',
