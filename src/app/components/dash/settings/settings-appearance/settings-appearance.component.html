@@ -12,9 +12,9 @@
           <img class="mr-3 rounded" *ngIf="settings && settings.media.logo"
                [src]="settings.media.logo.thumbnail_128x128" [width]="64">
           <div class="media-body">
-            <h5 class="mt-0" translate>Blog Logo</h5>
+            <h5 class="mt-0" translate>BLOG_LOGO</h5>
             <div class="btn-group btn-group-sm">
-              <button class="btn btn-sm btn-secondary" translate>Select</button>
+              <button class="btn btn-sm btn-secondary" translate>SELECT</button>
               <!-- Delete logo-->
               <button class="btn btn-sm btn-outline-secondary" *ngIf="settings && settings.media.logo"
                       (click)="submitSettings({ logo: null })">
@@ -31,7 +31,7 @@
           <img class="mr-3 rounded" *ngIf="settings && settings.media.cover_image"
                [src]="settings.media.cover_image.thumbnail_128x128" [width]="64">
           <div class="media-body">
-            <h5 class="mt-0">BLOG_COVER</h5>
+            <h5 class="mt-0" translate>BLOG_COVER</h5>
             <div class="btn-group btn-group-sm">
               <button class="btn btn-sm btn-secondary">SELECT</button>
               <!-- Delete cover -->
