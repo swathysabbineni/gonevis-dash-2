@@ -56,6 +56,16 @@ export class WriteComponent implements OnInit {
   private editor: Quill;
 
   /**
+   * Auto save interval
+   */
+  private autoSaveInterval: number;
+
+  /**
+   * Auto saving indicator
+   */
+  private autoSave: boolean;
+
+  /**
    * Entry status
    */
   readonly entryStatus = EntryStatus;
@@ -148,6 +158,22 @@ export class WriteComponent implements OnInit {
     }
 
     return isValid;
+  }
+
+  private initAutoSave(): void {
+    // Auto save every 10 seconds
+    this.autoSaveInterval = setInterval((): void => {
+      // Check if already updating
+      if (!this.loading) {
+        if (this.form.get('content').value) {
+          // Check if entry has an unsaved changes
+          if (!equal(this.oldForm, this.form.value)) {
+            this.autoSave = true;
+            this.save();
+          }
+        }
+      }
+    }, 10000);
   }
 
   // Host listener which will listen to 'message' event
@@ -415,14 +441,16 @@ export class WriteComponent implements OnInit {
     this.loading = true;
     this.id = id;
     this.writeService.getEntry(id).subscribe((data: Entry): void => {
+      this.loading = false;
       this.oldEntry = cloneDeep(data);
       if (data.entrydraft) {
         this.postChanged = true;
         data = data.entrydraft;
       }
-      this.entry = data;
       this.patchForm(data);
       this.editor['history'].clear();
+      // Initial auto-save
+      this.initAutoSave();
     });
   }
 
@@ -430,16 +458,9 @@ export class WriteComponent implements OnInit {
    * Update entry and navigate back to posts/pages
    */
   goBack(): void {
-    const isEqual: boolean = equal(this.form.value, this.oldForm);
-    if (!isEqual) {
-      let status: EntryStatus = this.form.get('status').value;
-      /**
-       * Check if entry is published
-       */
-      if (status === EntryStatus.Published) {
-        status = EntryStatus.UnsavedChanges;
-      }
-      this.save(status);
+    if (!equal(this.form.value, this.oldForm)) {
+      this.autoSave = true;
+      this.save();
     }
     this.router.navigate(['/dash', 'posts']);
   }
@@ -457,6 +478,7 @@ export class WriteComponent implements OnInit {
     }
   }
 
+
   /**
    * Update entry
    *
@@ -464,7 +486,6 @@ export class WriteComponent implements OnInit {
    */
   updateEntry(status?: EntryStatus): void {
     this.loading = true;
-    this.entry.status = status;
     const payload: Params = this.form.value;
     payload.id = this.id;
     payload.site = BlogService.currentBlog.id;
@@ -474,18 +495,23 @@ export class WriteComponent implements OnInit {
     /**
      * Check status before updating
      */
-    if (status === EntryStatus.UnsavedChanges) {
+    if (this.autoSave) {
       delete payload.status;
     }
     this.writeService.updateEntry(payload).subscribe((data: Entry): void => {
       this.loading = false;
-      this.entry = data;
-      this.oldEntry = cloneDeep(data);
-      this.postChanged = !!data.entrydraft;
-      if (data.entrydraft) {
-        data = data.entrydraft;
+      if (!this.autoSave) {
+        this.oldEntry = cloneDeep(data);
+        this.postChanged = false;
+        if (data.entrydraft) {
+          data = data.entrydraft;
+        }
+        this.patchForm(data);
+      } else {
+        this.postChanged = true;
+        this.autoSave = false;
+        this.oldForm = this.form.value;
       }
-      this.patchForm(data);
     }, (): void => {
       this.loading = false;
     });
