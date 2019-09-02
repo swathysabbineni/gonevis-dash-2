@@ -12,19 +12,19 @@ import { BlogService } from '@app/services/blog/blog.service';
 export class SettingsAdvancedComponent implements OnInit {
 
   /**
+   * Number of Posts Per Page
+   */
+  readonly postPerPage: void[] = new Array<void>(24);
+
+  /**
    * Advanced form
    */
-  advanceForm: FormGroup;
+  advancedForm: FormGroup;
 
   /**
    * Blog settings data
    */
   settings: BlogSettings;
-
-  /**
-   * Number of Posts Per Page
-   */
-  postPerPage = Array.from(Array(25).keys());
 
   /**
    * Advanced form API loading indicator
@@ -38,7 +38,7 @@ export class SettingsAdvancedComponent implements OnInit {
     /**
      * Setup advanced form
      */
-    this.advanceForm = this.formBuilder.group({
+    this.advancedForm = this.formBuilder.group({
       meta_description: [''],
       paginate_by: [''],
       commenting: [null],
@@ -63,7 +63,7 @@ export class SettingsAdvancedComponent implements OnInit {
       /**
        * Set up the theme form with default values
        */
-      this.advanceForm.patchValue({
+      this.advancedForm.patchValue({
         meta_description: this.settings.meta_description,
         paginate_by: this.settings.paginate_by,
         commenting: this.settings.commenting,
@@ -77,11 +77,10 @@ export class SettingsAdvancedComponent implements OnInit {
   /**
    * Update blog settings
    */
-  submit(payload: Params = this.advanceForm.value): void {
+  submit(payload: Params = this.advancedForm.value): void {
     this.advancedLoading = true;
     this.blogService.updateSettings(payload).subscribe((): void => {
       this.advancedLoading = false;
-      this.getSettings();
     });
   }
 }
