@@ -1,0 +1,9 @@
+@import "~src/assets/styles/variables";
+
+.card {
+  .card-body {
+    .border-primary:hover {
+      background: #edeef0;
+    }
+  }
+}
