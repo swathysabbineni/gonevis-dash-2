@@ -7,7 +7,7 @@ import { BlogService } from '@app/services/blog/blog.service';
 @Component({
   selector: 'app-settings-advanced',
   templateUrl: './settings-advanced.component.html',
-  styleUrls: ['./settings-advanced.component.scss']
+  styleUrls: ['./settings-advanced.component.scss'],
 })
 export class SettingsAdvancedComponent implements OnInit {
 
@@ -17,14 +17,14 @@ export class SettingsAdvancedComponent implements OnInit {
   readonly postPerPage: void[] = new Array<void>(24);
 
   /**
-   * Advanced form
-   */
-  advancedForm: FormGroup;
-
-  /**
    * Blog settings data
    */
   settings: BlogSettings;
+
+  /**
+   * Advanced form
+   */
+  advancedForm: FormGroup;
 
   /**
    * Advanced form API loading indicator
@@ -32,15 +32,16 @@ export class SettingsAdvancedComponent implements OnInit {
   advancedLoading: boolean;
 
   constructor(private formBuilder: FormBuilder,
-              private blogService: BlogService) { }
+              private blogService: BlogService) {
+  }
 
   ngOnInit(): void {
     /**
      * Setup advanced form
      */
     this.advancedForm = this.formBuilder.group({
-      meta_description: [''],
-      paginate_by: [''],
+      meta_description: [null],
+      paginate_by: [null],
       commenting: [null],
       voting: [null],
       show_views_count: [null],
@@ -61,7 +62,7 @@ export class SettingsAdvancedComponent implements OnInit {
       this.advancedLoading = false;
       this.settings = data;
       /**
-       * Set up the theme form with default values
+       * Set up the advanced form with default values
        */
       this.advancedForm.patchValue({
         meta_description: this.settings.meta_description,
@@ -79,8 +80,9 @@ export class SettingsAdvancedComponent implements OnInit {
    */
   submit(payload: Params = this.advancedForm.value): void {
     this.advancedLoading = true;
-    this.blogService.updateSettings(payload).subscribe((): void => {
+    this.blogService.updateSettings(payload).subscribe((data: BlogSettings): void => {
       this.advancedLoading = false;
+      this.settings = data;
     });
   }
 }
