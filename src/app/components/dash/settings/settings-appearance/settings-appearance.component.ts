@@ -158,9 +158,9 @@ export class SettingsAppearanceComponent implements OnInit {
    */
   submitSettings(payload: Params = this.themeForm.value): void {
     this.themeLoading = true;
-    this.blogService.updateSettings(payload).subscribe((): void => {
+    this.blogService.updateSettings(payload).subscribe((data: BlogSettings): void => {
       this.themeLoading = false;
-      this.getSettings();
+      this.settings = data;
     });
   }
 

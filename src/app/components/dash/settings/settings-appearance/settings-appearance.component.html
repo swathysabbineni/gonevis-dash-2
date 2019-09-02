@@ -64,7 +64,7 @@
       </a>
       <!-- Select button -->
       <button class="btn btn-primary" type="button" translate (click)="setTemplate()"
-              [disabled]="getThemeViewing().name === templateConfig.name">
+              [disabled]="themeLoading || getThemeViewing().name === templateConfig.name">
         SELECT
       </button>
     </div>
@@ -107,7 +107,7 @@
   <!-- Footer -->
   <div class="card-footer text-right">
     <!-- Submit -->
-    <button class="btn btn-primary" translate>SAVE_CHANGES</button>
+    <button class="btn btn-primary" [disabled]="themeLoading" translate>SAVE_CHANGES</button>
   </div>
 </form>
 
