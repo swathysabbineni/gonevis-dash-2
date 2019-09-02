@@ -107,6 +107,19 @@ export class BlogService {
   }
 
   /**
+   * Set blog template
+   *
+   * @param template Template ID
+   */
+  setTemplate(template: string): Observable<void> {
+    return this.http.put<void>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-template`, {
+        site_template_id: template,
+      },
+    );
+  }
+
+  /**
    * Get current template data
    */
   getTemplateConfig(): Observable<{ template_config: TemplateConfig }> {

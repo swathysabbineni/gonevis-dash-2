@@ -1,7 +1,7 @@
 <!-- Media -->
 <div class="card mb-3">
   <!-- Header -->
-  <div class="card-header">Media</div>
+  <div class="card-header" translate>MEDIA</div>
   <!-- Body -->
   <div class="card-body">
     <div class="row">
@@ -12,9 +12,9 @@
           <img class="mr-3 rounded" *ngIf="settings && settings.media.logo"
                [src]="settings.media.logo.thumbnail_128x128" [width]="64">
           <div class="media-body">
-            <h5 class="mt-0">Blog Logo</h5>
+            <h5 class="mt-0" translate>BLOG_LOGO</h5>
             <div class="btn-group btn-group-sm">
-              <button class="btn btn-sm btn-secondary">Select</button>
+              <button class="btn btn-sm btn-secondary" translate>SELECT</button>
               <!-- Delete logo-->
               <button class="btn btn-sm btn-outline-secondary" *ngIf="settings && settings.media.logo"
                       (click)="submitSettings({ logo: null })">
@@ -31,9 +31,9 @@
           <img class="mr-3 rounded" *ngIf="settings && settings.media.cover_image"
                [src]="settings.media.cover_image.thumbnail_128x128" [width]="64">
           <div class="media-body">
-            <h5 class="mt-0">Blog Cover</h5>
+            <h5 class="mt-0" translate>BLOG_COVER</h5>
             <div class="btn-group btn-group-sm">
-              <button class="btn btn-sm btn-secondary">Select</button>
+              <button class="btn btn-sm btn-secondary" translate>SELECT</button>
               <!-- Delete cover -->
               <button class="btn btn-sm btn-outline-secondary" *ngIf="settings && settings.media.cover_image"
                       (click)="submitSettings({ cover_image: null })">
@@ -50,7 +50,35 @@
 <!-- Theme -->
 <form class="card mb-3" [formGroup]="themeForm" (ngSubmit)="submitSettings()">
   <!-- Header -->
-  <div class="card-header">Theme</div>
+  <div class="card-header" translate>THEME</div>
+  <!-- Body -->
+  <div class="card-body" *ngIf="themeCarousel">
+    <!-- Theme name -->
+    {{ getThemeViewing().name | uppercase }}
+    <!-- Theme buttons -->
+    <div class="btn-group float-right">
+      <!-- Preview -->
+      <a class="btn btn-light" [title]="'PREVIEW' | translate" target="_blank"
+         href="{{ settings.absolute_uri }}?preview-template={{ getThemeViewing().name }}">
+        <fa-icon [fixedWidth]="true" icon="eye"></fa-icon>
+      </a>
+      <!-- Select button -->
+      <button class="btn btn-primary" type="button" translate (click)="setTemplate()"
+              [disabled]="themeLoading || getThemeViewing().name === templateConfig.name">
+        SELECT
+      </button>
+    </div>
+    <!-- Theme author -->
+    <div class="text-secondary" [title]="'AUTHOR' | translate">{{ getThemeViewing().config.author }}</div>
+  </div>
+  <!-- Themes -->
+  <div class="border-top border-bottom">
+    <carousel [interval]="0" *ngIf="templates" [noWrap]="false" #themeCarousel>
+      <slide *ngFor="let template of templates">
+        <img [src]="template.media.thumbnail_512x512" *ngIf="template.media.thumbnail_512x512" width="100%">
+      </slide>
+    </carousel>
+  </div>
   <!-- Body -->
   <div class="card-body">
     <!-- Template primary color -->
@@ -67,7 +95,7 @@
       </div>
     </div>
     <!-- Code Highlight -->
-    <div class="form-group">
+    <div class="form-group mb-0">
       <label for="highlight_theme" translate>CODE_HIGHLIGHT</label>
       <div class="input-group">
         <select class="custom-select" formControlName="highlight_theme" id="highlight_theme">
@@ -79,7 +107,7 @@
   <!-- Footer -->
   <div class="card-footer text-right">
     <!-- Submit -->
-    <button class="btn btn-primary" translate>SAVE_CHANGES</button>
+    <button class="btn btn-primary" [disabled]="themeLoading" translate>SAVE_CHANGES</button>
   </div>
 </form>
 

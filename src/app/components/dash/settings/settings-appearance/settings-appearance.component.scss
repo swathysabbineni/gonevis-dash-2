@@ -1,0 +1,12 @@
+@import "src/assets/styles/variables";
+
+::ng-deep {
+  .carousel {
+    min-height: 512px;
+    background: $light;
+
+    .carousel-control {
+      filter: invert(100%);
+    }
+  }
+}
