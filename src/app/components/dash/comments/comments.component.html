@@ -67,7 +67,7 @@
       </th>
     </tr>
     <!-- No comments -->
-    <div class="text-center py-3" *ngIf="!comments.length">
+    <div class="text-center py-3" *ngIf="comments && !comments.length">
       <h5 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h5>
     </div>
     </tbody>
