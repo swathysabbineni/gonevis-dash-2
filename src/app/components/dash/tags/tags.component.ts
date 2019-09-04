@@ -5,7 +5,9 @@ import { TagsService } from '@app/components/dash/tags/tags.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Tag } from '@app/interfaces/v1/tag';
+import { TagsModalComponent } from '@app/shared/tags-modal/tags-modal.component';
 import { TranslateService } from '@ngx-translate/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-tags',
@@ -25,6 +27,11 @@ export class TagsComponent implements OnInit {
   form: FormGroup;
 
   /**
+   * Tags modal to edit tags
+   */
+  tagsModal: BsModalRef;
+
+  /**
    * Tag form API loading indicator
    */
   loading: boolean;
@@ -38,7 +45,8 @@ export class TagsComponent implements OnInit {
               private translate: TranslateService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private modalService: BsModalService) {
   }
 
   ngOnInit(): void {
@@ -110,5 +118,12 @@ export class TagsComponent implements OnInit {
         },
       },
     });
+  }
+
+  /**
+   * Show modal to edit tags
+   */
+  showTagsModal() {
+    this.tagsModal = this.modalService.show(TagsModalComponent);
   }
 }
