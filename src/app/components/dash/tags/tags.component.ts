@@ -97,7 +97,7 @@ export class TagsComponent implements OnInit {
   /**
    * Add entry to navigations
    *
-   * @param title Entry title
+   * @param name Entry name
    * @param slug Entry slug
    */
   addToNavigataion(name: string, slug: string): void {
