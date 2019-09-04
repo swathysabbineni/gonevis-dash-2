@@ -108,7 +108,7 @@ export class TagsComponent implements OnInit {
    * @param name Entry name
    * @param slug Entry slug
    */
-  addToNavigataion(name: string, slug: string): void {
+  addToNavigation(name: string, slug: string): void {
     this.router.navigate(['navs'], {
       relativeTo: this.route.parent.parent,
       state: {
