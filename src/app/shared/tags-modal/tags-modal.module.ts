@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TagsModalComponent } from '@app/shared/tags-modal/tags-modal.component';
+import { NgModule } from '@angular/core';
 
-
+import { TagsModalComponent } from './tags-modal.component';
 
 @NgModule({
   declarations: [
@@ -15,4 +14,5 @@ import { TagsModalComponent } from '@app/shared/tags-modal/tags-modal.component'
     TagsModalComponent,
   ],
 })
-export class TagsModalModule { }
+export class TagsModalModule {
+}
