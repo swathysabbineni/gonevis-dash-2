@@ -123,7 +123,10 @@ export class TagsComponent implements OnInit {
   /**
    * Show modal to edit tags
    */
-  showTagsModal() {
-    this.tagsModal = this.modalService.show(TagsModalComponent);
+  showTagsModal(tag: Tag) {
+    this.tagsModal = this.modalService.show(TagsModalComponent, {
+      class: 'modal-sm',
+      initialState: { tag },
+    });
   }
 }
