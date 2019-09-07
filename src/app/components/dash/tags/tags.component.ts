@@ -5,7 +5,7 @@ import { TagsService } from '@app/components/dash/tags/tags.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Tag } from '@app/interfaces/v1/tag';
-import { TagsModalComponent } from '@app/shared/tags-modal/tags-modal.component';
+import { TagModalComponent } from '@app/shared/tags-modal/tag-modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
@@ -124,7 +124,7 @@ export class TagsComponent implements OnInit {
    * Show modal to edit tag
    */
   showTagModal(tag: Tag) {
-    this.tagsModal = this.modalService.show(TagsModalComponent, {
+    this.tagsModal = this.modalService.show(TagModalComponent, {
       class: 'modal-sm',
       initialState: { tag },
     });

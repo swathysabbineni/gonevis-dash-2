@@ -4,11 +4,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { TagsModalComponent } from './tags-modal.component';
+import { TagModalComponent } from 'src/app/shared/tags-modal/tag-modal.component';
 
 @NgModule({
   declarations: [
-    TagsModalComponent,
+    TagModalComponent,
   ],
   imports: [
     CommonModule,
@@ -17,8 +17,8 @@ import { TagsModalComponent } from './tags-modal.component';
     TranslateModule,
   ],
   entryComponents: [
-    TagsModalComponent,
+    TagModalComponent,
   ],
 })
-export class TagsModalModule {
+export class TagModalModule {
 }

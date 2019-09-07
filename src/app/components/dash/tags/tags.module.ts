@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TagsModalComponent } from '@app/shared/tags-modal/tags-modal.component';
-import { TagsModalModule } from '@app/shared/tags-modal/tags-modal.module';
+import { TagModalComponent } from '@app/shared/tags-modal/tag-modal.component';
+import { TagModalModule } from '@app/shared/tags-modal/tag-modal.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
@@ -26,7 +26,7 @@ import { TagsComponent } from './tags.component';
     TranslateModule,
     ReactiveFormsModule,
     ModalModule.forRoot(),
-    TagsModalModule,
+    TagModalModule,
   ],
 })
 export class TagsModule {

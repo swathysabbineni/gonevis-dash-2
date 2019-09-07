@@ -6,14 +6,14 @@ import { BlogService } from '@app/services/blog/blog.service';
 import { BsModalRef } from 'ngx-bootstrap';
 
 @Component({
-  selector: 'app-tags-modal',
-  templateUrl: './tags-modal.component.html',
-  styleUrls: ['./tags-modal.component.scss'],
+  selector: 'app-tag-modal',
+  templateUrl: './tag-modal.component.html',
+  styleUrls: ['./tag-modal.component.scss'],
 })
-export class TagsModalComponent implements OnInit {
+export class TagModalComponent implements OnInit {
 
   /**
-   * Tags data
+   * Editing tag
    */
   tag: Tag;
 
