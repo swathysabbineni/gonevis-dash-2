@@ -42,15 +42,9 @@ export class TagsModalComponent implements OnInit {
      * Setup tag form
      */
     this.form = this.formBuilder.group({
-      name: ['', Validators.required],
-      slug: [''],
-      description: [''],
-    });
-
-    this.form.patchValue({
-      name: this.tag.name,
-      slug: this.tag.slug,
-      description: this.tag.description,
+      name: [this.tag.name, Validators.required],
+      slug: [this.tag.slug],
+      description: [this.tag.description],
     });
   }
 
@@ -59,10 +53,10 @@ export class TagsModalComponent implements OnInit {
    */
   update(): void {
     this.loading = true;
-    this.blogService.updateTag(this.tag.slug, this.form.value).subscribe((): void => {
+    this.blogService.updateTag(this.tag.slug, this.form.value).subscribe((data: Tag): void => {
       this.loading = false;
       this.errors = {};
-      this.tag = this.form.value;
+      this.tag.name = data.name;
       this.modal.hide();
     }, (error): void => {
       this.loading = false;
