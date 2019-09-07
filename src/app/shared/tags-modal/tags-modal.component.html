@@ -26,9 +26,9 @@
     </div>
     <!-- Description -->
     <div class="form-group">
-    <textarea rows="2" class="form-control" formControlName="description"
-              [placeholder]="'DESCRIPTION' | translate">
-    </textarea>
+      <textarea rows="2" class="form-control" formControlName="description"
+                [placeholder]="'DESCRIPTION' | translate">
+      </textarea>
       <span class="text-danger" *ngIf="errors.description">{{ errors.description[0] }}</span>
     </div>
     <!-- Submit -->
