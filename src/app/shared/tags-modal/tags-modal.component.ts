@@ -56,9 +56,7 @@ export class TagsModalComponent implements OnInit {
     this.blogService.updateTag(this.tag.slug, this.form.value).subscribe((data: Tag): void => {
       this.loading = false;
       this.errors = {};
-      this.tag.name = data.name;
-      this.tag.slug = data.slug;
-      this.tag.description = data.description;
+      this.tag = Object.assign(this.tag, data);
       this.modal.hide();
     }, (error): void => {
       this.loading = false;
