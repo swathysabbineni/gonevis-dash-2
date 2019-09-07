@@ -5,7 +5,9 @@ import { TagsService } from '@app/components/dash/tags/tags.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Tag } from '@app/interfaces/v1/tag';
+import { TagModalComponent } from '@app/shared/tags-modal/tag-modal.component';
 import { TranslateService } from '@ngx-translate/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-tags',
@@ -25,6 +27,11 @@ export class TagsComponent implements OnInit {
   form: FormGroup;
 
   /**
+   * Tags modal to edit tags
+   */
+  tagsModal: BsModalRef;
+
+  /**
    * Tag form API loading indicator
    */
   loading: boolean;
@@ -38,7 +45,8 @@ export class TagsComponent implements OnInit {
               private translate: TranslateService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private modalService: BsModalService) {
   }
 
   ngOnInit(): void {
@@ -97,10 +105,10 @@ export class TagsComponent implements OnInit {
   /**
    * Add entry to navigations
    *
-   * @param title Entry title
+   * @param name Entry name
    * @param slug Entry slug
    */
-  addToNavigataion(name: string, slug: string): void {
+  addToNavigation(name: string, slug: string): void {
     this.router.navigate(['navs'], {
       relativeTo: this.route.parent.parent,
       state: {
@@ -109,6 +117,16 @@ export class TagsComponent implements OnInit {
           url: `/${ slug }`,
         },
       },
+    });
+  }
+
+  /**
+   * Show modal to edit tag
+   */
+  showTagModal(tag: Tag) {
+    this.tagsModal = this.modalService.show(TagModalComponent, {
+      class: 'modal-sm',
+      initialState: { tag },
     });
   }
 }

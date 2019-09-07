@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <!-- Tags list -->
-    <div class="col-md-9">
+    <div class="col-lg-9">
       <table class="table rounded bg-white">
         <tbody>
         <tr *ngFor="let tag of tags">
@@ -25,11 +25,11 @@
             <div class="btn-group btn-group-sm">
               <!-- Add to navigation -->
               <button class="btn btn-light text-secondary" [title]="'ADD_TO_NAVIGATION' | translate"
-                      (click)="addToNavigataion(tag.name, tag.slug)">
+                      (click)="addToNavigation(tag.name, tag.slug)">
                 <fa-icon [fixedWidth]="true" icon="bars"></fa-icon>
               </button>
               <!-- Edit -->
-              <button class="btn btn-light text-secondary" [title]="'EDIT' | translate">
+              <button class="btn btn-light text-secondary" [title]="'EDIT' | translate" (click)="showTagModal(tag)">
                 <fa-icon [fixedWidth]="true" icon="edit"></fa-icon>
               </button>
               <!-- View -->
@@ -46,14 +46,14 @@
           </th>
         </tr>
         <!-- No tags -->
-        <div class="text-center py-3" *ngIf="!tags.length">
+        <div class="text-center py-3" *ngIf="tags && !tags.length">
           <h5 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h5>
         </div>
         </tbody>
       </table>
     </div>
     <!-- Create tag -->
-    <div class="col-md-3">
+    <div class="col-lg-3">
       <div class="card">
         <div class="card-header" translate>CREATE_TAG</div>
         <div class="card-body">

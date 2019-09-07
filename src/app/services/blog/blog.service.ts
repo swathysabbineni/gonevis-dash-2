@@ -7,6 +7,7 @@ import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Metrics } from '@app/interfaces/v1/metrics';
 import { Subscriber } from '@app/interfaces/v1/subscriber';
+import { Tag } from '@app/interfaces/v1/tag';
 import { Template } from '@app/interfaces/v1/template';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { TemplateConfigFields } from '@app/interfaces/v1/template-config-fields';
@@ -190,6 +191,22 @@ export class BlogService {
   getSubscribers(): Observable<ApiResponse<Subscriber>> {
     return this.http.get<ApiResponse<Subscriber>>(
       `${this.apiService.base.zero}website/site/${BlogService.currentBlog.id}/subscribers`,
+    );
+  }
+
+  /**
+   * Update tag
+   *
+   * @param payload tag payload
+   * @param slug tag slug
+   */
+  updateTag(slug: string, payload: Params): Observable<Tag> {
+    return this.http.put<Tag>(
+      `${this.apiService.base.v1}tagool/tag/${slug}`, payload, {
+        params: {
+          site: BlogService.currentBlog.id,
+        },
+      },
     );
   }
 }
