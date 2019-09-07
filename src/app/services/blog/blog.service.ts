@@ -205,7 +205,8 @@ export class BlogService {
       `${this.apiService.base.v1}tagool/tag/${slug}`, payload, {
         params: {
           site: BlogService.currentBlog.id,
-        }
-      });
+        },
+      },
+    );
   }
 }
