@@ -57,6 +57,8 @@ export class TagsModalComponent implements OnInit {
       this.loading = false;
       this.errors = {};
       this.tag.name = data.name;
+      this.tag.slug = data.slug;
+      this.tag.description = data.description;
       this.modal.hide();
     }, (error): void => {
       this.loading = false;
