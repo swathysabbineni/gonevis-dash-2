@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { File } from '@app/interfaces/file';
+import { File as MediaFile } from '@app/interfaces/file';
+import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { Observable } from 'rxjs';
@@ -11,6 +12,51 @@ import { Observable } from 'rxjs';
 })
 export class MediaService {
 
+  /**
+   * Media upload accept list
+   */
+  static readonly acceptList = [
+    'image/jpeg',
+    'image/pjpeg',
+    'image/png',
+    'image/gif',
+    'application/pdf',
+    'application/msword',
+    'application/x-iwork-keynote-sffkey',
+    'application/mspowerpoint',
+    'application/powerpoint',
+    'application/vnd.ms-powerpoint',
+    'application/x-mspowerpoint',
+    'application/vnd.oasis.opendocument.text',
+    'application/excel',
+    'application/vnd.ms-excel',
+    'application/x-excel',
+    'application/x-msexcel',
+    'application/x-compressed',
+    'application/x-zip-compressed',
+    'application/zip',
+    'multipart/x-zip',
+    'audio/mpeg3',
+    'audio/x-mpeg-3',
+    'video/mpeg',
+    'video/x-mpeg',
+    'audio/x-m4a',
+    'audio/ogg',
+    'audio/wav',
+    'audio/x-wav',
+    'video/mp4',
+    'video/x-m4v',
+    'video/quicktime',
+    'video/x-ms-wmv',
+    'video/avi',
+    'video/msvideo',
+    'video/x-msvideo',
+    'video/mpeg',
+    'video/ogg',
+    'video/3gp',
+    'video/3gpp2',
+  ];
+
   constructor(private http: HttpClient,
               private api: ApiService) {
   }
@@ -18,8 +64,8 @@ export class MediaService {
   /**
    * Get blog media
    */
-  getMedia(): Observable<ApiResponse<File>> {
-    return this.http.get<ApiResponse<File>>(`${this.api.base.v1}dolphin/file/`, {
+  getMedia(): Observable<ApiResponse<MediaFile>> {
+    return this.http.get<ApiResponse<MediaFile>>(`${this.api.base.v1}dolphin/file/`, {
       params: { site: BlogService.currentBlog.id },
     });
   }
@@ -31,5 +77,46 @@ export class MediaService {
    */
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.api.base.v1}dolphin/file/${id}`);
+  }
+
+  /**
+   * Request to get the upload URL for file
+   *
+   * @param payload File payload
+   */
+  uploadUrl(payload: { file_name: string, file_size: number, mime_type: string }): Observable<UploadUrlResponse> {
+    return this.http.post<UploadUrlResponse>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/upload-url/`, payload,
+    );
+  }
+
+  /**
+   * Upload to the requested URL for file
+   *
+   * @param url Upload URL
+   * @param file File to upload
+   * @param fields Upload fields
+   */
+  uploadToUrl(url: string, file: File, fields: UploadUrlResponse['post_data']['fields']): Observable<void> {
+    const payload: FormData = new FormData();
+    for (const field in fields) {
+      if (fields[field]) {
+        payload.append(field, fields[field]);
+      }
+    }
+    payload.append('file', file);
+    return this.http.post<void>(url, payload);
+  }
+
+  /**
+   * Post file key
+   *
+   * @param fileKey File key from the upload URL response
+   */
+  post(fileKey: string): Observable<MediaFile> {
+    return this.http.post<MediaFile>(`${this.api.base.v1}dolphin/file/`, {
+      site: BlogService.currentBlog.id,
+      file_key: fileKey,
+    });
   }
 }

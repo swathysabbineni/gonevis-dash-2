@@ -12,6 +12,9 @@ import { MediaService } from './media.service';
 })
 export class MediaComponent implements OnInit {
 
+  /**
+   * List of blog media files
+   */
   files: File[];
 
   constructor(public utils: UtilService,
@@ -45,5 +48,14 @@ export class MediaComponent implements OnInit {
     this.mediaService.delete(file.id).subscribe((): void => {
       this.files.splice(this.files.indexOf(file), 1);
     });
+  }
+
+  /**
+   * On upload finish
+   *
+   * @param file Uploaded file
+   */
+  onUpload(file: File): void {
+    this.files.unshift(file);
   }
 }
