@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { UploadModule } from '@app/shared/upload/upload.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
@@ -19,7 +20,8 @@ import { MediaComponent } from './media.component';
     MediaRoutingModule,
     FontAwesomeModule,
     BsDropdownModule,
-    TranslateModule,
+    TranslateModule.forChild(),
+    UploadModule,
   ],
 })
 export class MediaModule {

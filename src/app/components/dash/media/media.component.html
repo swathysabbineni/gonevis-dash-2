@@ -1,4 +1,8 @@
 <div class="container-fluid">
+
+  <!-- Upload -->
+  <app-upload (upload)="onUpload($event)"></app-upload>
+
   <!-- Files -->
   <div class="files">
     <div class="row">
@@ -34,7 +38,7 @@
   </div>
 
   <!-- No data -->
-  <div class="bg-white rounded py-3 container" *ngIf="!files.length">
+  <div class="bg-white rounded py-3 container" *ngIf="files && !files.length">
     <h5 class="text-secondary text-center font-italic" translate>NOTHING_HERE_YET</h5>
   </div>
 </div>

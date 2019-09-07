@@ -9,8 +9,8 @@
         <label translate>PICTURE</label>
         <div class="btn-group btn-group-sm">
           <input type="file" [accept]="acceptList" class="d-none" #fileElement (change)="onFileSelected()">
-          <button type="button" class="btn btn-light" [disabled]="loading" (click)="fileElement.click()">
-            Upload
+          <button type="button" class="btn btn-light" [disabled]="loading" (click)="fileElement.click()" translate>
+            UPLOAD
           </button>
           <button type="button" class="btn btn-light" [disabled]="loading" (click)="submit(true)">Remove</button>
         </div>
