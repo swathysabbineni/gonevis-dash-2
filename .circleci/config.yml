@@ -83,10 +83,10 @@ workflows:
 #           requires:
 #             - test
       - deploy:
-          requires:
+#          requires:
 #            - build
 #             - test
 #             - jslint
            filters:
              branches:
-               only: setup-dash
+               only: master
