@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { File as MediaFile } from '@app/interfaces/file';
+import { File as FileMedia } from '@app/interfaces/file';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -64,8 +65,8 @@ export class MediaService {
   /**
    * Get blog media
    */
-  getMedia(): Observable<ApiResponse<MediaFile>> {
-    return this.http.get<ApiResponse<MediaFile>>(`${this.api.base.v1}dolphin/file/`, {
+  getMedia(): Observable<ApiResponse<FileMedia>> {
+    return this.http.get<ApiResponse<FileMedia>>(`${this.api.base.v1}dolphin/file/`, {
       params: { site: BlogService.currentBlog.id },
     });
   }
@@ -97,7 +98,7 @@ export class MediaService {
    * @param file File to upload
    * @param fields Upload fields
    */
-  uploadToUrl(url: string, file: File, fields: UploadUrlResponse['post_data']['fields']): Observable<void> {
+  uploadToUrl(url: string, file: File, fields: UploadUrlResponse['post_data']['fields']): Observable<void | FileMedia> {
     const payload: FormData = new FormData();
     for (const field in fields) {
       if (fields[field]) {
@@ -105,7 +106,10 @@ export class MediaService {
       }
     }
     payload.append('file', file);
-    return this.http.post<void>(url, payload);
+    if (environment.name === 'local') {
+      payload.append('site', BlogService.currentBlog.id);
+    }
+    return this.http.post<void | FileMedia>(url, payload);
   }
 
   /**
@@ -113,8 +117,8 @@ export class MediaService {
    *
    * @param fileKey File key from the upload URL response
    */
-  post(fileKey: string): Observable<MediaFile> {
-    return this.http.post<MediaFile>(`${this.api.base.v1}dolphin/file/`, {
+  post(fileKey: string): Observable<FileMedia> {
+    return this.http.post<FileMedia>(`${this.api.base.v1}dolphin/file/`, {
       site: BlogService.currentBlog.id,
       file_key: fileKey,
     });

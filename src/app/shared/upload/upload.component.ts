@@ -2,6 +2,7 @@ import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { File as FileMedia } from '@app/interfaces/file';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-upload',
@@ -46,12 +47,16 @@ export class UploadComponent {
           response.post_data.url,
           file,
           response.post_data.fields,
-        ).subscribe((): void => {
-          this.mediaService.post(
-            response.post_data.fields.key,
-          ).subscribe((fileUploaded: FileMedia): void => {
-            this.upload.emit(fileUploaded);
-          });
+        ).subscribe((data: void | FileMedia): void => {
+          if (environment.name === 'local') {
+            this.upload.emit(data as FileMedia);
+          } else {
+            this.mediaService.post(
+              response.post_data.fields.key,
+            ).subscribe((fileUploaded: FileMedia): void => {
+              this.upload.emit(fileUploaded);
+            });
+          }
         });
       });
     }
