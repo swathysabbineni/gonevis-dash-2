@@ -83,8 +83,8 @@ workflows:
 #           requires:
 #             - test
       - deploy:
-#          requires:
-#            - build
+          requires:
+            - build
 #             - test
 #             - jslint
            filters:
