@@ -66,6 +66,8 @@ export class FileListComponent implements OnInit {
    * @param file Selected file
    */
   onChoose(file: File): void {
-    this.choose.emit(file);
+    if (this.selection) {
+      this.choose.emit(file);
+    }
   }
 }
