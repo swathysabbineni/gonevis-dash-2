@@ -19,7 +19,8 @@ $tooltip-bg: $dark;
 
 @import "~bootstrap/scss/bootstrap";
 
-a {
+a,
+.pointer {
   cursor: pointer;
 }
 
