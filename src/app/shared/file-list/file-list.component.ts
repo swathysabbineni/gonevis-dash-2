@@ -18,6 +18,11 @@ export class FileListComponent implements OnInit {
   @Input() selection = false;
 
   /**
+   * Selected file ID
+   */
+  @Input() selected: string;
+
+  /**
    * File select event
    */
   @Output() choose: EventEmitter<File> = new EventEmitter<File>();
@@ -38,6 +43,7 @@ export class FileListComponent implements OnInit {
 
   /**
    * Load media files
+   * @todo Add filter for getting only images for file selection
    */
   getFiles(): void {
     this.mediaService.getMedia().subscribe((response: ApiResponse<File>): void => {

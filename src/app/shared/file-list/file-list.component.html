@@ -1,10 +1,11 @@
 <!-- Files -->
 <div class="files">
   <div class="row">
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6" *ngFor="let file of files">
+    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let file of files">
       <div class="file rounded-sm shadow-sm my-3"
            (click)="onChoose(file)"
            [class.pointer]="selection"
+           [class.selected]="file.id === selected"
            [style.background-image]="utils.sanitizeBackgroundImage(file.thumbnail_256x256)">
         <div class="content p-2">
           <div class="option">
@@ -15,13 +16,11 @@
               <!-- Options -->
               <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
                 <!-- Download -->
-                <a class="dropdown-item" target="_blank" [href]="file.file" download translate>
-                  DOWNLOAD</a>
+                <a class="dropdown-item" target="_blank" [href]="file.file" download translate>DOWNLOAD</a>
                 <!-- Separated -->
                 <div class="dropdown-divider"></div>
                 <!-- Delete -->
-                <button class="dropdown-item text-danger" (click)="delete(file)"
-                        [disabled]="file.loading" translate>
+                <button class="dropdown-item text-danger" (click)="delete(file)" [disabled]="file.loading" translate>
                   DELETE
                 </button>
               </div>

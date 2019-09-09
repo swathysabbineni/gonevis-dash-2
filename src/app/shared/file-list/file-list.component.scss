@@ -32,5 +32,10 @@
         opacity: 1;
       }
     }
+
+    &.selected {
+      border: 4px solid $primary;
+      pointer-events: none;
+    }
   }
 }
