@@ -87,6 +87,6 @@ workflows:
             - build
 #             - test
 #             - jslint
-#           filters:
-#             branches:
-#               only: production
+           filters:
+             branches:
+               only: master

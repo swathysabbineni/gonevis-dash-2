@@ -36,9 +36,9 @@
   <!-- Header -->
   <div class="card-header" translate>DOMAINS</div>
   <!-- Body -->
-  <div class="card-body">
+  <div class="card-body" *ngIf="settings">
     <!-- Help text -->
-    <p [class.mb-0]="!settings || !settings.domains.length" translate>HELP_TEXT_DOMAINS</p>
+    <p [class.mb-0]="!settings.domains.length" translate>HELP_TEXT_DOMAINS</p>
     <!-- Domains -->
     <div class="card bg-light" *ngFor="let domain of settings.domains; let last = last"
          [class.mb-0]="last" [class.mb-2]="!last">

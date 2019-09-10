@@ -1,49 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiResponse } from '@app/interfaces/api-response';
+import { Component, ViewChild } from '@angular/core';
 import { File } from '@app/interfaces/file';
-import { UtilService } from '@app/services/util/util.service';
-import { TranslateService } from '@ngx-translate/core';
-import { MediaService } from './media.service';
+import { FileListComponent } from '@app/shared/file-list/file-list.component';
 
 @Component({
   selector: 'app-media',
   templateUrl: './media.component.html',
   styleUrls: ['./media.component.scss'],
 })
-export class MediaComponent implements OnInit {
-
-  files: File[];
-
-  constructor(public utils: UtilService,
-              private mediaService: MediaService,
-              private translate: TranslateService) {
-  }
-
-  ngOnInit(): void {
-    this.getFiles();
-  }
+export class MediaComponent {
 
   /**
-   * Load media files
+   * File list child to add files to
    */
-  getFiles(): void {
-    this.mediaService.getMedia().subscribe((response: ApiResponse<File>): void => {
-      this.files = response.results;
-    });
+  @ViewChild(FileListComponent, { static: false }) fileListComponent: FileListComponent;
+
+  constructor() {
   }
 
   /**
-   * Delete a file
+   * On upload finish
    *
-   * @param file File to delete
+   * @param file Uploaded file
    */
-  delete(file: File): void {
-    if (!confirm(this.translate.instant('CONFORM_DELETE_FILE'))) {
-      return;
-    }
-    file.loading = true;
-    this.mediaService.delete(file.id).subscribe((): void => {
-      this.files.splice(this.files.indexOf(file), 1);
-    });
+  onUpload(file: File): void {
+    this.fileListComponent.files.unshift(file);
   }
 }

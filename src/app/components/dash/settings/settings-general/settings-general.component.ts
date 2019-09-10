@@ -4,6 +4,7 @@ import { ApiError } from '@app/interfaces/api-error';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Domain } from '@app/interfaces/v1/domain';
 import { BlogService } from '@app/services/blog/blog.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings-general',
@@ -53,7 +54,8 @@ export class SettingsGeneralComponent implements OnInit {
   domainsErrors: ApiError = {};
 
   constructor(private formBuilder: FormBuilder,
-              private blogService: BlogService) {
+              private blogService: BlogService,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -65,7 +67,7 @@ export class SettingsGeneralComponent implements OnInit {
    */
   getSettings(): void {
     this.blogLoading = true;
-    this.blogService.getSettings(BlogService.currentBlog.id).subscribe((data: BlogSettings): void => {
+    this.blogService.getSettings().subscribe((data: BlogSettings): void => {
       this.blogLoading = false;
       this.settings = data;
       /**
@@ -83,10 +85,7 @@ export class SettingsGeneralComponent implements OnInit {
    */
   submitBlog(): void {
     this.blogLoading = true;
-    this.blogService.updateSettings(
-      BlogService.currentBlog.id,
-      this.blogForm.value,
-    ).subscribe((data: BlogSettings): void => {
+    this.blogService.updateSettings(this.blogForm.value).subscribe((data: BlogSettings): void => {
       this.settings = data;
       this.blogLoading = false;
       this.blogErrors = {};
@@ -101,10 +100,7 @@ export class SettingsGeneralComponent implements OnInit {
    */
   submitDomain(): void {
     this.domainsLoading = true;
-    this.blogService.addDomain(
-      BlogService.currentBlog.id,
-      this.domainsForm.value.domain,
-    ).subscribe((): void => {
+    this.blogService.addDomain(this.domainsForm.value.domain).subscribe((): void => {
       this.getSettings();
       this.domainsLoading = false;
       this.domainsErrors = {};
@@ -121,8 +117,11 @@ export class SettingsGeneralComponent implements OnInit {
    * @param domain Blog domain
    */
   removeDomain(domain: Domain): void {
+    if (!confirm(this.translate.instant('CONFIRM_DELETE_DOMAIN'))) {
+      return;
+    }
     this.domainsLoading = true;
-    this.blogService.removeDomain(BlogService.currentBlog.id, domain.id).subscribe((): void => {
+    this.blogService.removeDomain(domain.id).subscribe((): void => {
       this.settings.domains.splice(this.settings.domains.indexOf(domain), 1);
       this.domainsLoading = false;
     });

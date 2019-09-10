@@ -60,7 +60,7 @@ export class TeamService {
   /**
    * Invite team member
    *
-   * @param email Team member role
+   * @param email Team member email
    * @param role Team member role
    */
   invite(email: string, role: TeamRoles): Observable<Team> {

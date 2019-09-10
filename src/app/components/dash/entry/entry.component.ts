@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Entry } from '@app/interfaces/v1/entry';
 import { TranslateService } from '@ngx-translate/core';
@@ -25,7 +25,8 @@ export class EntryComponent implements OnInit {
 
   constructor(private entryService: EntryService,
               private translate: TranslateService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -51,6 +52,24 @@ export class EntryComponent implements OnInit {
     entry.loading = true;
     this.entryService.delete(entry.id).subscribe((): void => {
       this.entries.splice(this.entries.indexOf(entry), 1);
+    });
+  }
+
+  /**
+   * Add entry to navigations
+   *
+   * @param title Entry title
+   * @param slug Entry slug
+   */
+  addToNavigataion(title: string, slug: string): void {
+    this.router.navigate(['navs'], {
+      relativeTo: this.route.parent.parent,
+      state: {
+        add: {
+          label: title,
+          url: `/${ slug }`,
+        },
+      },
     });
   }
 }
