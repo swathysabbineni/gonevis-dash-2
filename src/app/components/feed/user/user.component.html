@@ -1,8 +1,8 @@
 <!-- User -->
-<div class="card shadow-sm my-3" *ngIf="user">
+<div class="card feed shadow-sm my-3" *ngIf="user">
 
   <!-- Header -->
-  <div class="card-header d-flex">
+  <div class="card feed-header d-flex">
 
     <!-- Logo -->
     <img class="rounded-sm mr-3" *ngIf="user.media.thumbnail_128x128"
@@ -20,11 +20,11 @@
   </div>
 
   <!-- Body -->
-  <div class="card-body" *ngIf="user.about || user.location">
+  <div class="card feed-body" *ngIf="user.about || user.location">
     <!-- About -->
-    <div class="card-text">{{ user.about }}</div>
+    <div class="card feed-text">{{ user.about }}</div>
     <!-- Location -->
-    <div class="card-text text-secondary">{{ user.location }}</div>
+    <div class="card feed-text text-secondary">{{ user.location }}</div>
   </div>
 </div>
 

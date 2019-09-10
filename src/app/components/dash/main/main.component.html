@@ -5,11 +5,11 @@
     <div class="col-md-8">
 
       <!-- Posts -->
-      <div class="card shadow-sm mb-4">
+      <div class="card dash mb-4">
         <!-- Header -->
         <div class="card-header">
           <a class="init" routerLink="../../posts" translate>POSTS</a>
-          <span class="float-right badge badge-primary text-light" *ngIf="metrics">
+          <span class="card-label" *ngIf="metrics">
             {{ metrics.metrics.published_entry_count | number}}
           </span>
         </div>
@@ -44,11 +44,11 @@
       </div>
 
       <!-- Comments -->
-      <div class="card shadow-sm">
+      <div class="card dash">
         <!-- Header -->
         <div class="card-header">
           <a class="init" routerLink="../../comments" translate>COMMENTS</a>
-          <span class="float-right badge badge-primary text-light" *ngIf="metrics">
+          <span class="card-label" *ngIf="metrics">
             {{ metrics.metrics.comment_count | number }}
           </span>
         </div>
@@ -73,8 +73,8 @@
     <div class="col-md-4">
 
       <!-- Publication -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header" translate>PUBLICATION</div>
+      <div class="card dash mb-4">
+        <div class="card-header text-capitalize" translate>PUBLICATION</div>
         <div class="list-group">
           <!-- Posts -->
           <div class="list-group-item d-flex">
@@ -95,8 +95,8 @@
       </div>
 
       <!-- Comment overview -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header">
+      <div class="card dash mb-4">
+        <div class="card-header text-capitalize">
           <a routerLink="../../comments" translate>COMMENT_OVERVIEW</a>
         </div>
         <div class="list-group">
@@ -124,8 +124,8 @@
       </div>
 
       <!-- Blog overview -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header">
+      <div class="card dash mb-4">
+        <div class="card-header text-capitalize">
           <a routerLink="../../settings/general" translate>BLOG_OVERVIEW</a>
         </div>
         <div class="list-group">
@@ -147,8 +147,8 @@
       </div>
 
       <!-- Storage -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header" translate>STORAGE</div>
+      <div class="card dash mb-4">
+        <div class="card-header text-capitalize" translate>STORAGE</div>
         <div class="list-group">
           <!-- Files -->
           <div class="list-group-item d-flex">
@@ -173,8 +173,8 @@
       </div>
 
       <!-- Team -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header">
+      <div class="card dash mb-4">
+        <div class="card-header text-capitalize">
           <a routerLink="../../team" translate>TEAM</a>
         </div>
         <div class="list-group">

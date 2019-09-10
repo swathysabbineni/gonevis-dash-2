@@ -8,11 +8,14 @@
       <div class="d-flex flex-column mr-auto pr-3">
         <label translate>PICTURE</label>
         <div class="btn-group btn-group-sm">
-          <input type="file" [accept]="acceptList" class="d-none" #fileElement (change)="onFileSelected()">
           <button type="button" class="btn btn-light" [disabled]="loading" (click)="fileElement.click()" translate>
             UPLOAD
           </button>
-          <button type="button" class="btn btn-light" [disabled]="loading" (click)="submit(true)">Remove</button>
+          <input type="file" [accept]="acceptList" class="d-none" #fileElement (change)="onFileSelected()">
+          <button type="button" class="btn btn-light" [disabled]="loading" (click)="submit(true)"
+                  translate>
+            REMOVE
+          </button>
         </div>
       </div>
       <!-- Image -->

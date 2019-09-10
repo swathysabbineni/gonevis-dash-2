@@ -1,6 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700&display=swap');
+
+$font-family-base: 'Lato', 'Roboto', 'Helvetica', sans-serif;
+
 $primary: #2980b9;
 $success: #2ecc71;
 $danger: #e74c3c;
+$secondary: #6f7a8b;
+
+$body-bg: #edeef0;
+$body-color: $secondary;
 
 $navbar-padding-y: 5px;
 
