@@ -22,8 +22,8 @@
     </form>
     <!-- Tag list -->
     <p *ngFor="let tag of tags" class="d-block mb-1"
-       [class.bg-primary]="isTagSelected(tag.id)"
-       (click)="isTagSelected(tag.id) ? removeTag(tag.id) : addTag(tag)">
+       [class.bg-primary]="isTagSelected(tag.slug)"
+       (click)="isTagSelected(tag.slug) ? removeTag(tag.slug) : addTag(tag)">
       #{{ tag.slug }}
     </p>
   </div>

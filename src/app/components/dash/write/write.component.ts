@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, HostListener, Renderer2, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import '@app/components/dash/write/blots/divider.ts';
 import '@app/components/dash/write/blots/embed.ts';
@@ -12,6 +12,7 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { Params } from '@app/interfaces/params';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
+import { TagMin } from '@app/interfaces/v1/tag-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
 import equal from 'deep-equal';
@@ -123,18 +124,6 @@ export class WriteComponent implements OnInit, OnDestroy {
   };
 
   /**
-   * Entry
-   */
-  entry: Entry = {
-    title: '',
-    content: '',
-    site: BlogService.currentBlog.id,
-    status: EntryStatus.Draft,
-    tags: [],
-    tag_ids: [],
-  };
-
-  /**
    * Entry form
    */
   form: FormGroup;
@@ -207,6 +196,7 @@ export class WriteComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
+      tags: [[]],
       status: [EntryStatus.Draft],
       comment_enabled: [false],
       featured: [false],
@@ -239,6 +229,13 @@ export class WriteComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * @returns AbstractControl
+   */
+  private get tagsControl(): AbstractControl {
+    return this.form.get('tags');
+  }
+
+  /**
    * Update form controls
    *
    * @param data Entry
@@ -247,12 +244,14 @@ export class WriteComponent implements OnInit, OnDestroy {
     this.form.patchValue({
       title: data.title,
       content: data.content,
+      tags: data.tags,
       status: data.status,
       comment_enabled: data.comment_enabled,
       featured: data.featured,
       is_page: data.is_page,
     });
     this.oldForm = this.form.value;
+    console.log(this.form.value);
   }
 
   /**
@@ -489,6 +488,8 @@ export class WriteComponent implements OnInit, OnDestroy {
     const payload: Params = this.form.value;
     payload.id = this.id;
     payload.site = BlogService.currentBlog.id;
+    payload.tag_ids = (this.tagsControl.value as TagMin[]).map((tag: TagMin): string => tag.slug);
+    console.log(payload);
     if (status !== undefined) {
       payload.status = status;
     }
@@ -574,19 +575,17 @@ export class WriteComponent implements OnInit, OnDestroy {
    * @param tag Tag to add
    */
   addTag(tag: Tag): void {
-    this.entry.tags.unshift(tag);
-    if (this.tagQueryForm.get('query').value !== '') {
-      this.tagQueryForm.get('query').reset('');
-    }
+    const tags: TagMin[] = this.tagsControl.value;
+    this.tagsControl.setValue([...tags, ...[tag]]);
   }
 
   /**
    * Remove tag from entry
    *
-   * @param tagId Tag ID
+   * @param slug Tag slug
    */
-  removeTag(tagId: string): void {
-    this.entry.tags.splice(this.entry.tags.findIndex((tag: Tag): boolean => tag.id === tagId), 1);
+  removeTag(slug: string): void {
+    this.tagsControl.setValue((this.tagsControl.value as TagMin[]).filter((tag: TagMin): boolean => tag.slug !== slug));
   }
 
   /**
@@ -595,7 +594,7 @@ export class WriteComponent implements OnInit, OnDestroy {
    * @return Determine whether entry has given tag or not
    */
   isTagSelected(tagId: string): boolean {
-    return this.entry.tags.some((tag: Tag): boolean => tag.id === tagId);
+    return (this.tagsControl.value as TagMin[]).some((tag: Tag): boolean => tag.slug === tagId);
   }
 
   ngOnDestroy(): void {
