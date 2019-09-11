@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Params } from '@app/interfaces/params';
+import { SoundCloudEmbed } from '@app/interfaces/sound-cloud-embed';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
 import { ApiService } from '@app/services/api/api.service';
@@ -61,12 +62,21 @@ export class WriteService {
    *
    * @param url SoundCloud URL
    */
-  getSoundCloud(url: string): Observable<any> {
+  getSoundCloud(url: string): Observable<SoundCloudEmbed> {
     const httpParams: HttpParams = new HttpParams()
-      .set('format', 'js')
+      .set('format', 'json')
       .set('url', url)
       .set('iframe', 'true');
 
-    return this.http.get(`https://soundcloud.com/oembed`, { params: httpParams });
+    return this.http.get<SoundCloudEmbed>(`https://soundcloud.com/oembed`, { params: httpParams });
+  }
+
+  /**
+   * Get pasted image's Blob
+   *
+   * @param imageUrl Image URL
+   */
+  getPastedImage(imageUrl: string): Observable<Blob> {
+    return this.http.get<Blob>(imageUrl);
   }
 }

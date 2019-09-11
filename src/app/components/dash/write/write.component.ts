@@ -392,20 +392,14 @@ export class WriteComponent implements OnInit, OnDestroy {
       });
 
       if (node.data.startsWith('https://soundcloud.com/')) {
-        this.writeService.getSoundCloud(node.data).subscribe((data) => {
-          console.log(data);
+        this.writeService.getSoundCloud(node.data).subscribe((data: SoundCloudEmbed): void => {
+          // Get current selection
+          const range: RangeStatic = editor.getSelection();
+          // Insert SoundCloud embed
+          editor.insertEmbed(range.index, 'soundcloud', data.html);
+          // Set cursor selection after SoundCloud embed
+          editor.setSelection({ index: range.index + 2, length: 0 });
         });
-        // $http.get(`https://soundcloud.com/oembed?format=js&url=${node.data}&iframe=true`).then(data => {
-        //   let rawString = data.data.substr(1, data.data.length - 3);
-        //   let callback = JSON.parse(rawString);
-        //   // Get current selection.
-        //   let range = editor.getSelection();
-        //   // Insert SoundCloud embed.
-        //   editor.insertEmbed(range.index + range.length, 'soundcloud', callback.html);
-        //   // Set cursor selection after SoundCloud embed.
-        //   editor.setSelection(range.index + range.length + 2);
-        // }); https://soundcloud.com/pishroforever/rahbare-rape-fars
-        // return { ops: [] };
         return new Delta();
       }
 
