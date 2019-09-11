@@ -1,6 +1,6 @@
 <!-- Posts -->
 <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="loadMore(next)">
-  <div class="card shadow-sm my-3" *ngFor="let entry of entries">
+  <div class="card feed shadow-sm my-3" *ngFor="let entry of entries">
 
     <!-- Header -->
     <div class="card-header d-flex">
