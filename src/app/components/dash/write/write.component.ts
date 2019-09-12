@@ -398,7 +398,6 @@ export class WriteComponent implements OnInit, OnDestroy {
             const file: File = new File([data], 'name', { type: data.type });
             this.uploadFile(file);
           });
-          return new Delta();
         }
         /**
          * Check attributes whitelist
@@ -411,7 +410,7 @@ export class WriteComponent implements OnInit, OnDestroy {
           });
         }
         /**
-         * Check insert whitelistO
+         * Check insert whitelist
          */
         if (op.insert && (typeof op.insert === 'string' || typeof op.insert === 'object' &&
           Object.keys(op.insert).some((key: string): boolean => insertWhitelist.includes(key)))) {
@@ -550,6 +549,7 @@ export class WriteComponent implements OnInit, OnDestroy {
   updateEntry(status?: EntryStatus): void {
     this.loading = true;
     const payload: Params = this.form.value;
+    payload.content = this.editor.root.innerHTML;
     payload.id = this.id;
     payload.site = BlogService.currentBlog.id;
     payload.tag_ids = (this.tagsControl.value as TagMin[]).map((tag: TagMin): string => tag.slug);
