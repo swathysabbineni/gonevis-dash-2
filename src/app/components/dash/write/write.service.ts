@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponseBase, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Params } from '@app/interfaces/params';
@@ -68,7 +68,7 @@ export class WriteService {
       .set('url', url)
       .set('iframe', 'true');
 
-    return this.http.get<SoundCloudEmbed>(`https://soundcloud.com/oembed`, { params: httpParams });
+    return this.http.get<SoundCloudEmbed>('https://soundcloud.com/oembed', { params: httpParams });
   }
 
   /**
@@ -77,6 +77,6 @@ export class WriteService {
    * @param imageUrl Image URL
    */
   getPastedImage(imageUrl: string): Observable<Blob> {
-    return this.http.get<Blob>(imageUrl);
+    return this.http.get<Blob>(imageUrl, { responseType: 'blob' as 'json' });
   }
 }
