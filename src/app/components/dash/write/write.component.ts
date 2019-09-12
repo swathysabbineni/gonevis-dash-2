@@ -1,22 +1,38 @@
-import { Component, OnInit, ElementRef, HostListener, Renderer2, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  HostListener,
+  Renderer2,
+  OnDestroy,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MediaService } from '@app/components/dash/media/media.service';
 import '@app/components/dash/write/blots/divider.ts';
 import '@app/components/dash/write/blots/embed.ts';
 import '@app/components/dash/write/blots/soundcloud.ts';
 import '@app/components/dash/write/blots/video.ts';
 import '@app/components/dash/write/modules/clipboard.ts';
+import '@app/components/dash/write/modules/image-drag-drop.ts';
 import { WriteService } from '@app/components/dash/write/write.service';
 import { EntryStatus } from '@app/enums/entry-status.enum';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { File as FileMedia } from '@app/interfaces/file';
 import { Params } from '@app/interfaces/params';
+import { SoundCloudEmbed } from '@app/interfaces/sound-cloud-embed';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
 import { TagMin } from '@app/interfaces/v1/tag-min';
+import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { BlogService } from '@app/services/blog/blog.service';
+import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { QuillModules } from 'ngx-quill';
 import { Quill, Delta as DeltaInterface, RangeStatic } from 'quill';
 import Delta from 'quill-delta';
@@ -67,9 +83,21 @@ export class WriteComponent implements OnInit, OnDestroy {
   private autoSave: boolean;
 
   /**
+   * Current cursor index
+   */
+  private cursorIndex: number;
+
+  /**
    * Entry status
    */
   readonly entryStatus = EntryStatus;
+
+  @ViewChild('fileListModalTemplate', { static: false }) fileListModalTemplate: TemplateRef<any>;
+
+  /**
+   * File list modal
+   */
+  fileListModalRef: BsModalRef;
 
   /**
    * Tag list
@@ -100,6 +128,7 @@ export class WriteComponent implements OnInit, OnDestroy {
    * Quill modules
    */
   options: QuillModules = {
+    imageDragDrop: true,
     toolbar: {
       container: [
         ['bold', 'italic', 'underline', 'strike'],
@@ -185,7 +214,9 @@ export class WriteComponent implements OnInit, OnDestroy {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder,
+              private modalService: BsModalService,
               private translateService: TranslateService,
+              private mediaService: MediaService,
               private writeService: WriteService) {
   }
 
@@ -251,7 +282,36 @@ export class WriteComponent implements OnInit, OnDestroy {
       is_page: data.is_page,
     });
     this.oldForm = this.form.value;
-    console.log(this.form.value);
+  }
+
+  /**
+   * Upload file and insert image
+   *
+   * @param file File to upload
+   */
+  private uploadFile(file: File): void {
+    const range: RangeStatic = this.editor.getSelection(true);
+    this.mediaService.uploadUrl({
+      file_name: file.name,
+      file_size: file.size,
+      mime_type: file.type,
+    }).subscribe((response: UploadUrlResponse): void => {
+      this.mediaService.uploadToUrl(
+        response.post_data.url,
+        file,
+        response.post_data.fields,
+      ).subscribe((fileMedia: void | FileMedia): void => {
+        if (environment.name === 'local') {
+          this.editor.insertEmbed(range.index, 'image', (fileMedia as FileMedia).file);
+        } else {
+          this.mediaService.post(
+            response.post_data.fields.key,
+          ).subscribe((fileUploaded: FileMedia): void => {
+            this.editor.insertEmbed(range.index, 'image', fileUploaded.file);
+          });
+        }
+      });
+    });
   }
 
   /**
@@ -333,6 +393,13 @@ export class WriteComponent implements OnInit, OnDestroy {
     editor.clipboard.addMatcher(Node.ELEMENT_NODE, (node: HTMLElement, delta: DeltaInterface): DeltaInterface => {
       const ops: Op[] = [];
       delta.ops.forEach((op: Op): void => {
+        if (op.insert.hasOwnProperty('image')) {
+          this.writeService.getPastedImage(node.getAttribute('src')).subscribe((data: Blob): void => {
+            const file: File = new File([data], 'name', { type: data.type });
+            this.uploadFile(file);
+          });
+          return new Delta();
+        }
         /**
          * Check attributes whitelist
          */
@@ -405,22 +472,25 @@ export class WriteComponent implements OnInit, OnDestroy {
 
       return delta;
     });
-    let cursorIndex = 0;
+    this.cursorIndex = 0;
 
     const toolbar: any = editor.getModule('toolbar');
+    editor.getModule('imageDragDrop').file().subscribe((data: File): void => {
+      this.uploadFile(data);
+    });
     toolbar.addHandler('image', (): void => {
       const range = editor.getSelection();
 
       // If user is in the editor
       if (range) {
-        cursorIndex = range.index + range.length;
+        this.cursorIndex = range.index + range.length;
       } else {
-        cursorIndex = 0;
+        this.cursorIndex = 0;
       }
       /**
        * @todo - Add file selection
        */
-      // $scope.dolphinService.viewSelection('editorAddImage');
+      this.showFileListModal(this.fileListModalTemplate);
     });
   }
 
@@ -483,7 +553,6 @@ export class WriteComponent implements OnInit, OnDestroy {
     payload.id = this.id;
     payload.site = BlogService.currentBlog.id;
     payload.tag_ids = (this.tagsControl.value as TagMin[]).map((tag: TagMin): string => tag.slug);
-    console.log(payload);
     if (status !== undefined) {
       payload.status = status;
     }
@@ -589,6 +658,26 @@ export class WriteComponent implements OnInit, OnDestroy {
    */
   isTagSelected(tagId: string): boolean {
     return (this.tagsControl.value as TagMin[]).some((tag: Tag): boolean => tag.slug === tagId);
+  }
+
+  /**
+   * Show file selection modal
+   */
+  showFileListModal(template: TemplateRef<any>): void {
+    this.fileListModalRef = this.modalService.show(template, {
+      class: 'modal-lg',
+    });
+  }
+
+  /**
+   * On file selection
+   *
+   * @param file Selected file
+   */
+  onFileSelect(file: FileMedia) {
+    this.fileListModalRef.hide();
+    this.editor.insertEmbed(this.cursorIndex, 'image', file.file);
+    this.editor.setSelection({ index: this.cursorIndex + 1, length: 0 });
   }
 
   ngOnDestroy(): void {
