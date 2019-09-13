@@ -37,6 +37,11 @@ export class SettingsAdvancedComponent implements OnInit {
   googleAnalyticsForm: FormGroup;
 
   /**
+   * Google adSense form
+   */
+  googleAdSenseForm: FormGroup;
+
+  /**
    * Advanced form API loading indicator
    */
   advancedLoading: boolean;
@@ -59,6 +64,13 @@ export class SettingsAdvancedComponent implements OnInit {
     this.googleAnalyticsForm = this.formBuilder.group({
       google_analytics_enabled: [null],
       google_analytics_code: [null],
+    });
+    /**
+     * Setup google adSense form
+     */
+    this.googleAdSenseForm = this.formBuilder.group({
+      google_adsense_enabled: [null],
+      google_adsense_code: [null],
     });
     /**
      * Setup advanced form

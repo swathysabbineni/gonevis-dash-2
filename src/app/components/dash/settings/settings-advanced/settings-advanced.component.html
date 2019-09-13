@@ -93,6 +93,22 @@
     </div>
   </div>
 </form>
+
+<!-- Google adSense -->
+<form class="card dash mb-3" [formGroup]="googleAdSenseForm">
+  <div class="card-body">
+    <div class="custom-control custom-switch">
+      <input class="custom-control-input" type="checkbox" formControlName="google_adsense_enabled"
+             id="google_adsense_enabled">
+      <label class="custom-control-label" for="google_adsense_enabled" translate>ALLOW_GOOGLE_ADSENSE</label>
+      <!-- Submit -->
+      <button class="btn btn-primary float-right" [disabled]="advancedLoading" translate>SAVE</button>
+    </div>
+    <div class="mt-2">
+      <label for="google_adsense_code" translate>GOOGLE_ADSENSE_CODE</label>
+      <textarea class="form-control" id="google_adsense_code" formControlName="google_adsense_code"
+                [disabled]="!googleAdSenseForm.get('google_adsense_enabled').value">
+      </textarea>
     </div>
   </div>
 </form>
