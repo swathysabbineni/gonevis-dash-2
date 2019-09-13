@@ -56,3 +56,18 @@
     <button class="btn btn-primary" [disabled]="advancedLoading" translate>SAVE_CHANGES</button>
   </div>
 </form>
+
+<!-- Blog branding -->
+<form class="card dash mb-3">
+  <div class="card-body">
+    <div class="custom-control custom-switch" (click)="isCollapsed = !isCollapsed">
+      <input type="checkbox" formControlName="#"
+             class="custom-control-input" id="blog_branding">
+      <label class="custom-control-label" for="blog_branding">Remove GoNevis.com branding.</label>
+    </div>
+    <div class="mt-2" [collapse]="isCollapsed" [isAnimated]="true">
+      <label for="custom_blog_branding">Footer text</label>
+      <textarea class="form-control" name="custom_blog_branding" id="custom_blog_branding"></textarea>
+    </div>
+  </div>
+</form>

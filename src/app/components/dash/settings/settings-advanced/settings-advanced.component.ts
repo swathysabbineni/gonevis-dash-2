@@ -11,6 +11,8 @@ import { BlogService } from '@app/services/blog/blog.service';
 })
 export class SettingsAdvancedComponent implements OnInit {
 
+  isCollapsed: boolean;
+
   /**
    * Number of Posts Per Page
    */

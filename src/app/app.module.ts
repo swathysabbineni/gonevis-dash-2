@@ -34,7 +34,6 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     AppRoutingModule,
     HttpClientModule,
     BsDropdownModule.forRoot(),
-    CollapseModule.forRoot(),
     FontAwesomeModule,
     LoadingBarModule,
     LoadingBarHttpClientModule,
