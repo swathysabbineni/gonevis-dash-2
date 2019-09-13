@@ -32,6 +32,11 @@ export class SettingsAdvancedComponent implements OnInit {
   removeBrandingForm: FormGroup;
 
   /**
+   * Google analytics form
+   */
+  googleAnalyticsForm: FormGroup;
+
+  /**
    * Advanced form API loading indicator
    */
   advancedLoading: boolean;
@@ -47,6 +52,13 @@ export class SettingsAdvancedComponent implements OnInit {
     this.removeBrandingForm = this.formBuilder.group({
       remove_branding: [null],
       set_footer_text: [null],
+    });
+    /**
+     * Setup google Analytics
+     */
+    this.googleAnalyticsForm = this.formBuilder.group({
+      google_analytics_enabled: [null],
+      google_analytics_code: [null],
     });
     /**
      * Setup advanced form
