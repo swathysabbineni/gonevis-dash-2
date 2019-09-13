@@ -27,6 +27,11 @@ export class SettingsAdvancedComponent implements OnInit {
   advancedForm: FormGroup;
 
   /**
+   * remove branding form
+   */
+  removeBrandingForm: FormGroup;
+
+  /**
    * Advanced form API loading indicator
    */
   advancedLoading: boolean;
@@ -36,6 +41,13 @@ export class SettingsAdvancedComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    /**
+     * Setup remove branding form
+     */
+    this.removeBrandingForm = this.formBuilder.group({
+      remove_branding: [null],
+      set_footer_text: [null],
+    });
     /**
      * Setup advanced form
      */
