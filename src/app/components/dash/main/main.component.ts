@@ -6,6 +6,7 @@ import { Comment } from '@app/interfaces/v1/comment';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Metrics } from '@app/interfaces/v1/metrics';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UsersModalComponent } from '@app/shared/users-modal/users-modal.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
@@ -49,29 +50,33 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Load entries
-     */
-    this.entryService.getEntries().subscribe((response: ApiResponse<Entry>): void => {
-      this.entries = response.results;
-    });
-    /**
-     * Load comments
-     */
-    this.commentsService.getComments().subscribe((response: ApiResponse<Comment>): void => {
-      this.comments = response.results;
-    });
-    /**
-     * Load metrics
-     */
-    this.blogService.getMetrics().subscribe((data: Metrics): void => {
-      this.metrics = data;
-    });
-    /**
-     * Load template config
-     */
-    this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
-      this.templateConfig = data.template_config;
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        /**
+         * Load entries
+         */
+        this.entryService.getEntries().subscribe((response: ApiResponse<Entry>): void => {
+          this.entries = response.results;
+        });
+        /**
+         * Load comments
+         */
+        this.commentsService.getComments().subscribe((response: ApiResponse<Comment>): void => {
+          this.comments = response.results;
+        });
+        /**
+         * Load metrics
+         */
+        this.blogService.getMetrics().subscribe((data: Metrics): void => {
+          this.metrics = data;
+        });
+        /**
+         * Load template config
+         */
+        this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
+          this.templateConfig = data.template_config;
+        });
+      }
     });
   }
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Entry } from '@app/interfaces/v1/entry';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EntryService } from './entry.service';
 
@@ -30,13 +32,17 @@ export class EntryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Load entries
-     */
-    this.entryService.getEntries({
-      is_page: this.isPages,
-    }).subscribe((response: ApiResponse<Entry>): void => {
-      this.entries = response.results;
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        /**
+         * Load entries
+         */
+        this.entryService.getEntries({
+          is_page: this.isPages,
+        }).subscribe((response: ApiResponse<Entry>): void => {
+          this.entries = response.results;
+        });
+      }
     });
   }
 
@@ -67,7 +73,7 @@ export class EntryComponent implements OnInit {
       state: {
         add: {
           label: title,
-          url: `/${ slug }`,
+          url: `/${slug}`,
         },
       },
     });

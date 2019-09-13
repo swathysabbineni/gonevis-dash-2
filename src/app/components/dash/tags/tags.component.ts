@@ -5,6 +5,8 @@ import { TagsService } from '@app/components/dash/tags/tags.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Tag } from '@app/interfaces/v1/tag';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { BlogService } from '@app/services/blog/blog.service';
 import { TagModalComponent } from '@app/shared/tags-modal/tag-modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
@@ -50,18 +52,22 @@ export class TagsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Setup tag form
-     */
-    this.form = this.formBuilder.group({
-      name: ['', Validators.required],
-      slug: [''],
-      description: [''],
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        /**
+         * Setup tag form
+         */
+        this.form = this.formBuilder.group({
+          name: ['', Validators.required],
+          slug: [''],
+          description: [''],
+        });
+        /**
+         * Get tags
+         */
+        this.getTags();
+      }
     });
-    /**
-     * Get tags
-     */
-    this.getTags();
   }
 
   /**
@@ -114,7 +120,7 @@ export class TagsComponent implements OnInit {
       state: {
         add: {
           label: name,
-          url: `/${ slug }`,
+          url: `/${slug}`,
         },
       },
     });
