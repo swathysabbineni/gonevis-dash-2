@@ -158,5 +158,12 @@
   "UPLOAD": "Upload",
   "SELECT_IMAGE": "Select image",
   "FEEL_FREE_TO_JOIN_OUR_DISCORD_SERVER": "Feel free to join our new Discord server!",
+  "REMOVE_GONEVIS_BRANDING": "Remove GoNevis.com branding.",
+  "FOOTER_TEXT": "Footer text",
+  "ALLOW_GOOGLE_ANALYTICS": "Allow Google Analytics",
+  "GOOGLE_ANALYTICS_CODE": "Google Analytics Code",
+  "ALLOW_GOOGLE_ADSENSE": "Allow Google ADSense",
+  "GOOGLE_ADSENSE_CODE": "Google ADSense code",
+  "SAVE": "Save",
   "COLLABORATING": "Collaborating"
 }
