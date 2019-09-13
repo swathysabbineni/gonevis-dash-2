@@ -5,7 +5,7 @@
     <div class="col-md-8">
 
       <!-- Posts -->
-      <div class="card dash mb-4">
+      <div class="card dash mb-4" *ngIf="entries">
         <!-- Header -->
         <div class="card-header">
           <a class="init" routerLink="../../posts" translate>POSTS</a>
@@ -44,7 +44,7 @@
       </div>
 
       <!-- Comments -->
-      <div class="card dash">
+      <div class="card dash" *ngIf="comments">
         <!-- Header -->
         <div class="card-header">
           <a class="init" routerLink="../../comments" translate>COMMENTS</a>
@@ -96,8 +96,8 @@
 
       <!-- Comment overview -->
       <div class="card dash mb-4">
-        <div class="card-header text-capitalize">
-          <a routerLink="../../comments" translate>COMMENT_OVERVIEW</a>
+        <div class="card-header">
+          <a class="text-capitalize" routerLink="../../comments" translate>COMMENT_OVERVIEW</a>
         </div>
         <div class="list-group">
           <!-- All comments -->
@@ -125,8 +125,8 @@
 
       <!-- Blog overview -->
       <div class="card dash mb-4">
-        <div class="card-header text-capitalize">
-          <a routerLink="../../settings/general" translate>BLOG_OVERVIEW</a>
+        <div class="card-header">
+          <a class="text-capitalize" routerLink="../../settings/general" translate>BLOG_OVERVIEW</a>
         </div>
         <div class="list-group">
           <!-- Subscribers -->
@@ -174,8 +174,8 @@
 
       <!-- Team -->
       <div class="card dash mb-4">
-        <div class="card-header text-capitalize">
-          <a routerLink="../../team" translate>TEAM</a>
+        <div class="card-header">
+          <a class="text-capitalize" routerLink="../../team" translate>TEAM</a>
         </div>
         <div class="list-group">
           <!-- Team members -->
