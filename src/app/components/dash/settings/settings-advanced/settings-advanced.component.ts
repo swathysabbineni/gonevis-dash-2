@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 
 @Component({
@@ -51,42 +52,57 @@ export class SettingsAdvancedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Setup remove branding form
-     */
-    this.removeBrandingForm = this.formBuilder.group({
-      remove_branding: [null],
-      set_footer_text: [null],
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        /**
+         * Setup advanced form
+         */
+        this.advancedForm = this.formBuilder.group({
+          meta_description: [null],
+          paginate_by: [null],
+          commenting: [null],
+          voting: [null],
+          show_views_count: [null],
+          search_engine_visibility: [null],
+        });
+        /**
+         * Setup remove branding form
+         */
+        this.removeBrandingForm = this.formBuilder.group({
+          remove_branding: [null],
+          set_footer_text: [null],
+        });
+        /**
+         * Setup google Analytics
+         */
+        this.googleAnalyticsForm = this.formBuilder.group({
+          google_analytics_enabled: [null],
+          google_analytics_code: [null],
+        });
+        /**
+         * Setup google adSense form
+         */
+        this.googleAdSenseForm = this.formBuilder.group({
+          google_adsense_enabled: [null],
+          google_adsense_code: [null],
+        });
+        /**
+         * Setup advanced form
+         */
+        this.advancedForm = this.formBuilder.group({
+          meta_description: [null],
+          paginate_by: [null],
+          commenting: [null],
+          voting: [null],
+          show_views_count: [null],
+          search_engine_visibility: [null],
+        });
+        /**
+         * Get blog settings
+         */
+        this.getSettings();
+      }
     });
-    /**
-     * Setup google Analytics
-     */
-    this.googleAnalyticsForm = this.formBuilder.group({
-      google_analytics_enabled: [null],
-      google_analytics_code: [null],
-    });
-    /**
-     * Setup google adSense form
-     */
-    this.googleAdSenseForm = this.formBuilder.group({
-      google_adsense_enabled: [null],
-      google_adsense_code: [null],
-    });
-    /**
-     * Setup advanced form
-     */
-    this.advancedForm = this.formBuilder.group({
-      meta_description: [null],
-      paginate_by: [null],
-      commenting: [null],
-      voting: [null],
-      show_views_count: [null],
-      search_engine_visibility: [null],
-    });
-    /**
-     * Get blog settings
-     */
-    this.getSettings();
   }
 
   /**

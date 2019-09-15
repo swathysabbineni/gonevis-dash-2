@@ -18,39 +18,35 @@ export class AuthService {
   /**
    * Sign out redirect
    */
-  private static readonly signOutRedirect: string = '/user/sign-in';
+  private static readonly signOutRedirect: string[] = ['user', 'sign-in'];
 
   /**
-   * Authentication user subject
+   * Authenticated user (subject)
    */
   private static userSubject: BehaviorSubject<UserAuth> = new BehaviorSubject<UserAuth>(null);
 
   /**
-   * Authenticated user
+   * Authenticated user (observable)
    */
-  static user: Observable<UserAuth>;
+  static user: Observable<UserAuth> = AuthService.userSubject.asObservable();
 
   constructor(private http: HttpClient,
               private router: Router,
               private cookieService: CookieService,
               private apiService: ApiService) {
-    // If user is authenticated, then store token and user subjects with their local storage values
+    /**
+     * Update user (subject) and blogs (subject) if user is authenticated
+     * @see isAuth
+     */
     if (this.isAuth) {
-      const userData: UserAuth = JSON.parse(localStorage.getItem('user'));
-      // Update user subject data
-      AuthService.userSubject.next(userData);
-      // Set current blog
-      if (BlogService.currentBlog) {
-        BlogService.currentBlog = BlogService.currentBlog;
-      } else {
-        BlogService.currentBlog = userData.sites[0];
-      }
+      const user: UserAuth = JSON.parse(localStorage.getItem('user'));
+      AuthService.userSubject.next(user);
+      BlogService.set(user.sites.reverse());
     }
-    AuthService.user = AuthService.userSubject.asObservable();
   }
 
   /**
-   * Parse JWT from token.
+   * Parse JWT token
    *
    * @param token JWT.
    *
@@ -108,7 +104,7 @@ export class AuthService {
     this.cookieService.deleteAll('/');
     localStorage.clear();
     AuthService.userSubject.next(null);
-    this.router.navigateByUrl(AuthService.signOutRedirect);
+    this.router.navigate(AuthService.signOutRedirect);
   }
 
   /**
@@ -120,7 +116,9 @@ export class AuthService {
    * @return String observable which can be subscribed to.
    */
   signIn(username: string, password: string): Observable<string> {
-    return this.http.post<AuthResponse>(`${this.apiService.base.v1}account/login/`, { username, password }).pipe(
+    return this.http.post<AuthResponse>(
+      `${this.apiService.base.v1}account/login/`, { username, password },
+    ).pipe(
       map((data: AuthResponse): string => {
         // Store token into cookies
         this.setToken(data.token);
@@ -128,8 +126,6 @@ export class AuthService {
         localStorage.setItem('user', JSON.stringify(data.user));
         // Update user subject data
         AuthService.userSubject.next(data.user);
-        // Store current blog into local storage
-        BlogService.currentBlog = data.user.sites[0];
         // Return raw user data
         return data.user.username;
       }),

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommentStatus } from '@app/enums/comment-status';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Comment } from '@app/interfaces/v1/comment';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { CommentsService } from './comments.service';
 
@@ -29,12 +31,16 @@ export class CommentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Get comments
-     */
-    this.commentsService.getComments().subscribe((response: ApiResponse<Comment>): void => {
-      this.comments = response.results;
-      this.loading = true;
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        /**
+         * Get comments
+         */
+        this.commentsService.getComments().subscribe((response: ApiResponse<Comment>): void => {
+          this.comments = response.results;
+          this.loading = true;
+        });
+      }
     });
   }
 

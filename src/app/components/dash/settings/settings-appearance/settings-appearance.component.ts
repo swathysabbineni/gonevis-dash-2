@@ -7,6 +7,7 @@ import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Template } from '@app/interfaces/v1/template';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { CarouselComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
 
@@ -87,39 +88,43 @@ export class SettingsAppearanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Setup theme form
-     */
-    this.themeForm = this.formBuilder.group({
-      highlight_theme: [HighlightTheme.DEFAULT],
-      template_primary_color: [TemplatePrimaryColor.DEFAULT],
-    });
-    /**
-     * Get settings
-     */
-    this.getSettings();
-    /**
-     * Load template config
-     */
-    this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
-      /**
-       * Get templates
-       */
-      this.blogService.getTemplates().subscribe((response: { templates: Template[] }): void => {
-        this.templates = response.templates;
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
         /**
-         * Set current viewing theme
+         * Setup theme form
          */
-        this.changeDetectorRef.detectChanges();
-        this.themeCarousel.activeSlide = this.templates.findIndex(
-          theme => this.templateConfig.name === theme.name,
-        );
-      });
+        this.themeForm = this.formBuilder.group({
+          highlight_theme: [HighlightTheme.DEFAULT],
+          template_primary_color: [TemplatePrimaryColor.DEFAULT],
+        });
+        /**
+         * Get settings
+         */
+        this.getSettings();
+        /**
+         * Load template config
+         */
+        this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
+          /**
+           * Get templates
+           */
+          this.blogService.getTemplates().subscribe((response: { templates: Template[] }): void => {
+            this.templates = response.templates;
+            /**
+             * Set current viewing theme
+             */
+            this.changeDetectorRef.detectChanges();
+            this.themeCarousel.activeSlide = this.templates.findIndex(
+              theme => this.templateConfig.name === theme.name,
+            );
+          });
+        });
+        /**
+         * Get current theme and config
+         */
+        this.getTemplateConfig();
+      }
     });
-    /**
-     * Get current theme and config
-     */
-    this.getTemplateConfig();
   }
 
   /**
