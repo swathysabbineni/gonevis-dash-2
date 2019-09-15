@@ -6,7 +6,6 @@ import { SettingsAdvancedComponent } from './settings-advanced/settings-advanced
 import { SettingsAppearanceComponent } from './settings-appearance/settings-appearance.component';
 import { SettingsBillingComponent } from './settings-billing/settings-billing.component';
 import { SettingsGeneralComponent } from './settings-general/settings-general.component';
-import { SettingsUpgradeComponent } from './settings-upgrade/settings-upgrade.component';
 
 const routes: Routes = [{
   path: '',
@@ -25,7 +24,7 @@ const routes: Routes = [{
     component: SettingsAdvancedComponent,
   }, {
     path: 'upgrade',
-    component: SettingsUpgradeComponent,
+    loadChildren: (): any => import('./settings-upgrade/settings-upgrade.module').then(m => m.SettingsUpgradeModule)
   }, {
     path: 'billing',
     component: SettingsBillingComponent,

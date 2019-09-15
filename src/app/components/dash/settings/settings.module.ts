@@ -14,7 +14,6 @@ import { SettingsAppearanceComponent } from './settings-appearance/settings-appe
 import { SettingsBillingComponent } from './settings-billing/settings-billing.component';
 import { SettingsGeneralComponent } from './settings-general/settings-general.component';
 import { SettingsRoutingModule } from './settings-routing.module';
-import { SettingsUpgradeComponent } from './settings-upgrade/settings-upgrade.component';
 import { SettingsComponent } from './settings.component';
 
 
@@ -24,7 +23,6 @@ import { SettingsComponent } from './settings.component';
     SettingsGeneralComponent,
     SettingsAppearanceComponent,
     SettingsAdvancedComponent,
-    SettingsUpgradeComponent,
     SettingsBillingComponent,
   ],
   imports: [
