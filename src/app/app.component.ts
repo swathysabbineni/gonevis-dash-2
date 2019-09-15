@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent, Params } from '@angular/router';
+import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
   /**
    * Is user in any dash page
    */
-  inDash = true;
+  inDash: boolean;
 
   constructor(public auth: AuthService,
               private translate: TranslateService,
@@ -44,6 +44,14 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    /**
+     * Is user in any dash page
+     */
+    this.router.events.pipe(
+      filter((event: RouterEvent): boolean => event instanceof NavigationEnd),
+    ).subscribe((): void => {
+      this.inDash = this.route.root.firstChild.snapshot.routeConfig.path === 'dash';
+    });
 
     /**
      * Set the default language
