@@ -26,7 +26,7 @@ export class DashComponent implements OnInit {
           const index: number = Number(params.blog);
           if (index) {
             BlogService.setCurrent(blogs[index].id);
-          } else {
+          } else if (blogs) {
             BlogService.setCurrent(blogs[0].id);
           }
         });
