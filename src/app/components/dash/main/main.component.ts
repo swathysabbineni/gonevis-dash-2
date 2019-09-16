@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommentsService } from '@app/components/dash/comments/comments.service';
 import { EntryService } from '@app/components/dash/entry/entry.service';
+import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Comment } from '@app/interfaces/v1/comment';
 import { Entry } from '@app/interfaces/v1/entry';
@@ -53,6 +54,10 @@ export class MainComponent implements OnInit {
     BlogService.blog.subscribe((blog: BlogMin): void => {
       if (blog) {
         /**
+         * Reset data
+         */
+        this.templateConfig = null;
+        /**
          * Load entries
          */
         this.entryService.getEntries().subscribe((response: ApiResponse<Entry>): void => {
@@ -71,11 +76,13 @@ export class MainComponent implements OnInit {
           this.metrics = data;
         });
         /**
-         * Load template config
+         * Load template config (for owner and admins)
          */
-        this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
-          this.templateConfig = data.template_config;
-        });
+        if (blog.role !== TeamRoles.Editor) {
+          this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
+            this.templateConfig = data.template_config;
+          });
+        }
       }
     });
   }
