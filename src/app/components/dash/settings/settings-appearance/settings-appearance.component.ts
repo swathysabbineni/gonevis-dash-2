@@ -88,15 +88,15 @@ export class SettingsAppearanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    /**
+     * Setup theme form
+     */
+    this.themeForm = this.formBuilder.group({
+      highlight_theme: [HighlightTheme.DEFAULT],
+      template_primary_color: [TemplatePrimaryColor.DEFAULT],
+    });
     BlogService.blog.subscribe((blog: BlogMin): void => {
       if (blog) {
-        /**
-         * Setup theme form
-         */
-        this.themeForm = this.formBuilder.group({
-          highlight_theme: [HighlightTheme.DEFAULT],
-          template_primary_color: [TemplatePrimaryColor.DEFAULT],
-        });
         /**
          * Get settings
          */

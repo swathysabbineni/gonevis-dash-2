@@ -44,7 +44,7 @@
       </div>
 
       <!-- Comments -->
-      <div class="card dash" *ngIf="comments">
+      <div class="card dash mb-4" *ngIf="comments">
         <!-- Header -->
         <div class="card-header">
           <a class="init" routerLink="../../comments" translate>COMMENTS</a>
@@ -53,7 +53,9 @@
           </span>
         </div>
         <div class="list-group">
-          <a class="list-group-item list-group-item-action" *ngFor="let comment of comments">
+          <a class="list-group-item list-group-item-action" *ngFor="let comment of comments"
+             [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]"
+             [queryParams]="{ comment: comment.id }">
             <!-- Name-->
             <small class="text-secondary">{{ comment.user.name }}: </small>
             <!-- Comment -->
@@ -137,9 +139,10 @@
             </button>
           </div>
           <!-- Theme and layout -->
-          <div class="list-group-item d-flex">
+          <div class="list-group-item d-flex" *ngIf="templateConfig">
             <span translate>THEME_AND_LAYOUT</span>
-            <a class="ml-auto btn btn-sm btn-primary py-0" routerLink="../../settings/appearance" *ngIf="templateConfig">
+            <a class="ml-auto btn btn-sm btn-primary py-0" routerLink="../../settings/appearance"
+               *ngIf="templateConfig">
               {{ templateConfig.name | uppercase }}
             </a>
           </div>
