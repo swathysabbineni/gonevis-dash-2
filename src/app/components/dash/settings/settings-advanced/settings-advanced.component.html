@@ -66,9 +66,7 @@
     </div>
     <div class="mt-2">
       <label for="set_footer_text" translate>FOOTER_TEXT</label>
-      <textarea class="form-control" id="set_footer_text" formControlName="set_footer_text"
-                [disabled]="!removeBrandingForm.get('remove_branding').value">
-      </textarea>
+      <textarea class="form-control" id="set_footer_text" formControlName="set_footer_text"></textarea>
     </div>
   </div>
   <!-- Footer -->
@@ -88,8 +86,7 @@
     </div>
     <div class="mt-2">
       <label for="google_analytics_code" translate>GOOGLE_ANALYTICS_CODE</label>
-      <textarea class="form-control" id="google_analytics_code" formControlName="google_analytics_code"
-                [disabled]="!googleAnalyticsForm.get('google_analytics_enabled').value">
+      <textarea class="form-control" id="google_analytics_code" formControlName="google_analytics_code">
       </textarea>
     </div>
   </div>
@@ -110,9 +107,7 @@
     </div>
     <div class="mt-2">
       <label for="google_adsense_code" translate>GOOGLE_ADSENSE_CODE</label>
-      <textarea class="form-control" id="google_adsense_code" formControlName="google_adsense_code"
-                [disabled]="!googleAdSenseForm.get('google_adsense_enabled').value">
-      </textarea>
+      <textarea class="form-control" id="google_adsense_code" formControlName="google_adsense_code"></textarea>
     </div>
   </div>
   <!-- Footer -->

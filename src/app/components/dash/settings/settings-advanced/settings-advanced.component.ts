@@ -52,51 +52,51 @@ export class SettingsAdvancedComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    /**
+     * Setup advanced form
+     */
+    this.advancedForm = this.formBuilder.group({
+      meta_description: [null],
+      paginate_by: [null],
+      commenting: [null],
+      voting: [null],
+      show_views_count: [null],
+      search_engine_visibility: [null],
+    });
+    /**
+     * Setup remove branding form
+     */
+    this.removeBrandingForm = this.formBuilder.group({
+      remove_branding: [null],
+      set_footer_text: [null],
+    });
+    /**
+     * Setup google Analytics
+     */
+    this.googleAnalyticsForm = this.formBuilder.group({
+      google_analytics_enabled: [null],
+      google_analytics_code: [null],
+    });
+    /**
+     * Setup google adSense form
+     */
+    this.googleAdSenseForm = this.formBuilder.group({
+      google_adsense_enabled: [null],
+      google_adsense_code: [null],
+    });
+    /**
+     * Setup advanced form
+     */
+    this.advancedForm = this.formBuilder.group({
+      meta_description: [null],
+      paginate_by: [null],
+      commenting: [null],
+      voting: [null],
+      show_views_count: [null],
+      search_engine_visibility: [null],
+    });
     BlogService.blog.subscribe((blog: BlogMin): void => {
       if (blog) {
-        /**
-         * Setup advanced form
-         */
-        this.advancedForm = this.formBuilder.group({
-          meta_description: [null],
-          paginate_by: [null],
-          commenting: [null],
-          voting: [null],
-          show_views_count: [null],
-          search_engine_visibility: [null],
-        });
-        /**
-         * Setup remove branding form
-         */
-        this.removeBrandingForm = this.formBuilder.group({
-          remove_branding: [null],
-          set_footer_text: [null],
-        });
-        /**
-         * Setup google Analytics
-         */
-        this.googleAnalyticsForm = this.formBuilder.group({
-          google_analytics_enabled: [null],
-          google_analytics_code: [null],
-        });
-        /**
-         * Setup google adSense form
-         */
-        this.googleAdSenseForm = this.formBuilder.group({
-          google_adsense_enabled: [null],
-          google_adsense_code: [null],
-        });
-        /**
-         * Setup advanced form
-         */
-        this.advancedForm = this.formBuilder.group({
-          meta_description: [null],
-          paginate_by: [null],
-          commenting: [null],
-          voting: [null],
-          show_views_count: [null],
-          search_engine_visibility: [null],
-        });
         /**
          * Get blog settings
          */
