@@ -142,7 +142,8 @@
           <div class="list-group-item d-flex" *ngIf="templateConfig">
             <span translate>THEME_AND_LAYOUT</span>
             <a class="ml-auto btn btn-sm btn-primary py-0" routerLink="../../settings/appearance"
-               *ngIf="templateConfig">{{ templateConfig.name | uppercase }}
+               *ngIf="templateConfig">
+              {{ templateConfig.name | uppercase }}
             </a>
           </div>
         </div>
