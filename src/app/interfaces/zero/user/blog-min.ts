@@ -1,3 +1,5 @@
+import { TeamRoles } from '@app/enums/team-roles';
+
 /**
  * Represents minimal blog structure for user
  */
@@ -8,7 +10,7 @@ export interface BlogMin {
       thumbnail_48x48: string
     }
   };
-  role: number;
+  role: TeamRoles;
   title: string;
   url: string;
 }
