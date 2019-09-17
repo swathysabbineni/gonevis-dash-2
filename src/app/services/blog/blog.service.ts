@@ -7,6 +7,7 @@ import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Metrics } from '@app/interfaces/v1/metrics';
 import { Subscriber } from '@app/interfaces/v1/subscriber';
+import { Tag } from '@app/interfaces/v1/tag';
 import { Template } from '@app/interfaces/v1/template';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { TemplateConfigFields } from '@app/interfaces/v1/template-config-fields';
@@ -64,37 +65,84 @@ export class BlogService {
     { id: HighlightTheme.ZENBURN, label: 'Zenburn' },
   ];
 
+  /**
+   * Blog list (subject)
+   */
+  private static blogsSubject: BehaviorSubject<BlogMin[]> = new BehaviorSubject<BlogMin[]>(null);
+
+  /**
+   * Blog list (observable)
+   */
+  static blogs: Observable<BlogMin[]> = BlogService.blogsSubject.asObservable();
+
+  /**
+   * Current blog (subject)
+   */
   private static blogSubject: BehaviorSubject<BlogMin> = new BehaviorSubject<BlogMin>(null);
 
+  /**
+   * Current blog (observable)
+   */
   static blog: Observable<BlogMin> = BlogService.blogSubject.asObservable();
 
   constructor(private http: HttpClient,
-              private apiService: ApiService,
               private api: ApiService) {
   }
 
   /**
-   * Update current blog
+   * Set the blog list
    *
-   * @param blog Blog data
+   * @param blogs Blogs to set the list to
    */
-  static set currentBlog(blog: BlogMin) {
-    localStorage.setItem('blog', JSON.stringify(blog));
-    BlogService.blogSubject.next(blog);
+  static set(blogs: BlogMin[]): void {
+    BlogService.blogsSubject.next(blogs);
+  }
+
+  /**
+   * Add a blog to the blog list
+   *
+   * @param blog Blog to add
+   */
+  static add(blog: BlogMin): void {
+    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
+    blogs.push(blog);
+    BlogService.blogsSubject.next(blogs);
+  }
+
+  /**
+   * Update a blog from the blog list
+   *
+   * @param id Blog ID to update
+   * @param blog Blog data to update
+   */
+  static update(id: string, blog: BlogMin): void {
+    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
+    blogs[blogs.findIndex(item => item.id === id)] = blog;
+    BlogService.blogsSubject.next(blogs);
+  }
+
+  /**
+   * Set current blog
+   *
+   * @param id Blog ID to set as current
+   */
+  static setCurrent(id: string): void {
+    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
+    BlogService.blogSubject.next(blogs.find(blog => blog.id === id));
   }
 
   /**
    * @return Current blog
    */
   static get currentBlog(): BlogMin {
-    return JSON.parse(localStorage.getItem('blog'));
+    return BlogService.blogSubject.getValue();
   }
 
   /**
    * Get metrics
    */
   getMetrics(): Observable<Metrics> {
-    return this.http.get<Metrics>(`${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/metrics`);
+    return this.http.get<Metrics>(`${this.api.base.v1}website/site/${BlogService.currentBlog.id}/metrics`);
   }
 
   /**
@@ -102,7 +150,7 @@ export class BlogService {
    */
   getTemplates(): Observable<{ templates: Template[] }> {
     return this.http.get<{ templates: Template[] }>(
-      `${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/templates`,
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/templates`,
     );
   }
 
@@ -124,7 +172,7 @@ export class BlogService {
    */
   getTemplateConfig(): Observable<{ template_config: TemplateConfig }> {
     return this.http.get<{ template_config: TemplateConfig }>(
-      `${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/template-config`,
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/template-config`,
     );
   }
 
@@ -189,7 +237,23 @@ export class BlogService {
    */
   getSubscribers(): Observable<ApiResponse<Subscriber>> {
     return this.http.get<ApiResponse<Subscriber>>(
-      `${this.apiService.base.zero}website/site/${BlogService.currentBlog.id}/subscribers`,
+      `${this.api.base.zero}website/site/${BlogService.currentBlog.id}/subscribers`,
+    );
+  }
+
+  /**
+   * Update tag
+   *
+   * @param payload tag payload
+   * @param slug tag slug
+   */
+  updateTag(slug: string, payload: Params): Observable<Tag> {
+    return this.http.put<Tag>(
+      `${this.api.base.v1}tagool/tag/${slug}`, payload, {
+        params: {
+          site: BlogService.currentBlog.id,
+        },
+      },
     );
   }
 }

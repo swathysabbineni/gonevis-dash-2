@@ -1,7 +1,5 @@
 @import "variables";
 
-$body-bg: #edeef0;
-
 $input-group-addon-bg: none;
 $input-group-addon-color: $dark;
 $list-group-border-color: $light;
@@ -19,7 +17,8 @@ $tooltip-bg: $dark;
 
 @import "~bootstrap/scss/bootstrap";
 
-a {
+a,
+.pointer {
   cursor: pointer;
 }
 
@@ -27,143 +26,133 @@ a {
   white-space: pre-line;
 }
 
-.navbar {
+.card {
 
-  .navbar-brand {
+  &.feed {
+    $text-font-size: 13px;
+    $text-color: $secondary;
 
-    &:active {
-      opacity: 0.75;
-    }
-
-    img {
-      width: 48px;
-      margin-top: -8px;
-    }
-  }
-
-  .nav-item {
-
-    &.dropdown {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      border-radius: $border-radius;
-
-      &:hover,
-      &:focus {
-        background: rgba(0, 0, 0, 0.05);
-      }
-
-      &.show {
-        background: rgba(0, 0, 0, 0.2);
-      }
+    .card-header {
+      background: darken($card-bg, 1%);
+      color: $dark;
 
       img {
-        width: 32px;
-        height: 32px;
-        border-radius: 100%;
-        margin: -12px 6px -8px -2px;
-      }
+        width: 48px;
+        height: 48px;
+        background: $secondary;
 
-      span {
-        text-transform: capitalize;
-      }
-
-      .dropdown-menu {
-        text-transform: capitalize;
-      }
-    }
-  }
-}
-
-.card {
-  $text-font-size: 13px;
-  $text-color: $secondary;
-
-  .card-header {
-    background: darken($card-bg, 1%);
-    color: $dark;
-
-    img {
-      width: 48px;
-      height: 48px;
-      background: $secondary;
-
-      &.overlay {
-        width: 128px;
-        height: 128px;
-        margin-bottom: -86px;
-        z-index: 1;
-      }
-    }
-
-    span:not(.init) {
-      color: $text-color;
-      font-size: $text-font-size;
-    }
-
-    .nav-link.active {
-      cursor: default;
-      background: white;
-      border-bottom-color: white;
-    }
-  }
-
-  .cover {
-    background-color: $secondary;
-    background-size: cover;
-    background-position: center;
-    height: 256px;
-  }
-
-  .card-body {
-
-    .card-text,
-    .card-title {
-      a {
-        color: $text-color;
-        text-decoration: none;
-
-        &:hover,
-        &:focus {
-          color: $dark;
+        &.overlay {
+          width: 128px;
+          height: 128px;
+          margin-bottom: -86px;
+          z-index: 1;
         }
       }
 
+      span {
+        color: $text-color;
+        font-size: $text-font-size;
+      }
+
+      .nav-link.active {
+        cursor: default;
+        background: white;
+        border-bottom-color: white;
+      }
     }
 
-    p {
-      font-size: $text-font-size;
-      color: $text-color;
+    .cover {
+      background-color: $secondary;
+      background-size: cover;
+      background-position: center;
+      height: 256px;
+    }
+
+    .card-body {
+
+      .card-text,
+      .card-title {
+        a {
+          color: $text-color;
+          text-decoration: none;
+
+          &:hover,
+          &:focus {
+            color: $dark;
+          }
+        }
+
+      }
+
+      p {
+        font-size: $text-font-size;
+        color: $text-color;
+      }
+    }
+
+    .card-footer {
+
+      .btn-link {
+        color: $text-color;
+        text-decoration: none;
+        padding: 0;
+
+        &:hover {
+          color: $dark;
+        }
+
+        &:active {
+          color: $text-muted;
+        }
+
+        &:not(.float-right) {
+          margin-right: 20px;
+        }
+
+        &.float-right {
+          margin-left: 20px;
+        }
+
+        span {
+          padding-left: 5px;
+        }
+      }
     }
   }
 
-  .card-footer {
+  &.dash {
+    border: none !important;
+    cursor: default;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
 
-    .btn-link {
-      color: $text-color;
-      text-decoration: none;
-      padding: 0;
+    .card-header {
+      background-color: white;
+      padding-top: 18px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid $body-bg;
 
-      &:hover {
-        color: $dark;
+      &,
+      > a {
+        color: #6F7A8B;
+        font-weight: bold;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
       }
 
-      &:active {
-        color: $text-muted;
+      .card-label {
+        padding: 8px 12px;
+        margin-bottom: -16px;
+        margin-top: -8px;
+        background: $body-bg;
+        font-weight: bold;
+        color: #6F7A8B !important;
+        float: right;
+        border-radius: $border-radius;
       }
+    }
 
-      &:not(.float-right) {
-        margin-right: 20px;
-      }
-
-      &.float-right {
-        margin-left: 20px;
-      }
-
-      span {
-        padding-left: 5px;
-      }
+    .card-footer {
+      border-top: 2px solid $body-bg;
     }
   }
 }

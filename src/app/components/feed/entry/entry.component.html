@@ -2,7 +2,7 @@
 <app-entry-list [entries]="[entry]" *ngIf="entry"></app-entry-list>
 
 <!-- Comment section -->
-<div class="card shadow-sm my-3" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+<div class="card feed shadow-sm my-3" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
      (scrolled)="loadMore(next)" *ngIf="comments">
 
   <!-- Comment form -->

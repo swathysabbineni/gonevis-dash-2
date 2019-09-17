@@ -48,6 +48,6 @@ export class TagsService {
    */
   create(payload: Params): Observable<Tag> {
     payload.site = BlogService.currentBlog.id;
-    return this.http.post<Tag>(`${this.apiService.base.v1}tagool/tag/`, payload).pipe();
+    return this.http.post<Tag>(`${this.apiService.base.v1}tagool/tag/`, payload);
   }
 }

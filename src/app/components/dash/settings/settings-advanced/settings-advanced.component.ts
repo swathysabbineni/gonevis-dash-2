@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 
 @Component({
@@ -36,21 +37,25 @@ export class SettingsAdvancedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Setup advanced form
-     */
-    this.advancedForm = this.formBuilder.group({
-      meta_description: [null],
-      paginate_by: [null],
-      commenting: [null],
-      voting: [null],
-      show_views_count: [null],
-      search_engine_visibility: [null],
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        /**
+         * Setup advanced form
+         */
+        this.advancedForm = this.formBuilder.group({
+          meta_description: [null],
+          paginate_by: [null],
+          commenting: [null],
+          voting: [null],
+          show_views_count: [null],
+          search_engine_visibility: [null],
+        });
+        /**
+         * Get blog settings
+         */
+        this.getSettings();
+      }
     });
-    /**
-     * Get blog settings
-     */
-    this.getSettings();
   }
 
   /**

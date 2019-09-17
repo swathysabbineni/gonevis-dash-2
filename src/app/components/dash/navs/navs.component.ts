@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NavsService } from '@app/components/dash/navs/navs.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { Navigation } from '@app/interfaces/v1/navigation';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -35,18 +37,22 @@ export class NavsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Get navigations
-     */
-    this.navsService.getNavigations().subscribe((data: { navigation: Navigation[] }): void => {
-      this.navigations = data.navigation;
-      /**
-       * Watch router params
-       */
-      if (history.state.add) {
-        this.navigations.push({
-          label: history.state.add.label,
-          url: history.state.add.url,
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        /**
+         * Get navigations
+         */
+        this.navsService.getNavigations().subscribe((data: { navigation: Navigation[] }): void => {
+          this.navigations = data.navigation;
+          /**
+           * Watch router params
+           */
+          if (history.state.add) {
+            this.navigations.push({
+              label: history.state.add.label,
+              url: history.state.add.url,
+            });
+          }
         });
       }
     });
