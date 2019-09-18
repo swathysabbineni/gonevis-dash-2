@@ -41,16 +41,35 @@ export class SettingsUpgradeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isOwner = BlogService.currentBlog.role === TeamRoles.Owner;
     /**
-     * Get current subscription
+     * Get current user
      */
-    this.settingsUpgradeService.getSubscription().subscribe((data: { subscription: Subscription }): void => {
-      this.subscription = data.subscription;
-      if (data.subscription && data.subscription.active) {
-        this.currentPlan = data.subscription.plan;
+    AuthService.user.subscribe((data: UserAuth): UserAuth => this.user = data);
+    /**
+     * Check if owner
+     */
+    BlogService.blog.subscribe((data: BlogMin): void => {
+      if (data) {
+        this.isOwner = data.role === TeamRoles.Owner;
+        /**
+         * Get current subscription
+         */
+        this.settingsUpgradeService.getSubscription().subscribe((data: { subscription: Subscription }): void => {
+          this.subscription = data.subscription;
+          if (data.subscription && data.subscription.active) {
+            this.currentPlan = data.subscription.plan;
+          }
+        });
+
+        /**
+         * Get plans
+         */
+        this.settingsUpgradeService.getPlans().subscribe((plans: ApiResponse<Plan>): void => {
+          this.plans = plans.results;
+        });
       }
     });
+  }
 
     /**
      * Get plans
