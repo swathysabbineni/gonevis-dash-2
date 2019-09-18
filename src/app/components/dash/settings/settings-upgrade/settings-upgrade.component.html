@@ -1,13 +1,13 @@
 <!-- Plans -->
-<div class="plans row s-mar-top text-center animated fadeIn" *ngIf="plans.length && isOwner">
+<div class="row text-center" *ngIf="plans.length">
   <div class="col-md-6">
-    <div class="plan" id="lite">
+    <div id="lite">
       <!-- Title -->
-      <span class="plan-title">Lite</span>
+      <span>Lite</span>
       <p>Basic plan</p>
       <h2>FREE</h2>
       <!-- Detail -->
-      <div class="plan-detail">
+      <div>
         <p>GoNevis.com subdomain.</p>
         <p>No Ads</p>
         <p title="Create or manage as many blog as you like">Unlimited Blogs</p>
@@ -23,17 +23,22 @@
         <p>&nbsp;</p>
         <p>&nbsp;</p>
       </div>
-      <button class="btn btn-success">&nbsp;</button>
     </div>
   </div>
   <!-- Personal -->
   <div class="col-md-6">
     <div id="personal">
       <!-- Title -->
-      <div><fa-icon icon="star" [fixedWidth]="true"></fa-icon> Best Choice</div>
+      <div>
+        <fa-icon icon="star" [fixedWidth]="true"></fa-icon>
+        Best Choice
+      </div>
       <span>{{ plans[0].name }}</span>
       <p>{{ plans[0].description }}</p>
-      <h2><fa-icon icon="dollar-sign" [fixedWidth]="true"></fa-icon> {{ plans[0].price }}</h2>
+      <h2>
+        <fa-icon icon="dollar-sign" [fixedWidth]="true"></fa-icon>
+        {{ plans[0].price }}
+      </h2>
       <span>MONTHLY</span>
       <!-- Detail -->
       <div>
@@ -54,8 +59,8 @@
       </div>
       <!-- Pay -->
       <button class="btn btn-success" (click)="pay(plans[0])"
-              [disabled]="currentPlan.id === plans[0].id || paying">
-        {{ currentPlan.id === plans[0].id ? 'YOUR_PLAN' : 'UPGRADE' | translate }}
+              [disabled]="currentPlan && currentPlan.id === plans[0].id || !isOwner">
+        {{ (currentPlan && currentPlan.id === plans[0].id ? 'YOUR_PLAN' : 'UPGRADE') | translate }}
       </button>
     </div>
   </div>
@@ -65,7 +70,9 @@
       <!-- Title -->
       <span>{{ plans[1].name }}</span>
       <p>{{ plans[1].description }}</p>
-      <h2><fa-icon icon="dollar-sign" [fixedWidth]="true"></fa-icon> {{ plans[1].price }}</h2>
+      <h2>
+        <fa-icon icon="dollar-sign" [fixedWidth]="true"></fa-icon>
+        {{ plans[1].price }}</h2>
       <span>MONTHLY</span>
       <!-- Detail -->
       <div>
@@ -86,8 +93,8 @@
       </div>
       <!-- Pay -->
       <button class="btn btn-success" (click)="pay(plans[1])"
-              [disabled]="currentPlan.id === plans[1].id || paying">
-        {{ currentPlan.id === plans[1].id ? 'YOUR_PLAN' : 'UPGRADE' | translate }}
+              [disabled]="currentPlan && currentPlan.id === plans[1].id || !isOwner">
+        {{ (currentPlan && currentPlan.id === plans[1].id ? 'YOUR_PLAN' : 'UPGRADE') | translate }}
       </button>
     </div>
   </div>
@@ -99,12 +106,12 @@
   <!-- Body -->
   <div class="card-body">
     <!-- Question 1 -->
-      <p class="font-weight-bold">What payment methods do you accept? Paypal? What about invoices?</p>
-      <p>
-        We accept all major credit and debit cards such as Visa, Mastercard or MIR. For
-        annual pre-paid accounts on Business or Enterprise plans we also accept bank
-        transfers, where desired. We do not, under any circumstances, accept Paypal.
-      </p>
+    <p class="font-weight-bold">What payment methods do you accept? Paypal? What about invoices?</p>
+    <p>
+      We accept all major credit and debit cards such as Visa, Mastercard or MIR. For
+      annual pre-paid accounts on Business or Enterprise plans we also accept bank
+      transfers, where desired. We do not, under any circumstances, accept Paypal.
+    </p>
     <!-- Question 2 -->
     <p class="font-weight-bold">How do you process my payments?</p>
     <p>
