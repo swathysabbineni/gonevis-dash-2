@@ -7,4 +7,5 @@ export const environment: Environment = {
     v1: 'https://www.gonevis.com/api/v1/',
     zero: 'https://www.gonevis.com/api/zero/',
   },
+  paymentPublicId: 'pk_05c99b78fc3af3c7338276d58b74e',
 };
