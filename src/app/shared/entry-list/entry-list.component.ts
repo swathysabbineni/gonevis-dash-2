@@ -20,6 +20,11 @@ export class EntryListComponent {
   private currentEntries: Entry[] = [];
 
   /**
+   * Use content instead of excerpt
+   */
+  @Input() useContent = false;
+
+  /**
    * API loading indicator
    */
   loading: boolean;
@@ -36,9 +41,11 @@ export class EntryListComponent {
     /**
      * Sanitize entry content
      */
-    entries.forEach((entry: Entry): void => {
-      entry.content = this.utilService.sanitizeHtml(entry.content) as string;
-    });
+    if (this.useContent) {
+      entries.forEach((entry: Entry): void => {
+        entry.content = this.utilService.sanitizeHtml(entry.content) as string;
+      });
+    }
     this.currentEntries = entries;
   }
 
