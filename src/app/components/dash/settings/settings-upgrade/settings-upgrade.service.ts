@@ -17,14 +17,14 @@ export class SettingsUpgradeService {
   }
 
   /**
-   * Get plans
+   * Get list of plans to upgrade
    */
   getPlans(): Observable<ApiResponse<Plan>> {
     return this.http.get<ApiResponse<Plan>>(`${this.apiService.base.v1}eskenas/plans/`);
   }
 
   /**
-   * Get current subscription
+   * Get current blog subscription plan
    */
   getSubscription(): Observable<{ subscription: Subscription }> {
     const blogId: string = BlogService.currentBlog.id;

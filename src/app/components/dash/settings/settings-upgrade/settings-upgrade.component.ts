@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { PaymentValidationComponent } from '@app/components/dash/settings/settings-upgrade/payment-validation/payment-validation.component';
-import { SettingsUpgradeService } from '@app/components/dash/settings/settings-upgrade/settings-upgrade.service';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Plan } from '@app/interfaces/plan';
@@ -12,7 +10,10 @@ import { BlogService } from '@app/services/blog/blog.service';
 import { environment } from '@environments/environment';
 import { BsModalService } from 'ngx-bootstrap';
 
-declare var cp: any;
+import { PaymentValidationComponent } from './payment-validation/payment-validation.component';
+import { SettingsUpgradeService } from './settings-upgrade.service';
+
+declare var cp;
 
 @Component({
   selector: 'app-settings-upgrade',
@@ -63,17 +64,18 @@ export class SettingsUpgradeComponent implements OnInit {
       if (data) {
         this.isOwner = data.role === TeamRoles.Owner;
         /**
-         * Get current subscription
+         * Get current subscription plan
          */
-        this.settingsUpgradeService.getSubscription().subscribe((data: { subscription: Subscription }): void => {
-          this.subscription = data.subscription;
-          if (data.subscription && data.subscription.active) {
-            this.currentPlan = data.subscription.plan;
+        this.settingsUpgradeService.getSubscription().subscribe((response: {
+          subscription: Subscription
+        }): void => {
+          this.subscription = response.subscription;
+          if (response.subscription && response.subscription.active) {
+            this.currentPlan = response.subscription.plan;
           }
         });
-
         /**
-         * Get plans
+         * Get plan list
          */
         this.settingsUpgradeService.getPlans().subscribe((plans: ApiResponse<Plan>): void => {
           this.plans = plans.results;
@@ -83,9 +85,7 @@ export class SettingsUpgradeComponent implements OnInit {
   }
 
   /**
-   * @desc Payment
-   *
-   * @param plan Plan
+   * @param plan Plan to pay
    */
   pay(plan: Plan): void {
     /**
