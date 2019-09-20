@@ -1,1 +1,54 @@
-<p>settings-billing works!</p>
+<!-- No permission -->
+<p *ngIf="!isOwner" class="text-center" translate>RESTRICTED_PAGE</p>
+<!-- Nothing -->
+<p *ngIf="!subscription && !loading && isOwner" translate>NO_BILLING</p>
+
+<div *ngIf="subscription && isOwner">
+  <!-- Subscription details -->
+  <div class="card dash mb-3">
+    <div class="card-header" translate>SUBSCRIPTION_DETAILS</div>
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-3">
+          <p class="font-weight-bold mb-0 text-capitalize" style="line-height: 30px;">
+            {{ subscription.plan.name }}
+          </p>
+        </div>
+        <div class="col-3">
+          <p class="font-weight-bold mb-0 text-capitalize"
+             style="line-height: 30px;">$ {{ subscription.plan.price }}</p>
+        </div>
+        <div class="col-3">
+          <p class="font-weight-bold mb-0 text-capitalize"
+             style="line-height: 30px;">{{ subscription.created | date }}</p>
+        </div>
+        <div class="col-3 text-center">
+          <button class="btn btn-danger btn-sm" (click)="showCancelModal()" translate>CANCEL_SUBSCRIPTION</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Transactions -->
+  <div class="card dash">
+    <div class="card-header" translate>TRANSACTIONS</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <!-- Table head -->
+          <thead>
+          <tr>
+            <th translate>AMOUNT</th>
+            <th translate>DATE</th>
+          </tr>
+          </thead>
+
+          <!-- Table info -->
+          <tr *ngFor="let transaction of transactions">
+            <td>$ {{ transaction.total }}</td>
+            <td>{{ transaction.created | date }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
