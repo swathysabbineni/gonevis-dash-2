@@ -1,0 +1,23 @@
+<!-- Header -->
+<div class="modal-header">
+  <div class="d-flex align-items-center">
+    <h5 class="mb-0 mr-2" translate>CANCEL_SUBSCRIPTION</h5>
+  </div>
+  <!-- Close -->
+  <button class="ml-auto btn btn-link p-0" (click)="closeModal()">
+    <fa-icon [fixedWidth]="true" icon="times"></fa-icon>
+  </button>
+</div>
+<div class="modal-body">
+  <!-- Text -->
+  <span translate [translateParams]="{ planName : subscription.plan.name }" *ngIf="!cancelling">
+    CANCEL_SUBSCRIPTION_DESCRIPTION
+  </span>
+  <!-- Reloading icon -->
+  <fa-icon icon="circle-notch" size="3x" [fixedWidth]="true" [spin]="true" *ngIf="cancelling"></fa-icon>
+</div>
+<!-- Buttons -->
+<div class="modal-footer" *ngIf="!cancelling">
+  <button class="btn pull-left" [disabled]="loading">Yes, cancel</button>
+  <button class="btn btn-success" (click)="closeModal()">No, I changed my mind</button>
+</div>
