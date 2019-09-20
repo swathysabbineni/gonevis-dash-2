@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { Plan } from '@app/interfaces/plan';
+import { Plan } from '@app/interfaces/v1/plan';
 import { Subscription } from '@app/interfaces/subscription';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';

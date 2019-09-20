@@ -1,0 +1,9 @@
+@import "variables";
+
+.plan {
+  border-left: 12px solid;
+
+  .flex-column {
+    place-content: space-between;
+  }
+}
