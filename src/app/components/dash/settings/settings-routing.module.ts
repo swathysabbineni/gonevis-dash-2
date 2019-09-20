@@ -24,10 +24,10 @@ const routes: Routes = [{
     component: SettingsAdvancedComponent,
   }, {
     path: 'upgrade',
-    loadChildren: (): any => import('./settings-upgrade/settings-upgrade.module').then(m => m.SettingsUpgradeModule)
+    loadChildren: (): any => import('./settings-upgrade/settings-upgrade.module').then(m => m.SettingsUpgradeModule),
   }, {
     path: 'billing',
-    component: SettingsBillingComponent,
+    loadChildren: () => import('./settings-billing/settings-billing.module').then(m => m.SettingsBillingModule),
   }],
 }];
 
