@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Transaction } from '@app/interfaces/transaction';
 import { ApiService } from '@app/services/api/api.service';
+import { BlogService } from '@app/services/blog/blog.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -25,5 +26,17 @@ export class SettingsBillingService {
     return this.http.get<ApiResponse<Transaction>>(`${this.apiService.base.v1}eskenas/transactions/`, {
       params: httpParams,
     });
+  }
+
+  /**
+   * Cancel subscription
+   *
+   * @param planId Plan ID
+   */
+  cancelSubscription(planId: string): Observable<void> {
+    return this.http.post<void>(`${this.apiService.base.v1}eskenas/subscriptions/${planId}/cancel-subscription/`, {
+        site_id: BlogService.currentBlog.id,
+      },
+    );
   }
 }
