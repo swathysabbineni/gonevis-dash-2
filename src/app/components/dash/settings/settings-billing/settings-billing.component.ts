@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CancelSubscriptionComponent } from '@app/components/dash/settings/settings-billing/cancel-subscription/cancel-subscription.component';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SettingsBillingService } from '@app/components/dash/settings/settings-billing/settings-billing.service';
 import { SettingsUpgradeService } from '@app/components/dash/settings/settings-upgrade/settings-upgrade.service';
 import { TeamRoles } from '@app/enums/team-roles';
@@ -8,7 +8,7 @@ import { Subscription } from '@app/interfaces/subscription';
 import { Transaction } from '@app/interfaces/transaction';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
-import { BsModalService } from 'ngx-bootstrap';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-settings-billing',
@@ -21,6 +21,16 @@ export class SettingsBillingComponent implements OnInit {
    * Subscription
    */
   private subscription: Subscription;
+
+  /**
+   * Cancel subscription modal reference
+   */
+  bsModalRef: BsModalRef;
+
+  /**
+   * Indicates cancelling process
+   */
+  cancelling: boolean;
 
   /**
    * Blog owner indicator
@@ -37,7 +47,9 @@ export class SettingsBillingComponent implements OnInit {
    */
   transactions: Transaction[] = [];
 
-  constructor(private bsModalService: BsModalService,
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private bsModalService: BsModalService,
               private settingsUpgradeService: SettingsUpgradeService,
               private settingsBillingService: SettingsBillingService) {
   }
@@ -69,11 +81,27 @@ export class SettingsBillingComponent implements OnInit {
   }
 
   /**
-   * Show cancel modal
+   * Cancel subscription
    */
-  showCancelModal(): void {
-    this.bsModalService.show(CancelSubscriptionComponent, {
-      initialState: { subscription: this.subscription },
+  cancelSubscription(): void {
+    this.cancelling = true;
+    this.settingsBillingService.cancelSubscription(this.subscription.id).subscribe((): void => {
+      this.router.navigate(['../upgrade'], {
+        relativeTo: this.activatedRoute.parent,
+      });
+      this.bsModalRef.hide();
+      this.cancelling = false;
+    }, (): void => {
+      this.cancelling = false;
     });
+  }
+
+  /**
+   * Show cancel modal
+   *
+   * @param template Modal template
+   */
+  showCancelModal(template: TemplateRef<any>): void {
+    this.bsModalRef = this.bsModalService.show(template);
   }
 }
