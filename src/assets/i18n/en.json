@@ -159,7 +159,6 @@
   "UPLOAD": "Upload",
   "SELECT_IMAGE": "Select image",
   "FEEL_FREE_TO_JOIN_OUR_DISCORD_SERVER": "Feel free to join our new Discord server!",
-  "COLLABORATING": "Collaborating",
   "VALIDATING_PAYMENT": "Your payment is being validated...",
   "YOUR_PLAN": "Your Plan",
   "TEXT_DISCORD": "Feel free to join our new Discord server!",
@@ -172,5 +171,6 @@
   "TOAST_UPDATE": "updated successfully",
   "TOAST_UPLOAD": "uploaded successfully",
   "TOAST_ADD": "added successfully",
-  "SETTINGS": "Settings"
+  "SETTINGS": "Settings",
+  "COLLABORATING": "Collaborating"
 }
