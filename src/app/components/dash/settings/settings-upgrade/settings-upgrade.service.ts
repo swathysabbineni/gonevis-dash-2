@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { Plan } from '@app/interfaces/v1/plan';
 import { Subscription } from '@app/interfaces/subscription';
+import { Plan } from '@app/interfaces/v1/plan';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { Observable } from 'rxjs';
@@ -12,8 +12,51 @@ import { Observable } from 'rxjs';
 })
 export class SettingsUpgradeService {
 
+  /**
+   * CloudPayments
+   */
+  private readonly script: { src: string, loaded: boolean } = {
+    src: 'https://widget.cloudpayments.ru/bundles/cloudpayments',
+    loaded: false,
+  };
+
   constructor(private http: HttpClient,
               private apiService: ApiService) {
+  }
+
+  /**
+   * Load CloudPayments script
+   *
+   * @returns Promise that indicates whether CloudPayments widget loaded successfully or not
+   */
+  loadScript(): Promise<boolean> {
+    return new Promise<boolean>((resolve: (value: boolean) => void): void => {
+      if (!this.script.loaded) {
+        /**
+         * Load script
+         */
+        const scriptElement: HTMLScriptElement = document.createElement('script');
+        scriptElement.type = 'text/javascript';
+        scriptElement.src = this.script.src;
+        /**
+         * On load callback
+         */
+        scriptElement.onload = (): void => {
+          this.script.loaded = true;
+          resolve(true);
+        };
+        /**
+         * On error callback
+         */
+        scriptElement.onerror = (): void => resolve(false);
+        /**
+         * Append script element to head element as a child
+         */
+        document.getElementsByTagName('head')[0].appendChild(scriptElement);
+      } else {
+        resolve(true);
+      }
+    });
   }
 
   /**
