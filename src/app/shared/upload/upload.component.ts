@@ -3,6 +3,8 @@ import { MediaService } from '@app/components/dash/media/media.service';
 import { File as FileMedia } from '@app/interfaces/file';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { environment } from '@environments/environment';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-upload',
@@ -26,7 +28,19 @@ export class UploadComponent {
    */
   @ViewChild('fileElement', { static: false }) fileElement;
 
-  constructor(private mediaService: MediaService) {
+  constructor(private mediaService: MediaService,
+              private translate: TranslateService,
+              private toast: ToastrService) {
+  }
+
+  /**
+   * FIle upload completed
+   *
+   * @param file Uploaded file
+   */
+  private onFileUpload(file: FileMedia) {
+    this.toast.success(this.translate.instant('TOAST_UPLOAD'), file.file_name);
+    this.upload.emit(file);
   }
 
   /**
@@ -49,12 +63,12 @@ export class UploadComponent {
           response.post_data.fields,
         ).subscribe((data: void | FileMedia): void => {
           if (environment.name === 'local') {
-            this.upload.emit(data as FileMedia);
+            this.onFileUpload(data as FileMedia);
           } else {
             this.mediaService.post(
               response.post_data.fields.key,
             ).subscribe((fileUploaded: FileMedia): void => {
-              this.upload.emit(fileUploaded);
+              this.onFileUpload(fileUploaded);
             });
           }
         });
