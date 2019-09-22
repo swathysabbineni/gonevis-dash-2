@@ -1,4 +1,4 @@
-@import "~src/assets/styles/variables";
+@import "variables";
 
 .wrapper {
   display: flex;
@@ -10,8 +10,8 @@
     flex-direction: column;
     background: #fff;
     flex: 0 0 auto;
-    flex-basis: 250px;
-    max-width: 250px;
+    flex-basis: 200px;
+    max-width: 200px;
     overflow-y: auto;
 
     ul {
@@ -23,14 +23,13 @@
         position: relative;
 
         a {
-          color: darken($secondary, 5);
+          color: $secondary;
           display: flex;
           align-items: center;
-          padding: 0 2em;
+          padding: 0 1.25em;
           height: 40px;
           overflow: hidden;
           white-space: nowrap;
-
 
           &:hover,
           &.active {
@@ -39,51 +38,27 @@
             text-decoration: none;
           }
 
-          &.active {
-            background-color: rgba($primary, 0.15);
+          &:hover {
+            background: rgba($dark, 0.025);
+          }
 
-            &, fa-icon {
+          &.active {
+            background: linear-gradient(to right, transparent, $body-bg);
+
+            fa-icon {
               color: $primary;
             }
           }
 
-          &:hover:not(.active) {
-            background-color: rgba($primary, 0.08);
-          }
-
           fa-icon {
-            margin-right: 2em;
-            color: $secondary;
+            margin-right: 1.25em;
+            color: darken($body-bg, 20);
+            font-size: $small-font-size;
           }
         }
       }
     }
-
-    &.is-closed {
-      flex-basis: 75px;
-      max-width: 75px;
-
-      ul li a .inner span {
-        position: absolute;
-        color: $white;
-        top: 5px;
-        right: 5px;
-        background: rgba($primary, 0.8);
-        border-radius: 50px;
-        padding: 0 5px;
-        min-width: 20px;
-        line-height: 20px;
-        font-weight: 700;
-        display: flex;
-        justify-content: center;
-      }
-
-      .sidebar-header {
-        display: none;
-      }
-    }
   }
-
 
   .content {
     flex: 1 1 auto;
