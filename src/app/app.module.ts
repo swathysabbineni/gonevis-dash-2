@@ -44,9 +44,8 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     ToastrModule.forRoot({
-      timeOut: 10000,
+      timeOut: 5000,
       positionClass: 'toast-bottom-right',
-      preventDuplicates: true,
     }),
     TranslateModule.forRoot({
       loader: {
