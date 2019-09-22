@@ -17,9 +17,17 @@ $tooltip-bg: $dark;
 
 @import "~bootstrap/scss/bootstrap";
 
+html, body {
+  height: 100%;
+}
+
 a,
 .pointer {
   cursor: pointer;
+}
+
+.h-100 {
+  min-height: 0;
 }
 
 .white-space-pre-line {
