@@ -16,6 +16,7 @@ $tooltip-arrow-color: $dark;
 $tooltip-bg: $dark;
 
 @import "~bootstrap/scss/bootstrap";
+@import '~ngx-toastr/toastr';
 
 html, body {
   height: 100%;
