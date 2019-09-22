@@ -10,17 +10,15 @@
     <div class="card-body">
       <div class="row align-items-center">
         <div class="col-3">
-          <p class="font-weight-bold mb-0 text-capitalize" style="line-height: 30px;">
+          <p class="font-weight-bold mb-0 text-capitalize">
             {{ subscription.plan.name }}
           </p>
         </div>
         <div class="col-3">
-          <p class="font-weight-bold mb-0 text-capitalize"
-             style="line-height: 30px;">$ {{ subscription.plan.price }}</p>
+          <p class="font-weight-bold mb-0 text-capitalize">$ {{ subscription.plan.price }}</p>
         </div>
         <div class="col-3">
-          <p class="font-weight-bold mb-0 text-capitalize"
-             style="line-height: 30px;">{{ subscription.created | date }}</p>
+          <p class="font-weight-bold mb-0 text-capitalize">{{ subscription.created | date }}</p>
         </div>
         <div class="col-3 text-center">
           <button class="btn btn-danger btn-sm" (click)="showCancelModal(cancelTemplate)" translate>
