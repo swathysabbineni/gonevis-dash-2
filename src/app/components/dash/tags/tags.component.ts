@@ -10,6 +10,7 @@ import { BlogService } from '@app/services/blog/blog.service';
 import { TagModalComponent } from '@app/shared/tags-modal/tag-modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-tags',
@@ -48,7 +49,8 @@ export class TagsComponent implements OnInit {
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private modalService: BsModalService) {
+              private modalService: BsModalService,
+              private toast: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -88,6 +90,7 @@ export class TagsComponent implements OnInit {
     }
     tag.loading = true;
     this.tag.delete(tag.slug).subscribe((): void => {
+      this.toast.info(this.translate.instant('TOAST_DELETE'), tag.slug || tag.slug);
       this.tags.splice(this.tags.indexOf(tag), 1);
     });
   }
@@ -101,6 +104,7 @@ export class TagsComponent implements OnInit {
       this.loading = false;
       this.errors = {};
       this.form.reset();
+      this.toast.info(this.translate.instant('TOAST_CREATE'), this.form.value.name || this.form.value.slug);
       this.getTags();
     }, (error): void => {
       this.loading = false;

@@ -77,6 +77,7 @@
   "COMMENTS": "Comments",
   "TEAM": "Team",
   "TEAM_MEMBERS": "Team members",
+  "TEAM_MEMBER": "Team member",
   "PENDING_TEAM_MEMBERS": "Pending team members",
   "PUBLICATION": "Publication",
   "PUBLISHED_POSTS": "Published posts",
@@ -160,5 +161,16 @@
   "FEEL_FREE_TO_JOIN_OUR_DISCORD_SERVER": "Feel free to join our new Discord server!",
   "COLLABORATING": "Collaborating",
   "VALIDATING_PAYMENT": "Your payment is being validated...",
-  "YOUR_PLAN": "Your Plan"
+  "YOUR_PLAN": "Your Plan",
+  "TEXT_DISCORD": "Feel free to join our new Discord server!",
+  "TOAST_SIGN_IN": "Signed in, welcome back!",
+  "TOAST_SIGN_UP": "Welcome to GoNevis!",
+  "TOAST_SIGN_OUT": "You are now signed out",
+  "TOAST_DELETE": "deleted successfully",
+  "TOAST_REMOVE": "removed successfully",
+  "TOAST_CREATE": "created successfully",
+  "TOAST_UPDATE": "updated successfully",
+  "TOAST_UPLOAD": "uploaded successfully",
+  "TOAST_ADD": "added successfully",
+  "SETTINGS": "Settings"
 }
