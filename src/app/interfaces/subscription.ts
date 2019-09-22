@@ -1,4 +1,4 @@
-import { Plan } from '@app/interfaces/plan';
+import { Plan } from '@app/interfaces/v1/plan';
 
 export interface Subscription {
   id: string;

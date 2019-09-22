@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { PaymentValidationComponent } from '@app/components/dash/settings/settings-upgrade/payment-validation/payment-validation.component';
-import { SettingsUpgradeService } from '@app/components/dash/settings/settings-upgrade/settings-upgrade.service';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { Plan } from '@app/interfaces/plan';
+import { Plan } from '@app/interfaces/v1/plan';
 import { Subscription } from '@app/interfaces/subscription';
+import { UpgradePlan } from '@app/interfaces/upgrade-plan';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
@@ -12,7 +11,10 @@ import { BlogService } from '@app/services/blog/blog.service';
 import { environment } from '@environments/environment';
 import { BsModalService } from 'ngx-bootstrap';
 
-declare var cp: any;
+import { PaymentValidationComponent } from './payment-validation/payment-validation.component';
+import { SettingsUpgradeService } from './settings-upgrade.service';
+
+declare var cp;
 
 @Component({
   selector: 'app-settings-upgrade',
@@ -20,6 +22,54 @@ declare var cp: any;
   styleUrls: ['./settings-upgrade.component.scss'],
 })
 export class SettingsUpgradeComponent implements OnInit {
+
+  /**
+   * Upgrade plans to show in view
+   */
+  readonly plans: UpgradePlan[] = [{
+    name: 'Lite',
+    sub: 'Basic plan',
+    color: 'secondary',
+    features: [
+      '1 Team Member',
+      '512 MB Storage',
+      'GoNevis.com Sub-domain',
+      'No Ads',
+      'Unlimited Blogs',
+      'Free Themes',
+      'SEO Optimization',
+      'Basic UI Customization',
+      'Basic Media Library',
+      'Your Own Logo',
+    ],
+  }, {
+    name: 'Personal',
+    sub: 'Personal plan',
+    color: 'primary',
+    features: [
+      'Everything Above',
+      '5 GB Storage',
+      '5 Team Members',
+      'Custom Domain',
+      'Free Themes',
+      'All Media Library',
+      'No GoNevis.com Branding',
+    ],
+  }, {
+    name: 'Professional',
+    sub: 'Professional plan',
+    color: 'success',
+    features: [
+      'Everything Above',
+      '10 GB Storage',
+      '25 Team Members',
+      'Premium Themes',
+      'Advanced UI Customization',
+      'Google AdSense (Monetization)',
+      'Your own Google Analytics',
+      'Custom Footer',
+    ],
+  }];
 
   /**
    * Authenticated user
@@ -30,11 +80,6 @@ export class SettingsUpgradeComponent implements OnInit {
    * Blog owner indicator
    */
   isOwner: boolean;
-
-  /**
-   * Plans
-   */
-  plans: Plan[] = [];
 
   /**
    * Subscription
@@ -63,29 +108,33 @@ export class SettingsUpgradeComponent implements OnInit {
       if (data) {
         this.isOwner = data.role === TeamRoles.Owner;
         /**
-         * Get current subscription
+         * Get current subscription plan
          */
-        this.settingsUpgradeService.getSubscription().subscribe((data: { subscription: Subscription }): void => {
-          this.subscription = data.subscription;
-          if (data.subscription && data.subscription.active) {
-            this.currentPlan = data.subscription.plan;
+        this.settingsUpgradeService.getSubscription().subscribe((response: {
+          subscription: Subscription
+        }): void => {
+          this.subscription = response.subscription;
+          if (response.subscription && response.subscription.active) {
+            this.currentPlan = response.subscription.plan;
           }
         });
-
         /**
-         * Get plans
+         * Get plan list and set the plans "plan" property
          */
-        this.settingsUpgradeService.getPlans().subscribe((plans: ApiResponse<Plan>): void => {
-          this.plans = plans.results;
+        this.settingsUpgradeService.getPlans().subscribe((response: ApiResponse<Plan>): void => {
+          for (const upgradePlan of this.plans) {
+            const plan: Plan = response.results.find(item => item.name === upgradePlan.name);
+            if (plan) {
+              upgradePlan.plan = plan;
+            }
+          }
         });
       }
     });
   }
 
   /**
-   * @desc Payment
-   *
-   * @param plan Plan
+   * @param plan Plan to pay
    */
   pay(plan: Plan): void {
     /**

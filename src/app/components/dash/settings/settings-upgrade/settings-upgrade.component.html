@@ -1,5 +1,32 @@
 <!-- Plans -->
-<div class="row text-center" *ngIf="plans.length">
+<div class="card plan mb-3 shadow-sm border-{{ plan.color }}" *ngFor="let plan of plans">
+  <div class="card-body">
+    <div class="row no-gutters">
+      <div class="col-6 d-flex flex-column">
+        <div>
+          <div class="card-text text-black-50">{{ plan.sub | uppercase }}</div>
+          <h3 class="card-title font-weight-bold text-{{ plan.color }} m-0">{{ plan.name }}</h3>
+          <div *ngIf="!plan.plan" class="font-weight-bold h4 text-muted m-0">
+            <b class="display-4 font-weight-bold text-secondary">FREE</b>
+          </div>
+          <div *ngIf="plan.plan" class="font-weight-bold h4 text-muted m-0">
+            <span>$ </span>
+            <b class="display-4 font-weight-bold text-secondary">{{ plan.plan.price.split('.')[0] }}</b>
+            <span>.{{ plan.plan.price.split('.')[1] }} <small>monthly</small></span>
+          </div>
+        </div>
+        <button *ngIf="plan.plan" class="btn btn-sm m-0 btn-{{ plan.color }}">UPGRADE</button>
+      </div>
+      <div class="col-6 text-right">
+        <ul class="list-unstyled m-0">
+          <li *ngFor="let feature of plan.features">{{ feature }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row text-center" *ngIf="plans">
   <div class="col-md-6">
     <div id="lite">
       <!-- Title -->
