@@ -7,6 +7,7 @@ import { Team } from '@app/interfaces/v1/team';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-team',
@@ -40,7 +41,8 @@ export class TeamComponent implements OnInit {
 
   constructor(private teamService: TeamService,
               private translate: TranslateService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private toast: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -82,10 +84,12 @@ export class TeamComponent implements OnInit {
     }
     if (!isPending) {
       this.teamService.remove(idOrEmail).subscribe((): void => {
+        this.toast.info(this.translate.instant('TOAST_REMOVE'), this.translate.instant('TEAM_MEMBER'));
         this.getTeam();
       });
     } else {
       this.teamService.removePending(idOrEmail).subscribe((): void => {
+        this.toast.info(this.translate.instant('TOAST_REMOVE'), this.form.value.email);
         this.getTeam();
       });
     }
@@ -100,6 +104,7 @@ export class TeamComponent implements OnInit {
       this.loading = false;
       this.errors = {};
       this.form.controls.email.reset();
+      this.toast.success(this.translate.instant('TOAST_INVITE'), this.form.value.email);
       this.getTeam();
     }, (error): void => {
       this.loading = false;

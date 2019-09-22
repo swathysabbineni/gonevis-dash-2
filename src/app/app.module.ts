@@ -1,6 +1,7 @@
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-interceptor.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -9,8 +10,11 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { BsDropdownModule, CollapseModule } from 'ngx-bootstrap';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CookieService } from 'ngx-cookie-service';
+import { ToastrModule } from 'ngx-toastr';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -31,13 +35,18 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    BsDropdownModule.forRoot(),
-    CollapseModule.forRoot(),
     FontAwesomeModule,
     LoadingBarModule,
     LoadingBarHttpClientModule,
+    BsDropdownModule.forRoot(),
+    CollapseModule.forRoot(),
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-bottom-right',
+    }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
