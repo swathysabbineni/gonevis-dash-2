@@ -6,7 +6,9 @@ import { AuthToken } from '@app/interfaces/auth-token';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -31,9 +33,11 @@ export class AuthService {
   static user: Observable<UserAuth> = AuthService.userSubject.asObservable();
 
   constructor(private http: HttpClient,
+              private toast: ToastrService,
+              private translate: TranslateService,
               private router: Router,
-              private cookieService: CookieService,
-              private apiService: ApiService) {
+              private cookie: CookieService,
+              private api: ApiService) {
     /**
      * Update user (subject) and blogs (subject) if user is authenticated
      * @see isAuth
@@ -75,7 +79,7 @@ export class AuthService {
    * @return Is user authenticated or not
    */
   get isAuth(): boolean {
-    return this.cookieService.check('token');
+    return this.cookie.check('token');
   }
 
   /**
@@ -86,7 +90,7 @@ export class AuthService {
   setToken(token: string): void {
     const parsedJwt: AuthToken = AuthService.parseJwt(token);
     if (parsedJwt) {
-      this.cookieService.set('token', token, new Date(parsedJwt.exp * 1000), '/');
+      this.cookie.set('token', token, new Date(parsedJwt.exp * 1000), '/');
     }
   }
 
@@ -94,16 +98,17 @@ export class AuthService {
    * @returns Stored token from localStorage
    */
   get getToken(): string | null {
-    return this.cookieService.get('token');
+    return this.cookie.get('token');
   }
 
   /**
    * Un-authenticate user by cleaning localStorage and cookies
    */
   signOut(): void {
-    this.cookieService.deleteAll('/');
+    this.cookie.deleteAll('/');
     localStorage.clear();
     AuthService.userSubject.next(null);
+    this.toast.info(this.translate.instant('TOAST_SIGN_OUT'));
     this.router.navigate(AuthService.signOutRedirect);
   }
 
@@ -112,12 +117,13 @@ export class AuthService {
    *
    * @param username User username
    * @param password User password
+   * @param showToast Show sign in toast
    *
    * @return String observable which can be subscribed to.
    */
-  signIn(username: string, password: string): Observable<string> {
+  signIn(username: string, password: string, showToast: boolean = true): Observable<string> {
     return this.http.post<AuthResponse>(
-      `${this.apiService.base.v1}account/login/`, { username, password },
+      `${this.api.base.v1}account/login/`, { username, password },
     ).pipe(
       map((data: AuthResponse): string => {
         // Store token into cookies
@@ -126,6 +132,10 @@ export class AuthService {
         localStorage.setItem('user', JSON.stringify(data.user));
         // Update user subject data
         AuthService.userSubject.next(data.user);
+        // Show toast
+        if (showToast) {
+          this.toast.info(this.translate.instant('TOAST_SIGN_IN'), data.user.name);
+        }
         // Return raw user data
         return data.user.username;
       }),
@@ -140,11 +150,12 @@ export class AuthService {
    * @param password user password
    */
   signUp(email: string, username: string, password: string): Observable<void> {
-    return this.http.post(this.apiService.base.v1 + 'account/register-account-only/', {
+    return this.http.post(this.api.base.v1 + 'account/register-account-only/', {
       email, username, password,
     }).pipe(
       map((): void => {
-        this.signIn(username, password).subscribe();
+        this.toast.info(this.translate.instant('TOAST_SIGN_UP'), username);
+        this.signIn(username, password, false).subscribe();
       }),
     );
   }

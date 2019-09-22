@@ -2,8 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File } from '@app/interfaces/file';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { BlogService } from '@app/services/blog/blog.service';
 import { UtilService } from '@app/services/util/util.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-file-list',
@@ -34,11 +37,16 @@ export class FileListComponent implements OnInit {
 
   constructor(public utils: UtilService,
               private mediaService: MediaService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private toast: ToastrService) {
   }
 
   ngOnInit(): void {
-    this.getFiles();
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        this.getFiles();
+      }
+    });
   }
 
   /**
@@ -62,6 +70,7 @@ export class FileListComponent implements OnInit {
     }
     file.loading = true;
     this.mediaService.delete(file.id).subscribe((): void => {
+      this.toast.info(this.translate.instant('TOAST_DELETE'), file.file_name);
       this.files.splice(this.files.indexOf(file), 1);
     });
   }
