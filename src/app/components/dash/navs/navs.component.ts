@@ -7,6 +7,7 @@ import { Navigation } from '@app/interfaces/v1/navigation';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-navs',
@@ -26,14 +27,15 @@ export class NavsComponent implements OnInit {
   loading: boolean;
 
   /**
-   * API Errors
+   * API errors
    */
   errors: ApiError[] = [];
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private navsService: NavsService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private toast: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -73,6 +75,7 @@ export class NavsComponent implements OnInit {
       this.navigations = data.navigation;
       this.loading = false;
       this.errors = [];
+      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('NAVIGATIONS'));
     }, (error) => {
       this.loading = false;
       this.errors = error.error.navigation;
