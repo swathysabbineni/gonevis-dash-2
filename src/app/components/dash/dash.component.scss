@@ -1,0 +1,97 @@
+@import "~src/assets/styles/variables";
+
+.wrapper {
+  display: flex;
+  height: calc(100% - 50px);
+  min-height: 0;
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    flex: 0 0 auto;
+    flex-basis: 250px;
+    max-width: 250px;
+    overflow-y: auto;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        position: relative;
+
+        a {
+          color: darken($secondary, 5);
+          display: flex;
+          align-items: center;
+          padding: 0 2em;
+          height: 40px;
+          overflow: hidden;
+          white-space: nowrap;
+
+
+          &:hover,
+          &.active {
+            user-select: none;
+            cursor: pointer;
+            text-decoration: none;
+          }
+
+          &.active {
+            background-color: rgba($primary, 0.15);
+
+            &, fa-icon {
+              color: $primary;
+            }
+          }
+
+          &:hover:not(.active) {
+            background-color: rgba($primary, 0.08);
+          }
+
+          fa-icon {
+            margin-right: 2em;
+            color: $secondary;
+          }
+        }
+      }
+    }
+
+    &.is-closed {
+      flex-basis: 75px;
+      max-width: 75px;
+
+      ul li a .inner span {
+        position: absolute;
+        color: $white;
+        top: 5px;
+        right: 5px;
+        background: rgba($primary, 0.8);
+        border-radius: 50px;
+        padding: 0 5px;
+        min-width: 20px;
+        line-height: 20px;
+        font-weight: 700;
+        display: flex;
+        justify-content: center;
+      }
+
+      .sidebar-header {
+        display: none;
+      }
+    }
+  }
+
+
+  .content {
+    flex: 1 1 auto;
+    height: 100%;
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+}
