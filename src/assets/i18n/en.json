@@ -158,5 +158,8 @@
   "UPLOAD": "Upload",
   "SELECT_IMAGE": "Select image",
   "FEEL_FREE_TO_JOIN_OUR_DISCORD_SERVER": "Feel free to join our new Discord server!",
+  "TOAST_SIGN_IN": "Signed in, welcome back!",
+  "TOAST_SIGN_UP": "Welcome to GoNevis!",
+  "TOAST_SIGN_OUT": "You are now signed out",
   "COLLABORATING": "Collaborating"
 }
