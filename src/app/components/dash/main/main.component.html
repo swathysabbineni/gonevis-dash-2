@@ -8,7 +8,7 @@
       <div class="card dash mb-4" *ngIf="entries">
         <!-- Header -->
         <div class="card-header">
-          <a class="init" routerLink="../../posts" translate>POSTS</a>
+          <a class="init" routerLink="../../../posts" translate>POSTS</a>
           <span class="card-label" *ngIf="metrics">
             {{ metrics.metrics.published_entry_count | number}}
           </span>
@@ -47,7 +47,7 @@
       <div class="card dash mb-4" *ngIf="comments">
         <!-- Header -->
         <div class="card-header">
-          <a class="init" routerLink="../../comments" translate>COMMENTS</a>
+          <a class="init" routerLink="../../../comments" translate>COMMENTS</a>
           <span class="card-label" *ngIf="metrics">
             {{ metrics.metrics.comment_count | number }}
           </span>
@@ -99,7 +99,7 @@
       <!-- Comment overview -->
       <div class="card dash mb-4">
         <div class="card-header">
-          <a class="text-capitalize" routerLink="../../comments" translate>COMMENT_OVERVIEW</a>
+          <a class="text-capitalize" routerLink="../../../comments" translate>COMMENT_OVERVIEW</a>
         </div>
         <div class="list-group-flush">
           <!-- All comments -->
@@ -128,7 +128,7 @@
       <!-- Blog overview -->
       <div class="card dash mb-4">
         <div class="card-header">
-          <a class="text-capitalize" routerLink="../../settings/general" translate>BLOG_OVERVIEW</a>
+          <a class="text-capitalize" routerLink="../../../settings/general" translate>BLOG_OVERVIEW</a>
         </div>
         <div class="list-group-flush">
           <!-- Subscribers -->
@@ -141,7 +141,7 @@
           <!-- Theme and layout -->
           <div class="list-group-item d-flex" *ngIf="templateConfig">
             <span translate>THEME_AND_LAYOUT</span>
-            <a class="ml-auto btn btn-sm btn-primary py-0" routerLink="../../settings/appearance"
+            <a class="ml-auto btn btn-sm btn-primary py-0" routerLink="../../../settings/appearance"
                *ngIf="templateConfig">
               {{ templateConfig.name | uppercase }}
             </a>
@@ -178,7 +178,7 @@
       <!-- Team -->
       <div class="card dash mb-4">
         <div class="card-header">
-          <a class="text-capitalize" routerLink="../../team" translate>TEAM</a>
+          <a class="text-capitalize" routerLink="../../../team" translate>TEAM</a>
         </div>
         <div class="list-group-flush">
           <!-- Team members -->
