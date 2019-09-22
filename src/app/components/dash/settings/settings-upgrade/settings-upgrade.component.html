@@ -1,11 +1,11 @@
 <!-- Plans -->
-<div class="card plan mb-3 shadow-sm border-{{ plan.color }}" *ngFor="let plan of plans">
+<div [classList]="'card plan mb-3 shadow-sm border-' + plan.color" *ngFor="let plan of plans">
   <div class="card-body">
     <div class="row no-gutters">
       <div class="col-6 d-flex flex-column">
         <div>
           <div class="card-text text-black-50">{{ plan.sub | uppercase }}</div>
-          <h3 class="card-title font-weight-bold text-{{ plan.color }} m-0">{{ plan.name }}</h3>
+          <h3 [classList]="'card-title font-weight-bold m-0 text-' + plan.color">{{ plan.name }}</h3>
           <div *ngIf="!plan.plan" class="font-weight-bold h4 text-muted m-0">
             <b class="display-4 font-weight-bold text-secondary">FREE</b>
           </div>
@@ -15,114 +15,17 @@
             <span>.{{ plan.plan.price.split('.')[1] }} <small>monthly</small></span>
           </div>
         </div>
-        <button *ngIf="plan.plan" class="btn btn-sm m-0 btn-{{ plan.color }}">UPGRADE</button>
+        <button *ngIf="plan.plan" [disabled]="currentPlan && currentPlan.id === plan.plan.id"
+                [classList]="'btn btn-sm m-0 btn-' + plan.color"
+                (click)="pay(plan.plan)">
+          {{ (currentPlan && currentPlan.id === plan.plan.id ? 'YOUR_PLAN' : 'UPGRADE') | translate }}
+        </button>
       </div>
       <div class="col-6 text-right">
         <ul class="list-unstyled m-0">
           <li *ngFor="let feature of plan.features">{{ feature }}</li>
         </ul>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="row text-center" *ngIf="plans">
-  <div class="col-md-6">
-    <div id="lite">
-      <!-- Title -->
-      <span>Lite</span>
-      <p>Basic plan</p>
-      <h2>FREE</h2>
-      <!-- Detail -->
-      <div>
-        <p>GoNevis.com subdomain.</p>
-        <p>No Ads</p>
-        <p title="Create or manage as many blog as you like">Unlimited Blogs</p>
-        <p>Free Themes</p>
-        <p>Media Storage</p>
-        <p>SEO Optimization</p>
-        <p>Basic UI Customization</p>
-        <p><b>1</b> Team Members</p>
-        <p title="Images">Basic Media Library</p>
-        <p>Your own logo</p>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-      </div>
-    </div>
-  </div>
-  <!-- Personal -->
-  <div class="col-md-6">
-    <div id="personal">
-      <!-- Title -->
-      <div>
-        <fa-icon icon="star" [fixedWidth]="true"></fa-icon>
-        Best Choice
-      </div>
-      <span>{{ plans[0].name }}</span>
-      <p>{{ plans[0].description }}</p>
-      <h2>
-        <fa-icon icon="dollar-sign" [fixedWidth]="true"></fa-icon>
-        {{ plans[0].price }}
-      </h2>
-      <span>MONTHLY</span>
-      <!-- Detail -->
-      <div>
-        <p>Custom Domain</p>
-        <p>No Ads</p>
-        <p>Unlimited Blogs</p>
-        <p>Free Themes</p>
-        <p><b>5</b> GB Storage</p>
-        <p>SEO Optimization</p>
-        <p>Basic UI Customization</p>
-        <p><b>5</b> Team Members</p>
-        <p>All Media Library</p>
-        <p>Your own logo</p>
-        <p>No GoNevis.com branding</p>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-      </div>
-      <!-- Pay -->
-      <button class="btn btn-success" (click)="pay(plans[0])"
-              [disabled]="currentPlan && currentPlan.id === plans[0].id || !isOwner">
-        {{ (currentPlan && currentPlan.id === plans[0].id ? 'YOUR_PLAN' : 'UPGRADE') | translate }}
-      </button>
-    </div>
-  </div>
-  <!-- Ultra -->
-  <div class="col-md-6">
-    <div id="ultra">
-      <!-- Title -->
-      <span>{{ plans[1].name }}</span>
-      <p>{{ plans[1].description }}</p>
-      <h2>
-        <fa-icon icon="dollar-sign" [fixedWidth]="true"></fa-icon>
-        {{ plans[1].price }}</h2>
-      <span>MONTHLY</span>
-      <!-- Detail -->
-      <div>
-        <p>Custom Domain</p>
-        <p>No Ads</p>
-        <p>Unlimited Blogs</p>
-        <p>Premium Themes</p>
-        <p><b>10</b> GB Storage</p>
-        <p>SEO Optimization</p>
-        <p>Advanced UI Customization</p>
-        <p><b>25</b> Team Members</p>
-        <p>All Media Library</p>
-        <p>Your own logo</p>
-        <p>No GoNevis.com branding</p>
-        <p>Google AdSense (Monetization)</p>
-        <p>Your own Google Analytics</p>
-        <p>Custom Footer</p>
-      </div>
-      <!-- Pay -->
-      <button class="btn btn-success" (click)="pay(plans[1])"
-              [disabled]="currentPlan && currentPlan.id === plans[1].id || !isOwner">
-        {{ (currentPlan && currentPlan.id === plans[1].id ? 'YOUR_PLAN' : 'UPGRADE') | translate }}
-      </button>
     </div>
   </div>
 </div>
