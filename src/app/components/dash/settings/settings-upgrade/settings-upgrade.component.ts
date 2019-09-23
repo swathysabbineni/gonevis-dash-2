@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { Plan } from '@app/interfaces/v1/plan';
 import { Subscription } from '@app/interfaces/subscription';
 import { UpgradePlan } from '@app/interfaces/upgrade-plan';
 import { UserAuth } from '@app/interfaces/user-auth';
+import { Plan } from '@app/interfaces/v1/plan';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
@@ -14,7 +14,7 @@ import { BsModalService } from 'ngx-bootstrap';
 import { PaymentValidationComponent } from './payment-validation/payment-validation.component';
 import { SettingsUpgradeService } from './settings-upgrade.service';
 
-declare var cp;
+declare var cp: any;
 
 @Component({
   selector: 'app-settings-upgrade',
@@ -94,6 +94,7 @@ export class SettingsUpgradeComponent implements OnInit {
   constructor(private authService: AuthService,
               private bsModalService: BsModalService,
               private settingsUpgradeService: SettingsUpgradeService) {
+    this.settingsUpgradeService.loadScript();
   }
 
   ngOnInit(): void {
