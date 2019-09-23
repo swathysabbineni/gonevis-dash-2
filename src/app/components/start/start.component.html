@@ -1,1 +1,40 @@
-<p>start works!</p>
+<form class="container" [formGroup]="form">
+
+  <!-- Step: Address -->
+  <div class="step my-5" *ngIf="step === 'address'">
+
+    <!-- Header -->
+    <h2 class="text-center font-weight-bold" translate>LETS_CREATE_YOUR_BLOG</h2>
+
+    <!-- Content -->
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+
+        <!-- Input -->
+        <div class="form-group my-5">
+          <div class="input-group">
+            <input type="text" class="form-control py-4" formControlName="domain"
+                   [class.is-invalid]="errors.domain && loading === false"
+                   [class.is-valid]="!errors.domain && loading === false"
+                   (ngModelChange)="domainChanged.next($event)"
+                   [placeholder]="'ENTER_BLOG_ADDRESS' | translate">
+            <div class="input-group-append">
+              <span class="input-group-text text-monospace">.gonevis.com</span>
+            </div>
+            <div class="invalid-tooltip">{{ errors.domain }}</div>
+            <div class="valid-tooltip" translate>DOMAIN_IS_AVAILABLE</div>
+          </div>
+        </div>
+
+        <!-- Continue button -->
+        <div class="text-center">
+          <button class="btn btn-primary" (click)="step = 'theme'"
+                  [disabled]="loading !== false || errors.domain || form.get('domain').invalid">
+            <span class="mr-2" translate>PICK_A_THEME</span>
+            <fa-icon [fixedWidth]="true" [icon]="faArrowRight"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -249,6 +249,15 @@ export class BlogService {
   }
 
   /**
+   * Check sub-domain availability
+   *
+   * @param domain Domain slug
+   */
+  domainCheck(domain: string): Observable<void> {
+    return this.http.post<void>(`${this.api.base.v1}website/domain-check/`, { domain });
+  }
+
+  /**
    * Get blog subscribers
    */
   getSubscribers(): Observable<ApiResponse<Subscriber>> {

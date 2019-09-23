@@ -25,7 +25,7 @@ const routes: Routes = [{
   loadChildren: () => import('./components/start/start.module').then(m => m.StartModule),
 }, {
   path: '**',
-  redirectTo: 'feed',
+  redirectTo: 'start',
   pathMatch: 'full',
 }];
 
