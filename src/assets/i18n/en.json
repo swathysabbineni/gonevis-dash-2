@@ -170,5 +170,9 @@
   "TOAST_ADD": "added successfully",
   "SETTINGS": "Settings",
   "GET_STARTED": "Get Started",
+  "LETS_CREATE_YOUR_BLOG": "Let's create your blog",
+  "ENTER_BLOG_ADDRESS": "Enter your blog address",
+  "PICK_A_THEME": "Pick a Theme",
+  "DOMAIN_IS_AVAILABLE": "Sub-domain is available",
   "COLLABORATING": "Collaborating"
 }
