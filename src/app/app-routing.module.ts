@@ -21,6 +21,9 @@ const routes: Routes = [{
   path: 'user',
   loadChildren: () => import('./components/user/user.module').then(m => m.UserModule),
 }, {
+  path: 'start',
+  loadChildren: () => import('./components/start/start.module').then(m => m.StartModule),
+}, {
   path: '**',
   redirectTo: 'feed',
   pathMatch: 'full',
