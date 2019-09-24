@@ -1,32 +1,42 @@
 <!-- Plans -->
-<div [classList]="'card plan mb-3 shadow-sm border-' + plan.color" *ngFor="let plan of plans">
-  <div class="card-body">
+<div class="card plan mb-3 shadow-sm"
+     *ngFor="let plan of plans">
+  <div [classList]="'card-body border-' + plan.color">
     <div class="row no-gutters">
-      <div class="col-6 d-flex flex-column">
-        <div>
-          <div class="card-text text-black-50">{{ plan.sub | uppercase }}</div>
-          <h3 [classList]="'card-title font-weight-bold m-0 text-' + plan.color">{{ plan.name }}</h3>
-          <div *ngIf="!plan.plan" class="font-weight-bold h4 text-muted m-0">
-            <b class="display-4 font-weight-bold text-secondary">FREE</b>
-          </div>
-          <div *ngIf="plan.plan" class="font-weight-bold h4 text-muted m-0">
-            <span>$ </span>
-            <b class="display-4 font-weight-bold text-secondary">{{ plan.plan.price.split('.')[0] }}</b>
-            <span>.{{ plan.plan.price.split('.')[1] }} <small>monthly</small></span>
-          </div>
+      <div class="col-6">
+        <h3 class="card-title font-weight-bold text-dark mb-1">{{ plan.name }}</h3>
+        <div class="mb-3 text-secondary">
+          {{ plan.plan ? plan.plan.description : 'Basic plan' }}
         </div>
-        <button *ngIf="plan.plan" [disabled]="currentPlan && currentPlan.id === plan.plan.id"
-                [classList]="'btn btn-sm m-0 btn-' + plan.color"
-                (click)="pay(plan.plan)">
-          {{ (currentPlan && currentPlan.id === plan.plan.id ? 'YOUR_PLAN' : 'UPGRADE') | translate }}
-        </button>
+        <div *ngIf="!plan.plan" [classList]="'price bg-' + plan.color">
+          <h2 class="font-weight-bold my-2">FREE</h2>
+          <small>FOREVER</small>
+        </div>
+        <div *ngIf="plan.plan" [classList]="'price bg-' + plan.color">
+          <small>ONLY</small>
+          <h2 class="font-weight-bold my-2">
+            <fa-icon icon="dollar-sign"></fa-icon>
+            {{ plan.plan.price }}
+          </h2>
+          <small>MONTHLY</small>
+        </div>
       </div>
-      <div class="col-6 text-right">
+      <div class="col-6">
         <ul class="list-unstyled m-0">
-          <li *ngFor="let feature of plan.features">{{ feature }}</li>
+          <li class="py-1" *ngFor="let feature of plan.features">
+            <fa-icon [icon]="['far', 'check-circle']" [fixedWidth]="true" class="mr-1"></fa-icon>
+            {{ feature }}
+          </li>
         </ul>
       </div>
     </div>
+  </div>
+  <div class="card-footer font-weight-bold p-0" *ngIf="plan.plan">
+    <button [disabled]="currentPlan && plan.plan && currentPlan.id === plan.plan.id"
+            [classList]="'btn text-uppercase w-100 p-3 font-weight-bold btn-' + plan.color"
+            (click)="pay(plan.plan)">
+      {{ (currentPlan && plan.plan && currentPlan.id === plan.plan.id ? 'YOUR_PLAN' : 'UPGRADE') | translate }}
+    </button>
   </div>
 </div>
 

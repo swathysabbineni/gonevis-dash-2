@@ -102,11 +102,11 @@ export class SettingsUpgradeComponent implements OnInit {
      * Get current user
      */
     AuthService.user.subscribe((data: UserAuth): UserAuth => this.user = data);
-    /**
-     * Check if owner
-     */
     BlogService.blog.subscribe((data: BlogMin): void => {
       if (data) {
+        /**
+         * Check to see if user's role is owner which owner can only upgrade plans
+         */
         this.isOwner = data.role === TeamRoles.Owner;
         /**
          * Get current subscription plan
