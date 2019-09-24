@@ -15,10 +15,12 @@ export class SettingsUpgradeService {
   /**
    * CloudPayments
    */
-  private readonly script: { src: string, loaded: boolean } = {
-    src: 'https://widget.cloudpayments.ru/bundles/cloudpayments',
-    loaded: false,
-  };
+  private static readonly CLOUD_PAYMENTS_SCRIPT = 'https://widget.cloudpayments.ru/bundles/cloudpayments';
+
+  /**
+   * CloudPayments script loaded indicatorL
+   */
+  private cloudPaymentsLoaded: boolean;
 
   constructor(private http: HttpClient,
               private apiService: ApiService) {
@@ -31,18 +33,18 @@ export class SettingsUpgradeService {
    */
   loadScript(): Promise<boolean> {
     return new Promise<boolean>((resolve: (value: boolean) => void): void => {
-      if (!this.script.loaded) {
+      if (!this.cloudPaymentsLoaded) {
         /**
          * Load script
          */
         const scriptElement: HTMLScriptElement = document.createElement('script');
         scriptElement.type = 'text/javascript';
-        scriptElement.src = this.script.src;
+        scriptElement.src = SettingsUpgradeService.CLOUD_PAYMENTS_SCRIPT;
         /**
          * On load callback
          */
         scriptElement.onload = (): void => {
-          this.script.loaded = true;
+          this.cloudPaymentsLoaded = true;
           resolve(true);
         };
         /**
