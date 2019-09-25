@@ -6,26 +6,22 @@
 <div *ngIf="subscription && isOwner">
   <!-- Subscription details -->
   <div class="card dash mb-3">
-    <div class="card-header" translate>SUBSCRIPTION_DETAILS</div>
     <div class="card-body">
-      <div class="row align-items-center">
-        <div class="col-3">
-          <p class="font-weight-bold mb-0 text-capitalize">
-            {{ subscription.plan.name }}
-          </p>
-        </div>
-        <div class="col-3">
-          <p class="font-weight-bold mb-0 text-capitalize">$ {{ subscription.plan.price }}</p>
-        </div>
-        <div class="col-3">
-          <p class="font-weight-bold mb-0 text-capitalize">{{ subscription.created | date }}</p>
-        </div>
-        <div class="col-3 text-center">
-          <button class="btn btn-danger btn-sm" (click)="showCancelModal(cancelTemplate)" translate>
-            CANCEL_SUBSCRIPTION
-          </button>
-        </div>
+      <!-- Subscription date -->
+      <small class="card-subtitle font-weight-normal text-uppercase">{{ subscription.created | date }}</small>
+      <div class="card-title d-flex flex-column flex-sm-row align-items-start align-items-sm-center text-dark mb-0">
+        <!-- Subscription plan name -->
+        <span class="h2 font-weight-bold mr-auto">{{ subscription.plan.name }}</span>
+        <!-- Subscription monthly payment -->
+        <span class="badge badge-primary">${{ subscription.plan.price }} / monthly</span>
       </div>
+      <div class="card-text">{{ subscription.plan.description }}</div>
+    </div>
+    <!-- Cancel button -->
+    <div class="card-footer text-right">
+      <button class="btn btn-outline-danger" (click)="showCancelModal(cancelTemplate)" translate>
+        CANCEL_SUBSCRIPTION
+      </button>
     </div>
   </div>
   <!-- Transactions -->
