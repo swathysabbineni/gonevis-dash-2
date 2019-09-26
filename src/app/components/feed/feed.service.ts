@@ -34,29 +34,17 @@ export class FeedService {
    *
    * @param blog Filter by blog ID (in blog)
    * @param user Filter by user username (by author)
+   * @param show Determines what types of entries to show
    */
-  getEntries(blog: string = '', user: string = ''): Observable<ApiResponse<Entry>> {
+  getEntries(blog: string = '',
+             user: string = '',
+             show: 'feed' | 'bookmarked' | '' = ''): Observable<ApiResponse<Entry>> {
     return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.zero}website/entry/`, {
       params: {
         site: blog,
         user__username: user,
+        show,
       },
     });
-  }
-
-  /**
-   * Gets subscribed entries
-   */
-  getSubscribedEntries(): Observable<ApiResponse<Entry>> {
-    return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.v1}sushial/subscribed-entries/`);
-  }
-
-  /**
-   * Get user bookmarked entries
-   */
-  getBookmarkedEntries(): Observable<ApiResponse<Entry>> {
-    return this.http.get<ApiResponse<Entry>>(
-      `${this.apiService.base.zero}website/entry/${this.userId}/bookmarks/`,
-    );
   }
 }
