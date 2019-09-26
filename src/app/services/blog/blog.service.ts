@@ -133,7 +133,11 @@ export class BlogService {
    */
   static setCurrent(id: string): void {
     const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
-    BlogService.blogSubject.next(blogs.find(blog => blog.id === id));
+    if (id) {
+      BlogService.blogSubject.next(blogs.find(blog => blog.id === id));
+    } else {
+      BlogService.blogSubject.next(null);
+    }
   }
 
   /**
