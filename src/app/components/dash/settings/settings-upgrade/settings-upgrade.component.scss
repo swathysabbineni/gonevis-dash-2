@@ -2,12 +2,11 @@
 @import "~bootstrap/scss/mixins/breakpoints";
 
 .plan {
-  border-radius: .5rem;
+  border-radius: $border-radius;
 
   .price {
     position: relative;
     width: 140px;
-    height: 140px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,7 +15,7 @@
   }
 
   .card-footer button {
-    border-radius: 0 0 .5rem .5rem;
+    border-radius: 0 0 $border-radius $border-radius;
     position: relative;
     overflow: hidden;
 

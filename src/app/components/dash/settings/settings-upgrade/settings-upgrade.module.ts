@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { SettingsUpgradeComponent } from '@app/components/dash/settings/settings-upgrade/settings-upgrade.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheckCircle } from '@fortawesome/free-regular-svg-icons/faCheckCircle';
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons/faDollarSign';
 import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 import { TranslateModule } from '@ngx-translate/core';
@@ -28,6 +28,6 @@ export class SettingsUpgradeModule {
   constructor() {
     library.add(faStar);
     library.add(faDollarSign);
-    library.add(faCheckCircle);
+    library.add(faCheck);
   }
 }

@@ -10,14 +10,13 @@
           {{ plan.plan ? plan.plan.description : 'Basic plan' }}
         </div>
         <!-- Lite plan -->
-        <div *ngIf="!plan.plan" [classList]="'price bg-' + plan.color">
-          <h2 class="font-weight-bold my-2">FREE</h2>
+        <div *ngIf="!plan.plan" class="price py-3 bg-{{ plan.color }}">
+          <h2 class="font-weight-bold mb-2">FREE</h2>
           <small>FOREVER</small>
         </div>
         <!-- Plan price -->
-        <div *ngIf="plan.plan" [classList]="'price bg-' + plan.color">
-          <small>ONLY</small>
-          <h2 class="font-weight-bold my-2">
+        <div *ngIf="plan.plan" class="price py-3 bg-{{ plan.color }}">
+          <h2 class="font-weight-bold mb-2">
             <fa-icon icon="dollar-sign"></fa-icon>
             {{ plan.plan.price }}
           </h2>
@@ -27,8 +26,8 @@
       <!-- Plan features -->
       <div class="col-12 col-sm-6">
         <ul class="list-unstyled m-0">
-          <li class="py-1" *ngFor="let feature of plan.features">
-            <fa-icon [icon]="['far', 'check-circle']" [fixedWidth]="true" class="mr-1"></fa-icon>
+          <li *ngFor="let feature of plan.features">
+            <fa-icon icon="check" class="mr-2 text-{{ plan.color }}"></fa-icon>
             {{ feature }}
           </li>
         </ul>
@@ -37,10 +36,11 @@
   </div>
   <!-- Upgrade button -->
   <div class="card-footer font-weight-bold p-0" *ngIf="plan.plan">
-    <button [disabled]="currentPlan && plan.plan && currentPlan.id === plan.plan.id"
-            [classList]="'btn text-uppercase w-100 p-3 font-weight-bold btn-' + plan.color"
+    <button class="btn btn-dark btn-block py-3 text-uppercase font-weight-bold"
+            [disabled]="currentPlan && plan.plan && currentPlan.id === plan.plan.id"
             (click)="pay(plan.plan)">
-      {{ (currentPlan && plan.plan && currentPlan.id === plan.plan.id ? 'YOUR_PLAN' : 'UPGRADE') | translate }}
+      <span *ngIf="currentPlan && plan.plan && currentPlan.id === plan.plan.id" translate>YOUR_PLAN</span>
+      <span *ngIf="!(currentPlan && plan.plan && currentPlan.id === plan.plan.id)" translate>PURCHASE</span>
     </button>
   </div>
 </div>
