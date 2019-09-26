@@ -19,7 +19,9 @@
         <!-- Plan name -->
         <span class="h2 font-weight-bold mr-auto">{{ subscription.plan.name }}</span>
         <!-- Plan price -->
-        <span class="font-weight-bold">${{ subscription.plan.price }} <small>/ monthly</small></span>
+        <span class="font-weight-bold">${{ subscription.plan.price }}
+          <small>/ {{ 'MONTHLY' | translate }}</small>
+        </span>
       </div>
       <!-- Plan description -->
       <div class="card-text">{{ subscription.plan.description }}</div>
@@ -74,7 +76,7 @@
   </div>
   <!-- Buttons -->
   <div class="modal-footer" *ngIf="!cancelling">
-    <button class="btn pull-left" (click)="cancelSubscription()">Yes, cancel</button>
-    <button class="btn btn-success" (click)="bsModalRef.hide()">No, I changed my mind</button>
+    <button class="btn" (click)="cancelSubscription()" translate>CANCEL_SUBSCRIPTION_YES_BUTTON</button>
+    <button class="btn btn-success" (click)="bsModalRef.hide()" translate>CANCEL_SUBSCRIPTION_NO_BUTTON</button>
   </div>
 </ng-template>

@@ -183,5 +183,8 @@
   "TOAST_ADD": "added successfully",
   "SETTINGS": "Settings",
   "PURCHASE": "Purchase",
-  "COLLABORATING": "Collaborating"
+  "COLLABORATING": "Collaborating",
+  "CANCEL_SUBSCRIPTION_YES_BUTTON": "Yes, cancel",
+  "CANCEL_SUBSCRIPTION_NO_BUTTON": "No, I changed my mind",
+  "MONTHLY": "monthly"
 }
