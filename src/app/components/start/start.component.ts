@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
+import { ApiResponse } from '@app/interfaces/api-response';
+import { Template } from '@app/interfaces/v1/template';
 import { BlogService } from '@app/services/blog/blog.service';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { Subject } from 'rxjs';
@@ -35,7 +37,20 @@ export class StartComponent implements OnInit {
    */
   errors: ApiError = {};
 
+  /**
+   * Used for debounce (delayed API call on input)
+   */
   domainChanged: Subject<string> = new Subject<string>();
+
+  /**
+   * Templates to pick
+   */
+  templates: Template[];
+
+  /**
+   * Picked template
+   */
+  templateSelected: Template;
 
   constructor(private formBuilder: FormBuilder,
               private blogService: BlogService) {
@@ -53,6 +68,12 @@ export class StartComponent implements OnInit {
      */
     this.domainChanged.pipe(debounceTime(500), distinctUntilChanged()).subscribe((): void => {
       this.checkDomain();
+    });
+    /**
+     * Get templates
+     */
+    this.blogService.getTemplates().subscribe((data: ApiResponse<Template>): void => {
+      this.templates = data.results;
     });
   }
 

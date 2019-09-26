@@ -37,4 +37,27 @@
       </div>
     </div>
   </div>
+
+  <!-- Step: Theme -->
+  <div class="step my-5" *ngIf="step === 'theme'">
+
+    <!-- Header -->
+    <h2 class="text-center font-weight-bold" translate>PICK_A_TEMPLATE</h2>
+
+    <!-- Content -->
+    <div class="row">
+      <div class="col-lg-4 col-md-6" *ngFor="let template of templates">
+        <a class="card card-link shadow-sm mt-4" (click)="templateSelected = template; step = 'register'">
+          <div class="card-header bg-secondary text-white text-center text-uppercase font-weight-bold py-3">
+            {{ template.name }}
+          </div>
+          <img [src]="template.media.thumbnail_512x512" [alt]="template.name" *ngIf="template.media.thumbnail_512x512"
+               class="card-img-bottom">
+          <div class="card-body" *ngIf="!template.media.thumbnail_512x512">
+            <div class="card-text text-center" translate>PREVIEW_NOT_AVAILABLE</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
 </form>
