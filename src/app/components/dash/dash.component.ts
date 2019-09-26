@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dash',
@@ -10,7 +12,53 @@ import { BlogService } from '@app/services/blog/blog.service';
 })
 export class DashComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute) {
+  /**
+   * Sidebar links
+   */
+  links: SidebarLink[] = [{
+    path: 'main',
+    label: this.translateService.instant('MAIN'),
+    icon: 'home',
+  }, {
+    path: 'write',
+    label: this.translateService.instant('WRITE'),
+    icon: 'keyboard',
+  }, {
+    path: 'posts',
+    label: this.translateService.instant('POSTS'),
+    icon: 'scroll',
+  }, {
+    path: 'pages',
+    label: this.translateService.instant('PAGES'),
+    icon: 'newspaper',
+  }, {
+    path: 'comments',
+    label: this.translateService.instant('COMMENTS'),
+    icon: 'comments',
+  }, {
+    path: 'tags',
+    label: this.translateService.instant('TAGS'),
+    icon: 'tags',
+  }, {
+    path: 'media',
+    label: this.translateService.instant('MEDIA'),
+    icon: 'photo-video',
+  }, {
+    path: 'navs',
+    label: this.translateService.instant('NAVS'),
+    icon: 'bars',
+  }, {
+    path: 'team',
+    label: this.translateService.instant('TEAM'),
+    icon: 'users',
+  }, {
+    path: 'settings',
+    label: this.translateService.instant('SETTINGS'),
+    icon: 'cog',
+  }];
+
+  constructor(private route: ActivatedRoute,
+              private translateService: TranslateService) {
   }
 
   ngOnInit(): void {

@@ -1,64 +1,10 @@
 <div class="wrapper">
   <div class="sidebar">
     <ul>
-      <li>
-        <a [routerLink]="['main']" [routerLinkActive]="'active'">
-          <fa-icon icon="home" [fixedWidth]="true"></fa-icon>
-          Main
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['write']" [routerLinkActive]="'active'">
-          <fa-icon icon="keyboard" [fixedWidth]="true"></fa-icon>
-          Write
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['posts']" [routerLinkActive]="'active'">
-          <fa-icon icon="scroll" [fixedWidth]="true"></fa-icon>
-          Posts
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['pages']" [routerLinkActive]="'active'">
-          <fa-icon [icon]="['far', 'newspaper']" [fixedWidth]="true"></fa-icon>
-          Pages
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['comments']" [routerLinkActive]="'active'">
-          <fa-icon icon="comments" [fixedWidth]="true"></fa-icon>
-          Comments
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['tags']" [routerLinkActive]="'active'">
-          <fa-icon icon="tags" [fixedWidth]="true"></fa-icon>
-          Tags
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['media']" [routerLinkActive]="'active'">
-          <fa-icon icon="photo-video" [fixedWidth]="true"></fa-icon>
-          Media
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['navs']" [routerLinkActive]="'active'">
-          <fa-icon icon="route" [fixedWidth]="true"></fa-icon>
-          Navs
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['team']" [routerLinkActive]="'active'">
-          <fa-icon icon="users" [fixedWidth]="true"></fa-icon>
-          Team
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['settings']" [routerLinkActive]="'active'">
-          <fa-icon icon="cog" [fixedWidth]="true"></fa-icon>
-          Settings
+      <li *ngFor="let link of links">
+        <a [routerLink]="[link.path]" [routerLinkActive]="'active'">
+          <fa-icon icon="{{ link.icon }}" [fixedWidth]="true"></fa-icon>
+          {{ link.label }}
         </a>
       </li>
     </ul>
