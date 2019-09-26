@@ -17,7 +17,7 @@ export class DashComponent implements OnInit {
    */
   links: SidebarLink[] = [{
     path: 'main',
-    label: this.translateService.instant('MAIN'),
+    label: this.translateService.instant('DASHBOARD'),
     icon: 'home',
   }, {
     path: 'write',
