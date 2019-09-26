@@ -151,12 +151,19 @@ export class BlogService {
   }
 
   /**
-   * Get templates
+   * Get templates of current blog
    */
-  getTemplates(): Observable<{ templates: Template[] }> {
+  getBlogTemplates(): Observable<{ templates: Template[] }> {
     return this.http.get<{ templates: Template[] }>(
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/templates`,
     );
+  }
+
+  /**
+   * Get templates
+   */
+  getTemplates(): Observable<ApiResponse<Template>> {
+    return this.http.get<ApiResponse<Template>>(`${this.api.base.v1}website/templates`);
   }
 
   /**
