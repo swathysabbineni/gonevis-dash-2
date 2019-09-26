@@ -18,11 +18,11 @@
                    [class.is-valid]="!errors.domain && loading === false"
                    (ngModelChange)="domainChanged.next($event)"
                    [placeholder]="'ENTER_BLOG_ADDRESS' | translate">
+            <div class="invalid-tooltip">{{ errors.domain }}</div>
+            <div class="valid-tooltip" translate>DOMAIN_IS_AVAILABLE</div>
             <div class="input-group-append">
               <span class="input-group-text text-monospace">.gonevis.com</span>
             </div>
-            <div class="invalid-tooltip">{{ errors.domain }}</div>
-            <div class="valid-tooltip" translate>DOMAIN_IS_AVAILABLE</div>
           </div>
         </div>
 
