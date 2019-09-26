@@ -1,4 +1,4 @@
-<form class="container" [formGroup]="form">
+<div class="container">
 
   <!-- Step: Address -->
   <div class="step my-5" *ngIf="step === 'address'">
@@ -7,18 +7,18 @@
     <h2 class="text-center font-weight-bold" translate>LETS_CREATE_YOUR_BLOG</h2>
 
     <!-- Content -->
-    <div class="row justify-content-center">
+    <form class="row justify-content-center" [formGroup]="domainCheckForm">
       <div class="col-lg-6">
 
         <!-- Input -->
         <div class="form-group my-5">
           <div class="input-group">
             <input type="text" class="form-control py-4" formControlName="domain"
-                   [class.is-invalid]="errors.domain && loading === false"
-                   [class.is-valid]="!errors.domain && loading === false"
+                   [class.is-invalid]="error.domain && loading === false"
+                   [class.is-valid]="!error.domain && loading === false"
                    (ngModelChange)="domainChanged.next($event)"
                    [placeholder]="'ENTER_BLOG_ADDRESS' | translate">
-            <div class="invalid-tooltip">{{ errors.domain }}</div>
+            <div class="invalid-tooltip">{{ error.domain }}</div>
             <div class="valid-tooltip" translate>DOMAIN_IS_AVAILABLE</div>
             <div class="input-group-append">
               <span class="input-group-text text-monospace">.gonevis.com</span>
@@ -28,21 +28,21 @@
 
         <!-- Continue button -->
         <div class="text-center">
-          <button class="btn btn-primary" (click)="step = 'theme'"
-                  [disabled]="loading !== false || errors.domain || form.get('domain').invalid">
+          <button class="btn btn-primary" (click)="step = 'theme'" type="button"
+                  [disabled]="loading !== false || error.domain || domainCheckForm.get('domain').invalid">
             <span class="mr-2" translate>PICK_A_THEME</span>
-            <fa-icon [fixedWidth]="true" [icon]="faArrowRight"></fa-icon>
+            <fa-icon [fixedWidth]="true" [icon]="arrowRight"></fa-icon>
           </button>
         </div>
       </div>
-    </div>
+    </form>
   </div>
 
   <!-- Step: Theme -->
   <div class="step my-5" *ngIf="step === 'theme'">
 
     <!-- Header -->
-    <h2 class="text-center font-weight-bold" translate>PICK_A_TEMPLATE</h2>
+    <h2 class="text-center font-weight-bold mb-4" translate>PICK_A_TEMPLATE</h2>
 
     <!-- Content -->
     <div class="row">
@@ -60,4 +60,62 @@
       </div>
     </div>
   </div>
-</form>
+
+  <!-- Step: Register -->
+  <div class="step my-5" *ngIf="step === 'register'">
+
+    <!-- Header -->
+    <h2 class="text-center font-weight-bold mb-5" translate>ALMOST_DONE</h2>
+
+    <!-- Content -->
+    <form class="row justify-content-center" [formGroup]="registerForm" (ngSubmit)="register()">
+      <div class="col-lg-4">
+
+        <!-- Email -->
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <fa-icon [fixedWidth]="true" [icon]="envelope"></fa-icon>
+              </span>
+            </div>
+            <input type="email" class="form-control form-control-lg" formControlName="email"
+                   [placeholder]="'EMAIL' | translate">
+          </div>
+          <span class="text-danger" *ngIf="error.email">{{ error.email[0] }}</span>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <fa-icon [fixedWidth]="true" [icon]="lock"></fa-icon>
+              </span>
+            </div>
+            <input type="password" class="form-control form-control-lg" formControlName="password"
+                   [placeholder]="'PASSWORD' | translate">
+          </div>
+          <div class="mt-1">
+            <app-password-strength [password]="registerForm.get('password').value"></app-password-strength>
+          </div>
+          <span class="text-danger" *ngIf="error.password">{{ error.password[0] }}</span>
+        </div>
+
+        <!-- Errors -->
+        <p class="text-danger" *ngIf="error.detail">{{ error.detail }}</p>
+        <p class="text-danger" *ngIf="error.template_id">{{ error.template_id[0] }}</p>
+        <p class="text-danger" *ngIf="error.site_name">{{ error.site_name[0] }}</p>
+        <p class="text-danger" *ngIf="error.site_url">{{ error.site_url[0] }}</p>
+        <p class="text-danger" *ngIf="error.non_field_errors">{{ error.non_field_errors[0] }}</p>
+
+        <!-- Submit button -->
+        <div class="text-center mt-5">
+          <button class="btn btn-success" [disabled]="loading !== false || registerForm.invalid" translate>
+            SUBMIT
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

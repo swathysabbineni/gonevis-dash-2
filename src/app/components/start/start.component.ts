@@ -3,8 +3,11 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Template } from '@app/interfaces/v1/template';
+import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope';
+import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
@@ -15,7 +18,9 @@ import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 })
 export class StartComponent implements OnInit {
 
-  readonly faArrowRight = faArrowRight;
+  readonly arrowRight = faArrowRight;
+  readonly envelope = faEnvelope;
+  readonly lock = faLock;
 
   /**
    * Current step of getting started
@@ -23,9 +28,14 @@ export class StartComponent implements OnInit {
   step: 'address' | 'theme' | 'register' = 'address';
 
   /**
-   * Getting started form
+   * Domain check form
    */
-  form: FormGroup;
+  domainCheckForm: FormGroup;
+
+  /**
+   * Register form
+   */
+  registerForm: FormGroup;
 
   /**
    * API loading indicator
@@ -35,7 +45,7 @@ export class StartComponent implements OnInit {
   /**
    * API errors
    */
-  errors: ApiError = {};
+  error: ApiError = {};
 
   /**
    * Used for debounce (delayed API call on input)
@@ -53,15 +63,23 @@ export class StartComponent implements OnInit {
   templateSelected: Template;
 
   constructor(private formBuilder: FormBuilder,
-              private blogService: BlogService) {
+              private blogService: BlogService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
     /**
-     * Setup getting started form
+     * Setup domain check form
      */
-    this.form = this.formBuilder.group({
+    this.domainCheckForm = this.formBuilder.group({
       domain: [null, Validators.required],
+    });
+    /**
+     * Setup register
+     */
+    this.registerForm = this.formBuilder.group({
+      email: ['', Validators.compose([Validators.required, Validators.email])],
+      password: ['', Validators.required],
     });
     /**
      * Domain change watch
@@ -82,12 +100,30 @@ export class StartComponent implements OnInit {
    */
   checkDomain(): void {
     this.loading = true;
-    this.blogService.domainCheck(this.form.get('domain').value).subscribe((): void => {
+    this.blogService.domainCheck(this.domainCheckForm.get('domain').value).subscribe((): void => {
       this.loading = false;
-      this.errors = {};
+      this.error = {};
     }, error => {
       this.loading = false;
-      this.errors = error.error;
+      this.error = error.error;
+    });
+  }
+
+  /**
+   * Final registration of the user and the new blog
+   */
+  register(): void {
+    this.loading = true;
+    this.authService.signUpWithBlog(
+      this.registerForm.get('email').value,
+      this.registerForm.get('password').value,
+      this.domainCheckForm.get('domain').value,
+      this.domainCheckForm.get('domain').value,
+      this.templateSelected.id,
+    ).subscribe(() => {
+    }, error => {
+      this.loading = false;
+      this.error = error.error;
     });
   }
 }
