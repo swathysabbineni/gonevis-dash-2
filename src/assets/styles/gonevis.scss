@@ -18,9 +18,17 @@ $tooltip-bg: $dark;
 @import "~bootstrap/scss/bootstrap";
 @import '~ngx-toastr/toastr';
 
+html, body {
+  height: 100%;
+}
+
 a,
 .pointer {
   cursor: pointer;
+}
+
+.h-100 {
+  min-height: 0;
 }
 
 .white-space-pre-line {
