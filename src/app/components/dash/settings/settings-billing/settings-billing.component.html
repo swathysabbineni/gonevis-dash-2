@@ -28,7 +28,7 @@
     </div>
     <!-- Cancel button -->
     <div class="card-footer text-right">
-      <button class="btn btn-sm btn-danger" (click)="showCancelModal(cancelTemplate)" translate>
+      <button class="btn btn-sm btn-danger" (click)="showModal(cancelTemplate)" translate>
         CANCEL
       </button>
     </div>
@@ -60,23 +60,23 @@
       <h5 class="mb-0 mr-2" translate>CANCEL_SUBSCRIPTION</h5>
     </div>
     <!-- Close -->
-    <button class="ml-auto btn btn-link p-0" (click)="bsModalRef.hide()">
+    <button class="ml-auto btn btn-link p-0" (click)="modal.hide()">
       <fa-icon [fixedWidth]="true" icon="times"></fa-icon>
     </button>
   </div>
   <div class="modal-body">
     <!-- Text -->
-    <span translate [translateParams]="{ planName : subscription.plan.name }" *ngIf="!cancelling">
+    <span translate [translateParams]="{planName : subscription.plan.name}" *ngIf="!canceling">
       CANCEL_SUBSCRIPTION_DESCRIPTION
     </span>
     <!-- Reloading icon -->
-    <div class="text-center" *ngIf="cancelling">
+    <div class="text-center" *ngIf="canceling">
       <fa-icon icon="circle-notch" class="text-center" size="3x" [fixedWidth]="true" [spin]="true"></fa-icon>
     </div>
   </div>
   <!-- Buttons -->
-  <div class="modal-footer" *ngIf="!cancelling">
-    <button class="btn" (click)="cancelSubscription()" translate>YES_CANCEL</button>
-    <button class="btn btn-success" (click)="bsModalRef.hide()" translate>NO_I_CHANGED_MY_MIND</button>
+  <div class="modal-footer" *ngIf="!canceling">
+    <button class="btn" (click)="cancel()" translate>YES_CANCEL</button>
+    <button class="btn btn-success" (click)="modal.hide()" translate>NO_I_CHANGED_MY_MIND</button>
   </div>
 </ng-template>
