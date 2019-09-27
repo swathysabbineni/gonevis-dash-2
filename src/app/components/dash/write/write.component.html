@@ -35,7 +35,46 @@
   <quill-editor [formControl]="form.controls['content']"
                 [modules]="options"
                 placeholder="Write your article here..."
-                scrollingContainer="html, body" (onEditorCreated)="onEditorInit($event)"></quill-editor>
+                scrollingContainer="html, body" (onEditorCreated)="onEditorInit($event)">
+    <div quill-editor-toolbar>
+      <div class="ql-formats">
+        <button class="ql-bold" [title]="'Bold'"></button>
+        <button class="ql-italic" [title]="'Italic'"></button>
+        <button class="ql-underline" [title]="'Underline'"></button>
+        <button class="ql-strike" [title]="'Strike'"></button>
+      </div>
+      <div class="ql-formats">
+        <button class="ql-link" [title]="'Bold'"></button>
+        <button class="ql-blockquote" [title]="'Italic'"></button>
+        <button class="ql-code-block" [title]="'Underline'"></button>
+        <button class="ql-list" [title]="'Strike'" value="bullet"></button>
+        <button class="ql-divider" [title]="'Strike'"></button>
+      </div>
+      <div class="ql-formats">
+        <div class="dropdown ql-newOne" dropdown>
+          <button class="btn btn-success" dropdownToggle>open</button>
+          <span class="dropdown-menu" *dropdownMenu>
+            <li><a class="dropdown-item">Nice</a></li>
+          </span>
+        </div>
+<!--        <select class="custom-select ql-custom ql-header" [title]="'Bold'">-->
+<!--              <option value="h1"></option>-->
+<!--          &lt;!&ndash; Note a missing, thus falsy value, is used to reset to default &ndash;&gt;-->
+<!--              <option selected></option>-->
+<!--              <option value="h3"></option>-->
+<!--              <option value="h4"></option>-->
+<!--        </select>-->
+      </div>
+      <span class="ql-formats">
+        <select class="ql-align" [title]="'Aligment'">
+          <option selected></option>
+          <option value="center"></option>
+          <option value="right"></option>
+          <option value="justify"></option>
+        </select>
+      </span>
+    </div>
+  </quill-editor>
 </form>
 <!-- File list modal -->
 <ng-template #fileListModalTemplate>
