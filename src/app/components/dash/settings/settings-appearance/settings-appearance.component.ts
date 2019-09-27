@@ -108,7 +108,7 @@ export class SettingsAppearanceComponent implements OnInit {
           /**
            * Get templates
            */
-          this.blogService.getTemplates().subscribe((response: { templates: Template[] }): void => {
+          this.blogService.getBlogTemplates().subscribe((response: { templates: Template[] }): void => {
             this.templates = response.templates;
             /**
              * Set current viewing theme

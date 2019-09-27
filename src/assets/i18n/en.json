@@ -183,8 +183,16 @@
   "TOAST_ADD": "added successfully",
   "SETTINGS": "Settings",
   "PURCHASE": "Purchase",
-  "COLLABORATING": "Collaborating",
   "CANCEL_SUBSCRIPTION_YES_BUTTON": "Yes, cancel",
   "CANCEL_SUBSCRIPTION_NO_BUTTON": "No, I changed my mind",
-  "MONTHLY": "monthly"
+  "MONTHLY": "monthly",
+  "GET_STARTED": "Get Started",
+  "LETS_CREATE_YOUR_BLOG": "Let's create your blog",
+  "ENTER_BLOG_ADDRESS": "Enter your blog address",
+  "PICK_A_THEME": "Pick a Theme",
+  "DOMAIN_IS_AVAILABLE": "Sub-domain is available",
+  "PICK_A_TEMPLATE": "Pick a template",
+  "PREVIEW_NOT_AVAILABLE": "Preview not available yet",
+  "ALMOST_DONE": "You're almost done",
+  "COLLABORATING": "Collaborating"
 }

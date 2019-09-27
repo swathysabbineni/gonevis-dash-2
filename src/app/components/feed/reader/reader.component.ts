@@ -38,13 +38,13 @@ export class ReaderComponent implements OnInit {
         this.loading = false;
       };
       this.loading = true;
+      let show: 'feed' | 'bookmarked' | '' = '';
       if (data.route === 'updates') {
-        this.feedService.getSubscribedEntries().subscribe(onLoadEntries);
+        show = 'feed';
       } else if (data.route === 'bookmarks') {
-        this.feedService.getBookmarkedEntries().subscribe(onLoadEntries);
-      } else {
-        this.feedService.getEntries().subscribe(onLoadEntries);
+        show = 'bookmarked';
       }
+      this.feedService.getEntries({ show }).subscribe(onLoadEntries);
     });
   }
 }

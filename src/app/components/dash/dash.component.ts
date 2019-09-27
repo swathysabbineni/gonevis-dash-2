@@ -74,8 +74,10 @@ export class DashComponent implements OnInit {
           const index: number = Number(params.blog);
           if (index) {
             BlogService.setCurrent(blogs[index].id);
-          } else if (blogs) {
+          } else if (blogs && blogs.length) {
             BlogService.setCurrent(blogs[0].id);
+          } else {
+            BlogService.setCurrent(null);
           }
         });
       });

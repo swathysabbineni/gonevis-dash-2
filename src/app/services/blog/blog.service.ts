@@ -133,7 +133,11 @@ export class BlogService {
    */
   static setCurrent(id: string): void {
     const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
-    BlogService.blogSubject.next(blogs.find(blog => blog.id === id));
+    if (id) {
+      BlogService.blogSubject.next(blogs.find(blog => blog.id === id));
+    } else {
+      BlogService.blogSubject.next(null);
+    }
   }
 
   /**
@@ -151,12 +155,19 @@ export class BlogService {
   }
 
   /**
-   * Get templates
+   * Get templates of current blog
    */
-  getTemplates(): Observable<{ templates: Template[] }> {
+  getBlogTemplates(): Observable<{ templates: Template[] }> {
     return this.http.get<{ templates: Template[] }>(
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/templates`,
     );
+  }
+
+  /**
+   * Get templates
+   */
+  getTemplates(): Observable<ApiResponse<Template>> {
+    return this.http.get<ApiResponse<Template>>(`${this.api.base.v1}website/templates`);
   }
 
   /**
@@ -246,6 +257,15 @@ export class BlogService {
     ).pipe(map((() => {
       this.toast.info(this.translate.instant('TOAST_DELETE'), this.translate.instant('DOMAIN'));
     })));
+  }
+
+  /**
+   * Check sub-domain availability
+   *
+   * @param domain Domain slug
+   */
+  domainCheck(domain: string): Observable<void> {
+    return this.http.post<void>(`${this.api.base.v1}website/domain-check/`, { domain });
   }
 
   /**
