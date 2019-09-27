@@ -114,7 +114,7 @@ export class SettingsAppearanceComponent implements OnInit, OnDestroy {
             /**
              * Get templates
              */
-            this.blogService.getTemplates()
+            this.blogService.getBlogTemplates()
               .pipe(untilComponentDestroyed(this))
               .subscribe((response: { templates: Template[] }): void => {
                 this.templates = response.templates;

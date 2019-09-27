@@ -1,0 +1,64 @@
+@import "variables";
+@import "~bootstrap/scss/mixins/breakpoints";
+
+.plan {
+  border-radius: $border-radius;
+
+  .price {
+    position: relative;
+    width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+
+  .card-footer button {
+    border-radius: 0 0 $border-radius $border-radius;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      background: #fff;
+      content: "";
+      height: 155px;
+      left: -75px;
+      opacity: .2;
+      position: absolute;
+      top: -50px;
+      transform: rotate(35deg);
+      transition: all .8s cubic-bezier(.19, 1, .22, 1);
+      width: 50px;
+    }
+
+    &:hover::after {
+      left: 120%;
+    }
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .plan .price {
+    margin-left: -$card-spacer-x * 2;
+
+    &::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-top: 1.25rem solid rgba($secondary, 0.5);
+      border-left: 1.25rem solid transparent;
+      position: absolute;
+      left: 0;
+      bottom: -1.25rem;
+    }
+
+    &.bg-primary::after {
+      border-top-color: rgba($primary, 0.5);
+    }
+
+    &.bg-success::after {
+      border-top-color: rgba($success, 0.5);
+    }
+  }
+}

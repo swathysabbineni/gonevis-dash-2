@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthResponse } from '@app/interfaces/auth-response';
 import { AuthToken } from '@app/interfaces/auth-token';
 import { UserAuth } from '@app/interfaces/user-auth';
+import { RegisterWithBlogResponse } from '@app/interfaces/v1/register-with-blog-response';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -18,9 +19,19 @@ import { map } from 'rxjs/operators';
 export class AuthService {
 
   /**
+   * Sign in redirect
+   */
+  private static readonly signInRedirect: string[] = ['feed'];
+
+  /**
+   * Sign up redirect
+   */
+  private static readonly signUpRedirect: string[] = ['dash'];
+
+  /**
    * Sign out redirect
    */
-  private static readonly signOutRedirect: string[] = ['user', 'sign-in'];
+  private static readonly signOutRedirect: string[] = ['start'];
 
   /**
    * Authenticated user (subject)
@@ -118,10 +129,15 @@ export class AuthService {
    * @param username User username
    * @param password User password
    * @param showToast Show sign in toast
+   * @param redirectPath Redirect after signing up
    *
    * @return String observable which can be subscribed to.
    */
-  signIn(username: string, password: string, showToast: boolean = true): Observable<string> {
+  signIn(
+    username: string,
+    password: string,
+    showToast: boolean = true,
+    redirectPath: string[] = AuthService.signInRedirect): Observable<string> {
     return this.http.post<AuthResponse>(
       `${this.api.base.v1}account/login/`, { username, password },
     ).pipe(
@@ -130,12 +146,15 @@ export class AuthService {
         this.setToken(data.token);
         // Store user into local storage
         localStorage.setItem('user', JSON.stringify(data.user));
-        // Update user subject data
+        // Update user and blogs subject data
         AuthService.userSubject.next(data.user);
+        BlogService.set(data.user.sites.reverse());
         // Show toast
         if (showToast) {
           this.toast.info(this.translate.instant('TOAST_SIGN_IN'), data.user.name);
         }
+        // Redirect
+        this.router.navigate(redirectPath);
         // Return raw user data
         return data.user.username;
       }),
@@ -147,7 +166,7 @@ export class AuthService {
    *
    * @param email User email
    * @param username User username
-   * @param password user password
+   * @param password User password
    */
   signUp(email: string, username: string, password: string): Observable<void> {
     return this.http.post(this.api.base.v1 + 'account/register-account-only/', {
@@ -156,6 +175,37 @@ export class AuthService {
       map((): void => {
         this.toast.info(this.translate.instant('TOAST_SIGN_UP'), username);
         this.signIn(username, password, false).subscribe();
+      }),
+    );
+  }
+
+  /**
+   * Sign user up and create a blog
+   *
+   * @param email User email
+   * @param password User password
+   * @param blogName Blog title
+   * @param blogUrl Blog URL (sub-domain)
+   * @param blogTheme Blog template ID
+   */
+  signUpWithBlog(
+    email: string,
+    password: string,
+    blogName: string,
+    blogUrl: string,
+    blogTheme: string,
+  ): Observable<RegisterWithBlogResponse> {
+    return this.http.post<RegisterWithBlogResponse>(this.api.base.v1 + 'account/register/', {
+      email,
+      password,
+      site_name: blogName,
+      site_url: blogUrl,
+      template_id: blogTheme,
+    }).pipe(
+      map((data: RegisterWithBlogResponse): RegisterWithBlogResponse => {
+        this.toast.info(this.translate.instant('TOAST_SIGN_UP'), blogName);
+        this.signIn(email, password, false, AuthService.signUpRedirect).subscribe();
+        return data;
       }),
     );
   }

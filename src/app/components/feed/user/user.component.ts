@@ -90,7 +90,7 @@ export class UserComponent implements OnInit {
       this.current = current;
     }
     if (this.current === 'entries') {
-      this.feedService.getEntries('', this.username).subscribe((data: ApiResponse<Entry>): void => {
+      this.feedService.getEntries({ user: this.username }).subscribe((data: ApiResponse<Entry>): void => {
         this.next = data.next;
         this.entries = data.results;
         this.loading = false;
