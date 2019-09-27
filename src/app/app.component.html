@@ -5,7 +5,7 @@
 <nav class="navbar navbar-expand navbar-dark bg-primary sticky-top">
   <div [class.container]="!inDash" [class.container-fluid]="inDash">
     <!-- Brand -->
-    <a class="navbar-brand" routerLink="/feed" translate>
+    <a class="navbar-brand" routerLink="/" translate>
       <img src="../assets/img/logo.png" alt="GoNevis">
     </a>
     <!-- Navs -->
@@ -28,7 +28,7 @@
       </li>
     </ul>
     <!-- Navs -->
-    <ul class="navbar-nav" [class.ml-auto]="inDash">
+    <ul class="navbar-nav" [class.ml-auto]="inDash" *ngIf="auth.isAuth && user">
       <li class="nav-item" *ngIf="inDash">
         <a class="nav-link" routerLinkActive="active" routerLink="feed" translate>FEED</a>
       </li>
@@ -66,7 +66,14 @@
         </ul>
       </li>
     </ul>
-    <!-- Navs when not authenticated -->
+    <!-- Navs when not authenticated (left) -->
+    <ul class="navbar-nav" *ngIf="!auth.isAuth">
+      <!-- Start -->
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/start" translate>GET_STARTED</a>
+      </li>
+    </ul>
+    <!-- Navs when not authenticated (right) -->
     <ul class="navbar-nav ml-auto" *ngIf="!auth.isAuth">
       <!-- Sign in -->
       <li class="nav-item" routerLinkActive="active">

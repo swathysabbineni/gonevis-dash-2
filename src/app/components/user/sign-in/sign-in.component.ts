@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ApiError } from '@app/interfaces/api-error';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
@@ -12,9 +11,6 @@ import { AuthService } from '@app/services/auth/auth.service';
 })
 export class SignInComponent implements OnInit {
 
-  // Sign in redirection
-  readonly feedRoute: string = '/feed';
-
   // Sign in form
   form: FormGroup;
 
@@ -25,7 +21,6 @@ export class SignInComponent implements OnInit {
   loading: boolean;
 
   constructor(private formBuilder: FormBuilder,
-              private router: Router,
               private authService: AuthService) {
   }
 
@@ -52,7 +47,6 @@ export class SignInComponent implements OnInit {
     // API call
     this.authService.signIn(this.f.username.value, this.f.password.value).subscribe((): void => {
       this.loading = false;
-      this.router.navigateByUrl(this.feedRoute);
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
       this.loading = false;
