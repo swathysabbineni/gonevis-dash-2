@@ -14,9 +14,10 @@ export class PasswordStrengthComponent implements OnChanges {
   private static readonly minLength: number = 6;
 
   /**
-   * Password strengths
+   * Password strength levels
+   * @todo Add translation
    */
-  private static readonly strengths: PasswordStrength[] = [{
+  private static readonly strengthLevels: PasswordStrength[] = [{
     label: null,
     color: 'danger',
     percentage: 0,
@@ -30,7 +31,6 @@ export class PasswordStrengthComponent implements OnChanges {
     percentage: 40,
   }, {
     label: 'Good',
-    color: '',
     percentage: 60,
   }, {
     label: 'Strong',
@@ -50,10 +50,7 @@ export class PasswordStrengthComponent implements OnChanges {
   /**
    * Current password's strength
    */
-  strength: PasswordStrength = PasswordStrengthComponent.strengths[0];
-
-  constructor() {
-  }
+  strength: PasswordStrength = PasswordStrengthComponent.strengthLevels[0];
 
   /**
    * Update strength based on password
@@ -61,38 +58,38 @@ export class PasswordStrengthComponent implements OnChanges {
    * @return Calculated strength
    */
   private async updateStrength(): Promise<number> {
-    let strongness = 0;
+    let strength = 0;
     // Check password
     if (!this.password) {
       this.password = '';
     }
     // Is it long enough
     if (this.password.length >= PasswordStrengthComponent.minLength) {
-      strongness += 1;
+      strength += 1;
     }
     // Contains at least 1 number
     if (this.password.search(/\d/) !== -1) {
-      strongness += 1;
+      strength += 1;
     }
     // Contains at least 1 letter
     if (this.password.search(/[a-zA-Z]/) !== -1) {
-      strongness += 1;
+      strength += 1;
     }
     // Contains at least 1 uppercase letter
     if (this.password.search(/[A-Z]/) !== -1) {
-      strongness += 1;
+      strength += 1;
     }
     // Contains at least 1 special character
     if (this.password.search(/[^\w\s]/gi) !== -1) {
-      strongness += 1;
+      strength += 1;
     }
 
-    return strongness;
+    return strength;
   }
 
   ngOnChanges(): void {
     this.updateStrength().then((strength: number): void => {
-      this.strength = PasswordStrengthComponent.strengths[strength];
+      this.strength = PasswordStrengthComponent.strengthLevels[strength];
     });
   }
 }

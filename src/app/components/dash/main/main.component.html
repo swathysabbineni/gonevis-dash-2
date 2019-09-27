@@ -5,15 +5,15 @@
     <div class="col-md-8">
 
       <!-- Posts -->
-      <div class="card shadow-sm mb-4">
+      <div class="card dash mb-4" *ngIf="entries">
         <!-- Header -->
         <div class="card-header">
-          <a class="init" routerLink="../../posts" translate>POSTS</a>
-          <span class="float-right badge badge-primary text-light" *ngIf="metrics">
+          <a class="init" routerLink="../../../posts" translate>POSTS</a>
+          <span class="card-label" *ngIf="metrics">
             {{ metrics.metrics.published_entry_count | number}}
           </span>
         </div>
-        <div class="list-group">
+        <div class="list-group-flush">
           <a class="list-group-item list-group-item-action d-flex" *ngFor="let entry of entries">
             <!-- title -->
             <span>{{ entry.title }}</span>
@@ -44,16 +44,18 @@
       </div>
 
       <!-- Comments -->
-      <div class="card shadow-sm">
+      <div class="card dash mb-4" *ngIf="comments">
         <!-- Header -->
         <div class="card-header">
-          <a class="init" routerLink="../../comments" translate>COMMENTS</a>
-          <span class="float-right badge badge-primary text-light" *ngIf="metrics">
+          <a class="init" routerLink="../../../comments" translate>COMMENTS</a>
+          <span class="card-label" *ngIf="metrics">
             {{ metrics.metrics.comment_count | number }}
           </span>
         </div>
-        <div class="list-group">
-          <a class="list-group-item list-group-item-action" *ngFor="let comment of comments">
+        <div class="list-group-flush">
+          <a class="list-group-item list-group-item-action" *ngFor="let comment of comments"
+             [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]"
+             [queryParams]="{ comment: comment.id }">
             <!-- Name-->
             <small class="text-secondary">{{ comment.user.name }}: </small>
             <!-- Comment -->
@@ -73,9 +75,9 @@
     <div class="col-md-4">
 
       <!-- Publication -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header" translate>PUBLICATION</div>
-        <div class="list-group">
+      <div class="card dash mb-4">
+        <div class="card-header text-capitalize" translate>PUBLICATION</div>
+        <div class="list-group-flush">
           <!-- Posts -->
           <div class="list-group-item d-flex">
             <span translate>POSTS</span>
@@ -95,11 +97,11 @@
       </div>
 
       <!-- Comment overview -->
-      <div class="card shadow-sm mb-4">
+      <div class="card dash mb-4">
         <div class="card-header">
-          <a routerLink="../../comments" translate>COMMENT_OVERVIEW</a>
+          <a class="text-capitalize" routerLink="../../../comments" translate>COMMENT_OVERVIEW</a>
         </div>
-        <div class="list-group">
+        <div class="list-group-flush">
           <!-- All comments -->
           <div class="list-group-item d-flex">
             <span translate>ALL_COMMENTS</span>
@@ -124,11 +126,11 @@
       </div>
 
       <!-- Blog overview -->
-      <div class="card shadow-sm mb-4">
+      <div class="card dash mb-4">
         <div class="card-header">
-          <a routerLink="../../settings/general" translate>BLOG_OVERVIEW</a>
+          <a class="text-capitalize" routerLink="../../../settings/general" translate>BLOG_OVERVIEW</a>
         </div>
-        <div class="list-group">
+        <div class="list-group-flush">
           <!-- Subscribers -->
           <div class="list-group-item d-flex">
             <span translate>FOLLOWERS</span>
@@ -137,9 +139,10 @@
             </button>
           </div>
           <!-- Theme and layout -->
-          <div class="list-group-item d-flex">
+          <div class="list-group-item d-flex" *ngIf="templateConfig">
             <span translate>THEME_AND_LAYOUT</span>
-            <a class="ml-auto btn btn-sm btn-primary py-0" routerLink="../../settings/appearance" *ngIf="templateConfig">
+            <a class="ml-auto btn btn-sm btn-primary py-0" routerLink="../../../settings/appearance"
+               *ngIf="templateConfig">
               {{ templateConfig.name | uppercase }}
             </a>
           </div>
@@ -147,9 +150,9 @@
       </div>
 
       <!-- Storage -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header" translate>STORAGE</div>
-        <div class="list-group">
+      <div class="card dash mb-4">
+        <div class="card-header text-capitalize" translate>STORAGE</div>
+        <div class="list-group-flush">
           <!-- Files -->
           <div class="list-group-item d-flex">
             <span translate>FILES</span>
@@ -173,11 +176,11 @@
       </div>
 
       <!-- Team -->
-      <div class="card shadow-sm mb-4">
+      <div class="card dash mb-4">
         <div class="card-header">
-          <a routerLink="../../team" translate>TEAM</a>
+          <a class="text-capitalize" routerLink="../../../team" translate>TEAM</a>
         </div>
-        <div class="list-group">
+        <div class="list-group-flush">
           <!-- Team members -->
           <div class="list-group-item d-flex">
             <span translate>TEAM_MEMBERS</span>

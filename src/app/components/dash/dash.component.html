@@ -1,17 +1,24 @@
-<p>dash works!</p>
+<div class="wrapper">
+  <div class="sidebar">
+    <ul>
+      <li *ngFor="let link of links">
+        <a [routerLink]="[link.path]" [routerLinkActive]="'active'">
+          <fa-icon icon="{{ link.icon }}" [fixedWidth]="true"></fa-icon>
+          {{ link.label }}
+        </a>
+      </li>
+    </ul>
+    <ul class="mt-auto">
+      <li>
+        <a [routerLink]="['help']" [routerLinkActive]="'active'">
+          <fa-icon icon="question" [fixedWidth]="true"></fa-icon>
+          Help
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="content pt-3">
+    <router-outlet></router-outlet>
+  </div>
+</div>
 
-<p>
-  <a routerLinkActive="text-primary" routerLink="main">main </a>
-  <a routerLinkActive="text-primary" routerLink="write">write </a>
-  <a routerLinkActive="text-primary" routerLink="posts">posts </a>
-  <a routerLinkActive="text-primary" routerLink="pages">pages </a>
-  <a routerLinkActive="text-primary" routerLink="comments">comments </a>
-  <a routerLinkActive="text-primary" routerLink="tags">tags </a>
-  <a routerLinkActive="text-primary" routerLink="media">media </a>
-  <a routerLinkActive="text-primary" routerLink="navs">navs </a>
-  <a routerLinkActive="text-primary" routerLink="team">team </a>
-  <a routerLinkActive="text-primary" routerLink="settings">settings </a>
-  <a routerLinkActive="text-primary" routerLink="help">help </a>
-</p>
-
-<router-outlet></router-outlet>

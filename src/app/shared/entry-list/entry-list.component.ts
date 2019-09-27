@@ -15,14 +15,46 @@ import { UtilService } from '@app/services/util/util.service';
 export class EntryListComponent {
 
   /**
+   * Current entry list
+   */
+  private currentEntries: Entry[] = [];
+
+  /**
+   * Use content instead of excerpt
+   */
+  @Input() useContent = false;
+
+  /**
    * API loading indicator
    */
   loading: boolean;
 
   /**
-   * List of entries
+   * Update entry list
+   *
+   * @param entries Entry list
    */
-  @Input() entries: Entry[];
+  @Input() set entries(entries: Entry[]) {
+    if (!entries) {
+      return;
+    }
+    /**
+     * Sanitize entry content
+     */
+    if (this.useContent) {
+      entries.forEach((entry: Entry): void => {
+        entry.content = this.utilService.sanitizeHtml(entry.content) as string;
+      });
+    }
+    this.currentEntries = entries;
+  }
+
+  /**
+   * Get entry list
+   */
+  get entries(): Entry[] {
+    return this.currentEntries;
+  }
 
   /**
    * Next page endpoint

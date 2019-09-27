@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommentStatus } from '@app/enums/comment-status';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Comment } from '@app/interfaces/v1/comment';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 import { CommentsService } from './comments.service';
 
 @Component({
@@ -25,16 +28,21 @@ export class CommentsComponent implements OnInit {
   loading = false;
 
   constructor(private commentsService: CommentsService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private toast: ToastrService) {
   }
 
   ngOnInit(): void {
-    /**
-     * Get comments
-     */
-    this.commentsService.getComments().subscribe((response: ApiResponse<Comment>): void => {
-      this.comments = response.results;
-      this.loading = true;
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        /**
+         * Get comments
+         */
+        this.commentsService.getComments().subscribe((response: ApiResponse<Comment>): void => {
+          this.comments = response.results;
+          this.loading = true;
+        });
+      }
     });
   }
 
@@ -67,6 +75,7 @@ export class CommentsComponent implements OnInit {
     }
     comment.loading = true;
     this.commentsService.deleteComment(comment.id).subscribe((): void => {
+      this.toast.info(this.translate.instant('TOAST_DELETE'), this.translate.instant('COMMENT'));
       this.comments.splice(this.comments.indexOf(comment), 1);
     });
   }

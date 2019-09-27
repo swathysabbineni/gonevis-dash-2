@@ -4,7 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NavsService } from '@app/components/dash/navs/navs.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { Navigation } from '@app/interfaces/v1/navigation';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-navs',
@@ -24,29 +27,34 @@ export class NavsComponent implements OnInit {
   loading: boolean;
 
   /**
-   * API Errors
+   * API errors
    */
   errors: ApiError[] = [];
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private navsService: NavsService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private toast: ToastrService) {
   }
 
   ngOnInit(): void {
-    /**
-     * Get navigations
-     */
-    this.navsService.getNavigations().subscribe((data: { navigation: Navigation[] }): void => {
-      this.navigations = data.navigation;
-      /**
-       * Watch router params
-       */
-      if (history.state.add) {
-        this.navigations.push({
-          label: history.state.add.label,
-          url: history.state.add.url,
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        /**
+         * Get navigations
+         */
+        this.navsService.getNavigations().subscribe((data: { navigation: Navigation[] }): void => {
+          this.navigations = data.navigation;
+          /**
+           * Watch router params
+           */
+          if (history.state.add) {
+            this.navigations.push({
+              label: history.state.add.label,
+              url: history.state.add.url,
+            });
+          }
         });
       }
     });
@@ -67,6 +75,7 @@ export class NavsComponent implements OnInit {
       this.navigations = data.navigation;
       this.loading = false;
       this.errors = [];
+      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('NAVIGATIONS'));
     }, (error) => {
       this.loading = false;
       this.errors = error.error.navigation;

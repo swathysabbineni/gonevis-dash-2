@@ -13,7 +13,10 @@ import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { TemplateConfigFields } from '@app/interfaces/v1/template-config-fields';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { ApiService } from '@app/services/api/api.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -65,46 +68,106 @@ export class BlogService {
     { id: HighlightTheme.ZENBURN, label: 'Zenburn' },
   ];
 
+  /**
+   * Blog list (subject)
+   */
+  private static blogsSubject: BehaviorSubject<BlogMin[]> = new BehaviorSubject<BlogMin[]>(null);
+
+  /**
+   * Blog list (observable)
+   */
+  static blogs: Observable<BlogMin[]> = BlogService.blogsSubject.asObservable();
+
+  /**
+   * Current blog (subject)
+   */
   private static blogSubject: BehaviorSubject<BlogMin> = new BehaviorSubject<BlogMin>(null);
 
+  /**
+   * Current blog (observable)
+   */
   static blog: Observable<BlogMin> = BlogService.blogSubject.asObservable();
 
   constructor(private http: HttpClient,
-              private apiService: ApiService,
-              private api: ApiService) {
+              private api: ApiService,
+              private translate: TranslateService,
+              private toast: ToastrService) {
   }
 
   /**
-   * Update current blog
+   * Set the blog list
    *
-   * @param blog Blog data
+   * @param blogs Blogs to set the list to
    */
-  static set currentBlog(blog: BlogMin) {
-    localStorage.setItem('blog', JSON.stringify(blog));
-    BlogService.blogSubject.next(blog);
+  static set(blogs: BlogMin[]): void {
+    BlogService.blogsSubject.next(blogs);
+  }
+
+  /**
+   * Add a blog to the blog list
+   *
+   * @param blog Blog to add
+   */
+  static add(blog: BlogMin): void {
+    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
+    blogs.push(blog);
+    BlogService.blogsSubject.next(blogs);
+  }
+
+  /**
+   * Update a blog from the blog list
+   *
+   * @param id Blog ID to update
+   * @param blog Blog data to update
+   */
+  static update(id: string, blog: BlogMin): void {
+    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
+    blogs[blogs.findIndex(item => item.id === id)] = blog;
+    BlogService.blogsSubject.next(blogs);
+  }
+
+  /**
+   * Set current blog
+   *
+   * @param id Blog ID to set as current
+   */
+  static setCurrent(id: string): void {
+    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
+    if (id) {
+      BlogService.blogSubject.next(blogs.find(blog => blog.id === id));
+    } else {
+      BlogService.blogSubject.next(null);
+    }
   }
 
   /**
    * @return Current blog
    */
   static get currentBlog(): BlogMin {
-    return JSON.parse(localStorage.getItem('blog'));
+    return BlogService.blogSubject.getValue();
   }
 
   /**
    * Get metrics
    */
   getMetrics(): Observable<Metrics> {
-    return this.http.get<Metrics>(`${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/metrics`);
+    return this.http.get<Metrics>(`${this.api.base.v1}website/site/${BlogService.currentBlog.id}/metrics`);
+  }
+
+  /**
+   * Get templates of current blog
+   */
+  getBlogTemplates(): Observable<{ templates: Template[] }> {
+    return this.http.get<{ templates: Template[] }>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/templates`,
+    );
   }
 
   /**
    * Get templates
    */
-  getTemplates(): Observable<{ templates: Template[] }> {
-    return this.http.get<{ templates: Template[] }>(
-      `${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/templates`,
-    );
+  getTemplates(): Observable<ApiResponse<Template>> {
+    return this.http.get<ApiResponse<Template>>(`${this.api.base.v1}website/templates`);
   }
 
   /**
@@ -117,7 +180,9 @@ export class BlogService {
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-template`, {
         site_template_id: template,
       },
-    );
+    ).pipe(map((() => {
+      this.toast.success(this.translate.instant('TOAST_UPDATE'), this.translate.instant('THEME'));
+    })));
   }
 
   /**
@@ -125,7 +190,7 @@ export class BlogService {
    */
   getTemplateConfig(): Observable<{ template_config: TemplateConfig }> {
     return this.http.get<{ template_config: TemplateConfig }>(
-      `${this.apiService.base.v1}website/site/${BlogService.currentBlog.id}/template-config`,
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/template-config`,
     );
   }
 
@@ -139,7 +204,10 @@ export class BlogService {
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-template-config/`, {
         config_fields: fields,
       },
-    );
+    ).pipe(map((data => {
+      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('THEME_OPTIONS'));
+      return data;
+    })));
   }
 
   /**
@@ -157,7 +225,10 @@ export class BlogService {
   updateSettings(payload: Params): Observable<BlogSettings> {
     return this.http.put<BlogSettings>(
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/update-settings/`, payload,
-    );
+    ).pipe(map((data => {
+      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('SETTINGS'));
+      return data;
+    })));
   }
 
   /**
@@ -169,7 +240,10 @@ export class BlogService {
   addDomain(domain: string): Observable<void> {
     return this.http.put<void>(
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-custom-domain/`, { domain },
-    );
+    ).pipe(map((data => {
+      this.toast.info(this.translate.instant('TOAST_ADD'), domain);
+      return data;
+    })));
   }
 
   /**
@@ -179,10 +253,19 @@ export class BlogService {
    */
   removeDomain(domain: number): Observable<void> {
     return this.http.put<void>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/remove-custom-domain/`, {
-        domain_id: domain,
-      },
-    );
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/remove-custom-domain/`, { domain_id: domain },
+    ).pipe(map((() => {
+      this.toast.info(this.translate.instant('TOAST_DELETE'), this.translate.instant('DOMAIN'));
+    })));
+  }
+
+  /**
+   * Check sub-domain availability
+   *
+   * @param domain Domain slug
+   */
+  domainCheck(domain: string): Observable<void> {
+    return this.http.post<void>(`${this.api.base.v1}website/domain-check/`, { domain });
   }
 
   /**
@@ -190,7 +273,7 @@ export class BlogService {
    */
   getSubscribers(): Observable<ApiResponse<Subscriber>> {
     return this.http.get<ApiResponse<Subscriber>>(
-      `${this.apiService.base.zero}website/site/${BlogService.currentBlog.id}/subscribers`,
+      `${this.api.base.zero}website/site/${BlogService.currentBlog.id}/subscribers`,
     );
   }
 
@@ -202,11 +285,14 @@ export class BlogService {
    */
   updateTag(slug: string, payload: Params): Observable<Tag> {
     return this.http.put<Tag>(
-      `${this.apiService.base.v1}tagool/tag/${slug}`, payload, {
+      `${this.api.base.v1}tagool/tag/${slug}`, payload, {
         params: {
           site: BlogService.currentBlog.id,
         },
       },
-    );
+    ).pipe(map((data => {
+      this.toast.info(this.translate.instant('TOAST_UPDATE'), slug);
+      return data;
+    })));
   }
 }

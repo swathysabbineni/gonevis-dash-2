@@ -1,6 +1,6 @@
 <!-- Posts -->
 <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="loadMore(next)">
-  <div class="card shadow-sm my-3" *ngFor="let entry of entries">
+  <div class="card feed shadow-sm my-3" *ngFor="let entry of entries">
 
     <!-- Header -->
     <div class="card-header d-flex">
@@ -33,10 +33,10 @@
       <h5 class="card-title"><a [routerLink]="['/feed/entry', entry.id]">{{ entry.title }}</a></h5>
 
       <!-- Excerpt -->
-      <p class="card-text" *ngIf="entry.excerpt">{{ entry.excerpt }}</p>
+      <p class="card-text" *ngIf="!useContent">{{ entry.excerpt }}</p>
 
       <!-- Content -->
-      <p class="card-text" *ngIf="entry.content">{{ entry.content }}</p>
+      <p class="card-text" *ngIf="useContent" [innerHTML]="entry.content"></p>
     </div>
 
     <!-- Footer -->

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Domain } from '@app/interfaces/v1/domain';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -59,7 +60,11 @@ export class SettingsGeneralComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getSettings();
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        this.getSettings();
+      }
+    });
   }
 
   /**

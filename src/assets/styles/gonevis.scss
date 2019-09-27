@@ -3,8 +3,6 @@
 @import "~quill/dist/quill.snow.css";
 
 
-$body-bg: #edeef0;
-
 $input-group-addon-bg: none;
 $input-group-addon-color: $dark;
 $list-group-border-color: $light;
@@ -21,153 +19,353 @@ $tooltip-arrow-color: $dark;
 $tooltip-bg: $dark;
 
 @import "~bootstrap/scss/bootstrap";
+@import '~ngx-toastr/toastr';
+
+html, body {
+  height: 100%;
+}
 
 a,
 .pointer {
   cursor: pointer;
 }
 
+.h-100 {
+  min-height: 0;
+}
+
 .white-space-pre-line {
   white-space: pre-line;
 }
 
-.navbar {
+.card {
 
-  .navbar-brand {
-
-    &:active {
-      opacity: 0.75;
-    }
-
-    img {
-      width: 48px;
-      margin-top: -8px;
-    }
-  }
-
-  .nav-item {
-
-    &.dropdown {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      border-radius: $border-radius;
-
-      &:hover,
-      &:focus {
-        background: rgba(0, 0, 0, 0.05);
-      }
-
-      &.show {
-        background: rgba(0, 0, 0, 0.2);
-      }
+  &.feed {
+    .card-header {
+      background: darken($card-bg, 1%);
+      color: $dark;
 
       img {
-        width: 32px;
-        height: 32px;
-        border-radius: 100%;
-        margin: -12px 6px -8px -2px;
-      }
+        width: 48px;
+        height: 48px;
+        background: $secondary;
 
-      span {
-        text-transform: capitalize;
-      }
-
-      .dropdown-menu {
-        text-transform: capitalize;
-      }
-    }
-  }
-}
-
-.card {
-  $text-font-size: 13px;
-  $text-color: $secondary;
-
-  .card-header {
-    background: darken($card-bg, 1%);
-    color: $dark;
-
-    img {
-      width: 48px;
-      height: 48px;
-      background: $secondary;
-
-      &.overlay {
-        width: 128px;
-        height: 128px;
-        margin-bottom: -86px;
-        z-index: 1;
-      }
-    }
-
-    span:not(.init) {
-      color: $text-color;
-      font-size: $text-font-size;
-    }
-
-    .nav-link.active {
-      cursor: default;
-      background: white;
-      border-bottom-color: white;
-    }
-  }
-
-  .cover {
-    background-color: $secondary;
-    background-size: cover;
-    background-position: center;
-    height: 256px;
-  }
-
-  .card-body {
-
-    .card-text,
-    .card-title {
-      a {
-        color: $text-color;
-        text-decoration: none;
-
-        &:hover,
-        &:focus {
-          color: $dark;
+        &.overlay {
+          width: 128px;
+          height: 128px;
+          margin-bottom: -86px;
+          z-index: 1;
         }
       }
 
+      span {
+      }
+
+      .nav-link.active {
+        cursor: default;
+        background: white;
+        border-bottom-color: white;
+      }
     }
 
-    p {
-      font-size: $text-font-size;
-      color: $text-color;
+    .cover {
+      background-color: $secondary;
+      background-size: cover;
+      background-position: center;
+      height: 256px;
+    }
+
+    .card-body {
+
+      .card-text,
+      .card-title {
+        a {
+          text-decoration: none;
+
+          &:hover,
+          &:focus {
+            color: $dark;
+          }
+        }
+
+      }
+
+      p {
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      iframe,
+      .embed-responsive {
+        margin-bottom: $paragraph-margin-bottom;
+      }
+
+      blockquote {
+        border-left: 4px solid #ddd;
+        margin-bottom: $paragraph-margin-bottom;
+        padding: 10px;
+      }
+
+      .ql-align-center {
+        text-align: center;
+      }
+
+      .ql-align-right {
+        text-align: right;
+      }
+
+      .ql-align-justify {
+        text-align: justify;
+      }
+
+      .ql-direction-rtl {
+        direction: rtl;
+      }
+
+      ol > li, ul > li {
+        list-style-type: none;
+      }
+
+      li::before {
+        display: inline-block;
+        white-space: nowrap;
+        width: 1.2em;
+      }
+
+      ul > li::before {
+        content: '\2022';
+      }
+
+      li::before {
+        display: inline-block;
+        white-space: nowrap;
+        width: 1.2em;
+      }
+
+      li:not(.ql-direction-rtl)::before {
+        margin-left: -1.5em;
+        margin-right: 0.3em;
+        text-align: right;
+      }
+
+      li.ql-direction-rtl::before {
+        margin-left: 0.3em;
+        margin-right: -1.5em;
+      }
+
+      .ql-indent-1:not(.ql-direction-rtl) {
+        padding-left: 3em;
+      }
+
+      li.ql-indent-1:not(.ql-direction-rtl) {
+        padding-left: 4.5em;
+      }
+
+      .ql-indent-1.ql-direction-rtl.ql-align-right {
+        padding-right: 3em;
+      }
+
+      li.ql-indent-1.ql-direction-rtl.ql-align-right {
+        padding-right: 4.5em;
+      }
+
+      .ql-indent-2:not(.ql-direction-rtl) {
+        padding-left: 6em;
+      }
+
+      li.ql-indent-2:not(.ql-direction-rtl) {
+        padding-left: 7.5em;
+      }
+
+      .ql-indent-2.ql-direction-rtl.ql-align-right {
+        padding-right: 6em;
+      }
+
+      li.ql-indent-2.ql-direction-rtl.ql-align-right {
+        padding-right: 7.5em;
+      }
+
+      .ql-indent-3:not(.ql-direction-rtl) {
+        padding-left: 9em;
+      }
+
+      li.ql-indent-3:not(.ql-direction-rtl) {
+        padding-left: 10.5em;
+      }
+
+      .ql-indent-3.ql-direction-rtl.ql-align-right {
+        padding-right: 9em;
+      }
+
+      li.ql-indent-3.ql-direction-rtl.ql-align-right {
+        padding-right: 10.5em;
+      }
+
+      .ql-indent-4:not(.ql-direction-rtl) {
+        padding-left: 12em;
+      }
+
+      li.ql-indent-4:not(.ql-direction-rtl) {
+        padding-left: 13.5em;
+      }
+
+      .ql-indent-4.ql-direction-rtl.ql-align-right {
+        padding-right: 12em;
+      }
+
+      li.ql-indent-4.ql-direction-rtl.ql-align-right {
+        padding-right: 13.5em;
+      }
+
+      .ql-indent-5:not(.ql-direction-rtl) {
+        padding-left: 15em;
+      }
+
+      li.ql-indent-5:not(.ql-direction-rtl) {
+        padding-left: 16.5em;
+      }
+
+      .ql-indent-5.ql-direction-rtl.ql-align-right {
+        padding-right: 15em;
+      }
+
+      li.ql-indent-5.ql-direction-rtl.ql-align-right {
+        padding-right: 16.5em;
+      }
+
+      .ql-indent-6:not(.ql-direction-rtl) {
+        padding-left: 18em;
+      }
+
+      li.ql-indent-6:not(.ql-direction-rtl) {
+        padding-left: 19.5em;
+      }
+
+      .ql-indent-6.ql-direction-rtl.ql-align-right {
+        padding-right: 18em;
+      }
+
+      li.ql-indent-6.ql-direction-rtl.ql-align-right {
+        padding-right: 19.5em;
+      }
+
+      .ql-indent-7:not(.ql-direction-rtl) {
+        padding-left: 21em;
+      }
+
+      li.ql-indent-7:not(.ql-direction-rtl) {
+        padding-left: 22.5em;
+      }
+
+      .ql-indent-7.ql-direction-rtl.ql-align-right {
+        padding-right: 21em;
+      }
+
+      li.ql-indent-7.ql-direction-rtl.ql-align-right {
+        padding-right: 22.5em;
+      }
+
+      .ql-indent-8:not(.ql-direction-rtl) {
+        padding-left: 24em;
+      }
+
+      li.ql-indent-8:not(.ql-direction-rtl) {
+        padding-left: 25.5em;
+      }
+
+      .ql-indent-8.ql-direction-rtl.ql-align-right {
+        padding-right: 24em;
+      }
+
+      li.ql-indent-8.ql-direction-rtl.ql-align-right {
+        padding-right: 25.5em;
+      }
+
+      .ql-indent-9:not(.ql-direction-rtl) {
+        padding-left: 27em;
+      }
+
+      li.ql-indent-9:not(.ql-direction-rtl) {
+        padding-left: 28.5em;
+      }
+
+      .ql-indent-9.ql-direction-rtl.ql-align-right {
+        padding-right: 27em;
+      }
+
+      li.ql-indent-9.ql-direction-rtl.ql-align-right {
+        padding-right: 28.5em;
+      }
+
+      *:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .card-footer {
+
+      .btn-link {
+        text-decoration: none;
+        padding: 0;
+
+        &:hover {
+          color: $dark;
+        }
+
+        &:active {
+          color: $text-muted;
+        }
+
+        &:not(.float-right) {
+          margin-right: 20px;
+        }
+
+        &.float-right {
+          margin-left: 20px;
+        }
+
+        span {
+          padding-left: 5px;
+        }
+      }
     }
   }
 
-  .card-footer {
+  &.dash {
+    border: none !important;
+    cursor: default;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
 
-    .btn-link {
-      color: $text-color;
-      text-decoration: none;
-      padding: 0;
+    .card-header {
+      background-color: white;
+      padding-top: 18px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid $body-bg;
 
-      &:hover {
-        color: $dark;
+      &,
+      > a {
+        color: #6F7A8B;
+        font-weight: bold;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
       }
 
-      &:active {
-        color: $text-muted;
+      .card-label {
+        padding: 8px 12px;
+        margin-bottom: -16px;
+        margin-top: -8px;
+        background: $body-bg;
+        font-weight: bold;
+        color: #6F7A8B !important;
+        float: right;
+        border-radius: $border-radius;
       }
+    }
 
-      &:not(.float-right) {
-        margin-right: 20px;
-      }
-
-      &.float-right {
-        margin-left: 20px;
-      }
-
-      span {
-        padding-left: 5px;
-      }
+    .card-footer {
+      border-top: 2px solid $body-bg;
     }
   }
 }

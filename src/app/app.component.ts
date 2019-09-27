@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { UserAuth } from '@app/interfaces/user-auth';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
+import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
@@ -12,22 +14,49 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   /**
    * Authenticated user data
    */
   user: UserAuth;
 
-  constructor(public authService: AuthService,
-              private translateService: TranslateService,
+  /**
+   * Authenticated user blog list
+   */
+  blogs: BlogMin[];
+
+  /**
+   * Current blog
+   */
+  blogCurrent: BlogMin;
+
+  /**
+   * Is user in any dash page
+   */
+  inDash: boolean;
+
+  constructor(public auth: AuthService,
+              private translate: TranslateService,
               private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private titleService: Title) {
+              private route: ActivatedRoute,
+              private title: Title) {
+  }
+
+  ngOnInit(): void {
+    /**
+     * Is user in any dash page
+     */
+    this.router.events.pipe(
+      filter((event: RouterEvent): boolean => event instanceof NavigationEnd),
+    ).subscribe((): void => {
+      this.inDash = this.route.root.firstChild.snapshot.routeConfig.path === 'dash';
+    });
+
     /**
      * Set the default language
      */
-    this.translateService.setDefaultLang('en');
+    this.translate.setDefaultLang('en');
 
     /**
      * Get authenticated user data (and watch for changes)
@@ -37,23 +66,37 @@ export class AppComponent {
     });
 
     /**
+     * Get authenticated user blogs (and watch for changes)
+     */
+    BlogService.blogs.subscribe((blogs: BlogMin[]): void => {
+      this.blogs = blogs;
+    });
+
+    /**
+     * Get current blog (and watch for changes)
+     */
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      this.blogCurrent = blog;
+    });
+
+    /**
      * Watch for page changes then update window title with translation
      */
     this.router.events.pipe(
       filter((event: RouterEvent): boolean => event instanceof NavigationEnd),
-      map((): ActivatedRoute => this.activatedRoute),
-      map((route: ActivatedRoute): ActivatedRoute => {
-        while (route.firstChild) {
-          route = route.firstChild;
+      map((): ActivatedRoute => this.route),
+      map((activatedRoute: ActivatedRoute): ActivatedRoute => {
+        while (activatedRoute.firstChild) {
+          activatedRoute = activatedRoute.firstChild;
         }
-        return route;
+        return activatedRoute;
       }),
-      filter((route: ActivatedRoute): boolean => route.outlet === 'primary'),
-      mergeMap((route: ActivatedRoute): Observable<Data> => route.data),
+      filter((activatedRoute: ActivatedRoute): boolean => activatedRoute.outlet === 'primary'),
+      mergeMap((activatedRoute: ActivatedRoute): Observable<Data> => activatedRoute.data),
     ).subscribe((event: Data): void => {
       if (event.title) {
-        this.translateService.get(event.title).subscribe((response: string): void => {
-          this.titleService.setTitle(response);
+        this.translate.get(event.title).subscribe((response: string): void => {
+          this.title.setTitle(response);
         });
       }
     });

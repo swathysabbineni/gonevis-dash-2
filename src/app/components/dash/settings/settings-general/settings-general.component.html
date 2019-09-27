@@ -1,5 +1,5 @@
 <!-- Blog settings -->
-<form class="card mb-3" [formGroup]="blogForm" (ngSubmit)="submitBlog()" *ngIf="settings">
+<form class="card dash mb-3" [formGroup]="blogForm" (ngSubmit)="submitBlog()" *ngIf="settings">
   <!-- Header -->
   <div class="card-header" translate>BLOG_SETTINGS</div>
   <!-- Body -->
@@ -32,7 +32,7 @@
 </form>
 
 <!-- Blog domains -->
-<div class="card mb-3">
+<div class="card dash mb-3">
   <!-- Header -->
   <div class="card-header" translate>DOMAINS</div>
   <!-- Body -->
@@ -40,7 +40,7 @@
     <!-- Help text -->
     <p [class.mb-0]="!settings.domains.length" translate>HELP_TEXT_DOMAINS</p>
     <!-- Domains -->
-    <div class="card bg-light" *ngFor="let domain of settings.domains; let last = last"
+    <div class="card dash bg-light" *ngFor="let domain of settings.domains; let last = last"
          [class.mb-0]="last" [class.mb-2]="!last">
       <div class="card-body">
         <a [href]="getDomainLink(domain)" target="_blank" [title]="'DNS_NAME' | translate">{{ domain.domain }}</a>
