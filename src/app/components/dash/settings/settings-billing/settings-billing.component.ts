@@ -25,12 +25,12 @@ export class SettingsBillingComponent implements OnInit {
   /**
    * Cancel subscription modal reference
    */
-  bsModalRef: BsModalRef;
+  modal: BsModalRef;
 
   /**
    * Indicates cancelling process
    */
-  cancelling: boolean;
+  canceling: boolean;
 
   /**
    * Blog owner indicator
@@ -55,12 +55,12 @@ export class SettingsBillingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Check if owner
-     */
     BlogService.blog.subscribe((data: BlogMin): void => {
       this.loading = true;
       if (data) {
+        /**
+         * Is owner of this blog
+         */
         this.isOwner = data.role === TeamRoles.Owner;
         /**
          * Get current subscription
@@ -83,16 +83,16 @@ export class SettingsBillingComponent implements OnInit {
   /**
    * Cancel subscription
    */
-  cancelSubscription(): void {
-    this.cancelling = true;
+  cancel(): void {
+    this.canceling = true;
     this.settingsBillingService.cancelSubscription(this.subscription.id).subscribe((): void => {
       this.router.navigate(['../upgrade'], {
         relativeTo: this.activatedRoute.parent,
       });
-      this.bsModalRef.hide();
-      this.cancelling = false;
+      this.modal.hide();
+      this.canceling = false;
     }, (): void => {
-      this.cancelling = false;
+      this.canceling = false;
     });
   }
 
@@ -101,7 +101,7 @@ export class SettingsBillingComponent implements OnInit {
    *
    * @param template Modal template
    */
-  showCancelModal(template: TemplateRef<any>): void {
-    this.bsModalRef = this.bsModalService.show(template);
+  showModal(template: TemplateRef<any>): void {
+    this.modal = this.bsModalService.show(template);
   }
 }
