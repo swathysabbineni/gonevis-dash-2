@@ -44,7 +44,7 @@ export class ReaderComponent implements OnInit {
       } else if (data.route === 'bookmarks') {
         show = 'bookmarked';
       }
-      this.feedService.getEntries(null, null, show).subscribe(onLoadEntries);
+      this.feedService.getEntries({ show }).subscribe(onLoadEntries);
     });
   }
 }
