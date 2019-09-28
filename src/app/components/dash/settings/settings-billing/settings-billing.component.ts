@@ -17,14 +17,8 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 })
 export class SettingsBillingComponent implements OnInit {
 
-  /**
-   * Subscription
-   */
-  private subscription: Subscription;
+  subscription: Subscription;
 
-  /**
-   * Cancel subscription modal reference
-   */
   modal: BsModalRef;
 
   /**
@@ -43,7 +37,7 @@ export class SettingsBillingComponent implements OnInit {
   loading: boolean;
 
   /**
-   * Transactions list
+   * Transaction list
    */
   transactions: Transaction[] = [];
 
