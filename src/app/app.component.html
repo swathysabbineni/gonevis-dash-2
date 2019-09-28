@@ -5,7 +5,7 @@
 <nav class="navbar navbar-expand navbar-dark bg-primary sticky-top">
   <div [class.container]="!inDash" [class.container-fluid]="inDash">
     <!-- Brand -->
-    <a class="navbar-brand" routerLink="/feed" translate>
+    <a class="navbar-brand" routerLink="/" translate>
       <img src="../assets/img/logo.png" alt="GoNevis">
     </a>
     <!-- Navs -->
@@ -19,8 +19,8 @@
         <!-- Dropdown menu -->
         <ul class="dropdown-menu" *dropdownMenu>
           <li *ngFor="let blog of blogs; let index = index">
-            <a class="dropdown-item" [routerLink]="['dash', index]"
-               [class.active]="blogCurrent && blogCurrent.id === blog.id">
+            <a class="dropdown-item" (click)="setCurrentBlog(index)"
+               [ngClass]="{'active text-white': blogCurrent && blogCurrent.id === blog.id}">
               {{ blog.title }}
             </a>
           </li>
@@ -28,7 +28,7 @@
       </li>
     </ul>
     <!-- Navs -->
-    <ul class="navbar-nav" [class.ml-auto]="inDash">
+    <ul class="navbar-nav" [class.ml-auto]="inDash" *ngIf="auth.isAuth && user">
       <li class="nav-item" *ngIf="inDash">
         <a class="nav-link" routerLinkActive="active" routerLink="feed" translate>FEED</a>
       </li>
@@ -38,6 +38,10 @@
     </ul>
     <!-- Navs when authenticated -->
     <ul class="navbar-nav" [class.ml-auto]="!inDash" *ngIf="auth.isAuth && user">
+      <!-- Feedback -->
+      <li class="nav-item" (click)="feedback()">
+        <a class="nav-link" translate>FEEDBACK</a>
+      </li>
       <!-- User dropdown -->
       <li class="nav-item dropdown" dropdown>
         <!-- Dropdown label -->
@@ -66,7 +70,14 @@
         </ul>
       </li>
     </ul>
-    <!-- Navs when not authenticated -->
+    <!-- Navs when not authenticated (left) -->
+    <ul class="navbar-nav" *ngIf="!auth.isAuth">
+      <!-- Start -->
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/start" translate>GET_STARTED</a>
+      </li>
+    </ul>
+    <!-- Navs when not authenticated (right) -->
     <ul class="navbar-nav ml-auto" *ngIf="!auth.isAuth">
       <!-- Sign in -->
       <li class="nav-item" routerLinkActive="active">

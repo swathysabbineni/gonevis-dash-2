@@ -3,6 +3,6 @@
  */
 export interface PasswordStrength {
   label: string;
-  color: string;
+  color?: string;
   percentage: number;
 }

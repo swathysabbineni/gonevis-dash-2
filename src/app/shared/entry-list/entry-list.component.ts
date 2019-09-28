@@ -20,6 +20,11 @@ export class EntryListComponent {
   private currentEntries: Entry[] = [];
 
   /**
+   * Use content instead of excerpt
+   */
+  @Input() useContent = false;
+
+  /**
    * API loading indicator
    */
   loading: boolean;
@@ -37,7 +42,10 @@ export class EntryListComponent {
      * Sanitize entry content
      */
     entries.forEach((entry: Entry): void => {
-      entry.content = this.utilService.sanitizeHtml(entry.content) as string;
+      if (this.useContent) {
+        entry.content = this.utilService.sanitizeHtml(entry.content) as string;
+      }
+      entry.excerpt = this.utilService.sanitizeHtml(entry.excerpt) as string;
     });
     this.currentEntries = entries;
   }
@@ -120,6 +128,7 @@ export class EntryListComponent {
       this.next = data.next;
       this.loading = false;
       data.results.map((entry: Entry): void => {
+        entry.excerpt = this.utilService.sanitizeHtml(entry.excerpt) as string;
         this.entries.push(entry);
       });
     });
