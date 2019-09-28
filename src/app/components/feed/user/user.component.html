@@ -1,8 +1,8 @@
 <!-- User -->
-<div class="card feed shadow-sm my-3" *ngIf="user">
+<div class="card feed shadow-sm mt-3" *ngIf="user">
 
   <!-- Header -->
-  <div class="card feed-header d-flex">
+  <div class="card card-header feed-header d-flex">
 
     <!-- Logo -->
     <img class="rounded-sm mr-3" *ngIf="user.media.thumbnail_128x128"
@@ -20,7 +20,7 @@
   </div>
 
   <!-- Body -->
-  <div class="card feed-body" *ngIf="user.about || user.location">
+  <div class="card card-body feed-body" *ngIf="user.about || user.location">
     <!-- About -->
     <div class="card feed-text">{{ user.about }}</div>
     <!-- Location -->
@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<ul class="nav nav-pills">
+<ul class="nav nav-pills mt-3">
   <li class="nav-item">
     <a class="nav-link" translate [class.active]="current === 'entries'" (click)="setCurrent('entries')">POSTS</a>
   </li>
