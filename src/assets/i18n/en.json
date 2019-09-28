@@ -195,5 +195,10 @@
   "PICK_A_TEMPLATE": "Pick a template",
   "PREVIEW_NOT_AVAILABLE": "Preview not available yet",
   "ALMOST_DONE": "You're almost done",
+  "FEEDBACK": "Feedback",
+  "FEEDBACK_TEXT": "We would like your feedback to improve our service.",
+  "FEEDBACK_RECEIVED": "We received your feedback.",
+  "MESSAGE": "Message",
+  "THANK_YOU": "Thank you",
   "COLLABORATING": "Collaborating"
 }
