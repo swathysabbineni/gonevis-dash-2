@@ -124,6 +124,27 @@ export class SettingsAdvancedComponent implements OnInit {
         show_views_count: this.settings.show_views_count,
         search_engine_visibility: this.settings.search_engine_visibility,
       });
+      /**
+       * Set up the remove branding form with default values
+       */
+      this.removeBrandingForm.patchValue({
+        remove_branding: this.settings.remove_branding,
+        set_footer_text: this.settings.footer_text,
+      });
+      /**
+       * Set up the google analytics form with default values
+       */
+      this.googleAnalyticsForm.patchValue({
+        google_analytics_enabled: this.settings.google_analytics_enabled,
+        google_analytics_code: this.settings.google_analytics_code,
+      });
+      /**
+       * Set up the google adSense form with default values
+       */
+      this.googleAdSenseForm.patchValue({
+        google_adsense_enabled: this.settings.google_adsense_enabled,
+        google_adsense_code: this.settings.google_adsense_code,
+      });
     });
   }
 
