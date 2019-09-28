@@ -5,7 +5,9 @@ import { UserAuth } from '@app/interfaces/user-auth';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { FeedbackModalComponent } from '@app/shared/feedback-modal/feedback-modal.component';
 import { TranslateService } from '@ngx-translate/core';
+import { BsModalService } from 'ngx-bootstrap';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
@@ -40,7 +42,8 @@ export class AppComponent implements OnInit {
               private translate: TranslateService,
               private router: Router,
               private route: ActivatedRoute,
-              private title: Title) {
+              private title: Title,
+              private modalService: BsModalService) {
   }
 
   ngOnInit(): void {
@@ -115,5 +118,12 @@ export class AppComponent implements OnInit {
       return BlogService.currentBlog.id === data.id;
     });
     this.router.navigateByUrl(this.router.url.replace(blogIndex.toString(), index.toString()));
+  }
+
+  /**
+   * Open feedback modal
+   */
+  feedback(): void {
+    this.modalService.show(FeedbackModalComponent);
   }
 }
