@@ -101,4 +101,19 @@ export class AppComponent implements OnInit {
       }
     });
   }
+
+  /**
+   * Set current blog
+   *
+   * @param index Blog index
+   */
+  setCurrentBlog(index: number): void {
+    /**
+     * Find current blog index
+     */
+    const blogIndex: number = this.user.sites.findIndex((data: BlogMin): boolean => {
+      return BlogService.currentBlog.id === data.id;
+    });
+    this.router.navigateByUrl(this.router.url.replace(blogIndex.toString(), index.toString()));
+  }
 }
