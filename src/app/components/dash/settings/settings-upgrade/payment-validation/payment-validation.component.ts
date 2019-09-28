@@ -10,9 +10,6 @@ import { BsModalRef } from 'ngx-bootstrap';
 })
 export class PaymentValidationComponent {
 
-  /**
-   * Interval
-   */
   private readonly interval: number;
 
   constructor(private router: Router,
@@ -35,5 +32,4 @@ export class PaymentValidationComponent {
       });
     }, 2000);
   }
-
 }
