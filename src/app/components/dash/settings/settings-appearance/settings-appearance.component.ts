@@ -11,7 +11,6 @@ import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { CarouselComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-settings-appearance',
@@ -19,8 +18,6 @@ import { Subject } from 'rxjs';
   styleUrls: ['./settings-appearance.component.scss'],
 })
 export class SettingsAppearanceComponent implements OnInit, OnDestroy {
-
-  ubsub: Subject<void> = new Subject<void>();
 
   /**
    * @see BlogService.highlightThemes
