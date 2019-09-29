@@ -1,9 +1,10 @@
 <!-- Loading bar -->
 <ngx-loading-bar [includeSpinner]="false" color="white"></ngx-loading-bar>
 
+<!-- Main wrapper -->
 <div class="d-flex flex-column h-100">
   <!-- Navbar -->
-  <nav class="navbar navbar-expand navbar-dark bg-primary sticky-top">
+  <nav class="navbar navbar-expand navbar-dark sticky-top" [class.bg-primary]="!inDash" [class.bg-dark]="inDash">
     <div [class.container]="!inDash" [class.container-fluid]="inDash">
       <!-- Brand -->
       <a class="navbar-brand" routerLink="/" translate>
@@ -28,17 +29,20 @@
           </ul>
         </li>
       </ul>
-      <!-- Navs -->
-      <ul class="navbar-nav" [class.ml-auto]="inDash" *ngIf="auth.isAuth && user">
+      <!-- Navs when authenticated -->
+      <ul class="navbar-nav ml-auto" *ngIf="auth.isAuth && user">
+        <!-- Feed -->
         <li class="nav-item" *ngIf="inDash">
           <a class="nav-link" routerLinkActive="active" routerLink="feed" translate>FEED</a>
         </li>
+        <!-- Dashboard -->
         <li class="nav-item" *ngIf="!inDash">
           <a class="nav-link" routerLinkActive="active" routerLink="dash" translate>DASHBOARD</a>
         </li>
-      </ul>
-      <!-- Navs when authenticated -->
-      <ul class="navbar-nav" [class.ml-auto]="!inDash" *ngIf="auth.isAuth && user">
+        <!-- Feedback -->
+        <li class="nav-item" (click)="feedback()">
+          <a class="nav-link" translate>FEEDBACK</a>
+        </li>
         <!-- User dropdown -->
         <li class="nav-item dropdown" dropdown>
           <!-- Dropdown label -->

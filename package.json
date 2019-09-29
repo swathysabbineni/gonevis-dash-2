@@ -33,6 +33,7 @@
     "@ngx-loading-bar/http-client": "^4.2.0",
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
+    "@w11k/ngx-componentdestroyed": "^4.1.4",
     "bootstrap": "^4.3.1",
     "core-js": "^2.6.9",
     "ngx-bootstrap": "^4.3.0",

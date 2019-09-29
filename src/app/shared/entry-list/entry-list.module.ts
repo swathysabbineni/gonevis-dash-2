@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { EmbedModule } from '@app/shared/embed/embed.module';
 import { EntryShareModule } from '@app/shared/entry-share/entry-share.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -32,6 +33,7 @@ import { EntryListComponent } from './entry-list.component';
     InfiniteScrollModule,
     PopoverModule.forRoot(),
     EntryShareModule,
+    EmbedModule,
   ],
   exports: [
     EntryListComponent,

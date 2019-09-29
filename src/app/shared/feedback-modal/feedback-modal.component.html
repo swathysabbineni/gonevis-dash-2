@@ -1,0 +1,32 @@
+<!-- Header -->
+<div class="modal-header">
+  <!-- Title -->
+  <h5 class="modal-title" translate>FEEDBACK</h5>
+  <!-- Close -->
+  <button class="ml-auto btn btn-link p-0" (click)="modal.hide()">
+    <fa-icon [fixedWidth]="true" icon="times"></fa-icon>
+  </button>
+</div>
+
+<!-- Body -->
+<form class="modal-body" [formGroup]="form" (ngSubmit)="submit()">
+
+  <!-- Text -->
+  <p translate>FEEDBACK_TEXT</p>
+
+  <!-- Message -->
+  <div class="form-group">
+    <label for="message" translate>MESSAGE</label>
+    <textarea formControlName="message" rows="10" id="message" class="form-control"></textarea>
+    <div class="text-danger" *ngIf="error.message">{{ error.message[0] }}</div>
+  </div>
+
+  <!-- Error -->
+  <p class="text-danger" *ngIf="error.non_field_errors">{{ error.non_field_errors[0] }}</p>
+</form>
+
+<!-- Footer -->
+<div class="modal-footer">
+  <button class="btn btn-link" data-dismiss="modal" translate>CANCEL</button>
+  <button class="btn btn-primary" [disabled]="loading || form.invalid" (click)="submit()" translate>SUBMIT</button>
+</div>

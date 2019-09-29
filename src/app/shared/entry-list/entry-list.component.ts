@@ -41,11 +41,12 @@ export class EntryListComponent {
     /**
      * Sanitize entry content
      */
-    if (this.useContent) {
-      entries.forEach((entry: Entry): void => {
+    entries.forEach((entry: Entry): void => {
+      if (this.useContent) {
         entry.content = this.utilService.sanitizeHtml(entry.content) as string;
-      });
-    }
+      }
+      entry.excerpt = this.utilService.sanitizeHtml(entry.excerpt) as string;
+    });
     this.currentEntries = entries;
   }
 
@@ -127,6 +128,7 @@ export class EntryListComponent {
       this.next = data.next;
       this.loading = false;
       data.results.map((entry: Entry): void => {
+        entry.excerpt = this.utilService.sanitizeHtml(entry.excerpt) as string;
         this.entries.push(entry);
       });
     });
