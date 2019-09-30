@@ -12,8 +12,9 @@
         </div>
       </th>
       <!-- Cover -->
-      <th class="pr-0 text-center" [class.p-0]="!entry.media.cover_image">
-        <img class="rounded" *ngIf="entry.media.cover_image" [src]="entry.media.cover_image.thumbnail_48x48">
+      <th class="px-0 text-center" [class.p-0]="!entry.media.cover_image">
+        <img class="rounded" [height]="48" *ngIf="entry.media.cover_image"
+             [src]="entry.media.cover_image.thumbnail_48x48">
       </th>
       <th>
         <!-- Title -->
