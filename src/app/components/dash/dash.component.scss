@@ -8,7 +8,7 @@
   .sidebar {
     display: flex;
     flex-direction: column;
-    background: #fff;
+    background: #f8f8f8;
     flex: 0 0 auto;
     flex-basis: 200px;
     max-width: 200px;
@@ -23,27 +23,27 @@
         position: relative;
 
         a {
-          color: $secondary;
+          color: #40454D;
+          font-size: 0.85rem;
+          font-weight: 600;
           display: flex;
           align-items: center;
           padding: 0 1.25em;
-          height: 40px;
+          height: 42px;
           overflow: hidden;
           white-space: nowrap;
+          border-left: 3px solid transparent;
 
           &:hover,
           &.active {
             user-select: none;
             cursor: pointer;
             text-decoration: none;
-          }
-
-          &:hover {
-            background: rgba($dark, 0.025);
+            background: #f1f1f1;
           }
 
           &.active {
-            background: linear-gradient(to right, transparent, $body-bg);
+            border-left-color: $primary;
 
             fa-icon {
               color: $primary;
@@ -52,8 +52,7 @@
 
           fa-icon {
             margin-right: 1.25em;
-            color: darken($body-bg, 20);
-            font-size: $small-font-size;
+            color: #7d7d8f;
           }
         }
       }

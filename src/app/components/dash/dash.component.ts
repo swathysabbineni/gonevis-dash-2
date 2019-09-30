@@ -3,6 +3,17 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { faImage } from '@fortawesome/free-regular-svg-icons/faImage';
+import { faNewspaper } from '@fortawesome/free-regular-svg-icons/faNewspaper';
+import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
+import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
+import { faComment } from '@fortawesome/free-solid-svg-icons/faComment';
+import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
+import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
+import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
+import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
+import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -13,48 +24,52 @@ import { TranslateService } from '@ngx-translate/core';
 export class DashComponent implements OnInit {
 
   /**
-   * Sidebar links
+   * Sidebar items
    */
   links: SidebarLink[] = [{
     path: 'main',
     label: this.translateService.instant('DASHBOARD'),
-    icon: 'tachometer-alt',
+    icon: faTachometerAlt,
   }, {
     path: 'write',
     label: this.translateService.instant('WRITE'),
-    icon: 'plus',
+    icon: faPen,
   }, {
     path: 'posts',
     label: this.translateService.instant('POSTS'),
-    icon: 'book',
+    icon: faThLarge,
   }, {
     path: 'pages',
     label: this.translateService.instant('PAGES'),
-    icon: 'newspaper',
+    icon: faNewspaper,
   }, {
     path: 'comments',
     label: this.translateService.instant('COMMENTS'),
-    icon: 'comments',
+    icon: faComment,
   }, {
     path: 'tags',
     label: this.translateService.instant('TAGS'),
-    icon: 'tags',
+    icon: faHashtag,
   }, {
     path: 'media',
     label: this.translateService.instant('MEDIA'),
-    icon: 'photo-video',
+    icon: faImage,
   }, {
     path: 'navs',
     label: this.translateService.instant('NAVS'),
-    icon: 'bars',
+    icon: faBars,
   }, {
     path: 'team',
     label: this.translateService.instant('TEAM'),
-    icon: 'users',
+    icon: faUser,
   }, {
     path: 'settings',
     label: this.translateService.instant('SETTINGS'),
-    icon: 'cog',
+    icon: faCog,
+  }, {
+    path: 'help',
+    label: this.translateService.instant('HELP'),
+    icon: faInfoCircle,
   }];
 
   constructor(private route: ActivatedRoute,
