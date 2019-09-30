@@ -10,6 +10,16 @@ export class UtilService {
   }
 
   /**
+   * @returns Offset number by getting page size and current page
+   *
+   * @param pageSize Maximum items per page
+   * @param page Current page number
+   */
+  static getPageOffset(pageSize: number, page: number): string {
+    return `${pageSize * (page - 1)}`;
+  }
+
+  /**
    * Bypass security and trust the given value to be safe style value (CSS).
    *
    * @param url Image URL
