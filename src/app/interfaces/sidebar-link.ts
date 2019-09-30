@@ -1,3 +1,5 @@
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+
 /**
  * Represents sidebar link structure
  *
@@ -9,5 +11,5 @@ export interface SidebarLink {
   /** Label to display */
   label: string;
   /** Icon that represents the page */
-  icon: string;
+  icon: IconDefinition;
 }

@@ -5,4 +5,5 @@ export interface Environment {
     v1: string;
     zero: string;
   };
+  paymentPublicId: string;
 }

@@ -2,17 +2,9 @@
   <div class="sidebar">
     <ul>
       <li *ngFor="let link of links">
-        <a [routerLink]="[link.path]" [routerLinkActive]="'active'">
-          <fa-icon icon="{{ link.icon }}" [fixedWidth]="true"></fa-icon>
+        <a [routerLink]="[link.path]" routerLinkActive="active">
+          <fa-icon [icon]="link.icon" [fixedWidth]="true"></fa-icon>
           {{ link.label }}
-        </a>
-      </li>
-    </ul>
-    <ul class="mt-auto">
-      <li>
-        <a [routerLink]="['help']" [routerLinkActive]="'active'">
-          <fa-icon icon="question" [fixedWidth]="true"></fa-icon>
-          Help
         </a>
       </li>
     </ul>
@@ -21,4 +13,3 @@
     <router-outlet></router-outlet>
   </div>
 </div>
-
