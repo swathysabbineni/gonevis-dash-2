@@ -208,5 +208,7 @@
   "FEEDBACK_RECEIVED": "We received your feedback.",
   "MESSAGE": "Message",
   "THANK_YOU": "Thank you",
+  "NEXT": "Next",
+  "PREV": "Prev",
   "COLLABORATING": "Collaborating"
 }

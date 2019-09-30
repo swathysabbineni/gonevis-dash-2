@@ -12,8 +12,9 @@
         </div>
       </th>
       <!-- Cover -->
-      <th class="pr-0 text-center" [class.p-0]="!entry.media.cover_image">
-        <img class="rounded" *ngIf="entry.media.cover_image" [src]="entry.media.cover_image.thumbnail_48x48">
+      <th class="px-0 text-center" [class.p-0]="!entry.media.cover_image">
+        <img class="rounded" [height]="48" *ngIf="entry.media.cover_image"
+             [src]="entry.media.cover_image.thumbnail_48x48">
       </th>
       <th>
         <!-- Title -->
@@ -75,5 +76,16 @@
   <!-- No data -->
   <div class="text-center py-3" *ngIf="entries && !entries.length">
     <h5 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h5>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination-wrapper" *ngIf="pagination && entries.length">
+    <pagination [itemsPerPage]="pagination.itemsPerPage"
+                [totalItems]="pagination.totalItems"
+                [disabled]="loading"
+                (pageChanged)="pageChanged($event)"
+                [nextText]="'NEXT' | translate"
+                [previousText]="'PREV' | translate">
+    </pagination>
   </div>
 </div>
