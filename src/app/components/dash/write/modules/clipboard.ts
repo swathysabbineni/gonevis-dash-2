@@ -1,4 +1,4 @@
-import Quill, { BoundsStatic, Delta as DeltaInterface, RangeStatic } from 'quill';
+import Quill, { BoundsStatic, RangeStatic } from 'quill';
 import Delta from 'quill-delta';
 
 const ClipboardModule: any = Quill.import('modules/clipboard');
@@ -9,8 +9,10 @@ class CustomClipboard extends ClipboardModule {
       return;
     }
     const range: RangeStatic = this.quill.getSelection();
-    let delta: DeltaInterface = new Delta().retain(range.index);
-    this.container.style.top = (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0).toString() + 'px';
+    let delta: Delta = new Delta().retain(range.index);
+    this.container.style.top = (window.pageYOffset ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop || 0).toString() + 'px';
     this.container.focus();
     setTimeout((): void => {
       this.quill.selection.update('silent');
