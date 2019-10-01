@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { Pagination } from '@app/interfaces/pagination';
 import { Entry } from '@app/interfaces/v1/entry';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
+import { PageChangedEvent } from 'ngx-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { EntryService } from './entry.service';
 
@@ -26,6 +28,16 @@ export class EntryComponent implements OnInit {
    */
   entries: Entry[];
 
+  /**
+   * API pagination data
+   */
+  pagination: Pagination;
+
+  /**
+   * API loading indicator
+   */
+  loading: boolean;
+
   constructor(private entryService: EntryService,
               private translate: TranslateService,
               private route: ActivatedRoute,
@@ -39,12 +51,27 @@ export class EntryComponent implements OnInit {
         /**
          * Load entries
          */
-        this.entryService.getEntries({
-          is_page: this.isPages,
-        }).subscribe((response: ApiResponse<Entry>): void => {
-          this.entries = response.results;
-        });
+        this.getEntries();
       }
+    });
+  }
+
+  /**
+   * Load entries (posts or pages)
+   *
+   * @param page Page number
+   */
+  getEntries(page: number = 1) {
+    this.loading = true;
+    this.entryService.getEntries({
+      is_page: this.isPages,
+    }, page).subscribe((response: ApiResponse<Entry>): void => {
+      this.pagination = {
+        itemsPerPage: EntryService.PAGE_SIZE,
+        totalItems: response.count,
+      };
+      this.entries = response.results;
+      this.loading = false;
     });
   }
 
@@ -80,5 +107,12 @@ export class EntryComponent implements OnInit {
         },
       },
     });
+  }
+
+  /**
+   * Pagination event
+   */
+  pageChanged(event: PageChangedEvent) {
+    this.getEntries(event.page);
   }
 }

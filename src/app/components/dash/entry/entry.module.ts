@@ -7,7 +7,8 @@ import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { TranslateModule } from '@ngx-translate/core';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 import { EntryRoutingModule } from './entry-routing.module';
 import { EntryComponent } from './entry.component';
@@ -22,13 +23,16 @@ import { EntryComponent } from './entry.component';
     TranslateModule.forChild(),
     FontAwesomeModule,
     BsDropdownModule,
+    PaginationModule.forRoot(),
   ],
 })
 export class EntryModule {
   constructor() {
-    library.add(faComment);
-    library.add(faThumbsUp);
-    library.add(faEye);
-    library.add(faEllipsisV);
+    library.add(
+      faComment,
+      faThumbsUp,
+      faEye,
+      faEllipsisV,
+    );
   }
 }

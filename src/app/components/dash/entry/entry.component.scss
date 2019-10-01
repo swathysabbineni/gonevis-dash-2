@@ -1,4 +1,5 @@
 table {
+
   .checkbox {
     width: 50px;
 
@@ -6,5 +7,9 @@ table {
       position: relative;
       right: -10px;
     }
+  }
+
+  th.px-0 {
+    width: 68px;
   }
 }
