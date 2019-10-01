@@ -1,10 +1,12 @@
 <div class="container">
-  <div class="card dash my-3">
 
-    <!-- Title -->
+  <!-- Navs -->
+  <div class="card dash">
+
+    <!-- Header -->
     <div class="card-header" translate>NAVIGATIONS</div>
 
-    <!-- Body -->
+    <!-- Content -->
     <div class="card-body" *ngIf="navigations && navigations.length" cdkDropList (cdkDropListDropped)="drop($event)">
       <div class="d-flex align-items-center mb-2" cdkDrag cdkDragLockAxis="y"
            *ngFor="let navigation of navigations; let index = index; let last = last" [class.mb-0]="last">
@@ -39,9 +41,9 @@
       </div>
     </div>
 
-    <!-- Body (no navigations) -->
+    <!-- No data -->
     <div class="card-body" *ngIf="navigations && !navigations.length">
-      <div class="card-text text-secondary" translate>NOTHING_HERE</div>
+      <div class="card-text" translate>NOTHING_HERE_YET</div>
     </div>
 
     <!-- Footer -->

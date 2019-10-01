@@ -1,5 +1,5 @@
 <!-- No permission -->
-<div class="card" *ngIf="!subscription && !loading && isOwner || !isOwner">
+<div class="card dash" *ngIf="!subscription && !loading && isOwner || !isOwner">
   <div class="card-body">
     <div class="card-text text-center" *ngIf="!isOwner" translate>RESTRICTED_PAGE</div>
     <div class="card-text text-center" *ngIf="!subscription && !loading && isOwner" translate>NO_BILLING</div>

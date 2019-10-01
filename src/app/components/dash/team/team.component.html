@@ -1,101 +1,118 @@
 <div class="container">
-  <div class="row justify-content-end">
+  <div class="row justify-content-center">
+
     <!-- Team -->
     <div class="col-md-6">
-      <table class="table rounded bg-white" *ngIf="team">
-        <tbody>
-        <!-- Team members -->
-        <tr *ngFor="let member of team.team">
-          <!-- Image -->
-          <th class="pr-0 text-center image" [class.p-0]="!member.user.media">
-            <img class="rounded" *ngIf="member.user.media" [src]="member.user.media.thumbnail_48x48">
-          </th>
-          <!-- Name, role and email -->
-          <th>
-            <!-- Name -->
-            <a class="font-weight-bold text-dark" [routerLink]="['/feed/user', member.user.username]">
-              {{ member.user.get_full_name }}
-            </a>
-            <!-- Role and email -->
-            <div class="small">
-              <!-- Role -->
-              <span class="badge badge-primary mr-2">{{ roleNames[member.role] }}</span>
-              <!-- Email -->
-              <a target="_blank" href="mailto:{{ member.user.email }}">{{ member.user.email }}</a>
-            </div>
-          </th>
-          <!-- Buttons -->
-          <th class="text-right" *ngIf="member.role !== teamRoles.Owner">
-            <div class="btn-group btn-group-sm">
-              <!-- Remove -->
-              <button class="btn btn-light text-secondary" [title]="'REMOVE' | translate"
-                      (click)="remove(member.user.id)">
-                <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
-              </button>
-            </div>
-          </th>
-        </tr>
-        <!-- Team members pending -->
-        <tr *ngFor="let member of team.team_pending">
-          <th></th>
-          <!-- Email, role and invited by -->
-          <th>
-            <!-- Email -->
-            <a class="font-weight-bold text-dark" href="mailto:{{ member.email }}" target="_blank">
-              {{ member.email }}
-            </a>
-            <!-- Invited by -->
-            <small class="text-secondary">
-              <span translate>INVITED_BY</span>
+      <div class="card dash">
+
+        <!-- Header -->
+        <div class="card-header" translate>TEAM</div>
+
+        <!-- Content -->
+        <table class="table rounded bg-white m-0" *ngIf="team">
+          <tbody>
+
+          <!-- Team members -->
+          <tr *ngFor="let member of team.team">
+            <!-- Image -->
+            <th class="image" [class.p-0]="!member.user.media">
+              <img class="rounded-circle" *ngIf="member.user.media" [src]="member.user.media.thumbnail_48x48">
+            </th>
+            <!-- Name, role and email -->
+            <th>
+              <!-- Name -->
               <a class="font-weight-bold text-dark" [routerLink]="['/feed/user', member.user.username]">
                 {{ member.user.get_full_name }}
               </a>
-            </small>
-            <!-- Role and pending status -->
-            <div class="small">
-              <!-- Role -->
-              <span class="badge badge-primary mr-2">{{ roleNames[member.role] }}</span>
-              <!-- Pending status -->
-              <span class="badge badge-secondary mr-2" translate>PENDING</span>
-            </div>
-          </th>
-          <!-- Buttons -->
-          <th class="text-right" *ngIf="member.role !== teamRoles.Owner">
-            <div class="btn-group btn-group-sm">
-              <!-- Remove -->
-              <button class="btn btn-light text-secondary" [title]="'REMOVE' | translate"
-                      (click)="remove(member.email, true)">
-                <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
-              </button>
-            </div>
-          </th>
-        </tr>
-        </tbody>
-      </table>
+              <!-- Role and email -->
+              <div class="small">
+                <!-- Role -->
+                <span class="badge badge-primary mr-2">{{ roleNames[member.role] }}</span>
+                <!-- Email -->
+                <a target="_blank" href="mailto:{{ member.user.email }}">{{ member.user.email }}</a>
+              </div>
+            </th>
+            <!-- Buttons -->
+            <th class="text-right" *ngIf="member.role !== teamRoles.Owner">
+              <div class="btn-group btn-group-sm">
+                <!-- Remove -->
+                <button class="btn btn-light text-secondary" [title]="'REMOVE' | translate"
+                        (click)="remove(member.user.id)">
+                  <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+                </button>
+              </div>
+            </th>
+          </tr>
+
+          <!-- Team members pending -->
+          <tr *ngFor="let member of team.team_pending">
+            <th></th>
+            <!-- Email, role and invited by -->
+            <th>
+              <!-- Email -->
+              <a class="font-weight-bold text-dark" href="mailto:{{ member.email }}" target="_blank">
+                {{ member.email }}
+              </a>
+              <!-- Invited by -->
+              <small class="text-secondary">
+                <span translate>INVITED_BY</span>
+                <a class="font-weight-bold text-dark" [routerLink]="['/feed/user', member.user.username]">
+                  {{ member.user.get_full_name }}
+                </a>
+              </small>
+              <!-- Role and pending status -->
+              <div class="small">
+                <!-- Role -->
+                <span class="badge badge-primary mr-2">{{ roleNames[member.role] }}</span>
+                <!-- Pending status -->
+                <span class="badge badge-secondary mr-2" translate>PENDING</span>
+              </div>
+            </th>
+
+            <!-- Buttons -->
+            <th class="text-right" *ngIf="member.role !== teamRoles.Owner">
+              <div class="btn-group btn-group-sm">
+                <!-- Remove -->
+                <button class="btn btn-light text-secondary" [title]="'REMOVE' | translate"
+                        (click)="remove(member.email, true)">
+                  <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+                </button>
+              </div>
+            </th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+
     <!-- Invite -->
     <div class="col-md-3">
       <div class="card dash" *ngIf="form">
+
+        <!-- Header -->
         <div class="card-header" translate>INVITE</div>
-        <div class="card-body">
-          <form [formGroup]="form" (ngSubmit)="invite()">
-            <!-- Email -->
-            <div class="form-group">
-              <input class="form-control" type="email" formControlName="email"
-                     [placeholder]="'EMAIL' | translate" required>
-              <span class="text-danger" *ngIf="errors.email">{{ errors.email[0] }}</span>
-            </div>
-            <!-- Role -->
-            <div class="form-group">
-              <select class="form-control" formControlName="role">
-                <option [ngValue]="teamRoles.Administrator">{{ roleNames[teamRoles.Administrator] }}</option>
-                <option [ngValue]="teamRoles.Editor">{{ roleNames[teamRoles.Editor] }}</option>
-              </select>
-            </div>
-            <!-- Submit -->
-            <button class="btn btn-info btn-block" translate>SUBMIT</button>
-          </form>
-        </div>
+
+        <!-- Form -->
+        <form class="card-body" [formGroup]="form" (ngSubmit)="invite()">
+
+          <!-- Email -->
+          <div class="form-group">
+            <input class="form-control" type="email" formControlName="email"
+                   [placeholder]="'EMAIL' | translate" required>
+            <span class="text-danger" *ngIf="errors.email">{{ errors.email[0] }}</span>
+          </div>
+
+          <!-- Role -->
+          <div class="form-group">
+            <select class="form-control" formControlName="role">
+              <option [ngValue]="teamRoles.Administrator">{{ roleNames[teamRoles.Administrator] }}</option>
+              <option [ngValue]="teamRoles.Editor">{{ roleNames[teamRoles.Editor] }}</option>
+            </select>
+          </div>
+
+          <!-- Submit -->
+          <button class="btn btn-info btn-block" translate>SUBMIT</button>
+        </form>
       </div>
     </div>
   </div>
