@@ -20,12 +20,16 @@
           </div>
           <!-- Dropdown menu -->
           <ul class="dropdown-menu" *dropdownMenu>
+            <!-- Blogs -->
             <li *ngFor="let blog of blogs; let index = index">
               <a class="dropdown-item" [routerLink]="['dash', index]"
                  [class.active]="blogCurrent && blogCurrent.id === blog.id">
                 {{ blog.title }}
               </a>
             </li>
+            <li class="dropdown-divider"></li>
+            <!-- New blog -->
+            <li><a class="dropdown-item" routerLink="start" routerLinkActive="active" translate>START_NEW_BLOG</a></li>
           </ul>
         </li>
       </ul>
