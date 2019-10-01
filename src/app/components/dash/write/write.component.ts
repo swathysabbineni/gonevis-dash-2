@@ -34,7 +34,7 @@ import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { QuillModules } from 'ngx-quill';
-import { Quill, Delta as DeltaInterface, RangeStatic } from 'quill';
+import { Quill, RangeStatic } from 'quill';
 import Delta from 'quill-delta';
 import Op from 'quill/node_modules/quill-delta/dist/Op';
 import { debounceTime } from 'rxjs/operators';
@@ -390,7 +390,7 @@ export class WriteComponent implements OnInit, OnDestroy {
     /**
      * On clipboard element node pasted
      */
-    editor.clipboard.addMatcher(Node.ELEMENT_NODE, (node: HTMLElement, delta: DeltaInterface): DeltaInterface => {
+    editor.clipboard.addMatcher(Node.ELEMENT_NODE, (node: HTMLElement, delta: Delta): Delta => {
       const ops: Op[] = [];
       delta.ops.forEach((op: Op): void => {
         if (op.insert.hasOwnProperty('image')) {
@@ -426,7 +426,7 @@ export class WriteComponent implements OnInit, OnDestroy {
     /**
      * On clipboard text node pasted
      */
-    editor.clipboard.addMatcher(Node.TEXT_NODE, (node: Text, delta: DeltaInterface): DeltaInterface => {
+    editor.clipboard.addMatcher(Node.TEXT_NODE, (node: Text, delta: Delta): Delta => {
       if (WriteComponent.validatePastedVideo(node.data)) {
         delta.ops = [{
           attributes: {
