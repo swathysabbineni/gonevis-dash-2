@@ -108,7 +108,7 @@ export class AuthService {
   /**
    * @returns Stored token from localStorage
    */
-  get getToken(): string | null {
+  getToken(): string | null {
     return this.cookie.get('token');
   }
 
