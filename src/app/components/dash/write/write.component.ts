@@ -1,4 +1,3 @@
-import { DOCUMENT } from '@angular/common';
 import {
   Component,
   OnInit,
@@ -8,7 +7,6 @@ import {
   OnDestroy,
   TemplateRef,
   ViewChild,
-  Inject,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
