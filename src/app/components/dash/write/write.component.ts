@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import {
   Component,
   OnInit,
@@ -7,12 +8,14 @@ import {
   OnDestroy,
   TemplateRef,
   ViewChild,
+  Inject,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MediaService } from '@app/components/dash/media/media.service';
 import '@app/components/dash/write/blots/divider.ts';
 import '@app/components/dash/write/blots/embed.ts';
+import '@app/components/dash/write/blots/icons.ts';
 import '@app/components/dash/write/blots/soundcloud.ts';
 import '@app/components/dash/write/blots/video.ts';
 import '@app/components/dash/write/modules/clipboard.ts';
@@ -27,6 +30,7 @@ import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
 import { TagMin } from '@app/interfaces/v1/tag-min';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
@@ -125,19 +129,17 @@ export class WriteComponent implements OnInit, OnDestroy {
   postChanged: boolean;
 
   /**
+   * Determines whether page scrolled or not.
+   */
+  scrolled: boolean;
+
+  /**
    * Quill modules
    */
   options: QuillModules = {
     imageDragDrop: true,
     toolbar: {
-      container: [
-        ['bold', 'italic', 'underline', 'strike'],
-        ['link', 'blockquote', 'code-block', { list: 'bullet' }, 'divider'],
-        [{ header: [1, 2, 3, false] }],
-        ['image', 'video'],
-        [{ direction: 'rtl' }, { align: [] }],
-        ['clean'],
-      ],
+      container: '.toolbar',
       handlers: {
         divider: (): void => {
           const range: RangeStatic = this.editor.getSelection(true);
@@ -218,6 +220,7 @@ export class WriteComponent implements OnInit, OnDestroy {
               private translateService: TranslateService,
               private mediaService: MediaService,
               private writeService: WriteService) {
+    this.writeService.lazyLoadQuill().subscribe((): void => null);
   }
 
   ngOnInit(): void {
@@ -233,29 +236,34 @@ export class WriteComponent implements OnInit, OnDestroy {
       featured: [false],
       is_page: [false],
     });
-    /**
-     * Set up tag query form
-     */
-    this.tagQueryForm = this.formBuilder.group({ query: '' });
-    this.tagQueryForm.get('query').valueChanges.pipe(debounceTime(300)).subscribe((value: string): void => {
-      this.getTags(value);
-    });
-    this.getTags();
-    /**
-     * Make a copy of entry
-     */
-    this.oldEntry = cloneDeep(this.form.value);
-    this.oldForm = cloneDeep(this.form.value);
-    /**
-     * Subscribe to current state's params changes
-     */
-    this.activatedRoute.params.subscribe((params: Params): void => {
-      if (params.id === 'new') {
-        this.isEditing = false;
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (!blog) {
+        return;
       }
-      if (params.id && params.id !== 'new') {
-        this.getEntry(params.id.toString());
-      }
+      /**
+       * Set up tag query form
+       */
+      this.tagQueryForm = this.formBuilder.group({ query: '' });
+      this.tagQueryForm.get('query').valueChanges.pipe(debounceTime(300)).subscribe((value: string): void => {
+        this.getTags(value);
+      });
+      this.getTags();
+      /**
+       * Make a copy of entry
+       */
+      this.oldEntry = cloneDeep(this.form.value);
+      this.oldForm = cloneDeep(this.form.value);
+      /**
+       * Subscribe to current state's params changes
+       */
+      this.activatedRoute.params.subscribe((params: Params): void => {
+        if (params.id === 'new') {
+          this.isEditing = false;
+        }
+        if (params.id && params.id !== 'new') {
+          this.getEntry(params.id.toString());
+        }
+      });
     });
   }
 
