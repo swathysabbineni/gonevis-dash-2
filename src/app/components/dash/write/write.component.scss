@@ -1,4 +1,43 @@
+@import "variables";
+@import "~bootstrap/scss/mixins/breakpoints";
+
 .tags-wrapper {
   max-height: 350px;
   overflow-y: auto;
+}
+
+.ql-toolbar.ql-snow {
+  background: #fff;
+  border: 0;
+  height: 50px;
+  padding: 0;
+  display: flex;
+  z-index: 1;
+  transition: $transition-base;
+
+  button {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+  }
+
+  .ql-picker {
+    height: 100%;
+  }
+}
+
+.editor {
+  flex: 1;
+}
+
+@include media-breakpoint-down(md) {
+  .ql-toolbar.ql-snow {
+    overflow: auto;
+
+    .ql-formats {
+      display: flex;
+    }
+  }
 }
