@@ -186,4 +186,15 @@ export class SettingsAdvancedComponent implements OnInit {
       this.settings = data;
     });
   }
+
+  /**
+   * Update google adSense
+   */
+  updateGoogleAdSense(): void {
+    this.advancedLoading = true;
+    this.blogService.updateGoogleAdsense(this.googleAdSenseForm.value).subscribe((data: BlogSettings): void => {
+      this.advancedLoading = false;
+      this.settings = data;
+    });
+  }
 }

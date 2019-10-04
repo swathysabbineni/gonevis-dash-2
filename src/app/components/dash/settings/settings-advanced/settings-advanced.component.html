@@ -98,7 +98,7 @@
 </form>
 
 <!-- Google adSense -->
-<form class="card dash mb-3" [formGroup]="googleAdSenseForm">
+<form class="card dash mb-3" [formGroup]="googleAdSenseForm" (ngSubmit)="updateGoogleAdSense()">
   <div class="card-body">
     <div class="custom-control custom-switch">
       <input class="custom-control-input" type="checkbox" formControlName="google_adsense_enabled"
