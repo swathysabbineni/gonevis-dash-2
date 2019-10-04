@@ -1,13 +1,19 @@
 import { CustomIcon } from '@app/interfaces/custom-icon';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faAlignCenter } from '@fortawesome/free-solid-svg-icons/faAlignCenter';
+import { faAlignJustify } from '@fortawesome/free-solid-svg-icons/faAlignJustify';
+import { faAlignLeft } from '@fortawesome/free-solid-svg-icons/faAlignLeft';
+import { faAlignRight } from '@fortawesome/free-solid-svg-icons/faAlignRight';
 import { faBan } from '@fortawesome/free-solid-svg-icons/faBan';
 import { faBold } from '@fortawesome/free-solid-svg-icons/faBold';
 import { faCode } from '@fortawesome/free-solid-svg-icons/faCode';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
 import { faItalic } from '@fortawesome/free-solid-svg-icons/faItalic';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
+import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
+import { faParagraph } from '@fortawesome/free-solid-svg-icons/faParagraph';
 import { faQuoteRight } from '@fortawesome/free-solid-svg-icons/faQuoteRight';
 import { faStrikethrough } from '@fortawesome/free-solid-svg-icons/faStrikethrough';
 import { faUnderline } from '@fortawesome/free-solid-svg-icons/faUnderline';
@@ -60,13 +66,14 @@ const customIcons: CustomIcon[] = [{
  * Convert given icon to SVG element which contains a path element
  *
  * @param icon FortAwesome icon
+ * @param classList List of classes to attach to SVG element
  *
  * @see IconDefinition
  * @link https://github.com/FortAwesome/angular-fontawesome/blob/master/docs/usage.md
  *
  * @returns SVG element based on given icon
  */
-function iconToSVGElement(icon: IconDefinition): SVGSVGElement {
+function iconToSVGElement(icon: IconDefinition, classList?: string): SVGSVGElement {
   /**
    * Create SVG element
    */
@@ -75,6 +82,9 @@ function iconToSVGElement(icon: IconDefinition): SVGSVGElement {
    * Add classes
    */
   node.classList.add('svg-inline--fa', 'fa-fw', `${icon.prefix}-${icon.iconName}`);
+  if (classList) {
+    node.classList.add(classList);
+  }
   /**
    * Set node viewBox
    */
@@ -110,5 +120,13 @@ function iconToSVGElement(icon: IconDefinition): SVGSVGElement {
 customIcons.forEach((icon: CustomIcon): void => {
   Icons[icon.default] = iconToSVGElement(icon.new).outerHTML;
 });
+
+Icons.list.bullet = iconToSVGElement(faListUl).outerHTML;
+Icons.direction[''] = iconToSVGElement(faParagraph).outerHTML;
+Icons.direction.rtl = iconToSVGElement(faParagraph, 'fa-flip-horizontal').outerHTML;
+Icons.align[''] = iconToSVGElement(faAlignLeft).outerHTML;
+Icons.align.center = iconToSVGElement(faAlignCenter).outerHTML;
+Icons.align.right = iconToSVGElement(faAlignRight).outerHTML;
+Icons.align.justify = iconToSVGElement(faAlignJustify).outerHTML;
 
 Quill.register(Icons, true);
