@@ -256,6 +256,16 @@ export class BlogService {
       },
     );
   }
+
+  /**
+   * Update google analytics
+   *
+   * @param payload Blog update data
+   */
+  updateGoogleAnalytics(payload: Params): Observable<BlogSettings> {
+    return this.http.put<BlogSettings>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/google-analytics/`, payload);
+  }
   /**
    * Add blog domain
    * Note that this endpoint returns a structure that is useless so we set it as `void`.

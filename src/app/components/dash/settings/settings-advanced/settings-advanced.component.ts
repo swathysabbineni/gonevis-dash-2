@@ -175,4 +175,15 @@ export class SettingsAdvancedComponent implements OnInit {
       this.settings = data;
     });
   }
+
+  /**
+   * Update google analytics
+   */
+  updateGoogleAnalytics(): void {
+    this.advancedLoading = true;
+    this.blogService.updateGoogleAnalytics(this.googleAnalyticsForm.value).subscribe((data: BlogSettings): void => {
+      this.advancedLoading = false;
+      this.settings = data;
+    });
+  }
 }
