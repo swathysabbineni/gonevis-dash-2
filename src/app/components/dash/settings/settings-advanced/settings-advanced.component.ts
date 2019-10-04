@@ -158,4 +158,21 @@ export class SettingsAdvancedComponent implements OnInit {
       this.settings = data;
     });
   }
+
+  /**
+   * Update remove branding
+   */
+  updateRemoveBranding(): void {
+    this.advancedLoading = true;
+    this.blogService.updateRemoveBranding(this.removeBrandingForm.value.remove_branding)
+      .subscribe((data: BlogSettings): void => {
+      this.advancedLoading = false;
+      this.settings = data;
+    });
+    this.blogService.updateFooterText(this.removeBrandingForm.value.set_footer_text)
+      .subscribe((data: BlogSettings): void => {
+      this.advancedLoading = false;
+      this.settings = data;
+    });
+  }
 }

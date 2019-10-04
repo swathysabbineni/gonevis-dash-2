@@ -58,7 +58,7 @@
 </form>
 
 <!-- Remove branding -->
-<form class="card dash mb-3" [formGroup]="removeBrandingForm">
+<form class="card dash mb-3" [formGroup]="removeBrandingForm" (ngSubmit)="updateRemoveBranding()">
   <div class="card-body">
     <div class="custom-control custom-switch">
       <input class="custom-control-input" type="checkbox" formControlName="remove_branding" id="remove_branding">

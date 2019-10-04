@@ -232,6 +232,31 @@ export class BlogService {
   }
 
   /**
+   * Update remove branding
+   *
+   * @param status Blog update data
+   */
+  updateRemoveBranding(status: boolean): Observable<BlogSettings> {
+    return this.http.put<BlogSettings>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/remove-branding/`, {
+        remove_branding: status,
+      },
+    );
+  }
+
+  /**
+   * Update footer text
+   *
+   * @param status Blog update data
+   */
+  updateFooterText(status: string): Observable<BlogSettings> {
+    return this.http.put<BlogSettings>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-custom-footer/`, {
+        footer_text: status,
+      },
+    );
+  }
+  /**
    * Add blog domain
    * Note that this endpoint returns a structure that is useless so we set it as `void`.
    *
