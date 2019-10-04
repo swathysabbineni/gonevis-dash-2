@@ -19,4 +19,5 @@ export interface File {
    * Extra properties
    */
   loading: boolean;
+  deleted: boolean;
 }

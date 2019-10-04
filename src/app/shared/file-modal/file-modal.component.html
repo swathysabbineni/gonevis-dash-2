@@ -1,17 +1,28 @@
 <div class="modal-content border-0">
 
   <!-- Header -->
-  <div class="modal-header" @flyInFlyOut *ngIf="!full">
+  <div class="modal-header p-3 d-flex align-items-center" @flyInFlyOut *ngIf="!full">
+
     <!-- Title -->
-    <h5 class="modal-title" translate>{{ file.file_name }}</h5>
-    <!-- Close -->
-    <button class="ml-auto btn btn-link p-0" (click)="modal.hide()">
-      <fa-icon [fixedWidth]="true" icon="times"></fa-icon>
-    </button>
+    <p class="modal-title font-weight-bold" translate>{{ file.file_name }}</p>
+
+    <!-- Buttons -->
+    <div class="ml-auto">
+
+      <!-- Delete -->
+      <button class="btn btn-light ml-2" (click)="delete()">
+        <fa-icon [fixedWidth]="true" [icon]="trash"></fa-icon>
+      </button>
+
+      <!-- Close -->
+      <button class="btn btn-light ml-2" (click)="modal.hide()">
+        <fa-icon [fixedWidth]="true" [icon]="times"></fa-icon>
+      </button>
+    </div>
   </div>
 
   <!-- Body -->
   <div class="modal-body" (click)="full = !full">
-    <img [src]="file.file" [alt]="file.file_name" class="shadow-sm">
+    <img [src]="file.file" [alt]="file.file_name">
   </div>
 </div>

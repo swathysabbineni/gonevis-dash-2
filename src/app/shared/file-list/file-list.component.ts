@@ -7,7 +7,7 @@ import { BlogService } from '@app/services/blog/blog.service';
 import { UtilService } from '@app/services/util/util.service';
 import { FileModalComponent } from '@app/shared/file-modal/file-modal.component';
 import { TranslateService } from '@ngx-translate/core';
-import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -71,9 +71,14 @@ export class FileListComponent implements OnInit {
     if (this.selection) {
       this.choose.emit(file);
     } else {
-      this.modalService.show(FileModalComponent, {
+      const modal: BsModalRef = this.modalService.show(FileModalComponent, {
         initialState: { file },
         class: 'full',
+      });
+      this.modalService.onHidden.subscribe((): void => {
+        if (file.deleted) {
+          this.files.splice(this.files.indexOf(file), 1);
+        }
       });
     }
   }

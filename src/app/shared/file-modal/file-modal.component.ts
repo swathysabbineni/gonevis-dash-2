@@ -2,6 +2,9 @@ import { trigger, style, state, transition, animate } from '@angular/animations'
 import { Component } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { File } from '@app/interfaces/file';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
@@ -13,16 +16,15 @@ import { ToastrService } from 'ngx-toastr';
   animations: [
     trigger('flyInFlyOut', [
       state('void', style({ marginTop: '-60px' })),
-      transition('void => *', [
-        animate('100ms linear'),
-      ]),
-      transition('* => void', [
-        animate('100ms linear'),
-      ]),
+      transition('void => *', [animate('100ms linear')]),
+      transition('* => void', [animate('100ms linear')]),
     ]),
   ],
 })
 export class FileModalComponent {
+
+  readonly trash: IconDefinition = faTrash;
+  readonly times: IconDefinition = faTimes;
 
   /**
    * Media file data
@@ -48,10 +50,10 @@ export class FileModalComponent {
     if (!confirm(this.translate.instant('CONFORM_DELETE_FILE'))) {
       return;
     }
-    this.file.loading = true;
+    this.file.deleted = true;
+    this.modal.hide();
     this.mediaService.delete(this.file.id).subscribe((): void => {
       this.toast.info(this.translate.instant('TOAST_DELETE'), this.file.file_name);
-      delete this.file;
     });
   }
 }
