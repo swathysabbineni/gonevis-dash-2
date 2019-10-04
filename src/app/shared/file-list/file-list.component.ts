@@ -5,7 +5,9 @@ import { File } from '@app/interfaces/file';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UtilService } from '@app/services/util/util.service';
+import { FileModalComponent } from '@app/shared/file-modal/file-modal.component';
 import { TranslateService } from '@ngx-translate/core';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -38,7 +40,8 @@ export class FileListComponent implements OnInit {
   constructor(public utils: UtilService,
               private mediaService: MediaService,
               private translate: TranslateService,
-              private toast: ToastrService) {
+              private toast: ToastrService,
+              private modalService: BsModalService) {
   }
 
   ngOnInit(): void {
@@ -60,22 +63,6 @@ export class FileListComponent implements OnInit {
   }
 
   /**
-   * Delete a file
-   *
-   * @param file File to delete
-   */
-  delete(file: File): void {
-    if (!confirm(this.translate.instant('CONFORM_DELETE_FILE'))) {
-      return;
-    }
-    file.loading = true;
-    this.mediaService.delete(file.id).subscribe((): void => {
-      this.toast.info(this.translate.instant('TOAST_DELETE'), file.file_name);
-      this.files.splice(this.files.indexOf(file), 1);
-    });
-  }
-
-  /**
    * On file selection
    *
    * @param file Selected file
@@ -83,6 +70,11 @@ export class FileListComponent implements OnInit {
   onChoose(file: File): void {
     if (this.selection) {
       this.choose.emit(file);
+    } else {
+      this.modalService.show(FileModalComponent, {
+        initialState: { file },
+        class: 'full',
+      });
     }
   }
 }
