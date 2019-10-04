@@ -18,7 +18,7 @@ import { HelpComponent } from './help.component';
     CommonModule,
     HelpRoutingModule,
     FontAwesomeModule,
-    TranslateModule,
+    TranslateModule.forChild(),
   ],
 })
 export class HelpModule {

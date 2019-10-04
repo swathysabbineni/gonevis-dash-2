@@ -20,7 +20,7 @@ import { MainComponent } from './main.component';
   imports: [
     CommonModule,
     MainRoutingModule,
-    TranslateModule,
+    TranslateModule.forChild(),
     FontAwesomeModule,
     NgMathPipesModule,
     ModalModule.forRoot(),
