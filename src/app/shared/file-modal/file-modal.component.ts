@@ -1,10 +1,12 @@
 import { trigger, style, state, transition, animate } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { File } from '@app/interfaces/file';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
+import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -27,6 +29,13 @@ export class FileModalComponent {
   readonly back: IconDefinition = faArrowLeft;
   readonly trash: IconDefinition = faTrash;
   readonly download: IconDefinition = faDownload;
+  readonly share: IconDefinition = faShareAlt;
+  readonly edit: IconDefinition = faPen;
+
+  /**
+   * Image element
+   */
+  @ViewChild('image', { static: false }) image: ElementRef;
 
   /**
    * Media file data
@@ -37,6 +46,11 @@ export class FileModalComponent {
    * Show image in full mode (no header)
    */
   full: boolean;
+
+  /**
+   * Image dimensions
+   */
+  dimensions: { width: number, height: number };
 
   constructor(public modal: BsModalRef,
               private translate: TranslateService,
@@ -57,5 +71,15 @@ export class FileModalComponent {
     this.mediaService.delete(this.file.id).subscribe((): void => {
       this.toast.info(this.translate.instant('TOAST_DELETE'), this.file.file_name);
     });
+  }
+
+  /**
+   * On image load
+   */
+  load() {
+    this.dimensions = {
+      width: (this.image.nativeElement as HTMLImageElement).width,
+      height: (this.image.nativeElement as HTMLImageElement).height,
+    };
   }
 }

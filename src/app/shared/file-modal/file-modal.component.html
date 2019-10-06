@@ -1,15 +1,35 @@
 <div class="modal-content border-0">
 
   <!-- Header -->
-  <div class="modal-header p-3 bg-light d-flex align-items-center" @flyInFlyOut *ngIf="!full">
+  <div class="modal-header p-3 bg-light d-flex align-items-center" *ngIf="!full" @flyInFlyOut>
 
     <!-- Back -->
     <button class="btn btn-light" (click)="modal.hide()" [title]="'CLOSE' | translate">
       <fa-icon [fixedWidth]="true" [icon]="back"></fa-icon>
     </button>
 
-    <!-- Title -->
-    <p class="modal-title font-weight-bold ml-2" translate>{{ file.file_name }}</p>
+    <!-- File name and other info -->
+    <div class="ml-2">
+
+      <!-- File name -->
+      <p class="modal-title font-weight-bold" translate>{{ file.file_name }}</p>
+
+      <!-- Creation and update date -->
+      <span class="badge badge-secondary" title="{{ 'UPDATED' | translate }} {{ file.updated | date }}">
+        {{ file.created | date }}
+      </span>
+
+      <!-- Image dimensions -->
+      <span class="badge badge-secondary ml-2" [title]="'DIMENSIONS' | translate" *ngIf="dimensions">
+        {{ dimensions.width }} x {{ dimensions.height }}
+      </span>
+
+      <!-- File size -->
+      <span class="badge badge-secondary ml-2" [title]="'SIZE' | translate">{{ file.size_human }}</span>
+
+      <!-- File type -->
+      <span class="badge badge-secondary ml-2" [title]="'TYPE' | translate">{{ file.ext }}</span>
+    </div>
 
     <!-- Buttons -->
     <div class="ml-auto">
@@ -37,6 +57,8 @@
 
   <!-- Body -->
   <div class="modal-body" (click)="full = !full">
-    <img [src]="file.file" [alt]="file.file_name">
+
+    <!-- Image -->
+    <img [src]="file.file" [alt]="file.file_name" *ngIf="file.is_image" (load)="load()" #image>
   </div>
 </div>
