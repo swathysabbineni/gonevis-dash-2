@@ -15,7 +15,6 @@
       align-items: center;
       justify-content: space-between;
       height: 100%;
-      opacity: 0;
       transition: all 200ms;
 
       .caption {
@@ -27,12 +26,6 @@
 
       .option {
         align-self: flex-end;
-      }
-    }
-
-    &:hover {
-      .content {
-        opacity: 1;
       }
     }
 
