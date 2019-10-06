@@ -14,6 +14,14 @@
     <!-- Buttons -->
     <div class="ml-auto">
 
+      <!-- Share -->
+      <button class="btn btn-light ml-2" [title]="'SHARE' | translate"
+              [popover]="shareTemplate" [outsideClick]="true" placement="left">
+        <fa-icon [fixedWidth]="true" [icon]="share"></fa-icon>
+        <ng-template #shareTemplate>
+          <app-share [link]="file.file"></app-share>
+        </ng-template>
+      </button>
       <!-- Download -->
       <a class="btn btn-light ml-2" [title]="'DOWNLOAD' | translate"
          [href]="file.file" [download]="file.file_name" target="_blank">
