@@ -8,6 +8,11 @@
     border: 0;
     background: $white;
     border-radius: 0;
+    color: $body-color;
+
+    .btn {
+      color: $body-color;
+    }
   }
 
   .modal-body {

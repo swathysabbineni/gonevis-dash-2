@@ -1,27 +1,28 @@
 <div class="modal-content border-0">
 
   <!-- Header -->
-  <div class="modal-header p-3 d-flex align-items-center" @flyInFlyOut *ngIf="!full">
+  <div class="modal-header p-3 bg-light d-flex align-items-center" @flyInFlyOut *ngIf="!full">
+
+    <!-- Back -->
+    <button class="btn btn-light" (click)="modal.hide()" [title]="'CLOSE' | translate">
+      <fa-icon [fixedWidth]="true" [icon]="back"></fa-icon>
+    </button>
 
     <!-- Title -->
-    <p class="modal-title font-weight-bold" translate>{{ file.file_name }}</p>
+    <p class="modal-title font-weight-bold ml-2" translate>{{ file.file_name }}</p>
 
     <!-- Buttons -->
     <div class="ml-auto">
 
       <!-- Download -->
-      <a class="btn btn-light ml-2" [href]="file.file" [download]="file.file_name" target="_blank">
+      <a class="btn btn-light ml-2" [title]="'DOWNLOAD' | translate"
+         [href]="file.file" [download]="file.file_name" target="_blank">
         <fa-icon [fixedWidth]="true" [icon]="download"></fa-icon>
       </a>
 
       <!-- Delete -->
-      <button class="btn btn-light ml-2" (click)="delete()">
+      <button class="btn btn-light ml-2" (click)="delete()" [title]="'DELETE' | translate">
         <fa-icon [fixedWidth]="true" [icon]="trash"></fa-icon>
-      </button>
-
-      <!-- Close -->
-      <button class="btn btn-light ml-2" (click)="modal.hide()">
-        <fa-icon [fixedWidth]="true" [icon]="times"></fa-icon>
       </button>
     </div>
   </div>
