@@ -8,6 +8,11 @@
            [class.selected]="file.id === selected"
            [style.background-image]="utils.sanitizeBackgroundImage(file.thumbnail_256x256)">
         <div class="content">
+
+          <!-- File icon -->
+          <fa-icon class="text-info text-center" [icon]="getFileIcon(file)" *ngIf="!file.is_image" size="5x"></fa-icon>
+
+          <!-- Caption -->
           <div class="caption p-2 small text-truncate">{{ file.meta_data.name }}</div>
         </div>
       </div>
@@ -16,4 +21,4 @@
 </div>
 
 <!-- No data -->
-<div class="bg-white rounded py-3 container" *ngIf="files && !files.length" translate>NOTHING_HERE_YET</div>
+<div class="my-3" *ngIf="files && !files.length" translate>NOTHING_HERE_YET</div>

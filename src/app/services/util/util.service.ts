@@ -23,9 +23,13 @@ export class UtilService {
    * Bypass security and trust the given value to be safe style value (CSS).
    *
    * @param url Image URL
+   * @returns Trusted style URL or nothing of not provided
    */
-  sanitizeBackgroundImage(url: string): SafeStyle {
-    return this.domSanitizer.bypassSecurityTrustStyle(`url(${url})`);
+  sanitizeBackgroundImage(url: string): SafeStyle | null {
+    if (url) {
+      return this.domSanitizer.bypassSecurityTrustStyle(`url(${url})`);
+    }
+    return null;
   }
 
   /**

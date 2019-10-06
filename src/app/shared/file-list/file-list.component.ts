@@ -6,9 +6,17 @@ import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UtilService } from '@app/services/util/util.service';
 import { FileModalComponent } from '@app/shared/file-modal/file-modal.component';
+import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
+import { faFileArchive } from '@fortawesome/free-solid-svg-icons/faFileArchive';
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons/faFileCsv';
+import { faFileExcel } from '@fortawesome/free-solid-svg-icons/faFileExcel';
+import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
+import { faFilePowerpoint } from '@fortawesome/free-solid-svg-icons/faFilePowerpoint';
+import { faFileWord } from '@fortawesome/free-solid-svg-icons/faFileWord';
 import { TranslateService } from '@ngx-translate/core';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 @Component({
   selector: 'app-file-list',
@@ -58,7 +66,10 @@ export class FileListComponent implements OnInit {
    */
   getFiles(): void {
     this.mediaService.getMedia().subscribe((response: ApiResponse<File>): void => {
-      this.files = response.results;
+      /**
+       * @todo Remove me once the filter is added by the API
+       */
+      this.files = response.results.filter(file => file.is_image);
     });
   }
 
@@ -71,7 +82,7 @@ export class FileListComponent implements OnInit {
     if (this.selection) {
       this.choose.emit(file);
     } else {
-      const modal: BsModalRef = this.modalService.show(FileModalComponent, {
+      this.modalService.show(FileModalComponent, {
         initialState: { file },
         class: 'full',
       });
@@ -80,6 +91,37 @@ export class FileListComponent implements OnInit {
           this.files.splice(this.files.indexOf(file), 1);
         }
       });
+    }
+  }
+
+  /**
+   * @return Icon to represent this file
+   * @param file File to get icon for
+   */
+  getFileIcon(file: File): IconDefinition {
+    switch (file.ext) {
+      case 'application/excel':
+      case 'excel':
+      case 'vnd.ms-excel':
+      case 'x-excel':
+      case 'x-msexcel':
+        return faFileExcel;
+      case 'application/mspowerpoint':
+      case 'application/powerpoint':
+      case 'application/vnd.ms-powerpoint':
+      case 'application/x-mspowerpoint':
+        return faFilePowerpoint;
+      case 'application/x-zip-compressed':
+      case 'application/x-zip':
+      case 'application/zip':
+      case 'application/compressed':
+        return faFileArchive;
+      case 'application/pdf':
+        return faFilePdf;
+      case 'application/msword':
+        return faFileWord;
+      default:
+        return faFile;
     }
   }
 }
