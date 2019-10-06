@@ -203,5 +203,9 @@
   "NEXT": "Next",
   "PREV": "Prev",
   "START_NEW_BLOG": "Start New Blog",
+  "SIZE": "Size",
+  "TYPE": "Type",
+  "SHARE": "Share",
+  "UPDATED": "Updated",
   "COLLABORATING": "Collaborating"
 }
