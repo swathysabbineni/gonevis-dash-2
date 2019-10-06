@@ -70,18 +70,29 @@
       <button class="ql-clean" tooltip="Clear format" placement="bottom"></button>
     </div>
   </div>
-  <div class="editor h-100 overflow-auto d-flex flex-column bg-white"
+  <div class="editor h-100 overflow-auto bg-white"
        (scroll)="scrolled = $event.target['scrollTop'] > 0">
-    <quill-editor class="container" [formControl]="form.controls['content']"
-                  [modules]="options"
-                  placeholder="Write your article here..."
-                  scrollingContainer=".editor"
-                  bounds=".editor"
-                  [styles]="{borderWidth: 0, padding: '1rem 0', fontSize: '1rem'}"
-                  style="min-height: 100%"
-                  classes="text-dark"
-                  (onEditorCreated)="onEditorInit($event)">
-    </quill-editor>
+    <div class="container d-flex flex-column h-100">
+      <!-- Title -->
+      <textarea id="title"
+                appAutoResize
+                class="form-control" formControlName="title"
+                ng-focus="updatingTitle=true"
+                ng-blur="updatingTitle=false"
+                placeholder="{{ 'TITLE' | translate }}"
+                autocomplete="off"
+                [required]="true"></textarea>
+      <quill-editor [formControl]="form.controls['content']"
+                    [modules]="options"
+                    placeholder="Write your article here..."
+                    scrollingContainer=".editor"
+                    bounds=".editor"
+                    [styles]="{borderWidth: 0, fontSize: '1rem'}"
+                    style="flex: 1"
+                    classes="text-dark"
+                    (onEditorCreated)="onEditorInit($event)">
+      </quill-editor>
+    </div>
   </div>
 </form>
 <!-- File list modal -->
