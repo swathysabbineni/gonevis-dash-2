@@ -69,7 +69,7 @@ export class FileModalComponent {
     this.file.deleted = true;
     this.modal.hide();
     this.mediaService.delete(this.file.id).subscribe((): void => {
-      this.toast.info(this.translate.instant('TOAST_DELETE'), this.file.file_name);
+      this.toast.info(this.translate.instant('TOAST_DELETE'), this.file.meta_data.name);
     });
   }
 

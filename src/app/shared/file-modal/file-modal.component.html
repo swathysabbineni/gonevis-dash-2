@@ -12,7 +12,9 @@
     <div class="ml-2">
 
       <!-- File name -->
-      <p class="modal-title font-weight-bold" translate>{{ file.file_name }}</p>
+      <p class="modal-title font-weight-bold" translate>
+        {{ file.meta_data.name }}
+      </p>
 
       <!-- Creation and update date -->
       <span class="badge badge-secondary" title="{{ 'UPDATED' | translate }} {{ file.updated | date }}">

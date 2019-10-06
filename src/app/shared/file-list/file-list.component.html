@@ -8,7 +8,7 @@
            [class.selected]="file.id === selected"
            [style.background-image]="utils.sanitizeBackgroundImage(file.thumbnail_256x256)">
         <div class="content">
-          <div class="caption p-2 small text-truncate">{{ file.file_name }}</div>
+          <div class="caption p-2 small text-truncate">{{ file.meta_data.name }}</div>
         </div>
       </div>
     </div>
