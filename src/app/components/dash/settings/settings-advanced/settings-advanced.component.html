@@ -89,6 +89,10 @@
       <input class="form-control" placeholder="UA-XXXXX-Y"
              id="google_analytics_code" formControlName="google_analytics_code">
     </div>
+    <!-- Error -->
+    <span class="text-danger" *ngIf="googleAnalyticsErrors.google_analytics_code">
+      {{ googleAnalyticsErrors.google_analytics_code[0] }}
+    </span>
   </div>
   <!-- Footer -->
   <div class="card-footer text-right">
@@ -110,6 +114,10 @@
       <input class="form-control" placeholder="ca-pub-XXXXXXXXXXXXXXX"
              id="google_adsense_code" formControlName="google_adsense_code">
     </div>
+    <!-- Error -->
+    <span class="text-danger" *ngIf="googleAdSenseErrors.google_adsense_code">
+      {{ googleAdSenseErrors.google_adsense_code[0] }}
+    </span>
   </div>
   <!-- Footer -->
   <div class="card-footer text-right">

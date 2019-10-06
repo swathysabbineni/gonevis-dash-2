@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ApiError } from '@app/interfaces/api-error';
 import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
@@ -48,6 +49,17 @@ export class SettingsAdvancedComponent implements OnInit {
    * Advanced form API loading indicator
    */
   advancedLoading: boolean;
+
+  /**
+   * Google analytics form API errors
+   */
+  googleAnalyticsErrors: ApiError = {};
+
+  /**
+   * Google adSense form API errors
+   */
+  googleAdSenseErrors: ApiError = {};
+
 
   constructor(private formBuilder: FormBuilder,
               private blogService: BlogService,
@@ -188,11 +200,16 @@ export class SettingsAdvancedComponent implements OnInit {
    */
   updateGoogleAnalytics(): void {
     this.advancedLoading = true;
-    this.blogService.updateGoogleAnalytics(this.googleAnalyticsForm.value).subscribe((data: BlogSettings): void => {
+    this.blogService.updateGoogleAnalytics(this.googleAnalyticsForm.value)
+      .subscribe((data: BlogSettings): void => {
       this.advancedLoading = false;
       this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('GOOGLE_ANALYTICS'));
       this.settings = data;
-    });
+      this.googleAnalyticsErrors = {};
+    }, (error): void => {
+        this.advancedLoading = false;
+        this.googleAnalyticsErrors = error.error;
+      });
   }
 
   /**
@@ -204,6 +221,10 @@ export class SettingsAdvancedComponent implements OnInit {
       this.advancedLoading = false;
       this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('GOOGLE_ADSENSE'));
       this.settings = data;
+      this.googleAdSenseErrors = {};
+    }, (error): void  => {
+      this.advancedLoading = false;
+      this.googleAdSenseErrors = error.error;
     });
   }
 }
