@@ -36,6 +36,41 @@
     <!-- Buttons -->
     <div class="ml-auto">
 
+      <!-- Edit -->
+      <button class="btn btn-light ml-2" [title]="'EDIT' | translate" (click)="setupEdit()"
+              [popover]="editTemplate" [isOpen]="showEdit" triggers="" placement="bottom">
+        <fa-icon [fixedWidth]="true" [icon]="edit"></fa-icon>
+        <ng-template #editTemplate>
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <!-- Name -->
+            <div class="form-group">
+              <label for="name" translate>NAME</label>
+              <input id="name" type="text" class="form-control form-control-sm" formControlName="name">
+              <span class="text-danger" *ngIf="error.meta_data && error.meta_data.name">
+                {{ error.meta_data.name[0] }}
+              </span>
+            </div>
+            <!-- Description -->
+            <div class="form-group">
+              <label for="description" translate>DESCRIPTION</label>
+              <textarea id="description" class="form-control form-control-sm" [rows]="3"
+                        formControlName="description">
+              </textarea>
+              <span class="text-danger" *ngIf="error.meta_data && error.meta_data.description">
+                {{ error.meta_data.description[0] }}
+              </span>
+            </div>
+            <!-- Errors -->
+            <p class="text-danger" *ngIf="error.non_field_errors">{{ error.non_field_errors[0] }}</p>
+            <p class="text-danger" *ngIf="error.detail">{{ error.detail }}</p>
+            <!-- Button -->
+            <button class="btn btn-sm btn-block btn-primary text-light" [disabled]="loading" translate>
+              SAVE_CHANGES
+            </button>
+          </form>
+        </ng-template>
+      </button>
+
       <!-- Share -->
       <button class="btn btn-light ml-2" [title]="'SHARE' | translate"
               [popover]="shareTemplate" [outsideClick]="true" placement="left">
@@ -44,9 +79,10 @@
           <app-share [link]="file.file"></app-share>
         </ng-template>
       </button>
+
       <!-- Download -->
       <a class="btn btn-light ml-2" [title]="'DOWNLOAD' | translate"
-         [href]="file.file" [download]="file.file_name" target="_blank">
+         [href]="file.file" [download]="file.meta_data.name" target="_blank">
         <fa-icon [fixedWidth]="true" [icon]="download"></fa-icon>
       </a>
 
@@ -58,9 +94,9 @@
   </div>
 
   <!-- Body -->
-  <div class="modal-body" (click)="full = !full">
+  <div class="modal-body" (click)="full = !full; showEdit = false">
 
     <!-- Image -->
-    <img [src]="file.file" [alt]="file.file_name" *ngIf="file.is_image" (load)="load()" #image>
+    <img [src]="file.file" [alt]="file.meta_data.name" *ngIf="file.is_image" (load)="load()" #image>
   </div>
 </div>
