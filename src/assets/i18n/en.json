@@ -220,5 +220,7 @@
   "THUMBNAIL_256": "Thumbnail (256px)",
   "THUMBNAIL_128":  "Thumbnail (128px)",
   "THUMBNAIL_48": "Thumbnail (48px)",
+  "GOOGLE_ANALYTICS": "Google Analytics",
+  "GOOGLE_ADSENSE": "Google AdSense",
   "COLLABORATING": "Collaborating"
 }

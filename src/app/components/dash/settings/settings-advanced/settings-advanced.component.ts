@@ -4,6 +4,8 @@ import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-settings-advanced',
@@ -48,7 +50,9 @@ export class SettingsAdvancedComponent implements OnInit {
   advancedLoading: boolean;
 
   constructor(private formBuilder: FormBuilder,
-              private blogService: BlogService) {
+              private blogService: BlogService,
+              private toast: ToastrService,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -167,11 +171,14 @@ export class SettingsAdvancedComponent implements OnInit {
     this.blogService.updateRemoveBranding(this.removeBrandingForm.value.remove_branding)
       .subscribe((data: BlogSettings): void => {
       this.advancedLoading = false;
+      this.toast.info(this.translate.instant('TOAST_UPDATE'),
+        this.translate.instant('REMOVE_GONEVIS_BRANDING'));
       this.settings = data;
     });
     this.blogService.updateFooterText(this.removeBrandingForm.value.set_footer_text)
       .subscribe((data: BlogSettings): void => {
       this.advancedLoading = false;
+      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('FOOTER_TEXT'));
       this.settings = data;
     });
   }
@@ -183,6 +190,7 @@ export class SettingsAdvancedComponent implements OnInit {
     this.advancedLoading = true;
     this.blogService.updateGoogleAnalytics(this.googleAnalyticsForm.value).subscribe((data: BlogSettings): void => {
       this.advancedLoading = false;
+      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('GOOGLE_ANALYTICS'));
       this.settings = data;
     });
   }
@@ -194,6 +202,7 @@ export class SettingsAdvancedComponent implements OnInit {
     this.advancedLoading = true;
     this.blogService.updateGoogleAdsense(this.googleAdSenseForm.value).subscribe((data: BlogSettings): void => {
       this.advancedLoading = false;
+      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('GOOGLE_ADSENSE'));
       this.settings = data;
     });
   }
