@@ -3,31 +3,17 @@
   <div class="row">
     <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let file of files"
          [class.col-xl-2]="!selection">
-      <div class="file rounded-sm shadow-sm my-3"
+      <div class="file pointer rounded-sm shadow-sm my-3"
            (click)="onChoose(file)"
-           [class.pointer]="selection"
            [class.selected]="file.id === selected"
            [style.background-image]="utils.sanitizeBackgroundImage(file.thumbnail_256x256)">
-        <div class="content p-2">
-          <div class="option">
-            <div class="dropdown" dropdown>
-              <button class="btn btn-sm btn-dark" dropdownToggle>
-                <fa-icon [fixedWidth]="true" icon="ellipsis-v"></fa-icon>
-              </button>
-              <!-- Options -->
-              <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
-                <!-- Download -->
-                <a class="dropdown-item" target="_blank" [href]="file.file" download translate>DOWNLOAD</a>
-                <!-- Separated -->
-                <div class="dropdown-divider"></div>
-                <!-- Delete -->
-                <button class="dropdown-item text-danger" (click)="delete(file)" [disabled]="file.loading" translate>
-                  DELETE
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="caption rounded-sm p-2 small bg-dark text-light">{{ file.file_name }}</div>
+        <div class="content">
+
+          <!-- File icon -->
+          <fa-icon class="text-info text-center" [icon]="getFileIcon(file)" *ngIf="!file.is_image" size="5x"></fa-icon>
+
+          <!-- Caption -->
+          <div class="caption p-2 small text-truncate">{{ file.meta_data.name }}</div>
         </div>
       </div>
     </div>
@@ -35,6 +21,4 @@
 </div>
 
 <!-- No data -->
-<div class="bg-white rounded py-3 container" *ngIf="files && !files.length">
-  <h5 class="text-secondary text-center font-italic" translate>NOTHING_HERE_YET</h5>
-</div>
+<div class="my-3" *ngIf="files && !files.length" translate>NOTHING_HERE_YET</div>

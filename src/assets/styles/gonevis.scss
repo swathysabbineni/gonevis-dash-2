@@ -386,3 +386,16 @@ a,
   display: flex;
   justify-content: center;
 }
+
+.modal {
+  .full {
+    max-width: initial;
+    margin: 0;
+    height: 100%;
+
+    .modal-content {
+      border: none;
+      background: rgba($dark, 0.75);
+    }
+  }
+}

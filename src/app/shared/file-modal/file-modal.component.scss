@@ -1,0 +1,40 @@
+@import "variables";
+
+.modal-content {
+  border-radius: 0;
+  height: 100vh;
+
+  .modal-header {
+    border: 0;
+    background: $white;
+    border-radius: 0;
+    color: $body-color;
+
+    .btn {
+      color: $body-color;
+    }
+
+    .dropdown {
+      display: inline-block;
+
+      .dropdown-toggle:after {
+        content: none
+      }
+    }
+  }
+
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    height: 100%;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      background-color: $dark;
+    }
+  }
+}

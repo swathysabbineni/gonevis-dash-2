@@ -1,0 +1,115 @@
+<div class="modal-content border-0">
+
+  <!-- Header -->
+  <div class="modal-header p-3 bg-light d-flex align-items-center" *ngIf="!full" @flyInFlyOut>
+
+    <!-- Back -->
+    <button class="btn btn-light" (click)="modal.hide()" [title]="'CLOSE' | translate">
+      <fa-icon [fixedWidth]="true" [icon]="back"></fa-icon>
+    </button>
+
+    <!-- File name and other info -->
+    <div class="ml-2">
+
+      <!-- File name -->
+      <p class="modal-title font-weight-bold" [title]="file.meta_data.description" translate>
+        {{ file.meta_data.name }}
+      </p>
+
+      <!-- Creation and update date -->
+      <span class="badge badge-secondary" title="{{ 'UPDATED' | translate }} {{ file.updated | date }}">
+        {{ file.created | date }}
+      </span>
+
+      <!-- Image dimensions -->
+      <span class="badge badge-secondary ml-2" [title]="'DIMENSIONS' | translate" *ngIf="dimensions">
+        {{ dimensions.width }} x {{ dimensions.height }}
+      </span>
+
+      <!-- File size -->
+      <span class="badge badge-secondary ml-2" [title]="'SIZE' | translate">{{ file.size_human }}</span>
+
+      <!-- File type -->
+      <span class="badge badge-secondary ml-2" [title]="'TYPE' | translate">{{ file.ext }}</span>
+    </div>
+
+    <!-- Buttons -->
+    <div class="ml-auto">
+
+      <!-- Thumbnails -->
+      <div class="dropdown" *ngIf="file.is_image" dropdown>
+        <button class="btn btn-light ml-2 dropdown-toggle" [title]="'THUMBNAILS' | translate" dropdownToggle>
+          <fa-icon [fixedWidth]="true" [icon]="images"></fa-icon>
+        </button>
+        <div class="dropdown-menu dropdown-menu-left" *dropdownMenu>
+          <a class="dropdown-item" download translate target="_blank" [href]="file.file">ORIGINAL_SIZE</a>
+          <a class="dropdown-item" download translate target="_blank" [href]="file.thumbnail_256x256">THUMBNAIL_256</a>
+          <a class="dropdown-item" download translate target="_blank" [href]="file.thumbnail_128x128">THUMBNAIL_128</a>
+          <a class="dropdown-item" download translate target="_blank" [href]="file.thumbnail_48x48">THUMBNAIL_48</a>
+        </div>
+      </div>
+
+      <!-- Edit -->
+      <button class="btn btn-light ml-2" [title]="'EDIT' | translate" (click)="setupEdit()"
+              [popover]="editTemplate" [isOpen]="showEdit" triggers="" placement="bottom">
+        <fa-icon [fixedWidth]="true" [icon]="edit"></fa-icon>
+        <ng-template #editTemplate>
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <!-- Name -->
+            <div class="form-group">
+              <label for="name" translate>NAME</label>
+              <input id="name" type="text" class="form-control form-control-sm" formControlName="name">
+              <span class="text-danger" *ngIf="error.meta_data && error.meta_data.name">
+                {{ error.meta_data.name[0] }}
+              </span>
+            </div>
+            <!-- Description -->
+            <div class="form-group">
+              <label for="description" translate>DESCRIPTION</label>
+              <textarea id="description" class="form-control form-control-sm" [rows]="3"
+                        formControlName="description">
+              </textarea>
+              <span class="text-danger" *ngIf="error.meta_data && error.meta_data.description">
+                {{ error.meta_data.description[0] }}
+              </span>
+            </div>
+            <!-- Errors -->
+            <p class="text-danger" *ngIf="error.non_field_errors">{{ error.non_field_errors[0] }}</p>
+            <p class="text-danger" *ngIf="error.detail">{{ error.detail }}</p>
+            <!-- Button -->
+            <button class="btn btn-sm btn-block btn-primary text-light" [disabled]="loading" translate>
+              SAVE_CHANGES
+            </button>
+          </form>
+        </ng-template>
+      </button>
+
+      <!-- Share -->
+      <button class="btn btn-light ml-2" [title]="'SHARE' | translate"
+              [popover]="shareTemplate" [outsideClick]="true" placement="left">
+        <fa-icon [fixedWidth]="true" [icon]="share"></fa-icon>
+        <ng-template #shareTemplate>
+          <app-share [link]="file.file"></app-share>
+        </ng-template>
+      </button>
+
+      <!-- Download -->
+      <a class="btn btn-light ml-2" [title]="'DOWNLOAD' | translate"
+         [href]="file.file" [download]="file.meta_data.name" target="_blank">
+        <fa-icon [fixedWidth]="true" [icon]="download"></fa-icon>
+      </a>
+
+      <!-- Delete -->
+      <button class="btn btn-light ml-2" (click)="delete()" [title]="'DELETE' | translate">
+        <fa-icon [fixedWidth]="true" [icon]="trash"></fa-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="modal-body" (click)="toggleFull()">
+
+    <!-- Image -->
+    <img [src]="file.file" [alt]="file.meta_data.name" *ngIf="file.is_image" (load)="onLoad()" #image>
+  </div>
+</div>

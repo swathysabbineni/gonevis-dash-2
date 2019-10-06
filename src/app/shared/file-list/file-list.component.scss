@@ -7,19 +7,27 @@
     background-size: cover;
     background-position: center;
     background-color: $dark;
+    overflow: hidden;
 
     .content {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
       height: 100%;
-      opacity: 0;
-      transition: all 200ms;
+
+      fa-icon {
+        flex: 1;
+        display: flex;
+        align-items: center;
+      }
 
       .caption {
-        word-break: break-word;
+        margin-top: auto;
         text-align: center;
+        width: 100%;
+        background: rgba($dark, 0.5);
+        color: rgba($light, 0.9);
+        transition: $transition-base;
       }
 
       .option {
@@ -29,13 +37,22 @@
 
     &:hover {
       .content {
-        opacity: 1;
+        .caption {
+          background: rgba($dark, 0.75);
+        }
       }
     }
 
     &.selected {
       border: 4px solid $primary;
+      border-bottom: none;
       pointer-events: none;
+
+      .content {
+        .caption {
+          background: $primary;
+        }
+      }
     }
   }
 }
