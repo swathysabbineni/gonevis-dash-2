@@ -28,6 +28,19 @@
   }
 }
 
+#title {
+  box-shadow: none!important;
+  background: transparent!important;
+  border: none;
+  font-size: 3rem;
+  margin-top: 60px;
+  color: $dark;
+  font-weight: 700;
+  padding: 0 15px;
+  resize: none;
+  flex: 0 0 auto;
+}
+
 .editor {
   flex: 1;
 }
