@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ShareModule } from '@app/shared/share/share.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 
 import { FileModalComponent } from './file-modal.component';
@@ -16,9 +17,10 @@ import { FileModalComponent } from './file-modal.component';
     CommonModule,
     TranslateModule.forChild(),
     FontAwesomeModule,
-    PopoverModule.forRoot(),
     ShareModule,
     ReactiveFormsModule,
+    PopoverModule.forRoot(),
+    BsDropdownModule.forRoot(),
   ],
   entryComponents: [
     FileModalComponent,

@@ -13,6 +13,14 @@
     .btn {
       color: $body-color;
     }
+
+    .dropdown {
+      display: inline-block;
+
+      .dropdown-toggle:after {
+        content: none
+      }
+    }
   }
 
   .modal-body {

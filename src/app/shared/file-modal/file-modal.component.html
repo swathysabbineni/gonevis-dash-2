@@ -36,6 +36,19 @@
     <!-- Buttons -->
     <div class="ml-auto">
 
+      <!-- Thumbnails -->
+      <div class="dropdown" dropdown>
+        <button class="btn btn-light ml-2 dropdown-toggle" [title]="'THUMBNAILS' | translate" dropdownToggle>
+          <fa-icon [fixedWidth]="true" [icon]="images"></fa-icon>
+        </button>
+        <div class="dropdown-menu dropdown-menu-left" *dropdownMenu>
+          <a class="dropdown-item" download translate target="_blank" [href]="file.file">ORIGINAL_SIZE</a>
+          <a class="dropdown-item" download translate target="_blank" [href]="file.thumbnail_256x256">THUMBNAIL_256</a>
+          <a class="dropdown-item" download translate target="_blank" [href]="file.thumbnail_128x128">THUMBNAIL_128</a>
+          <a class="dropdown-item" download translate target="_blank" [href]="file.thumbnail_48x48">THUMBNAIL_48</a>
+        </div>
+      </div>
+
       <!-- Edit -->
       <button class="btn btn-light ml-2" [title]="'EDIT' | translate" (click)="setupEdit()"
               [popover]="editTemplate" [isOpen]="showEdit" triggers="" placement="bottom">

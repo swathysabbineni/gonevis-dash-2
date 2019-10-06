@@ -8,6 +8,7 @@ import { File } from '@app/interfaces/file';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
+import { faImages } from '@fortawesome/free-solid-svg-icons/faImages';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
@@ -34,6 +35,7 @@ export class FileModalComponent {
   readonly download: IconDefinition = faDownload;
   readonly share: IconDefinition = faShareAlt;
   readonly edit: IconDefinition = faPen;
+  readonly images: IconDefinition = faImages;
 
   /**
    * Image element
