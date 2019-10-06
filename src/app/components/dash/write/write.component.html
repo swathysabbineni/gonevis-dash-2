@@ -84,7 +84,7 @@
                 [required]="true"></textarea>
       <quill-editor [formControl]="form.controls['content']"
                     [modules]="options"
-                    placeholder="Write your article here..."
+                    [placeholder]="'CONTENT' | translate"
                     scrollingContainer=".editor"
                     bounds=".editor"
                     [styles]="{borderWidth: 0, fontSize: '1rem'}"
