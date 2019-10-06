@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { File } from '@app/interfaces/file';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
@@ -23,8 +24,9 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class FileModalComponent {
 
-  readonly trash: IconDefinition = faTrash;
   readonly times: IconDefinition = faTimes;
+  readonly trash: IconDefinition = faTrash;
+  readonly download: IconDefinition = faDownload;
 
   /**
    * Media file data
