@@ -391,6 +391,10 @@ a,
   top: 50% !important;
 }
 
+.ql-container {
+  font-family: inherit !important;
+}
+
 .ql-snow .divider {
   border-left: 1px solid #dadce0;
   margin: 0.75rem 0;
@@ -505,4 +509,6 @@ a,
 .ql-editor {
   min-height: 100%;
   height: auto !important;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
