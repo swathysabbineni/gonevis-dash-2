@@ -37,7 +37,7 @@
     <div class="ml-auto">
 
       <!-- Thumbnails -->
-      <div class="dropdown" dropdown>
+      <div class="dropdown" *ngIf="file.is_image" dropdown>
         <button class="btn btn-light ml-2 dropdown-toggle" [title]="'THUMBNAILS' | translate" dropdownToggle>
           <fa-icon [fixedWidth]="true" [icon]="images"></fa-icon>
         </button>
@@ -107,9 +107,9 @@
   </div>
 
   <!-- Body -->
-  <div class="modal-body" (click)="full = !full; showEdit = false">
+  <div class="modal-body" (click)="toggleFull()">
 
     <!-- Image -->
-    <img [src]="file.file" [alt]="file.meta_data.name" *ngIf="file.is_image" (load)="load()" #image>
+    <img [src]="file.file" [alt]="file.meta_data.name" *ngIf="file.is_image" (load)="onLoad()" #image>
   </div>
 </div>

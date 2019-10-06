@@ -84,6 +84,25 @@ export class FileModalComponent {
               private formBuilder: FormBuilder) {
   }
 
+  /**
+   * Toggle image full mode
+   */
+  toggleFull(): void {
+    if (this.file.is_image) {
+      this.full = !this.full;
+      this.showEdit = false;
+    }
+  }
+
+  /**
+   * On image load
+   */
+  onLoad() {
+    this.dimensions = {
+      width: (this.image.nativeElement as HTMLImageElement).width,
+      height: (this.image.nativeElement as HTMLImageElement).height,
+    };
+  }
 
   /**
    * Delete the file
@@ -97,16 +116,6 @@ export class FileModalComponent {
     this.mediaService.delete(this.file.id).subscribe((): void => {
       this.toast.info(this.translate.instant('TOAST_DELETE'), this.file.meta_data.name);
     });
-  }
-
-  /**
-   * On image load
-   */
-  load() {
-    this.dimensions = {
-      width: (this.image.nativeElement as HTMLImageElement).width,
-      height: (this.image.nativeElement as HTMLImageElement).height,
-    };
   }
 
   /**
