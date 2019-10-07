@@ -125,7 +125,6 @@
   "UNTITLED": "Untitled",
   "ICON_CLASS": "Icon class",
   "NAVIGATIONS": "Navigations",
-  "NOTHING_HERE": "There's nothing here, try adding some.",
   "COLOR": "Color",
   "ADD_TO_NAVIGATION": "Add to navigation",
   "TEMPLATE_PRIMARY_COLOR": "Template Primary Color",
@@ -204,7 +203,18 @@
   "THANK_YOU": "Thank you",
   "NEXT": "Next",
   "PREV": "Prev",
-  "COLLABORATING": "Collaborating",
   "TITLE": "Title",
-  "CONTENT": "Content"
+  "CONTENT": "Content",
+  "START_NEW_BLOG": "Start New Blog",
+  "SIZE": "Size",
+  "TYPE": "Type",
+  "SHARE": "Share",
+  "UPDATED": "Updated",
+  "DIMENSIONS": "Dimensions",
+  "THUMBNAILS": "Thumbnails",
+  "ORIGINAL_SIZE":  "Original Size",
+  "THUMBNAIL_256": "Thumbnail (256px)",
+  "THUMBNAIL_128":  "Thumbnail (128px)",
+  "THUMBNAIL_48": "Thumbnail (48px)",
+  "COLLABORATING": "Collaborating"
 }

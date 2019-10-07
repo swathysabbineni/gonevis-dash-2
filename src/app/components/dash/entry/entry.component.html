@@ -1,85 +1,95 @@
 <div class="container">
 
   <!-- Entries -->
-  <table class="table rounded bg-white">
-    <tbody>
-    <tr *ngFor="let entry of entries">
-      <!-- Select -->
-      <th class="checkbox">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" [id]="entry.id">
-          <label class="custom-control-label" [for]="entry.id"></label>
-        </div>
-      </th>
-      <!-- Cover -->
-      <th class="px-0 text-center" [class.p-0]="!entry.media.cover_image">
-        <img class="rounded" [height]="48" *ngIf="entry.media.cover_image"
-             [src]="entry.media.cover_image.thumbnail_48x48">
-      </th>
-      <th>
-        <!-- Title -->
-        <a class="font-weight-bold">{{ entry.title }}</a>
-        <!-- Description -->
-        <div class="small text-secondary">
-          <span translate>PUBLISHED_ON</span> {{ entry.published | date }}
-        </div>
-      </th>
-      <!-- Stats -->
-      <th class="text-secondary text-right">
-        <!-- Likes -->
-        <span *ngIf="entry.vote_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="['far', 'thumbs-up']"></fa-icon>
-          {{ entry.vote_count | number }}
-        </span>
-        <!-- Comments -->
-        <span *ngIf="entry.comment_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
-          {{ entry.comment_count | number }}
-        </span>
-        <!-- Votes -->
-        <span *ngIf="entry.view_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
-          {{ entry.view_count | number }}
-        </span>
-      </th>
-      <!-- Options -->
-      <th class="text-right">
-        <!-- Dropdown -->
-        <div class="dropdown" dropdown>
-          <button class="btn btn-light btn-sm" dropdownToggle>
-            <fa-icon icon="ellipsis-v"></fa-icon>
-          </button>
-          <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
-            <!-- Header -->
-            <h6 class="dropdown-header" translate>Commenting enabled</h6>
-            <!-- View -->
-            <a class="dropdown-item text-secondary" [href]="entry.absolute_uri" target="_blank" translate>
-              VIEW_ON_BLOG
-            </a>
-            <!-- Add to navigation -->
-            <button class="dropdown-item text-secondary" (click)="addToNavigation(entry.title, entry.slug)" translate>
-              ADD_TO_NAVIGATION
-            </button>
-            <!-- Separated -->
-            <div class="dropdown-divider"></div>
-            <!-- Delete -->
-            <button class="dropdown-item text-danger" (click)="delete(entry)" [disabled]="entry.loading" translate>
-              DELETE
-            </button>
-          </div>
-        </div>
-      </th>
-    </tr>
-    </tbody>
-  </table>
+  <div class="card dash">
 
-  <!-- No data -->
-  <div class="text-center py-3" *ngIf="entries && !entries.length">
-    <h5 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h5>
+    <!-- Header -->
+    <div class="card-header">
+      <span *ngIf="!isPages" translate>POSTS</span>
+      <span *ngIf="isPages" translate>PAGES</span>
+    </div>
+
+    <!-- Content -->
+    <table class="table rounded bg-white m-0">
+      <tbody>
+      <tr *ngFor="let entry of entries">
+        <!-- Select -->
+        <th class="checkbox">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" [id]="entry.id">
+            <label class="custom-control-label" [for]="entry.id"></label>
+          </div>
+        </th>
+        <!-- Cover -->
+        <th class="image" [class.p-0]="!entry.media.cover_image">
+          <img class="rounded" [height]="48" *ngIf="entry.media.cover_image"
+               [src]="entry.media.cover_image.thumbnail_48x48">
+        </th>
+        <th>
+          <!-- Title -->
+          <a class="font-weight-bold">{{ entry.title }}</a>
+          <!-- Description -->
+          <div class="small text-secondary">
+            <span translate>PUBLISHED_ON</span> {{ entry.published | date }}
+          </div>
+        </th>
+        <!-- Stats -->
+        <th class="text-secondary text-right">
+          <!-- Likes -->
+          <span *ngIf="entry.vote_count" class="mr-3">
+          <fa-icon [fixedWidth]="true" [icon]="['far', 'thumbs-up']"></fa-icon>
+            {{ entry.vote_count | number }}
+        </span>
+          <!-- Comments -->
+          <span *ngIf="entry.comment_count" class="mr-3">
+          <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
+            {{ entry.comment_count | number }}
+        </span>
+          <!-- Votes -->
+          <span *ngIf="entry.view_count" class="mr-3">
+          <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
+            {{ entry.view_count | number }}
+        </span>
+        </th>
+        <!-- Options -->
+        <th class="text-right">
+          <!-- Dropdown -->
+          <div class="dropdown" dropdown>
+            <button class="btn btn-light btn-sm" dropdownToggle>
+              <fa-icon icon="ellipsis-v"></fa-icon>
+            </button>
+            <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+              <!-- Header -->
+              <h6 class="dropdown-header" translate>Commenting enabled</h6>
+              <!-- View -->
+              <a class="dropdown-item text-secondary" [href]="entry.absolute_uri" target="_blank" translate>
+                VIEW_ON_BLOG
+              </a>
+              <!-- Add to navigation -->
+              <button class="dropdown-item text-secondary" (click)="addToNavigation(entry.title, entry.slug)" translate>
+                ADD_TO_NAVIGATION
+              </button>
+              <!-- Separated -->
+              <div class="dropdown-divider"></div>
+              <!-- Delete -->
+              <button class="dropdown-item text-danger" (click)="delete(entry)" [disabled]="entry.loading" translate>
+                DELETE
+              </button>
+            </div>
+          </div>
+        </th>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- No data -->
+    <div class="card-body" *ngIf="entries && !entries.length">
+      <div class="card-text" translate>NOTHING_HERE_YET</div>
+    </div>
   </div>
 
   <!-- Pagination -->
-  <div class="pagination-wrapper" *ngIf="pagination && entries.length">
+  <div class="pagination-wrapper mt-3" *ngIf="pagination && entries.length">
     <pagination [itemsPerPage]="pagination.itemsPerPage"
                 [totalItems]="pagination.totalItems"
                 [disabled]="loading"

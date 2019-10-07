@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EntryComponent } from '@app/components/feed/entry/entry.component';
 import { CommentFormModule } from '@app/shared/comment-form/comment-form.module';
 import { EntryListModule } from '@app/shared/entry-list/entry-list.module';
-import { EntryShareModule } from '@app/shared/entry-share/entry-share.module';
+import { ShareModule } from '@app/shared/share/share.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons/faBookmark';
@@ -29,7 +29,7 @@ import { EntryRoutingModule } from './entry-routing.module';
     FormsModule,
     ReactiveFormsModule,
     EntryRoutingModule,
-    EntryShareModule,
+    ShareModule,
     FontAwesomeModule,
     TooltipModule.forRoot(),
     PopoverModule.forRoot(),

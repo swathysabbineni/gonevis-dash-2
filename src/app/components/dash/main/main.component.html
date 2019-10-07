@@ -36,9 +36,9 @@
               </small>
             </div>
           </a>
-          <!-- No posts -->
-          <div class="text-center py-3" *ngIf="entries && !entries.length">
-            <h6 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h6>
+          <!-- No data -->
+          <div class="card-body" *ngIf="entries && !entries.length">
+            <div class="card-text" translate>NOTHING_HERE_YET</div>
           </div>
         </div>
       </div>
@@ -63,9 +63,9 @@
             <!-- Date -->
             <small class="float-right">{{ comment.created | date }}</small>
           </a>
-          <!-- No comments -->
-          <div class="text-center py-3" *ngIf="comments && !comments.length">
-            <h6 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h6>
+          <!-- No data -->
+          <div class="card-body" *ngIf="comments && !comments.length">
+            <div class="card-text" translate>NOTHING_HERE_YET</div>
           </div>
         </div>
       </div>

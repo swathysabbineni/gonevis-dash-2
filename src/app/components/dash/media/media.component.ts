@@ -14,9 +14,6 @@ export class MediaComponent {
    */
   @ViewChild(FileListComponent, { static: false }) fileListComponent: FileListComponent;
 
-  constructor() {
-  }
-
   /**
    * On upload finish
    *

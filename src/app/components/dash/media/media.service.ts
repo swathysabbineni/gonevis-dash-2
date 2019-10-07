@@ -123,4 +123,18 @@ export class MediaService {
       file_key: fileKey,
     });
   }
+
+  /**
+   * Update media file (name and description)
+   *
+   * @param id File ID
+   * @param payload New file name and description data
+   */
+  update(id: string, payload: FileMedia['meta_data']): Observable<FileMedia> {
+    return this.http.put<FileMedia>(`${this.api.base.v1}dolphin/file/${id}/`, {
+      meta_data: payload,
+    }, {
+      params: { site: BlogService.currentBlog.id },
+    });
+  }
 }

@@ -1,75 +1,85 @@
 <div class="container">
-  <table class="table rounded bg-white">
-    <tbody>
-    <tr *ngFor="let comment of comments">
-      <!-- Image -->
-      <th class="pr-0 text-center" [class.p-0]="!comment.user.media">
-        <img class="rounded-circle" *ngIf="comment.user.media" [src]="comment.user.media.thumbnail_48x48">
-      </th>
-      <!-- User, post, date and comment -->
-      <th>
-        <!-- User -->
-        <a class="text-primary font-weight-bold" [routerLink]="['/feed/user', comment.user.username]">
-          {{ comment.user.name }}
-        </a>
-        <span class="text-lowercase" translate>COMMENTED_ON</span>
-        <!-- Post -->
-        <a class="text-primary font-weight-bold"
-           [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]">
-          {{ comment.commented_object_minimal_data.title }}
-        </a>
-        <!-- Date -->
-        <span class="text-secondary"> &bull; {{ comment.created | date }}</span>
-        <!-- Comment -->
-        <div class="mt-2 white-space-pre-line">{{ comment.comment }}</div>
-      </th>
-      <!-- Buttons -->
-      <th class="text-right">
-        <!-- Dropdown -->
-        <div class="dropdown" dropdown>
-          <button class="btn btn-light btn-sm" type="button" dropdownToggle>
-            <fa-icon icon="ellipsis-v"></fa-icon>
-          </button>
-          <!-- Options -->
-          <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
-            <!-- View -->
-            <a class="btn btn-light dropdown-item"
-               [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]"
-               [queryParams]="{ comment: comment.id }" translate>
-              VIEW
-            </a>
-            <!-- Header -->
-            <h6 class="dropdown-header" translate>CHANGE_STATUS</h6>
-            <!-- Active -->
-            <button class="dropdown-item" (click)="update(comment, status.Active)"
-                    [class.active]="comment.status === status.Active" translate>
-              ACTIVE
+
+  <!-- Comments -->
+  <div class="card dash">
+
+    <!-- Header -->
+    <div class="card-header" translate>COMMENTS</div>
+
+    <!-- Content -->
+    <table class="table rounded bg-white m-0">
+      <tbody>
+      <tr *ngFor="let comment of comments">
+        <!-- Image -->
+        <th class="image" [class.p-0]="!comment.user.media">
+          <img class="rounded-circle" *ngIf="comment.user.media" [src]="comment.user.media.thumbnail_48x48">
+        </th>
+        <!-- User, post, date and comment -->
+        <th>
+          <!-- User -->
+          <a class="text-primary font-weight-bold" [routerLink]="['/feed/user', comment.user.username]">
+            {{ comment.user.name }}
+          </a>
+          <span class="text-lowercase" translate>COMMENTED_ON</span>
+          <!-- Post -->
+          <a class="text-primary font-weight-bold"
+             [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]">
+            {{ comment.commented_object_minimal_data.title }}
+          </a>
+          <!-- Date -->
+          <span class="text-secondary"> &bull; {{ comment.created | date }}</span>
+          <!-- Comment -->
+          <div class="mt-2 white-space-pre-line">{{ comment.comment }}</div>
+        </th>
+        <!-- Buttons -->
+        <th class="text-right">
+          <!-- Dropdown -->
+          <div class="dropdown" dropdown>
+            <button class="btn btn-light btn-sm" type="button" dropdownToggle>
+              <fa-icon icon="ellipsis-v"></fa-icon>
             </button>
-            <!-- Pending -->
-            <button class="dropdown-item" (click)="update(comment, status.Pending)"
-                    [class.active]="comment.status === status.Pending" translate>
-              PENDING
-            </button>
-            <!-- Hidden -->
-            <button class="dropdown-item" (click)="update(comment, status.Hidden)"
-                    [class.active]="comment.status === status.Hidden" translate>
-              HIDDEN
-            </button>
-            <!-- Separated -->
-            <div class="dropdown-divider"></div>
-            <!-- Delete -->
-            <button class="dropdown-item text-danger" (click)="delete(comment)"
-                    [disabled]="comment.loading" translate>
-              DELETE
-            </button>
+            <!-- Options -->
+            <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+              <!-- View -->
+              <a class="btn btn-light dropdown-item"
+                 [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]"
+                 [queryParams]="{ comment: comment.id }" translate>
+                VIEW
+              </a>
+              <!-- Header -->
+              <h6 class="dropdown-header" translate>CHANGE_STATUS</h6>
+              <!-- Active -->
+              <button class="dropdown-item" (click)="update(comment, status.Active)"
+                      [class.active]="comment.status === status.Active" translate>
+                ACTIVE
+              </button>
+              <!-- Pending -->
+              <button class="dropdown-item" (click)="update(comment, status.Pending)"
+                      [class.active]="comment.status === status.Pending" translate>
+                PENDING
+              </button>
+              <!-- Hidden -->
+              <button class="dropdown-item" (click)="update(comment, status.Hidden)"
+                      [class.active]="comment.status === status.Hidden" translate>
+                HIDDEN
+              </button>
+              <!-- Separated -->
+              <div class="dropdown-divider"></div>
+              <!-- Delete -->
+              <button class="dropdown-item text-danger" (click)="delete(comment)"
+                      [disabled]="comment.loading" translate>
+                DELETE
+              </button>
+            </div>
           </div>
-        </div>
-      </th>
-    </tr>
-    <!-- No comments -->
-    <div class="text-center py-3" *ngIf="comments && !comments.length">
-      <h5 class="text-secondary font-italic" translate>NOTHING_HERE_YET</h5>
+        </th>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- No data -->
+    <div class="card-body" *ngIf="comments && !comments.length">
+      <div class="card-text" translate>NOTHING_HERE_YET</div>
     </div>
-    </tbody>
-  </table>
+  </div>
 </div>

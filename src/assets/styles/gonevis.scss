@@ -333,8 +333,11 @@ a,
 
   &.dash {
     border: none !important;
-    cursor: default;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+
+    &:not(.card-link) {
+      cursor: default;
+    }
 
     .card-header {
       background-color: white;
@@ -511,4 +514,17 @@ a,
   height: auto !important;
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+.modal {
+  .full {
+    max-width: initial;
+    margin: 0;
+    height: 100%;
+
+    .modal-content {
+      border: none;
+      background: rgba($dark, 0.75);
+    }
+  }
 }

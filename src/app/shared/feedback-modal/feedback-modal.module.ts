@@ -17,7 +17,7 @@ import { FeedbackModalComponent } from './feedback-modal.component';
     CommonModule,
     ReactiveFormsModule,
     FontAwesomeModule,
-    TranslateModule,
+    TranslateModule.forChild(),
   ],
   providers: [
     FeedbackService,

@@ -20,7 +20,7 @@ import { NavsComponent } from './navs.component';
     CommonModule,
     FormsModule,
     NavsRoutingModule,
-    TranslateModule,
+    TranslateModule.forChild(),
     FontAwesomeModule,
     FormsModule,
     DragDropModule,

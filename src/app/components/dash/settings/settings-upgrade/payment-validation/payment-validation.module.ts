@@ -14,7 +14,7 @@ import { PaymentValidationComponent } from './payment-validation.component';
   imports: [
     CommonModule,
     FontAwesomeModule,
-    TranslateModule,
+    TranslateModule.forChild(),
   ],
   entryComponents: [
     PaymentValidationComponent,

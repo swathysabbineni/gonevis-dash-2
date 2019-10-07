@@ -39,7 +39,7 @@ export class UploadComponent {
    * @param file Uploaded file
    */
   private onFileUpload(file: FileMedia) {
-    this.toast.success(this.translate.instant('TOAST_UPLOAD'), file.file_name);
+    this.toast.success(this.translate.instant('TOAST_UPLOAD'), file.meta_data.name);
     this.upload.emit(file);
   }
 
