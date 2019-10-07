@@ -24,6 +24,8 @@ export class CommentsService {
 
   /**
    * Get blog tags
+   *
+   * @param page API page
    */
   getComments(page: number = 1): Observable<ApiResponse<Comment>> {
     return this.http.get<ApiResponse<Comment>>(`${this.apiService.base.v1}sushial/comment`, {
