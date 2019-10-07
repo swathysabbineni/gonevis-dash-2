@@ -4,6 +4,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoResizeModule } from '@app/shared/auto-resize/auto-resize.module';
 import { FileListModule } from '@app/shared/file-list/file-list.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
 import { TranslateModule } from '@ngx-translate/core';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
@@ -31,7 +34,11 @@ import { WriteComponent } from './write.component';
     ModalModule.forRoot(),
     TextFieldModule,
     AutoResizeModule,
+    FontAwesomeModule,
   ],
 })
 export class WriteModule {
+  constructor() {
+    library.add(faCog);
+  }
 }
