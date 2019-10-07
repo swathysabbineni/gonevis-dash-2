@@ -28,49 +28,60 @@
 <!--    </p>-->
 <!--  </div>-->
 <!--</ng-template>-->
-<form class="d-flex flex-column h-100" [formGroup]="form">
+<form class="d-flex flex-column h-100 bg-white" [formGroup]="form">
   <!-- Title -->
   <!--    <input type="text" formControlName="title" placeholder="Title" [required]="true">-->
   <!-- Editor -->
-  <div class="toolbar" [class.shadow-sm]="scrolled">
-    <div class="ql-formats">
-      <select class="ql-header ql-picker" tooltip="Direction" placement="bottom"
-              [title]="'Heading'"></select>
+  <div class="d-flex align-items-center header" [class.shadow-sm]="scrolled">
+    <div class="toolbar">
+      <div class="ql-formats">
+        <select class="ql-header ql-picker" tooltip="Direction" placement="bottom"
+                [title]="'Heading'"></select>
+      </div>
+      <div class="ql-formats">
+        <button class="ql-bold" tooltip="Bold (Ctrl + B)" placement="bottom"></button>
+        <button class="ql-italic" tooltip="Italic (Ctrl + I)" placement="bottom"></button>
+        <button class="ql-underline" tooltip="Underline (Ctrl + U)" placement="bottom"></button>
+        <button class="ql-strike" tooltip="Strikethrough" placement="bottom"></button>
+      </div>
+      <div class="divider"></div>
+      <div class="ql-formats">
+        <button class="ql-link" tooltip="Link (Ctrl + K)" placement="bottom"></button>
+        <button class="ql-blockquote" tooltip="Quote" placement="bottom"></button>
+        <button class="ql-code-block" tooltip="Code" placement="bottom"></button>
+        <button class="ql-list" tooltip="List bullet" placement="bottom" value="bullet"></button>
+        <button class="ql-divider" tooltip="Divider" placement="bottom"></button>
+      </div>
+      <div class="divider"></div>
+      <div class="ql-formats">
+        <button class="ql-image" tooltip="Insert image" placement="bottom"></button>
+        <button class="ql-video" tooltip="Insert video" placement="bottom"></button>
+      </div>
+      <div class="divider"></div>
+      <div class="ql-formats">
+        <button class="ql-direction" tooltip="Direction" placement="bottom" value="rtl"></button>
+        <select class="ql-align">
+          <option selected></option>
+          <option value="center"></option>
+          <option value="right"></option>
+          <option value="justify"></option>
+        </select>
+      </div>
+      <div class="ql-formats">
+        <button class="ql-clean" tooltip="Clear format" placement="bottom"></button>
+      </div>
     </div>
-    <div class="ql-formats">
-      <button class="ql-bold" tooltip="Bold (Ctrl + B)" placement="bottom"></button>
-      <button class="ql-italic" tooltip="Italic (Ctrl + I)" placement="bottom"></button>
-      <button class="ql-underline" tooltip="Underline (Ctrl + U)" placement="bottom"></button>
-      <button class="ql-strike" tooltip="Strikethrough" placement="bottom"></button>
-    </div>
-    <div class="divider"></div>
-    <div class="ql-formats">
-      <button class="ql-link" tooltip="Link (Ctrl + K)" placement="bottom"></button>
-      <button class="ql-blockquote" tooltip="Quote" placement="bottom"></button>
-      <button class="ql-code-block" tooltip="Code" placement="bottom"></button>
-      <button class="ql-list" tooltip="List bullet" placement="bottom" value="bullet"></button>
-      <button class="ql-divider" tooltip="Divider" placement="bottom"></button>
-    </div>
-    <div class="divider"></div>
-    <div class="ql-formats">
-      <button class="ql-image" tooltip="Insert image" placement="bottom"></button>
-      <button class="ql-video" tooltip="Insert video" placement="bottom"></button>
-    </div>
-    <div class="divider"></div>
-    <div class="ql-formats">
-      <button class="ql-direction" tooltip="Direction" placement="bottom" value="rtl"></button>
-      <select class="ql-align">
-        <option selected></option>
-        <option value="center"></option>
-        <option value="right"></option>
-        <option value="justify"></option>
-      </select>
-    </div>
-    <div class="ql-formats">
-      <button class="ql-clean" tooltip="Clear format" placement="bottom"></button>
+    <div class="d-flex ml-auto">
+      <button class="btn btn-primary mr-2" (click)="save()">
+        <span *ngIf="isEditing">Update</span>
+        <span *ngIf="!isEditing">Submit</span>
+      </button>
+      <button class="btn btn-light mr-2">
+        <fa-icon icon="cog" [fixedWidth]="true"></fa-icon>
+      </button>
     </div>
   </div>
-  <div class="editor h-100 overflow-auto bg-white"
+  <div class="editor h-100 overflow-auto"
        (scroll)="scrolled = $event.target['scrollTop'] > 0">
     <div class="container d-flex flex-column h-100">
       <!-- Title -->
@@ -81,6 +92,8 @@
                 ng-blur="updatingTitle=false"
                 placeholder="{{ 'TITLE' | translate }}"
                 autocomplete="off"
+                (keydown.enter)="$event.preventDefault(); editor.focus()"
+                (keydown.tab)="$event.preventDefault(); editor.focus()"
                 [required]="true"></textarea>
       <quill-editor [formControl]="form.controls['content']"
                     [modules]="options"

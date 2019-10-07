@@ -6,25 +6,28 @@
   overflow-y: auto;
 }
 
-.ql-toolbar.ql-snow {
-  background: #fff;
-  border: 0;
-  height: 50px;
-  padding: 0;
-  display: flex;
-  z-index: 1;
+.header {
   transition: $transition-base;
 
-  button {
-    width: 40px;
+  .ql-toolbar.ql-snow {
+    background: #fff;
+    border: 0;
+    height: 50px;
+    padding: 0;
     display: flex;
-    justify-content: center;
-    height: 100%;
-    align-items: center;
-  }
+    z-index: 1;
 
-  .ql-picker {
-    height: 100%;
+    button {
+      width: 40px;
+      display: flex;
+      justify-content: center;
+      height: 100%;
+      align-items: center;
+    }
+
+    .ql-picker {
+      height: 100%;
+    }
   }
 }
 
