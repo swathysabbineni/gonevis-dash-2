@@ -4,12 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TagsService } from '@app/components/dash/tags/tags.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { Pagination } from '@app/interfaces/pagination';
 import { Tag } from '@app/interfaces/v1/tag';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TagModalComponent } from '@app/shared/tags-modal/tag-modal.component';
 import { TranslateService } from '@ngx-translate/core';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService, PageChangedEvent } from 'ngx-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -23,6 +24,11 @@ export class TagsComponent implements OnInit {
    * Blog tags
    */
   tags: Tag[];
+
+  /**
+   * API pagination data
+   */
+  pagination: Pagination;
 
   /**
    * Tag form
@@ -74,10 +80,18 @@ export class TagsComponent implements OnInit {
 
   /**
    * Get tags
+   *
+   * @param page API number
    */
-  getTags(): void {
-    this.tag.getTags().subscribe((response: ApiResponse<Tag>): void => {
+  getTags(page: number = 1): void {
+    this.loading = true;
+    this.tag.getTags(page).subscribe((response: ApiResponse<Tag>): void => {
+      this.pagination = {
+        itemsPerPage: TagsService.PAGE_SIZE,
+        totalItems: response.count,
+      };
       this.tags = response.results;
+      this.loading = false;
     });
   }
 
@@ -138,5 +152,12 @@ export class TagsComponent implements OnInit {
       class: 'modal-sm',
       initialState: { tag },
     });
+  }
+
+  /**
+   * Pagination event
+   */
+  pageChanged(event: PageChangedEvent) {
+    this.getTags(event.page);
   }
 }
