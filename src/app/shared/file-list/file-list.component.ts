@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File } from '@app/interfaces/file';
+import { Pagination } from '@app/interfaces/pagination';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UtilService } from '@app/services/util/util.service';
@@ -14,6 +15,7 @@ import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
 import { faFilePowerpoint } from '@fortawesome/free-solid-svg-icons/faFilePowerpoint';
 import { faFileWord } from '@fortawesome/free-solid-svg-icons/faFileWord';
 import { TranslateService } from '@ngx-translate/core';
+import { PageChangedEvent } from 'ngx-bootstrap';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -45,6 +47,16 @@ export class FileListComponent implements OnInit {
    */
   files: File[];
 
+  /**
+   * API pagination data
+   */
+  pagination: Pagination;
+
+  /**
+   * API loading indicator
+   */
+  loading: boolean;
+
   constructor(public utils: UtilService,
               private mediaService: MediaService,
               private translate: TranslateService,
@@ -62,14 +74,22 @@ export class FileListComponent implements OnInit {
 
   /**
    * Load media files
+   *
+   * @param page Page number
    * @todo Add filter for getting only images for file selection
    */
-  getFiles(): void {
-    this.mediaService.getMedia().subscribe((response: ApiResponse<File>): void => {
+  getFiles(page: number = 1): void {
+    this.loading = true;
+    this.mediaService.getMedia(page).subscribe((response: ApiResponse<File>): void => {
+      this.pagination = {
+        itemsPerPage: MediaService.PAGE_SIZE,
+        totalItems: response.count,
+      };
       /**
        * @todo Remove me once the filter is added by the API
        */
       this.files = response.results.filter(file => file.is_image);
+      this.loading = false;
     });
   }
 
@@ -92,6 +112,13 @@ export class FileListComponent implements OnInit {
         }
       });
     }
+  }
+
+  /**
+   * Pagination event
+   */
+  pageChanged(event: PageChangedEvent) {
+    this.getFiles(event.page);
   }
 
   /**
