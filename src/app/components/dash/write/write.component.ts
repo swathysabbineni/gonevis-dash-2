@@ -257,6 +257,7 @@ export class WriteComponent implements OnInit, OnDestroy {
       this.activatedRoute.params.subscribe((params: Params): void => {
         if (params.id === 'new') {
           this.isEditing = false;
+          this.initAutoSave();
         }
         if (params.id && params.id !== 'new') {
           this.getEntry(params.id.toString());
@@ -558,7 +559,7 @@ export class WriteComponent implements OnInit, OnDestroy {
     payload.content = this.editor.root.innerHTML;
     payload.id = this.id;
     payload.site = BlogService.currentBlog.id;
-    payload.tag_ids = (this.tagsControl.value as TagMin[]).map((tag: TagMin): string => tag.slug);
+    payload.tag_ids = (this.tagsControl.value as TagMin[]).map((tag: TagMin): string => tag.id);
     if (status !== undefined) {
       payload.status = status;
     }
@@ -598,6 +599,7 @@ export class WriteComponent implements OnInit, OnDestroy {
     }
     const payload: Params = this.form.value;
     payload.site = BlogService.currentBlog.id;
+    payload.tag_ids = (this.tagsControl.value as TagMin[]).map((tag: TagMin): string => tag.id);
     if (status !== undefined) {
       payload.status = status;
     }
