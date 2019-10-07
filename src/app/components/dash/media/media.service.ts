@@ -17,7 +17,7 @@ export class MediaService {
   /**
    * API page size
    */
-  static readonly PAGE_SIZE = 20;
+  static readonly PAGE_SIZE = 24;
 
   /**
    * Media upload accept list
