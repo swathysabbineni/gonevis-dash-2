@@ -5,12 +5,18 @@ import { Params } from '@app/interfaces/params';
 import { Comment } from '@app/interfaces/v1/comment';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UtilService } from '@app/services/util/util.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommentsService {
+
+  /**
+   * API page size
+   */
+  static readonly PAGE_SIZE = 20;
 
   constructor(private http: HttpClient,
               private apiService: ApiService) {
@@ -19,10 +25,12 @@ export class CommentsService {
   /**
    * Get blog tags
    */
-  getComments(): Observable<ApiResponse<Comment>> {
+  getComments(page: number = 1): Observable<ApiResponse<Comment>> {
     return this.http.get<ApiResponse<Comment>>(`${this.apiService.base.v1}sushial/comment`, {
       params: {
         site: BlogService.currentBlog.id,
+        limit: CommentsService.PAGE_SIZE.toString(),
+        offset: UtilService.getPageOffset(CommentsService.PAGE_SIZE, page),
       },
     });
   }
