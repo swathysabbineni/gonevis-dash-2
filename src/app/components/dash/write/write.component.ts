@@ -31,6 +31,8 @@ import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { environment } from '@environments/environment';
+import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
+import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
 import { TranslateService } from '@ngx-translate/core';
 import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
@@ -93,6 +95,18 @@ export class WriteComponent implements OnInit, OnDestroy {
    * Entry status
    */
   readonly entryStatus = EntryStatus;
+
+  readonly entryStatuses = [{
+    label: this.translateService.instant('DRAFT'),
+    id: EntryStatus.Draft,
+    icon: faEdit,
+    title: this.translateService.instant('SET_DRAFT'),
+  }, {
+    label: this.translateService.instant('PUBLISHED'),
+    id: EntryStatus.Published,
+    icon: faGlobe,
+    title: this.translateService.instant('SET_PUBLISHED'),
+  }];
 
   @ViewChild('fileListModalTemplate', { static: false }) fileListModalTemplate: TemplateRef<any>;
 
@@ -233,6 +247,8 @@ export class WriteComponent implements OnInit, OnDestroy {
       comment_enabled: [false],
       featured: [false],
       is_page: [false],
+      start_publication: [null],
+      cover_image: [null],
     });
     BlogService.blog.subscribe((blog: BlogMin): void => {
       if (!blog) {
@@ -287,6 +303,8 @@ export class WriteComponent implements OnInit, OnDestroy {
       comment_enabled: data.comment_enabled,
       featured: data.featured,
       is_page: data.is_page,
+      start_publication: data.start_publication,
+      cover_image: data.media.cover_image,
     });
     this.oldForm = this.form.value;
   }
