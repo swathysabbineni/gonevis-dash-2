@@ -60,6 +60,17 @@
           <div class="card-text" translate>NOTHING_HERE_YET</div>
         </div>
       </div>
+
+      <!-- Pagination -->
+      <div class="pagination-wrapper mt-3" *ngIf="pagination && tags.length">
+        <pagination [itemsPerPage]="pagination.itemsPerPage"
+                    [totalItems]="pagination.totalItems"
+                    [disabled]="loading"
+                    (pageChanged)="pageChanged($event)"
+                    [nextText]="'NEXT' | translate"
+                    [previousText]="'PREV' | translate">
+        </pagination>
+      </div>
     </div>
 
     <!-- Create tag -->

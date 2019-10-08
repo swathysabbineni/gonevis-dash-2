@@ -5,6 +5,7 @@ import { File as FileMedia } from '@app/interfaces/file';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UtilService } from '@app/services/util/util.service';
 import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
 
@@ -12,6 +13,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class MediaService {
+
+  /**
+   * API page size
+   */
+  static readonly PAGE_SIZE = 24;
 
   /**
    * Media upload accept list
@@ -64,10 +70,16 @@ export class MediaService {
 
   /**
    * Get blog media
+   *
+   * @param page API page
    */
-  getMedia(): Observable<ApiResponse<FileMedia>> {
+  getMedia(page: number = 1): Observable<ApiResponse<FileMedia>> {
     return this.http.get<ApiResponse<FileMedia>>(`${this.api.base.v1}dolphin/file/`, {
-      params: { site: BlogService.currentBlog.id },
+      params: {
+        site: BlogService.currentBlog.id,
+        limit: MediaService.PAGE_SIZE.toString(),
+        offset: UtilService.getPageOffset(MediaService.PAGE_SIZE, page),
+      },
     });
   }
 

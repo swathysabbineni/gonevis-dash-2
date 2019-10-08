@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommentStatus } from '@app/enums/comment-status';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { Pagination } from '@app/interfaces/pagination';
 import { Comment } from '@app/interfaces/v1/comment';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
+import { PageChangedEvent } from 'ngx-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { CommentsService } from './comments.service';
 
@@ -23,6 +25,11 @@ export class CommentsComponent implements OnInit {
   comments: Comment[];
 
   /**
+   * API pagination data
+   */
+  pagination: Pagination;
+
+  /**
    * API loading indicator
    */
   loading = false;
@@ -38,11 +45,25 @@ export class CommentsComponent implements OnInit {
         /**
          * Get comments
          */
-        this.commentsService.getComments().subscribe((response: ApiResponse<Comment>): void => {
-          this.comments = response.results;
-          this.loading = true;
-        });
+        this.getComments();
       }
+    });
+  }
+
+  /**
+   * Get comments
+   *
+   * @param page Page number
+   */
+  getComments(page: number = 1) {
+    this.loading = true;
+    this.commentsService.getComments(page).subscribe((response: ApiResponse<Comment>): void => {
+      this.pagination = {
+        itemsPerPage: CommentsService.PAGE_SIZE,
+        totalItems: response.count,
+      };
+      this.comments = response.results;
+      this.loading = false;
     });
   }
 
@@ -78,5 +99,12 @@ export class CommentsComponent implements OnInit {
       this.toast.info(this.translate.instant('TOAST_DELETE'), this.translate.instant('COMMENT'));
       this.comments.splice(this.comments.indexOf(comment), 1);
     });
+  }
+
+  /**
+   * Pagination event
+   */
+  pageChanged(event: PageChangedEvent) {
+    this.getComments(event.page);
   }
 }
