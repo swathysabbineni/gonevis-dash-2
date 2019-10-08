@@ -81,14 +81,11 @@ export class FileListComponent implements OnInit {
   getFiles(page: number = 1): void {
     this.loading = true;
     this.mediaService.getMedia(page).subscribe((response: ApiResponse<File>): void => {
+      this.files = response.results;
       this.pagination = {
         itemsPerPage: MediaService.PAGE_SIZE,
         totalItems: response.count,
       };
-      /**
-       * @todo Remove me once the filter is added by the API
-       */
-      this.files = response.results.filter(file => file.is_image);
       this.loading = false;
     });
   }
