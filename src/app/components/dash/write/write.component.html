@@ -81,30 +81,144 @@
       </button>
     </div>
   </div>
-  <div class="editor h-100 overflow-auto"
-       (scroll)="scrolled = $event.target['scrollTop'] > 0">
-    <div class="container d-flex flex-column h-100">
-      <!-- Title -->
-      <textarea id="title"
-                appAutoResize
-                class="form-control" formControlName="title"
-                ng-focus="updatingTitle=true"
-                ng-blur="updatingTitle=false"
-                placeholder="{{ 'TITLE' | translate }}"
-                autocomplete="off"
-                (keydown.enter)="$event.preventDefault(); editor.focus()"
-                (keydown.tab)="$event.preventDefault(); editor.focus()"
-                [required]="true"></textarea>
-      <quill-editor [formControl]="form.controls['content']"
-                    [modules]="options"
-                    [placeholder]="'CONTENT' | translate"
-                    scrollingContainer=".editor"
-                    bounds=".editor"
-                    [styles]="{borderWidth: 0, fontSize: '1rem'}"
-                    style="flex: 1"
-                    classes="text-dark"
-                    (onEditorCreated)="onEditorInit($event)">
-      </quill-editor>
+  <div class="d-flex h-100">
+    <div class="editor h-100 overflow-auto"
+         (scroll)="scrolled = $event.target['scrollTop'] > 0">
+      <div class="container d-flex flex-column h-100">
+        <!-- Title -->
+        <textarea id="title"
+                  autosize
+                  class="form-control" formControlName="title"
+                  ng-focus="updatingTitle=true"
+                  ng-blur="updatingTitle=false"
+                  placeholder="{{ 'TITLE' | translate }}"
+                  autocomplete="off"
+                  (keydown.enter)="$event.preventDefault(); editor.focus()"
+                  (keydown.tab)="$event.preventDefault(); editor.focus()"
+                  [required]="true"></textarea>
+        <quill-editor [formControl]="form.controls['content']"
+                      [modules]="options"
+                      [placeholder]="'CONTENT' | translate"
+                      scrollingContainer=".editor"
+                      bounds=".editor"
+                      [styles]="{borderWidth: 0, fontSize: '1rem'}"
+                      style="flex: 1"
+                      classes="text-dark"
+                      (onEditorCreated)="onEditorInit($event)">
+        </quill-editor>
+      </div>
+    </div>
+    <div class="card sidebar">
+      <!-- Header -->
+      <div class="card-header d-flex">
+        <button class="btn btn-warning">Update</button>
+        <button class="btn btn-default ml-auto">
+          <fa-icon icon="times" [fixedWidth]="true"></fa-icon>
+        </button>
+      </div>
+      <!-- Content -->
+      <div class="card-body overflow-auto p-0">
+        <!-- Status -->
+        <div class="section">
+          <!-- Toggle -->
+          <a class="btn btn-link collapse-header"
+             (click)="statusContent.collapse = !statusContent.isCollapsed"
+             [attr.aria-expanded]="statusContent.expanded"
+             aria-controls="collapseBasic">
+            <!-- Title -->
+            <div class="mr-auto">
+              <fa-icon [icon]="['far', 'newspaper']" [fixedWidth]="true"></fa-icon>
+              Status
+            </div>
+            <!-- Caret -->
+            <fa-icon icon="caret-down" [fixedWidth]="true"></fa-icon>
+          </a>
+          <!-- Content -->
+          <div class="collapse-content" [collapse]="true" #statusContent=bs-collapse>
+            <!-- Status selection -->
+            <div class="form-group">
+              <label for="status"></label>
+              <select class="custom-select" formControlName="status" id="status">
+                <option *ngFor="let status of entryStatuses"
+                        [ngValue]="status.id"
+                        [title]="status.title">
+                  {{ status.label }}
+                </option>
+              </select>
+            </div>
+            <!-- Start publication -->
+            <div class="form-group">
+              <label for="start_publication" translate>START_PUBLICATION</label>
+              <input type="date"
+                     id="start_publication"
+                     class="form-control"
+                     formControlName="start_publication">
+            </div>
+          </div>
+        </div>
+        <!-- Tags -->
+        <!--        <div class="section">-->
+        <!--          &lt;!&ndash; Toggle &ndash;&gt;-->
+        <!--          <a class="btn btn-link collapse-header"-->
+        <!--             (click)="tagsContent.collapse = !tagsContent.isCollapsed"-->
+        <!--             [attr.aria-expanded]="tagsContent.expanded"-->
+        <!--             aria-controls="collapseBasic">-->
+        <!--            &lt;!&ndash; Title &ndash;&gt;-->
+        <!--            <div class="mr-auto">-->
+        <!--              <fa-icon icon="tags" [fixedWidth]="true"></fa-icon> Tags-->
+        <!--            </div>-->
+        <!--            &lt;!&ndash; Caret &ndash;&gt;-->
+        <!--            <fa-icon icon="caret-down" [fixedWidth]="true"></fa-icon>-->
+        <!--          </a>-->
+        <!--          &lt;!&ndash; Content &ndash;&gt;-->
+        <!--          <div class="collapse-content" [collapse]="true" #tagsContent=bs-collapse>-->
+        <!--            &lt;!&ndash; Tags &ndash;&gt;-->
+        <!--            <button type="button"-->
+        <!--                    [popover]="popTemplate" popoverTitle="Tags">-->
+        <!--              Tags-->
+        <!--            </button>-->
+        <!--            <ng-template #popTemplate>-->
+        <!--              <div class="tags-wrapper">-->
+        <!--                &lt;!&ndash; Search form &ndash;&gt;-->
+        <!--                <form [formGroup]="tagQueryForm">-->
+        <!--                  <input type="text" placeholder="Search tags" formControlName="query">-->
+        <!--                </form>-->
+        <!--                &lt;!&ndash; Tag list &ndash;&gt;-->
+        <!--                <p *ngFor="let tag of tags" class="d-block mb-1"-->
+        <!--                   [class.bg-primary]="isTagSelected(tag.slug)"-->
+        <!--                   (click)="isTagSelected(tag.slug) ? removeTag(tag.slug) : addTag(tag)">-->
+        <!--                  #{{ tag.slug }}-->
+        <!--                </p>-->
+        <!--              </div>-->
+        <!--            </ng-template>-->
+        <!--          </div>-->
+        <!--        </div>-->
+        <!-- Cover image -->
+        <div class="section">
+          <!-- Toggle -->
+          <a class="btn btn-link collapse-header"
+             (click)="coverImageContent.collapse = !coverImageContent.isCollapsed"
+             [attr.aria-expanded]="coverImageContent.expanded"
+             aria-controls="collapseBasic">
+            <!-- Title -->
+            <div class="mr-auto">
+              <fa-icon icon="image" [fixedWidth]="true"></fa-icon>
+              Post Cover
+            </div>
+            <!-- Caret -->
+            <fa-icon icon="caret-down" [fixedWidth]="true"></fa-icon>
+          </a>
+          <!-- Content -->
+          <div class="collapse-content" [collapse]="true" #coverImageContent=bs-collapse>
+            <div class="form-group">
+              <button class="btn btn-dark" *ngIf="!form.get('cover_image').value">
+                Set cover image
+              </button>
+              <img [src]="form.get('cover_image').value" class="mw-100" *ngIf="form.get('cover_image').value" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </form>
