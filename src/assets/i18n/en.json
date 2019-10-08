@@ -71,6 +71,9 @@
   "CONFORM_DELETE_COMMENT": "Are you sure you want to delete this comment?",
   "DOWNLOAD": "Download",
   "PUBLISHED": "Published",
+  "SET_PUBLISHED": "Set as Published",
+  "DRAFT": "Draft",
+  "SET_DRAFT": "Set as draft (hidden)",
   "CHANGE_STATUS": "Change status",
   "DELETE": "Delete",
   "VIEW": "View",
@@ -212,9 +215,10 @@
   "UPDATED": "Updated",
   "DIMENSIONS": "Dimensions",
   "THUMBNAILS": "Thumbnails",
-  "ORIGINAL_SIZE":  "Original Size",
+  "ORIGINAL_SIZE": "Original Size",
   "THUMBNAIL_256": "Thumbnail (256px)",
-  "THUMBNAIL_128":  "Thumbnail (128px)",
+  "THUMBNAIL_128": "Thumbnail (128px)",
   "THUMBNAIL_48": "Thumbnail (48px)",
-  "COLLABORATING": "Collaborating"
+  "COLLABORATING": "Collaborating",
+  "START_PUBLICATION": "Start publication"
 }
