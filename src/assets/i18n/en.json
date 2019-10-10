@@ -219,6 +219,7 @@
   "THUMBNAIL_256": "Thumbnail (256px)",
   "THUMBNAIL_128": "Thumbnail (128px)",
   "THUMBNAIL_48": "Thumbnail (48px)",
-  "COLLABORATING": "Collaborating",
-  "START_PUBLICATION": "Start publication"
+  "ROLE": "Role",
+  "START_PUBLICATION": "Start publication",
+  "COLLABORATING": "Collaborating"
 }
