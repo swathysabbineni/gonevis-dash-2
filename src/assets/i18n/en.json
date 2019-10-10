@@ -137,6 +137,7 @@
   "AUTHOR": "Author",
   "PREVIEW": "Preview",
   "META_DESCRIPTION": "Meta Description",
+  "META_DESCRIPTION_PLACEHOLDER": "Meta Description (200 chars)",
   "META_DESCRIPTION_ABOUT": "Meta Description is used by some search engines to improve your blog visibility in search result.",
   "PAGINATE": "Number Of Posts Per Page.",
   "ALLOW_COMMENTING": "Allow visitors to comment on my posts.",
@@ -220,5 +221,13 @@
   "THUMBNAIL_128": "Thumbnail (128px)",
   "THUMBNAIL_48": "Thumbnail (48px)",
   "COLLABORATING": "Collaborating",
-  "START_PUBLICATION": "Start publication"
+  "START_PUBLICATION": "Start publication",
+  "SET_COVER_IMAGE": "Set cover image",
+  "CHANGE_COVER_IMAGE": "Change cover image",
+  "EXCERPT": "Excerpt",
+  "SLUG": "Slug",
+  "SLUG_PLACEHOLDER": "Slug (URL)",
+  "COMMUNITY": "Community",
+  "ENABLE_COMMENTING": "Enable commenting",
+  "SET_AS_PAGE": "Set as page"
 }
