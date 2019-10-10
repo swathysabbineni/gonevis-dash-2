@@ -23,6 +23,8 @@ export class MediaService {
    * Media upload accept list
    */
   static readonly acceptList = [
+    'application/xml',
+    'text/xml',
     'image/jpeg',
     'image/pjpeg',
     'image/png',
@@ -39,11 +41,14 @@ export class MediaService {
     'application/vnd.ms-excel',
     'application/x-excel',
     'application/x-msexcel',
+    'application/xml',
+    'text/xml',
     'application/x-compressed',
     'application/x-zip-compressed',
     'application/zip',
     'multipart/x-zip',
     'audio/mpeg3',
+    'audio/mpeg',
     'audio/x-mpeg-3',
     'video/mpeg',
     'video/x-mpeg',
@@ -51,17 +56,6 @@ export class MediaService {
     'audio/ogg',
     'audio/wav',
     'audio/x-wav',
-    'video/mp4',
-    'video/x-m4v',
-    'video/quicktime',
-    'video/x-ms-wmv',
-    'video/avi',
-    'video/msvideo',
-    'video/x-msvideo',
-    'video/mpeg',
-    'video/ogg',
-    'video/3gp',
-    'video/3gpp2',
   ];
 
   constructor(private http: HttpClient,
