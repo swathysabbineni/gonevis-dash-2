@@ -6,9 +6,10 @@ import { FileListModule } from '@app/shared/file-list/file-list.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faNewspaper } from '@fortawesome/free-regular-svg-icons/faNewspaper';
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faTags } from '@fortawesome/free-solid-svg-icons/faTags';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { TranslateModule } from '@ngx-translate/core';
@@ -49,8 +50,9 @@ export class WriteModule {
     library.add(faCog);
     library.add(faTimes);
     library.add(faNewspaper);
-    library.add(faCaretDown);
+    library.add(faAngleDown);
     library.add(faTags);
     library.add(faImage);
+    library.add(faPlus);
   }
 }
