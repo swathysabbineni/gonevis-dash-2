@@ -26,6 +26,17 @@
         {{ selectedCount }} {{ 'SELECTED' | translate }}
       </div>
 
+      <!-- Status filter -->
+      <div class="dropdown ml-auto" dropdown *ngIf="!selectedCount">
+        <button class="btn btn-light dropdown-toggle" dropdownToggle translate>
+          <fa-icon [icon]="filter" [fixedWidth]="true" class="text-secondary"></fa-icon> PUBLISHED
+        </button>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+          <button class="dropdown-item" translate>ANY</button>
+          <button class="dropdown-item" translate>DRAFT</button>
+        </div>
+      </div>
+
       <!-- Commenting -->
       <div class="dropdown ml-auto" dropdown *ngIf="selectedCount">
         <button class="btn btn-light dropdown-toggle" dropdownToggle translate>COMMENTING</button>
