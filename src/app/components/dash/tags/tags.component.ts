@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TagsService } from '@app/components/dash/tags/tags.service';
@@ -55,6 +55,11 @@ export class TagsComponent implements OnInit {
    * Tag form API errors
    */
   errors: ApiError = {};
+
+  /**
+   * File list modal
+   */
+  fileListModalRef: BsModalRef;
 
   constructor(private tag: TagsService,
               private translate: TranslateService,
@@ -167,5 +172,27 @@ export class TagsComponent implements OnInit {
    */
   pageChanged(event: PageChangedEvent) {
     this.getTags(event.page);
+  }
+
+  /**
+   * Show file selection modal
+   */
+  showFileListModal(template: TemplateRef<any>) {
+    this.fileListModalRef = this.modalService.show(template, {
+      class: 'modal-lg',
+    });
+  }
+
+  /**
+   * On file selection
+   *
+   * @param file Selected file
+   */
+  onFileSelect(file: File) {
+    this.fileListModalRef.hide();
+    this.form.patchValue({
+      cover_image: file.id,
+    });
+    this.image = file;
   }
 }
