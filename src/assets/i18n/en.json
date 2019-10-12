@@ -216,5 +216,12 @@
   "ROLE": "Role",
   "CREATED_ON": "Created on",
   "SELECTED": "Selected",
+  "STATUS": "Status",
+  "DRAFT": "Draft",
+  "COMMENTING": "Commenting",
+  "YES": "Yes",
+  "NO": "No",
+  "ENABLED": "Enabled",
+  "DISABLED": "Disabled",
   "COLLABORATING": "Collaborating"
 }
