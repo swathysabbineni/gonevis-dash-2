@@ -9,6 +9,24 @@
       <span *ngIf="isPages" translate>PAGES</span>
     </div>
 
+    <!-- Actions -->
+    <div class="card-body d-flex flex-row" *ngIf="entries">
+
+      <!-- Select -->
+      <div class="checkbox">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="select"
+                 [(ngModel)]="select" (change)="onToggleSelect()" [indeterminate]="isSelectIndeterminate">
+          <label class="custom-control-label" for="select"></label>
+        </div>
+      </div>
+
+      <!-- Selected count -->
+      <div *ngIf="selectedCount" class="text-secondary text-lowercase">
+        {{ selectedCount }} {{ 'SELECTED' | translate }}
+      </div>
+    </div>
+
     <!-- Content -->
     <table class="table rounded bg-white m-0">
       <tbody>
@@ -16,7 +34,7 @@
         <!-- Select -->
         <th class="checkbox">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" [id]="entry.id">
+            <input type="checkbox" class="custom-control-input" [id]="entry.id" [(ngModel)]="entry.select">
             <label class="custom-control-label" [for]="entry.id"></label>
           </div>
         </th>
@@ -28,9 +46,12 @@
         <th>
           <!-- Title -->
           <a class="font-weight-bold">{{ entry.title }}</a>
-          <!-- Description -->
-          <div class="small text-secondary">
+          <!-- Date -->
+          <div class="small text-secondary" *ngIf="entry.published">
             <span translate>PUBLISHED_ON</span> {{ entry.published | date }}
+          </div>
+          <div class="small text-secondary" *ngIf="!entry.published">
+            <span translate>CREATED_ON</span> {{ entry.created | date }}
           </div>
         </th>
         <!-- Stats -->
@@ -39,17 +60,17 @@
           <span *ngIf="entry.vote_count" class="mr-3">
           <fa-icon [fixedWidth]="true" [icon]="['far', 'thumbs-up']"></fa-icon>
             {{ entry.vote_count | number }}
-        </span>
+          </span>
           <!-- Comments -->
           <span *ngIf="entry.comment_count" class="mr-3">
           <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
             {{ entry.comment_count | number }}
-        </span>
+          </span>
           <!-- Votes -->
           <span *ngIf="entry.view_count" class="mr-3">
           <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
             {{ entry.view_count | number }}
-        </span>
+          </span>
         </th>
         <!-- Options -->
         <th class="text-right">

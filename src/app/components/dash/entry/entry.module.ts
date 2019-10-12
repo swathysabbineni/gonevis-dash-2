@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
@@ -24,6 +25,7 @@ import { EntryComponent } from './entry.component';
     FontAwesomeModule,
     BsDropdownModule,
     PaginationModule.forRoot(),
+    FormsModule,
   ],
 })
 export class EntryModule {

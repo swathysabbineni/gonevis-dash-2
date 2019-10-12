@@ -38,6 +38,25 @@ export class EntryComponent implements OnInit {
    */
   loading: boolean;
 
+  /**
+   * Main select checkbox (used to select and deselect all)
+   */
+  select: boolean;
+
+  /**
+   * @returns Number of selected entries
+   */
+  get selectedCount(): number {
+    return this.entries.filter(entry => entry.select).length;
+  }
+
+  /**
+   * @returns Whether select is indeterminate or not
+   */
+  get isSelectIndeterminate(): boolean {
+    return Boolean(this.entries.length > this.selectedCount && this.selectedCount > 0);
+  }
+
   constructor(private entryService: EntryService,
               private translate: TranslateService,
               private route: ActivatedRoute,
@@ -54,6 +73,15 @@ export class EntryComponent implements OnInit {
         this.getEntries();
       }
     });
+  }
+
+  /**
+   * On main select checked or unchecked
+   */
+  onToggleSelect() {
+    for (const entry of this.entries) {
+      entry.select = this.select;
+    }
   }
 
   /**
