@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TagsService } from '@app/components/dash/tags/tags.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { File } from '@app/interfaces/file';
 import { Pagination } from '@app/interfaces/pagination';
 import { Tag } from '@app/interfaces/v1/tag';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
@@ -34,6 +35,11 @@ export class TagsComponent implements OnInit {
    * Tag form
    */
   form: FormGroup;
+
+  /**
+   * Tag form image
+   */
+  image: File;
 
   /**
    * Tags modal to edit tags
@@ -69,6 +75,7 @@ export class TagsComponent implements OnInit {
           name: ['', Validators.required],
           slug: [''],
           description: [''],
+          cover_image: [''],
         });
         /**
          * Get tags
@@ -118,6 +125,7 @@ export class TagsComponent implements OnInit {
       this.loading = false;
       this.errors = {};
       this.form.reset();
+      this.image = null;
       this.toast.info(this.translate.instant('TOAST_CREATE'), this.form.value.name || this.form.value.slug);
       this.getTags();
     }, (error): void => {

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FileListModule } from '@app/shared/file-list/file-list.module';
 import { TagModalModule } from '@app/shared/tags-modal/tag-modal.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -27,6 +28,7 @@ import { TagsComponent } from './tags.component';
     ReactiveFormsModule,
     ModalModule.forRoot(),
     TagModalModule,
+    FileListModule,
     PaginationModule.forRoot(),
   ],
 })
