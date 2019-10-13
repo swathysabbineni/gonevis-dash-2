@@ -217,5 +217,15 @@
   "CREATED_ON": "Created on",
   "SELECTED": "Selected",
   "TAG_IMAGE": "Tag image",
+  "STATUS": "Status",
+  "DRAFT": "Draft",
+  "COMMENTING": "Commenting",
+  "YES": "Yes",
+  "NO": "No",
+  "ENABLED": "Enabled",
+  "DISABLED": "Disabled",
+  "ANY_STATUS": "Any status",
+  "COMMENTING_DISABLED": "Commenting disabled",
+  "NOT_FEATURED": "Not featured",
   "COLLABORATING": "Collaborating"
 }

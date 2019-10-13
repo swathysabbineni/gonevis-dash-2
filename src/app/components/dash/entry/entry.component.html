@@ -10,10 +10,10 @@
     </div>
 
     <!-- Actions -->
-    <div class="card-body d-flex flex-row" *ngIf="entries">
+    <div class="card-body d-flex flex-row align-items-center bg-light py-2" *ngIf="entries">
 
       <!-- Select -->
-      <div class="checkbox">
+      <div class="checkbox" *ngIf="entries.length">
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="select"
                  [(ngModel)]="select" (change)="onToggleSelect()" [indeterminate]="isSelectIndeterminate">
@@ -22,8 +22,55 @@
       </div>
 
       <!-- Selected count -->
-      <div *ngIf="selectedCount" class="text-secondary text-lowercase">
-        {{ selectedCount }} {{ 'SELECTED' | translate }}
+      <div *ngIf="entriesSelected.length" class="text-secondary text-lowercase ml-2">
+        {{ entriesSelected.length }} {{ 'SELECTED' | translate }}
+      </div>
+
+      <!-- Status filter -->
+      <div class="dropdown ml-auto" dropdown *ngIf="!entriesSelected.length">
+        <button class="btn btn-light dropdown-toggle" dropdownToggle>
+          <fa-icon [icon]="filter" [fixedWidth]="true" class="text-secondary mr-1"></fa-icon>
+          {{ statusFilter.label | translate }}
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+          <button class="dropdown-item"
+                  *ngFor="let filter of statusFilters"
+                  [class.active]="filter === statusFilter"
+                  (click)="statusFilter = filter; getEntries()">
+            {{ filter.label | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Commenting -->
+      <div class="dropdown ml-auto" dropdown *ngIf="entriesSelected.length">
+        <button class="btn btn-light dropdown-toggle" dropdownToggle translate>COMMENTING</button>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+          <button class="dropdown-item" translate (click)="updateEntries('comment_enabled', true)">ENABLED</button>
+          <button class="dropdown-item" translate (click)="updateEntries('comment_enabled', false)">DISABLED</button>
+        </div>
+      </div>
+
+      <!-- Featured -->
+      <div class="dropdown ml-2" dropdown *ngIf="entriesSelected.length">
+        <button class="btn btn-light dropdown-toggle" dropdownToggle translate>FEATURED</button>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+          <button class="dropdown-item" translate (click)="updateEntries('featured', true)">YES</button>
+          <button class="dropdown-item" translate (click)="updateEntries('featured', true)">NO</button>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="dropdown ml-2" dropdown *ngIf="entriesSelected.length">
+        <button class="btn btn-light dropdown-toggle" dropdownToggle translate>STATUS</button>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+          <button class="dropdown-item" translate (click)="updateEntries('status', entryStatus.Published)">
+            PUBLISHED
+          </button>
+          <button class="dropdown-item" translate (click)="updateEntries('status', entryStatus.Draft)">
+            DRAFT
+          </button>
+        </div>
       </div>
     </div>
 
@@ -34,7 +81,8 @@
         <!-- Select -->
         <th class="checkbox">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" [id]="entry.id" [(ngModel)]="entry.select">
+            <input type="checkbox" class="custom-control-input" [id]="entry.id"
+                   [(ngModel)]="entry.select" (ngModelChange)="onEntrySelect()">
             <label class="custom-control-label" [for]="entry.id"></label>
           </div>
         </th>
@@ -81,7 +129,12 @@
             </button>
             <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
               <!-- Header -->
-              <h6 class="dropdown-header" translate>Commenting enabled</h6>
+              <h6 class="dropdown-header" translate *ngIf="entry.comment_enabled">COMMENTING_ENABLED</h6>
+              <h6 class="dropdown-header" translate *ngIf="!entry.comment_enabled">COMMENTING_DISABLED</h6>
+              <h6 class="dropdown-header" translate *ngIf="entry.featured">FEATURED</h6>
+              <h6 class="dropdown-header" translate *ngIf="!entry.featured">NOT_FEATURED</h6>
+              <!-- Separated -->
+              <div class="dropdown-divider"></div>
               <!-- View -->
               <a class="dropdown-item text-secondary" [href]="entry.absolute_uri" target="_blank" translate>
                 VIEW_ON_BLOG
