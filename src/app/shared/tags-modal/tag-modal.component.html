@@ -12,6 +12,25 @@
 <!-- Body -->
 <div class="modal-body">
   <form [formGroup]="form" (ngSubmit)="update()">
+
+    <!-- Add image -->
+    <div class="media form-group">
+      <img class="mr-3 rounded" *ngIf="image" [src]="image.thumbnail_128x128" [width]="64">
+      <div class="media-body d-sm-block">
+        <div translate>TAG_IMAGE</div>
+        <div class="btn-group btn-group-sm mt-1">
+          <button class="btn btn-sm btn-secondary" type="button" translate
+                  (click)="showFileListModal(fileListModalTemplate)">
+            SELECT
+          </button>
+          <!-- Remove image-->
+          <button class="btn btn-sm btn-outline-secondary" type="button" *ngIf="image"
+            <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Name -->
     <div class="form-group">
       <label for="name" translate>NAME</label>
