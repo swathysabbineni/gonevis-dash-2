@@ -25,6 +25,7 @@
           </button>
           <!-- Remove image-->
           <button class="btn btn-sm btn-outline-secondary" type="button" *ngIf="image"
+                  (click)="removeCoverImage()">
             <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
           </button>
         </div>

@@ -105,4 +105,11 @@ export class TagModalComponent implements OnInit {
     this.image = file;
   }
 
+  /**
+   * Remove tag Cover image
+   */
+  removeCoverImage(): void {
+    this.image = null;
+    this.form.value.cover_image = null;
+  }
 }
