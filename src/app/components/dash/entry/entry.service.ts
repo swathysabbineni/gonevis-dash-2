@@ -35,6 +35,7 @@ export class EntryService {
       user?: string,
       format?: EntryFormat | '',
       status?: EntryStatus | '',
+      ordering?: string,
     } = {},
     page: number = 1,
   ): Observable<ApiResponse<Entry>> {
