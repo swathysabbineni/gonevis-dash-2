@@ -38,7 +38,13 @@ export class TagModalComponent implements OnInit {
    */
   loading: boolean;
 
+  /**
+   * File list modal
+   */
+  fileListModalRef: BsModalRef;
+
   constructor(public modal: BsModalRef,
+              private modalService: BsModalService,
               private formBuilder: FormBuilder,
               private blogService: BlogService) {
   }
@@ -76,4 +82,27 @@ export class TagModalComponent implements OnInit {
       this.errors = error.error;
     });
   }
+
+  /**
+   * Show file selection modal
+   */
+  showFileListModal(template: TemplateRef<any>) {
+    this.fileListModalRef = this.modalService.show(template, {
+      class: 'modal-lg',
+    });
+  }
+
+  /**
+   * On file selection
+   *
+   * @param file Selected file
+   */
+  onFileSelect(file: File) {
+    this.fileListModalRef.hide();
+    this.form.patchValue({
+      cover_image: file.id,
+    });
+    this.image = file;
+  }
+
 }

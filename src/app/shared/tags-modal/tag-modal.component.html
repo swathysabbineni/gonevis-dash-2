@@ -53,3 +53,19 @@
     <button class="btn btn-info btn-block" translate>SUBMIT</button>
   </form>
 </div>
+
+<!-- File list modal -->
+<ng-template #fileListModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" translate>SELECT_IMAGE</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="fileListModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-file-list [selection]="true"
+                   [selected]="image && image.id"
+                   (choose)="onFileSelect($event)">
+    </app-file-list>
+  </div>
+</ng-template>
