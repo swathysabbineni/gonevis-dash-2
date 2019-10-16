@@ -87,7 +87,7 @@ export class DashComponent implements OnInit {
          */
         this.route.params.subscribe((params: Params) => {
           const index: number = Number(params.blog);
-          if (index) {
+          if (index && blogs[index]) {
             BlogService.setCurrent(blogs[index].id);
           } else if (blogs && blogs.length) {
             BlogService.setCurrent(blogs[0].id);

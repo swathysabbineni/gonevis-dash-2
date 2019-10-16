@@ -10,6 +10,7 @@ import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateModule } from '@ngx-translate/core';
 import { ModalModule } from 'ngx-bootstrap';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 import { TagsRoutingModule } from './tags-routing.module';
 import { TagsComponent } from './tags.component';
@@ -26,6 +27,7 @@ import { TagsComponent } from './tags.component';
     ReactiveFormsModule,
     ModalModule.forRoot(),
     TagModalModule,
+    PaginationModule.forRoot(),
   ],
 })
 export class TagsModule {

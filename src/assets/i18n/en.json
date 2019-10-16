@@ -232,5 +232,21 @@
   "SET_AS_PAGE": "Set as page",
   "LOADING_DRAFT": "Loading draft",
   "UNPUBLISHED_CHANGES": "You have unpublished changes",
-  "DISCARD_CHANGES": "Discard changes"
+  "DISCARD_CHANGES": "Discard changes",
+  "ROLE": "Role",
+  "CREATED_ON": "Created on",
+  "SELECTED": "Selected",
+  "STATUS": "Status",
+  "COMMENTING": "Commenting",
+  "YES": "Yes",
+  "NO": "No",
+  "ENABLED": "Enabled",
+  "DISABLED": "Disabled",
+  "ANY_STATUS": "Any status",
+  "COMMENTING_DISABLED": "Commenting disabled",
+  "NOT_FEATURED": "Not featured",
+  "LIKES": "Likes",
+  "VIEWS": "Views",
+  "SORT_BY": "Sort by",
+  "CLEAR": "Clear"
 }

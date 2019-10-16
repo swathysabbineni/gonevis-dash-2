@@ -5,7 +5,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { TranslateModule } from '@ngx-translate/core';
-import { ModalModule } from 'ngx-bootstrap';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 import { FileListComponent } from './file-list.component';
@@ -24,6 +25,7 @@ import { FileListComponent } from './file-list.component';
     ModalModule.forRoot(),
     BsDropdownModule,
     FileModalModule,
+    PaginationModule.forRoot(),
   ],
 })
 export class FileListModule {

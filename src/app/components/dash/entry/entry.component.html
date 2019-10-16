@@ -9,6 +9,105 @@
       <span *ngIf="isPages" translate>PAGES</span>
     </div>
 
+    <!-- Actions -->
+    <div class="card-body d-flex flex-row align-items-center bg-light py-2" *ngIf="entries">
+
+      <!-- Select -->
+      <div class="checkbox" *ngIf="entries.length">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="select"
+                 [(ngModel)]="select" (change)="onToggleSelect()" [indeterminate]="isSelectIndeterminate">
+          <label class="custom-control-label" for="select"></label>
+        </div>
+      </div>
+
+      <!-- Selected count -->
+      <div *ngIf="entriesSelected.length" class="text-secondary text-lowercase ml-2">
+        {{ entriesSelected.length }} {{ 'SELECTED' | translate }}
+      </div>
+
+      <!-- Status filter -->
+      <div class="dropdown ml-auto" dropdown *ngIf="!entriesSelected.length">
+        <button class="btn btn-light dropdown-toggle" dropdownToggle>
+          <fa-icon [icon]="filter" [fixedWidth]="true" class="text-secondary mr-1"></fa-icon>
+          {{ statusFilter.label | translate }}
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+          <button class="dropdown-item"
+                  *ngFor="let filter of statusFilters"
+                  [class.active]="filter === statusFilter"
+                  (click)="statusFilter = filter; getEntries()">
+            {{ filter.label | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Sort fields -->
+      <div class="dropdown ml-2" dropdown *ngIf="!entriesSelected.length">
+        <button class="btn btn-light dropdown-toggle" dropdownToggle>
+          <fa-icon [fixedWidth]="true" [icon]="sort" class="text-secondary mr-1"></fa-icon>
+          <span *ngIf="!sortField" translate>SORT_BY</span>
+          <span *ngIf="sortField" translate>{{ sortField.label }}</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+          <!-- Clear sorting -->
+          <button class="dropdown-item" [class.active]="!sortField" (click)="sortField = null; getEntries()" translate>
+            <fa-icon [fixedWidth]="true" [icon]="times"></fa-icon>
+            CLEAR
+          </button>
+          <!-- Sorting fields -->
+          <button class="dropdown-item"
+                  *ngFor="let field of sortFields"
+                  [class.active]="field === sortField"
+                  (click)="sortField = field; getEntries()">
+            <fa-icon [fixedWidth]="true" [icon]="field.icon"></fa-icon>
+            {{ field.label | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Sort order -->
+      <button class="btn btn-light ml-2" *ngIf="!entriesSelected.length && sortField" (click)="toggleOrder()">
+        <fa-icon class="text-secondary" [fixedWidth]="true"
+                 [icon]="ascending" *ngIf="sortOrder === order.ASCENDING">
+        </fa-icon>
+        <fa-icon class="text-secondary" [fixedWidth]="true"
+                 [icon]="descending" *ngIf="sortOrder === order.DESCENDING">
+        </fa-icon>
+      </button>
+
+      <!-- Commenting -->
+      <div class="dropdown ml-auto" dropdown *ngIf="entriesSelected.length">
+        <button class="btn btn-light dropdown-toggle" dropdownToggle translate>COMMENTING</button>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+          <button class="dropdown-item" translate (click)="updateEntries('comment_enabled', true)">ENABLED</button>
+          <button class="dropdown-item" translate (click)="updateEntries('comment_enabled', false)">DISABLED</button>
+        </div>
+      </div>
+
+      <!-- Featured -->
+      <div class="dropdown ml-2" dropdown *ngIf="entriesSelected.length">
+        <button class="btn btn-light dropdown-toggle" dropdownToggle translate>FEATURED</button>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+          <button class="dropdown-item" translate (click)="updateEntries('featured', true)">YES</button>
+          <button class="dropdown-item" translate (click)="updateEntries('featured', true)">NO</button>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="dropdown ml-2" dropdown *ngIf="entriesSelected.length">
+        <button class="btn btn-light dropdown-toggle" dropdownToggle translate>STATUS</button>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+          <button class="dropdown-item" translate (click)="updateEntries('status', entryStatus.Published)">
+            PUBLISHED
+          </button>
+          <button class="dropdown-item" translate (click)="updateEntries('status', entryStatus.Draft)">
+            DRAFT
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Content -->
     <table class="table rounded bg-white m-0">
       <tbody>
@@ -16,7 +115,8 @@
         <!-- Select -->
         <th class="checkbox">
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" [id]="entry.id">
+            <input type="checkbox" class="custom-control-input" [id]="entry.id"
+                   [(ngModel)]="entry.select" (ngModelChange)="onEntrySelect()">
             <label class="custom-control-label" [for]="entry.id"></label>
           </div>
         </th>
@@ -28,39 +128,47 @@
         <th>
           <!-- Title -->
           <a class="font-weight-bold">{{ entry.title }}</a>
-          <!-- Description -->
-          <div class="small text-secondary">
+          <!-- Date -->
+          <div class="small text-secondary" *ngIf="entry.published">
             <span translate>PUBLISHED_ON</span> {{ entry.published | date }}
+          </div>
+          <div class="small text-secondary" *ngIf="!entry.published">
+            <span translate>CREATED_ON</span> {{ entry.created | date }}
           </div>
         </th>
         <!-- Stats -->
         <th class="text-secondary text-right">
           <!-- Likes -->
           <span *ngIf="entry.vote_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="['far', 'thumbs-up']"></fa-icon>
+          <fa-icon [fixedWidth]="true" [icon]="like"></fa-icon>
             {{ entry.vote_count | number }}
-        </span>
+          </span>
           <!-- Comments -->
           <span *ngIf="entry.comment_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
+          <fa-icon [fixedWidth]="true" [icon]="comment"></fa-icon>
             {{ entry.comment_count | number }}
-        </span>
-          <!-- Votes -->
+          </span>
+          <!-- Views -->
           <span *ngIf="entry.view_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
+          <fa-icon [fixedWidth]="true" [icon]="eye"></fa-icon>
             {{ entry.view_count | number }}
-        </span>
+          </span>
         </th>
         <!-- Options -->
         <th class="text-right">
           <!-- Dropdown -->
           <div class="dropdown" dropdown>
             <button class="btn btn-light btn-sm" dropdownToggle>
-              <fa-icon icon="ellipsis-v"></fa-icon>
+              <fa-icon [fixedWidth]="true" [icon]="ellipsis"></fa-icon>
             </button>
             <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
               <!-- Header -->
-              <h6 class="dropdown-header" translate>Commenting enabled</h6>
+              <h6 class="dropdown-header" translate *ngIf="entry.comment_enabled">COMMENTING_ENABLED</h6>
+              <h6 class="dropdown-header" translate *ngIf="!entry.comment_enabled">COMMENTING_DISABLED</h6>
+              <h6 class="dropdown-header" translate *ngIf="entry.featured">FEATURED</h6>
+              <h6 class="dropdown-header" translate *ngIf="!entry.featured">NOT_FEATURED</h6>
+              <!-- Separated -->
+              <div class="dropdown-divider"></div>
               <!-- View -->
               <a class="dropdown-item text-secondary" [href]="entry.absolute_uri" target="_blank" translate>
                 VIEW_ON_BLOG

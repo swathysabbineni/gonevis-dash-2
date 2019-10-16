@@ -14,21 +14,20 @@
   <form [formGroup]="form" (ngSubmit)="update()">
     <!-- Name -->
     <div class="form-group">
-      <input class="form-control" type="text" formControlName="name"
-             [placeholder]="'NAME' | translate" required>
+      <label for="name" translate>NAME</label>
+      <input class="form-control" id="name" type="text" formControlName="name" required>
       <span class="text-danger" *ngIf="errors.name">{{ errors.name[0] }}</span>
     </div>
     <!-- Tag name -->
     <div class="form-group">
-      <input class="form-control" type="text" formControlName="slug"
-             [placeholder]="'TAG' | translate">
+      <label for="slug" translate>TAG</label>
+      <input class="form-control" id="slug" type="text" formControlName="slug">
       <span class="text-danger" *ngIf="errors.slug">{{ errors.slug[0] }}</span>
     </div>
     <!-- Description -->
     <div class="form-group">
-      <textarea rows="2" class="form-control" formControlName="description"
-                [placeholder]="'DESCRIPTION' | translate">
-      </textarea>
+      <label for="description" translate>DESCRIPTION</label>
+      <textarea rows="2" class="form-control" id="description" formControlName="description"></textarea>
       <span class="text-danger" *ngIf="errors.description">{{ errors.description[0] }}</span>
     </div>
     <!-- Submit -->

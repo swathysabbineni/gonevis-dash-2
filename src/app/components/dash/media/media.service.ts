@@ -5,6 +5,7 @@ import { File as FileMedia } from '@app/interfaces/file';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UtilService } from '@app/services/util/util.service';
 import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
 
@@ -14,9 +15,16 @@ import { Observable } from 'rxjs';
 export class MediaService {
 
   /**
+   * API page size
+   */
+  static readonly PAGE_SIZE = 24;
+
+  /**
    * Media upload accept list
    */
   static readonly acceptList = [
+    'application/xml',
+    'text/xml',
     'image/jpeg',
     'image/pjpeg',
     'image/png',
@@ -33,11 +41,14 @@ export class MediaService {
     'application/vnd.ms-excel',
     'application/x-excel',
     'application/x-msexcel',
+    'application/xml',
+    'text/xml',
     'application/x-compressed',
     'application/x-zip-compressed',
     'application/zip',
     'multipart/x-zip',
     'audio/mpeg3',
+    'audio/mpeg',
     'audio/x-mpeg-3',
     'video/mpeg',
     'video/x-mpeg',
@@ -45,17 +56,6 @@ export class MediaService {
     'audio/ogg',
     'audio/wav',
     'audio/x-wav',
-    'video/mp4',
-    'video/x-m4v',
-    'video/quicktime',
-    'video/x-ms-wmv',
-    'video/avi',
-    'video/msvideo',
-    'video/x-msvideo',
-    'video/mpeg',
-    'video/ogg',
-    'video/3gp',
-    'video/3gpp2',
   ];
 
   constructor(private http: HttpClient,
@@ -64,10 +64,16 @@ export class MediaService {
 
   /**
    * Get blog media
+   *
+   * @param page API page
    */
-  getMedia(): Observable<ApiResponse<FileMedia>> {
+  getMedia(page: number = 1): Observable<ApiResponse<FileMedia>> {
     return this.http.get<ApiResponse<FileMedia>>(`${this.api.base.v1}dolphin/file/`, {
-      params: { site: BlogService.currentBlog.id },
+      params: {
+        site: BlogService.currentBlog.id,
+        limit: MediaService.PAGE_SIZE.toString(),
+        offset: UtilService.getPageOffset(MediaService.PAGE_SIZE, page),
+      },
     });
   }
 

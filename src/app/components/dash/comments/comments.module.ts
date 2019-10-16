@@ -7,7 +7,8 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateModule } from '@ngx-translate/core';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 import { CommentsRoutingModule } from './comments-routing.module';
 
@@ -21,6 +22,7 @@ import { CommentsRoutingModule } from './comments-routing.module';
     FontAwesomeModule,
     TranslateModule.forChild(),
     BsDropdownModule,
+    PaginationModule.forRoot(),
   ],
 })
 export class CommentsModule {
