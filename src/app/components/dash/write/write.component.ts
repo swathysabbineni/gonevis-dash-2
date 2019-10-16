@@ -8,7 +8,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MediaService } from '@app/components/dash/media/media.service';
 import '@app/components/dash/write/blots/divider.ts';
@@ -38,6 +38,7 @@ import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { QuillModules } from 'ngx-quill';
+import { ToastrService } from 'ngx-toastr';
 import { Quill, RangeStatic } from 'quill';
 import Delta from 'quill-delta';
 import Op from 'quill/node_modules/quill-delta/dist/Op';
@@ -92,6 +93,11 @@ export class WriteComponent implements OnInit, OnDestroy {
   private cursorIndex: number;
 
   /**
+   * Determines whether selecting image for editor or not
+   */
+  private isEditorImage: boolean;
+
+  /**
    * Entry status
    */
   readonly entryStatus = EntryStatus;
@@ -123,7 +129,7 @@ export class WriteComponent implements OnInit, OnDestroy {
   /**
    * Tag query form
    */
-  tagQueryForm: FormGroup;
+  tagQueryControl: FormControl = new FormControl('');
 
   /**
    * API loading indicator
@@ -144,6 +150,11 @@ export class WriteComponent implements OnInit, OnDestroy {
    * Determines whether page scrolled or not.
    */
   scrolled: boolean;
+
+  /**
+   * It's being used for attaching minimum date for start publication date
+   */
+  minDate: Date = new Date();
 
   /**
    * Quill modules
@@ -172,6 +183,11 @@ export class WriteComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   /**
+   * Entry's cover image
+   */
+  coverImage: FileMedia;
+
+  /**
    * Validate YouTube url
    *
    * @param clipboard Copied text
@@ -192,6 +208,9 @@ export class WriteComponent implements OnInit, OnDestroy {
     return isValid;
   }
 
+  /**
+   * Auto save post/page every 10 seconds
+   */
   private initAutoSave(): void {
     // Auto save every 10 seconds
     this.autoSaveInterval = setInterval((): void => {
@@ -231,7 +250,8 @@ export class WriteComponent implements OnInit, OnDestroy {
               private modalService: BsModalService,
               private translateService: TranslateService,
               private mediaService: MediaService,
-              private writeService: WriteService) {
+              private writeService: WriteService,
+              private toast: ToastrService) {
     this.writeService.lazyLoadQuill().subscribe((): void => null);
   }
 
@@ -242,13 +262,16 @@ export class WriteComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
+      excerpt: [''],
       tags: [[]],
       status: [EntryStatus.Draft],
+      slug: [''],
       comment_enabled: [false],
       featured: [false],
       is_page: [false],
       start_publication: [null],
       cover_image: [null],
+      meta_description: [''],
     });
     BlogService.blog.subscribe((blog: BlogMin): void => {
       if (!blog) {
@@ -257,8 +280,7 @@ export class WriteComponent implements OnInit, OnDestroy {
       /**
        * Set up tag query form
        */
-      this.tagQueryForm = this.formBuilder.group({ query: '' });
-      this.tagQueryForm.get('query').valueChanges.pipe(debounceTime(300)).subscribe((value: string): void => {
+      this.tagQueryControl.valueChanges.pipe(debounceTime(300)).subscribe((value: string): void => {
         this.getTags(value);
       });
       this.getTags();
@@ -298,14 +320,17 @@ export class WriteComponent implements OnInit, OnDestroy {
     this.form.patchValue({
       title: data.title,
       content: data.content,
+      excerpt: data.excerpt,
       tags: data.tags,
       status: data.status,
+      slug: data.slug,
       comment_enabled: data.comment_enabled,
       featured: data.featured,
       is_page: data.is_page,
       start_publication: data.start_publication,
-      cover_image: data.media.cover_image,
+      cover_image: data.media.cover_image ? data.media.cover_image.id : null,
     });
+    this.coverImage = data.media.cover_image;
     this.oldForm = this.form.value;
   }
 
@@ -512,9 +537,9 @@ export class WriteComponent implements OnInit, OnDestroy {
         this.cursorIndex = 0;
       }
       /**
-       * @todo - Add file selection
+       * File selection
        */
-      this.showFileListModal(this.fileListModalTemplate);
+      this.showFileListModal(this.fileListModalTemplate, true);
     });
   }
 
@@ -533,6 +558,9 @@ export class WriteComponent implements OnInit, OnDestroy {
       if (data.entrydraft) {
         this.postChanged = true;
         data = data.entrydraft;
+        this.translateService.get(['LOADING_DRAFT', 'UNPUBLISHED_CHANGES']).subscribe((response: Params): void => {
+          this.toast.warning(response.UNPUBLISHED_CHANGES as string, response.LOADING_DRAFT as string);
+        });
       }
       this.patchForm(data);
       this.editor['history'].clear();
@@ -558,21 +586,6 @@ export class WriteComponent implements OnInit, OnDestroy {
    * @param status Status of entry
    */
   save(status?: EntryStatus): void {
-    if (this.isEditing) {
-      this.updateEntry(status);
-    } else {
-      this.addEntry(status);
-    }
-  }
-
-
-  /**
-   * Update entry
-   *
-   * @param status Status of entry
-   */
-  updateEntry(status?: EntryStatus): void {
-    this.loading = true;
     const payload: Params = this.form.value;
     payload.content = this.editor.root.innerHTML;
     payload.id = this.id;
@@ -587,6 +600,21 @@ export class WriteComponent implements OnInit, OnDestroy {
     if (this.autoSave) {
       delete payload.status;
     }
+    if (this.isEditing) {
+      this.updateEntry(payload, status);
+    } else {
+      this.addEntry(payload, status);
+    }
+  }
+
+  /**
+   * Update entry
+   *
+   * @param payload Payload required by backend
+   * @param status Status of entry
+   */
+  updateEntry(payload: Params, status?: EntryStatus): void {
+    this.loading = true;
     this.writeService.updateEntry(payload).subscribe((data: Entry): void => {
       this.loading = false;
       if (!this.autoSave) {
@@ -609,23 +637,12 @@ export class WriteComponent implements OnInit, OnDestroy {
   /**
    * Add Entry
    *
+   * @param payload Payload required by backend
    * @param status Status of entry
    */
-  addEntry(status?: EntryStatus): void {
+  addEntry(payload: Params, status?: EntryStatus): void {
     if (this.form.get('title').value.trim() === '') {
       this.form.get('title').setValue(`Untitled ${new Date().toDateString()}`);
-    }
-    const payload: Params = this.form.value;
-    payload.site = BlogService.currentBlog.id;
-    payload.tag_ids = (this.tagsControl.value as TagMin[]).map((tag: TagMin): string => tag.id);
-    if (status !== undefined) {
-      payload.status = status;
-    }
-    /**
-     * Check status before updating
-     */
-    if (status === EntryStatus.UnsavedChanges) {
-      delete payload.status;
     }
     this.writeService.addEntry(this.form.value).subscribe((data: Entry): void => {
       this.loading = false;
@@ -644,7 +661,7 @@ export class WriteComponent implements OnInit, OnDestroy {
     }
     this.patchForm(this.oldEntry);
     this.oldEntry.entrydraft = null;
-    this.updateEntry();
+    this.save();
   }
 
   /**
@@ -671,10 +688,10 @@ export class WriteComponent implements OnInit, OnDestroy {
   /**
    * Remove tag from entry
    *
-   * @param slug Tag slug
+   * @param id Tag ID
    */
-  removeTag(slug: string): void {
-    this.tagsControl.setValue((this.tagsControl.value as TagMin[]).filter((tag: TagMin): boolean => tag.slug !== slug));
+  removeTag(id: string): void {
+    this.tagsControl.setValue((this.tagsControl.value as TagMin[]).filter((tag: TagMin): boolean => tag.id !== id));
   }
 
   /**
@@ -683,13 +700,17 @@ export class WriteComponent implements OnInit, OnDestroy {
    * @return Determine whether entry has given tag or not
    */
   isTagSelected(tagId: string): boolean {
-    return (this.tagsControl.value as TagMin[]).some((tag: Tag): boolean => tag.slug === tagId);
+    return (this.tagsControl.value as TagMin[]).some((tag: Tag): boolean => tag.id === tagId);
   }
 
   /**
    * Show file selection modal
+   *
+   * @param template Template to show as a modal
+   * @param isEditorImage Determines whether selecting image for editor or not
    */
-  showFileListModal(template: TemplateRef<any>): void {
+  showFileListModal(template: TemplateRef<any>, isEditorImage: boolean): void {
+    this.isEditorImage = isEditorImage;
     this.fileListModalRef = this.modalService.show(template, {
       class: 'modal-lg',
     });
@@ -700,10 +721,15 @@ export class WriteComponent implements OnInit, OnDestroy {
    *
    * @param file Selected file
    */
-  onFileSelect(file: FileMedia) {
+  onFileSelect(file: FileMedia): void {
     this.fileListModalRef.hide();
-    this.editor.insertEmbed(this.cursorIndex, 'image', file.file);
-    this.editor.setSelection({ index: this.cursorIndex + 1, length: 0 });
+    if (this.isEditorImage) {
+      this.editor.insertEmbed(this.cursorIndex, 'image', file.file);
+      this.editor.setSelection({ index: this.cursorIndex + 1, length: 0 });
+    } else {
+      this.form.get('cover_image').setValue(file.id);
+      this.coverImage = file;
+    }
   }
 
   ngOnDestroy(): void {
