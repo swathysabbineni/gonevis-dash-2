@@ -1,37 +1,5 @@
-<!--<button (click)="save(entryStatus.Published)" *ngIf="isEditing">-->
-<!--  <span *ngIf="form.controls.status.value === entryStatus.Draft">Publish</span>-->
-<!--  <span *ngIf="form.controls.status.value === entryStatus.Published">Update</span>-->
-<!--</button>-->
-<!--<button (click)="addEntry(entryStatus.Published)" *ngIf="!isEditing">Publish</button>-->
-<!--<button (click)="save()">-->
-<!--  <span *ngIf="isEditing">Update</span>-->
-<!--  <span *ngIf="!isEditing">Submit</span>-->
-<!--</button>-->
-<!--<button (click)="goBack()">BACK</button>-->
-<!--<button *ngIf="postChanged" (click)="revertChanges()">Revert changes</button>-->
-<!--&lt;!&ndash; Tags &ndash;&gt;-->
-<!--<button type="button"-->
-<!--        [popover]="popTemplate" popoverTitle="Tags">-->
-<!--  Tags-->
-<!--</button>-->
-<!--<ng-template #popTemplate>-->
-<!--  <div class="tags-wrapper">-->
-<!--    &lt;!&ndash; Search form &ndash;&gt;-->
-<!--    <form [formGroup]="tagQueryForm">-->
-<!--      <input type="text" placeholder="Search tags" formControlName="query">-->
-<!--    </form>-->
-<!--    &lt;!&ndash; Tag list &ndash;&gt;-->
-<!--    <p *ngFor="let tag of tags" class="d-block mb-1"-->
-<!--       [class.bg-primary]="isTagSelected(tag.slug)"-->
-<!--       (click)="isTagSelected(tag.slug) ? removeTag(tag.slug) : addTag(tag)">-->
-<!--      #{{ tag.slug }}-->
-<!--    </p>-->
-<!--  </div>-->
-<!--</ng-template>-->
+<!-- Editor -->
 <form class="d-flex flex-column h-100 bg-white" [formGroup]="form">
-  <!-- Title -->
-  <!--    <input type="text" formControlName="title" placeholder="Title" [required]="true">-->
-  <!-- Editor -->
   <div class="d-flex align-items-center header" [class.shadow-sm]="scrolled">
     <div class="toolbar">
       <div class="ql-formats">
@@ -72,10 +40,11 @@
       </div>
     </div>
     <div class="d-flex ml-auto">
-      <button class="btn btn-primary mr-2" (click)="save()">
-        <span *ngIf="isEditing">Update</span>
-        <span *ngIf="!isEditing">Submit</span>
+      <button class="btn btn-primary mr-2" (click)="save(entryStatus.Published)" *ngIf="isEditing">
+        <span *ngIf="form.get('status').value === entryStatus.Draft">Publish</span>
+        <span *ngIf="form.get('status').value === entryStatus.Published">Update</span>
       </button>
+      <button *ngIf="!isEditing" (click)="save()">Submit</button>
       <button class="btn btn-light mr-2">
         <fa-icon icon="cog" [fixedWidth]="true"></fa-icon>
       </button>
@@ -89,14 +58,12 @@
         <textarea id="title"
                   autosize
                   class="form-control" formControlName="title"
-                  ng-focus="updatingTitle=true"
-                  ng-blur="updatingTitle=false"
                   placeholder="{{ 'TITLE' | translate }}"
                   autocomplete="off"
                   (keydown.enter)="$event.preventDefault(); editor.focus()"
                   (keydown.tab)="$event.preventDefault(); editor.focus()"
                   [required]="true"></textarea>
-        <quill-editor [formControl]="form.controls['content']"
+        <quill-editor formControlName="content"
                       [modules]="options"
                       [placeholder]="'CONTENT' | translate"
                       scrollingContainer=".editor"
@@ -111,7 +78,7 @@
     <div class="card sidebar">
       <!-- Header -->
       <div class="card-header d-flex">
-        <button class="btn btn-warning">Update</button>
+        <button class="btn btn-warning" (click)="save()" [disabled]="loading">Update</button>
         <button class="btn btn-default ml-auto">
           <fa-icon icon="times" [fixedWidth]="true"></fa-icon>
         </button>
@@ -131,10 +98,10 @@
               Status
             </div>
             <!-- Caret -->
-            <fa-icon icon="caret-down" [fixedWidth]="true"></fa-icon>
+            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
           </a>
           <!-- Content -->
-          <div class="collapse-content" [collapse]="true" #statusContent=bs-collapse>
+          <div class="collapse-content" [collapse]="false" #statusContent=bs-collapse>
             <!-- Status selection -->
             <div class="form-group">
               <label for="status"></label>
@@ -148,51 +115,54 @@
             </div>
             <!-- Start publication -->
             <div class="form-group">
-              <label for="start_publication" translate>START_PUBLICATION</label>
-              <input type="date"
-                     id="start_publication"
+              <label for="startPublication" translate>START_PUBLICATION</label>
+              <input type="text"
+                     id="startPublication"
                      class="form-control"
-                     formControlName="start_publication">
+                     formControlName="start_publication" bsDatepicker
+                     [minDate]="minDate"
+                     [bsConfig]="{ dateInputFormat: 'YYYY-MM-DDThh:mm' }">
+            </div>
+            <!-- Revert changes -->
+            <div class="form-group">
+              <button type="button" (click)="revertChanges()" *ngIf="postChanged"
+                      class="btn btn-outline-danger btn-sm btn-block" [disabled]="loading">
+                <fa-icon icon="undo" [fixedWidth]="true"></fa-icon>
+                {{ 'DISCARD_CHANGES' | translate }}
+              </button>
             </div>
           </div>
         </div>
         <!-- Tags -->
-        <!--        <div class="section">-->
-        <!--          &lt;!&ndash; Toggle &ndash;&gt;-->
-        <!--          <a class="btn btn-link collapse-header"-->
-        <!--             (click)="tagsContent.collapse = !tagsContent.isCollapsed"-->
-        <!--             [attr.aria-expanded]="tagsContent.expanded"-->
-        <!--             aria-controls="collapseBasic">-->
-        <!--            &lt;!&ndash; Title &ndash;&gt;-->
-        <!--            <div class="mr-auto">-->
-        <!--              <fa-icon icon="tags" [fixedWidth]="true"></fa-icon> Tags-->
-        <!--            </div>-->
-        <!--            &lt;!&ndash; Caret &ndash;&gt;-->
-        <!--            <fa-icon icon="caret-down" [fixedWidth]="true"></fa-icon>-->
-        <!--          </a>-->
-        <!--          &lt;!&ndash; Content &ndash;&gt;-->
-        <!--          <div class="collapse-content" [collapse]="true" #tagsContent=bs-collapse>-->
-        <!--            &lt;!&ndash; Tags &ndash;&gt;-->
-        <!--            <button type="button"-->
-        <!--                    [popover]="popTemplate" popoverTitle="Tags">-->
-        <!--              Tags-->
-        <!--            </button>-->
-        <!--            <ng-template #popTemplate>-->
-        <!--              <div class="tags-wrapper">-->
-        <!--                &lt;!&ndash; Search form &ndash;&gt;-->
-        <!--                <form [formGroup]="tagQueryForm">-->
-        <!--                  <input type="text" placeholder="Search tags" formControlName="query">-->
-        <!--                </form>-->
-        <!--                &lt;!&ndash; Tag list &ndash;&gt;-->
-        <!--                <p *ngFor="let tag of tags" class="d-block mb-1"-->
-        <!--                   [class.bg-primary]="isTagSelected(tag.slug)"-->
-        <!--                   (click)="isTagSelected(tag.slug) ? removeTag(tag.slug) : addTag(tag)">-->
-        <!--                  #{{ tag.slug }}-->
-        <!--                </p>-->
-        <!--              </div>-->
-        <!--            </ng-template>-->
-        <!--          </div>-->
-        <!--        </div>-->
+        <div class="section">
+          <!-- Toggle -->
+          <a class="btn btn-link collapse-header"
+             (click)="tagsContent.collapse = !tagsContent.isCollapsed"
+             [attr.aria-expanded]="tagsContent.expanded"
+             aria-controls="collapseBasic">
+            <!-- Title -->
+            <div class="mr-auto">
+              <fa-icon icon="tags" [fixedWidth]="true"></fa-icon>
+              Tags
+            </div>
+            <!-- Caret -->
+            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+          </a>
+          <!-- Content -->
+          <div class="collapse-content" [collapse]="true" #tagsContent=bs-collapse>
+            <div class="form-group">
+              <input type="text" placeholder="Search tags" [formControl]="tagQueryControl" class="form-control">
+            </div>
+            <div class="form-group">
+              <div class="custom-control custom-checkbox" *ngFor="let tag of tags">
+                <input type="checkbox" class="custom-control-input"
+                       (click)="isTagSelected(tag.id) ? removeTag(tag.id) : addTag(tag)"
+                       [checked]="isTagSelected(tag.id)" [id]="tag.id">
+                <label class="custom-control-label" [for]="tag.id">{{ tag.slug }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- Cover image -->
         <div class="section">
           <!-- Toggle -->
@@ -206,15 +176,97 @@
               Post Cover
             </div>
             <!-- Caret -->
-            <fa-icon icon="caret-down" [fixedWidth]="true"></fa-icon>
+            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
           </a>
           <!-- Content -->
           <div class="collapse-content" [collapse]="true" #coverImageContent=bs-collapse>
             <div class="form-group">
-              <button class="btn btn-dark" *ngIf="!form.get('cover_image').value">
-                Set cover image
+              <img [src]="coverImage.thumbnail_256x256" class="mw-100 rounded" *ngIf="form.get('cover_image').value"
+                   alt="">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-light btn-block" (click)="showFileListModal(fileListModalTemplate, false)"
+                      translate
+                      *ngIf="!form.get('cover_image').value">
+                SET_COVER_IMAGE
               </button>
-              <img [src]="form.get('cover_image').value" class="mw-100" *ngIf="form.get('cover_image').value" alt="">
+              <div class="btn-group btn-block" role="group" *ngIf="form.get('cover_image').value">
+                <button type="button" class="btn btn-light"
+                        (click)="showFileListModal(fileListModalTemplate, false)"
+                        translate>
+                  CHANGE_COVER_IMAGE
+                </button>
+                <button type="button" class="btn btn-danger" (click)="form.get('cover_image').setValue(null)">
+                  <fa-icon icon="times" [fixedWidth]="true"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- More options -->
+        <div class="section">
+          <!-- Toggle -->
+          <a class="btn btn-link collapse-header"
+             (click)="moreOptionsContent.collapse = !moreOptionsContent.isCollapsed"
+             [attr.aria-expanded]="moreOptionsContent.expanded"
+             aria-controls="collapseBasic">
+            <!-- Title -->
+            <div class="mr-auto">
+              <fa-icon icon="plus" [fixedWidth]="true"></fa-icon>
+              More Options
+            </div>
+            <!-- Caret -->
+            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+          </a>
+          <!-- Content -->
+          <div class="collapse-content" [collapse]="true" #moreOptionsContent=bs-collapse>
+            <!-- Excerpt -->
+            <div class="form-group">
+              <!-- Label -->
+              <label for="excerpt" translate>EXCERPT</label>
+              <!-- Input -->
+              <textarea class="form-control" name="excerpt" id="excerpt" rows="5" formControlName="excerpt"
+                        [placeholder]="'EXCERPT' | translate"></textarea>
+            </div>
+            <!-- Slug -->
+            <div class="form-group">
+              <!-- Label -->
+              <label for="slug" translate>SLUG</label>
+              <!-- Input -->
+              <input class="form-control" name="slug" id="slug" formControlName="slug"
+                     [placeholder]="'SLUG_PLACEHOLDER' | translate">
+            </div>
+            <!-- Meta description -->
+            <div class="form-group">
+              <!-- Label -->
+              <label for="meta_description" translate>META_DESCRIPTION</label>
+              <!-- Input -->
+              <input class="form-control" name="meta_description" id="meta_description"
+                     formControlName="meta_description"
+                     [placeholder]="'META_DESCRIPTION_PLACEHOLDER' | translate">
+            </div>
+            <!-- Label -->
+            <p translate>COMMUNITY</p>
+            <!-- Enable commenting -->
+            <div class="form-group custom-control custom-checkbox">
+              <!-- Checkbox -->
+              <input type="checkbox" class="custom-control-input" id="commentEnabled" formControlName="comment_enabled">
+              <!-- Lable; -->
+              <label class="custom-control-label" for="commentEnabled" translate>ENABLE_COMMENTING</label>
+            </div>
+            <!-- Featured -->
+            <div class="form-group custom-control custom-checkbox">
+              <!-- Checkbox -->
+              <input type="checkbox" class="custom-control-input" id="featured" formControlName="featured">
+              <!-- Label -->
+              <label class="custom-control-label" for="featured" translate>FEATURED</label>
+            </div>
+            <!-- Set as page -->
+            <div class="form-group custom-control custom-checkbox">
+              <!-- Checkbox -->
+              <input type="checkbox" class="custom-control-input" id="setAsPage" formControlName="is_page">
+              <!-- Label -->
+              <label class="custom-control-label" for="setAsPage" translate>SET_AS_PAGE</label>
             </div>
           </div>
         </div>

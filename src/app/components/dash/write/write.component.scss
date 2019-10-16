@@ -58,6 +58,7 @@
   width: 300px;
   border-radius: 0;
   background: $body-bg;
+  border-left: $border-width solid $border-color;;
 
   .section {
     display: flex;
