@@ -42,6 +42,40 @@
         </div>
       </div>
 
+      <!-- Sort fields -->
+      <div class="dropdown ml-2" dropdown *ngIf="!entriesSelected.length">
+        <button class="btn btn-light dropdown-toggle" dropdownToggle>
+          <fa-icon [fixedWidth]="true" [icon]="sort" class="text-secondary mr-1"></fa-icon>
+          <span *ngIf="!sortField" translate>SORT_BY</span>
+          <span *ngIf="sortField" translate>{{ sortField.label }}</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+          <!-- Clear sorting -->
+          <button class="dropdown-item" [class.active]="!sortField" (click)="sortField = null; getEntries()" translate>
+            <fa-icon [fixedWidth]="true" [icon]="times"></fa-icon>
+            CLEAR
+          </button>
+          <!-- Sorting fields -->
+          <button class="dropdown-item"
+                  *ngFor="let field of sortFields"
+                  [class.active]="field === sortField"
+                  (click)="sortField = field; getEntries()">
+            <fa-icon [fixedWidth]="true" [icon]="field.icon"></fa-icon>
+            {{ field.label | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Sort order -->
+      <button class="btn btn-light ml-2" *ngIf="!entriesSelected.length && sortField" (click)="toggleOrder()">
+        <fa-icon class="text-secondary" [fixedWidth]="true"
+                 [icon]="ascending" *ngIf="sortOrder === order.ASCENDING">
+        </fa-icon>
+        <fa-icon class="text-secondary" [fixedWidth]="true"
+                 [icon]="descending" *ngIf="sortOrder === order.DESCENDING">
+        </fa-icon>
+      </button>
+
       <!-- Commenting -->
       <div class="dropdown ml-auto" dropdown *ngIf="entriesSelected.length">
         <button class="btn btn-light dropdown-toggle" dropdownToggle translate>COMMENTING</button>
@@ -106,17 +140,17 @@
         <th class="text-secondary text-right">
           <!-- Likes -->
           <span *ngIf="entry.vote_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="['far', 'thumbs-up']"></fa-icon>
+          <fa-icon [fixedWidth]="true" [icon]="like"></fa-icon>
             {{ entry.vote_count | number }}
           </span>
           <!-- Comments -->
           <span *ngIf="entry.comment_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
+          <fa-icon [fixedWidth]="true" [icon]="comment"></fa-icon>
             {{ entry.comment_count | number }}
           </span>
-          <!-- Votes -->
+          <!-- Views -->
           <span *ngIf="entry.view_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
+          <fa-icon [fixedWidth]="true" [icon]="eye"></fa-icon>
             {{ entry.view_count | number }}
           </span>
         </th>
@@ -125,7 +159,7 @@
           <!-- Dropdown -->
           <div class="dropdown" dropdown>
             <button class="btn btn-light btn-sm" dropdownToggle>
-              <fa-icon icon="ellipsis-v"></fa-icon>
+              <fa-icon [fixedWidth]="true" [icon]="ellipsis"></fa-icon>
             </button>
             <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
               <!-- Header -->

@@ -227,5 +227,9 @@
   "ANY_STATUS": "Any status",
   "COMMENTING_DISABLED": "Commenting disabled",
   "NOT_FEATURED": "Not featured",
+  "LIKES": "Likes",
+  "VIEWS": "Views",
+  "SORT_BY": "Sort by",
+  "CLEAR": "Clear",
   "COLLABORATING": "Collaborating"
 }
