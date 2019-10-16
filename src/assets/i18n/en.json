@@ -229,5 +229,8 @@
   "SLUG_PLACEHOLDER": "Slug (URL)",
   "COMMUNITY": "Community",
   "ENABLE_COMMENTING": "Enable commenting",
-  "SET_AS_PAGE": "Set as page"
+  "SET_AS_PAGE": "Set as page",
+  "LOADING_DRAFT": "Loading draft",
+  "UNPUBLISHED_CHANGES": "You have unpublished changes",
+  "DISCARD_CHANGES": "Discard changes"
 }
