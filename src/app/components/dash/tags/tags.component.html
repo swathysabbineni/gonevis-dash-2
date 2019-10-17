@@ -29,26 +29,32 @@
             </th>
             <!-- Buttons -->
             <th class="text-right">
-              <div class="btn-group btn-group-sm">
-                <!-- Add to navigation -->
-                <button class="btn btn-light text-secondary" [title]="'ADD_TO_NAVIGATION' | translate"
-                        (click)="addToNavigation(tag.name, tag.slug)">
-                  <fa-icon [fixedWidth]="true" icon="bars"></fa-icon>
+              <!-- Dropdown -->
+              <div class="dropdown" dropdown>
+                <button class="btn btn-light btn-sm" type="button" dropdownToggle>
+                  <fa-icon icon="ellipsis-v"></fa-icon>
                 </button>
-                <!-- Edit -->
-                <button class="btn btn-light text-secondary" [title]="'EDIT' | translate" (click)="showTagModal(tag)">
-                  <fa-icon [fixedWidth]="true" icon="edit"></fa-icon>
-                </button>
-                <!-- View -->
-                <a class="btn btn-light text-secondary" [title]="'VIEW_ON_BLOG' | translate"
-                   [href]="tag.absolute_uri" target="_blank">
-                  <fa-icon [fixedWidth]="true" icon="eye"></fa-icon>
-                </a>
-                <!-- Delete -->
-                <button class="btn btn-light text-secondary" [title]="'DELETE' | translate"
-                        (click)="delete(tag)" [disabled]="tag.loading">
-                  <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
-                </button>
+                <!-- Options -->
+                <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+                  <!-- View -->
+                  <a class="dropdown-item" translate [href]="tag.absolute_uri" target="_blank">
+                    VIEW_ON_BLOG
+                  </a>
+                  <!-- Add to navigation -->
+                  <button class="dropdown-item" (click)="addToNavigation(tag.name, tag.slug)" translate>
+                    ADD_TO_NAVIGATION
+                  </button>
+                  <!-- Edit -->
+                  <button class="dropdown-item" (click)="showTagModal(tag)" translate>
+                    EDIT
+                  </button>
+                  <!-- Separated -->
+                  <div class="dropdown-divider"></div>
+                  <!-- Delete -->
+                  <button class="dropdown-item text-danger" translate (click)="delete(tag)" [disabled]="tag.loading">
+                    DELETE
+                  </button>
+                </div>
               </div>
             </th>
           </tr>

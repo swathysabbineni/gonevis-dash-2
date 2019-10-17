@@ -10,7 +10,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateModule } from '@ngx-translate/core';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule, BsDropdownModule } from 'ngx-bootstrap';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 import { TagsRoutingModule } from './tags-routing.module';
@@ -30,6 +30,7 @@ import { TagsComponent } from './tags.component';
     TagModalModule,
     FileListModule,
     PaginationModule.forRoot(),
+    BsDropdownModule,
   ],
 })
 export class TagsModule {
