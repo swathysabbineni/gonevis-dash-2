@@ -39,5 +39,6 @@ export interface Entry {
   /**
    * Extra properties
    */
-  loading?: boolean;
+  loading: boolean;
+  select: boolean;
 }

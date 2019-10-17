@@ -31,8 +31,6 @@ import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { environment } from '@environments/environment';
-import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
-import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
 import { TranslateService } from '@ngx-translate/core';
 import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
@@ -102,19 +100,17 @@ export class WriteComponent implements OnInit, OnDestroy {
    */
   readonly entryStatus = EntryStatus;
 
-  readonly entryStatuses = [{
-    label: this.translateService.instant('DRAFT'),
-    id: EntryStatus.Draft,
-    icon: faEdit,
-    title: this.translateService.instant('SET_DRAFT'),
-  }, {
-    label: this.translateService.instant('PUBLISHED'),
-    id: EntryStatus.Published,
-    icon: faGlobe,
-    title: this.translateService.instant('SET_PUBLISHED'),
-  }];
+  @ViewChild('fileListModalTemplate', { static: false }) private fileListModalTemplate: TemplateRef<any>;
 
-  @ViewChild('fileListModalTemplate', { static: false }) fileListModalTemplate: TemplateRef<any>;
+  /**
+   * Determines whether user was creating post or not
+   */
+  private wasCreating: boolean;
+
+  /**
+   * Determines whether to show or hide sidebar
+   */
+  hideSidebar = true;
 
   /**
    * File list modal
@@ -294,10 +290,26 @@ export class WriteComponent implements OnInit, OnDestroy {
        */
       this.activatedRoute.params.subscribe((params: Params): void => {
         if (params.id === 'new') {
+          this.form.reset({
+            title: '',
+            content: '',
+            excerpt: '',
+            tags: [],
+            status: EntryStatus.Draft,
+            slug: '',
+            comment_enabled: false,
+            featured: false,
+            is_page: false,
+            start_publication: null,
+            cover_image: null,
+            meta_description: '',
+          });
+          clearInterval(this.autoSaveInterval);
           this.isEditing = false;
           this.initAutoSave();
         }
         if (params.id && params.id !== 'new') {
+          clearInterval(this.autoSaveInterval);
           this.getEntry(params.id.toString());
         }
       });
@@ -329,6 +341,7 @@ export class WriteComponent implements OnInit, OnDestroy {
       is_page: data.is_page,
       start_publication: data.start_publication,
       cover_image: data.media.cover_image ? data.media.cover_image.id : null,
+      meta_description: data.meta_description,
     });
     this.coverImage = data.media.cover_image;
     this.oldForm = this.form.value;
@@ -443,12 +456,6 @@ export class WriteComponent implements OnInit, OnDestroy {
     editor.clipboard.addMatcher(Node.ELEMENT_NODE, (node: HTMLElement, delta: Delta): Delta => {
       const ops: Op[] = [];
       delta.ops.forEach((op: Op): void => {
-        if (op.insert.hasOwnProperty('image')) {
-          this.writeService.getPastedImage(node.getAttribute('src')).subscribe((data: Blob): void => {
-            const file: File = new File([data], 'name', { type: data.type });
-            this.uploadFile(file);
-          });
-        }
         /**
          * Check attributes whitelist
          */
@@ -458,6 +465,18 @@ export class WriteComponent implements OnInit, OnDestroy {
               delete op.attributes[attr];
             }
           });
+        }
+        /**
+         * Check if pasted element was an image
+         */
+        if (op.insert.hasOwnProperty('image') &&
+          !op.insert['image'].startsWith('https://gonevis-draft.s3.amazonaws.com') &&
+          !op.insert['image'].startsWith('https://gonevis.s3.amazonaws.com')) {
+          this.writeService.getPastedImage(node.getAttribute('src')).subscribe((data: Blob): void => {
+            const file: File = new File([data], 'name', { type: data.type });
+            this.uploadFile(file);
+          });
+          return;
         }
         /**
          * Check insert whitelist
@@ -562,7 +581,12 @@ export class WriteComponent implements OnInit, OnDestroy {
           this.toast.warning(response.UNPUBLISHED_CHANGES as string, response.LOADING_DRAFT as string);
         });
       }
-      this.patchForm(data);
+      /**
+       * Don't patch if user was creating post
+       */
+      if (!this.wasCreating) {
+        this.patchForm(data);
+      }
       this.editor['history'].clear();
       // Initial auto-save
       this.initAutoSave();
@@ -646,6 +670,9 @@ export class WriteComponent implements OnInit, OnDestroy {
     }
     this.writeService.addEntry(this.form.value).subscribe((data: Entry): void => {
       this.loading = false;
+      if (this.autoSave) {
+        this.wasCreating = true;
+      }
       this.router.navigate(['../', data.id], { relativeTo: this.activatedRoute });
     }, (): void => {
       this.loading = false;
