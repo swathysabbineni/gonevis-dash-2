@@ -1,6 +1,7 @@
 <!-- Editor -->
 <form class="d-flex flex-column h-100 bg-white" [formGroup]="form">
   <div class="d-flex align-items-center header" [class.shadow-sm]="scrolled">
+    <!-- Custom toolbar -->
     <div class="toolbar">
       <div class="ql-formats">
         <select class="ql-header ql-picker" tooltip="Direction" placement="bottom"
@@ -39,17 +40,19 @@
         <button class="ql-clean" tooltip="Clear format" placement="bottom"></button>
       </div>
     </div>
+    <!-- Submit buttons -->
     <div class="d-flex ml-auto">
       <button class="btn btn-primary mr-2" (click)="save(entryStatus.Published)" *ngIf="isEditing">
         <span *ngIf="form.get('status').value === entryStatus.Draft">Publish</span>
         <span *ngIf="form.get('status').value === entryStatus.Published">Update</span>
       </button>
-      <button *ngIf="!isEditing" (click)="save()">Submit</button>
-      <button class="btn btn-light mr-2">
+      <button class="btn btn-success mr-2" *ngIf="!isEditing" (click)="save()">Submit</button>
+      <button class="btn btn-light mr-2" (click)="hideSidebar = !hideSidebar">
         <fa-icon icon="cog" [fixedWidth]="true"></fa-icon>
       </button>
     </div>
   </div>
+  <!-- Editor -->
   <div class="d-flex h-100">
     <div class="editor h-100 overflow-auto"
          (scroll)="scrolled = $event.target['scrollTop'] > 0">
@@ -63,6 +66,7 @@
                   (keydown.enter)="$event.preventDefault(); editor.focus()"
                   (keydown.tab)="$event.preventDefault(); editor.focus()"
                   [required]="true"></textarea>
+        <!-- Quill editor -->
         <quill-editor formControlName="content"
                       [modules]="options"
                       [placeholder]="'CONTENT' | translate"
@@ -75,7 +79,7 @@
         </quill-editor>
       </div>
     </div>
-    <div class="card sidebar">
+    <div class="card sidebar" [class.closed]="hideSidebar">
       <!-- Header -->
       <div class="card-header d-flex">
         <button class="btn btn-warning" (click)="save()" [disabled]="loading">Update</button>
@@ -106,10 +110,11 @@
             <div class="form-group">
               <label for="status"></label>
               <select class="custom-select" formControlName="status" id="status">
-                <option *ngFor="let status of entryStatuses"
-                        [ngValue]="status.id"
-                        [title]="status.title">
-                  {{ status.label }}
+                <!-- Draft -->
+                <option [ngValue]="entryStatus.Draft" [title]="'SET_DRAFT' | translate" translate>DRAFT</option>
+                <!-- Published -->
+                <option [ngValue]="entryStatus.Published" [title]="'SET_PUBLISHED' | translate" translate>
+                  PUBLISHED
                 </option>
               </select>
             </div>

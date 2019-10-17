@@ -59,6 +59,7 @@
   border-radius: 0;
   background: $body-bg;
   border-left: $border-width solid $border-color;;
+  overflow: hidden;
 
   .section {
     display: flex;
@@ -80,6 +81,11 @@
     .collapse-content {
       padding: 0 $card-spacer-x;
     }
+  }
+
+  &.closed {
+    flex-basis: 0;
+    width: 0;
   }
 }
 
