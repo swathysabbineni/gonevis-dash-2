@@ -9,9 +9,9 @@ import { Observable } from 'rxjs';
 export class AuthGuardService implements CanLoad {
 
   /**
-   * Sign in redirection
+   * Start redirection
    */
-  private readonly signInRoute: string = '/user/sign-in';
+  private readonly startRoute: string = '/start';
 
   constructor(private router: Router,
               private cookieService: CookieService) {
@@ -38,8 +38,8 @@ export class AuthGuardService implements CanLoad {
       return true;
     }
 
-    // Not logged-in prevent user from accessing current route and redirect user to login page with the return url.
-    this.router.navigateByUrl(this.signInRoute);
+    // Not logged-in prevent user from accessing current route and redirect user to start page with the return url.
+    this.router.navigateByUrl(this.startRoute);
     return false;
   }
 }
