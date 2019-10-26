@@ -8,6 +8,10 @@
       <label for="meta_description" translate>META_DESCRIPTION</label>
       <input class="form-control" formControlName="meta_description" type="text" id="meta_description">
       <small class="form-text text-muted" translate>META_DESCRIPTION_ABOUT</small>
+      <!-- API error -->
+      <span class="text-danger" *ngIf="advancedForm.hasError('invalid', 'meta_description')">
+        <span class="d-block" *ngFor="let error of advancedFormError['meta_description']">{{ error }}</span>
+      </span>
     </div>
     <!-- Number of posts per page -->
     <div class="form-group">
@@ -17,6 +21,10 @@
           {{ index + 1 }}
         </option>
       </select>
+      <!-- API error -->
+      <span class="text-danger" *ngIf="advancedForm.hasError('invalid', 'paginate_by')">
+        <span class="d-block" *ngFor="let error of advancedFormError['paginate_by']">{{ error }}</span>
+      </span>
     </div>
     <!-- Commenting -->
     <div class="form-group">
@@ -68,6 +76,10 @@
       <label for="set_footer_text" translate>FOOTER_TEXT</label>
       <textarea class="form-control" id="set_footer_text" formControlName="set_footer_text"></textarea>
     </div>
+    <!-- Error -->
+    <span class="text-danger" *ngIf="customFooterTextErrors.footer_text">
+      {{ customFooterTextErrors.footer_text[0] }}
+    </span>
   </div>
   <!-- Footer -->
   <div class="card-footer text-right">

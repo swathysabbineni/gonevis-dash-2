@@ -4,6 +4,7 @@ import { ApiError } from '@app/interfaces/api-error';
 import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
@@ -31,6 +32,11 @@ export class SettingsAdvancedComponent implements OnInit {
   advancedForm: FormGroup;
 
   /**
+   * Advanced form API error
+   */
+  advancedFormError: ApiError = {};
+
+  /**
    * remove branding form
    */
   removeBrandingForm: FormGroup;
@@ -49,6 +55,11 @@ export class SettingsAdvancedComponent implements OnInit {
    * Advanced form API loading indicator
    */
   advancedLoading: boolean;
+
+  /**
+   * Custom footer text API errors
+   */
+  customFooterTextErrors: ApiError = {};
 
   /**
    * Google analytics form API errors
@@ -170,8 +181,21 @@ export class SettingsAdvancedComponent implements OnInit {
   submit(payload: Params = this.advancedForm.value): void {
     this.advancedLoading = true;
     this.blogService.updateSettings(payload).subscribe((data: BlogSettings): void => {
+      this.advancedFormError = {};
       this.advancedLoading = false;
       this.settings = data;
+    }, (error: HttpErrorResponseApi): void => {
+      this.advancedFormError = error.error;
+      this.advancedLoading = false;
+      /**
+       * Iterate through raised error keys and based on those keys, set error to form controls.
+       */
+      Object.keys(this.advancedFormError).map((key: string): void => {
+        if (this.advancedForm.get(key)) {
+          this.advancedForm.get(key).setErrors({ invalid: true });
+          this.advancedForm.get(key).markAllAsTouched();
+        }
+      });
     });
   }
 
@@ -182,17 +206,21 @@ export class SettingsAdvancedComponent implements OnInit {
     this.advancedLoading = true;
     this.blogService.updateRemoveBranding(this.removeBrandingForm.value.remove_branding)
       .subscribe((data: BlogSettings): void => {
-      this.advancedLoading = false;
-      this.toast.info(this.translate.instant('TOAST_UPDATE'),
-        this.translate.instant('REMOVE_GONEVIS_BRANDING'));
-      this.settings = data;
-    });
+        this.advancedLoading = false;
+        this.toast.info(this.translate.instant('TOAST_UPDATE'),
+          this.translate.instant('REMOVE_GONEVIS_BRANDING'));
+        this.settings = data;
+      }, () => this.advancedLoading = false);
     this.blogService.updateFooterText(this.removeBrandingForm.value.set_footer_text)
       .subscribe((data: BlogSettings): void => {
-      this.advancedLoading = false;
-      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('FOOTER_TEXT'));
-      this.settings = data;
-    });
+        this.advancedLoading = false;
+        this.customFooterTextErrors = {};
+        this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('FOOTER_TEXT'));
+        this.settings = data;
+      }, (error: HttpErrorResponseApi): void => {
+        this.advancedLoading = false;
+        this.customFooterTextErrors = error.error;
+      });
   }
 
   /**
@@ -202,11 +230,11 @@ export class SettingsAdvancedComponent implements OnInit {
     this.advancedLoading = true;
     this.blogService.updateGoogleAnalytics(this.googleAnalyticsForm.value)
       .subscribe((data: BlogSettings): void => {
-      this.advancedLoading = false;
-      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('GOOGLE_ANALYTICS'));
-      this.settings = data;
-      this.googleAnalyticsErrors = {};
-    }, (error): void => {
+        this.advancedLoading = false;
+        this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('GOOGLE_ANALYTICS'));
+        this.settings = data;
+        this.googleAnalyticsErrors = {};
+      }, (error): void => {
         this.advancedLoading = false;
         this.googleAnalyticsErrors = error.error;
       });
@@ -222,7 +250,7 @@ export class SettingsAdvancedComponent implements OnInit {
       this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('GOOGLE_ADSENSE'));
       this.settings = data;
       this.googleAdSenseErrors = {};
-    }, (error): void  => {
+    }, (error): void => {
       this.advancedLoading = false;
       this.googleAdSenseErrors = error.error;
     });
