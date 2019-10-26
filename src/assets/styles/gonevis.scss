@@ -24,7 +24,8 @@ html, body {
 }
 
 a,
-.pointer {
+.pointer,
+.custom-control-label {
   cursor: pointer;
 }
 
@@ -34,6 +35,12 @@ a,
 
 .white-space-pre-line {
   white-space: pre-line;
+}
+
+.dropdown {
+  .dropdown-item {
+    outline: none !important;
+  }
 }
 
 .card {

@@ -17,14 +17,14 @@ export class EntryService {
   /**
    * API page size
    */
-  static readonly PAGE_SIZE = 20;
+  static readonly PAGE_SIZE: number = 20;
 
   constructor(private http: HttpClient,
               private apiService: ApiService) {
   }
 
   /**
-   * Get blog entries
+   * Get blog entries (posts and pages)
    *
    * @param filter API filters
    * @param page API page
@@ -33,8 +33,9 @@ export class EntryService {
     filter: {
       is_page?: boolean,
       user?: string,
-      format?: EntryFormat,
-      status?: EntryStatus,
+      format?: EntryFormat | '',
+      status?: EntryStatus | '',
+      ordering?: string,
     } = {},
     page: number = 1,
   ): Observable<ApiResponse<Entry>> {
@@ -45,6 +46,16 @@ export class EntryService {
         offset: UtilService.getPageOffset(EntryService.PAGE_SIZE, page),
       }),
     });
+  }
+
+  /**
+   * Update an entry
+   *
+   * @param id Entry ID
+   * @param payload Entry data
+   */
+  update(id: string, payload: { [field: string]: any }): Observable<Entry> {
+    return this.http.patch<Entry>(`${this.apiService.base.v1}website/entry/${id}`, payload);
   }
 
   /**

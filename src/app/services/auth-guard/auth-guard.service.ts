@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, Router, UrlSegment } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { AuthService } from '@app/services/auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,37 +8,28 @@ import { Observable } from 'rxjs';
 export class AuthGuardService implements CanLoad {
 
   /**
-   * Sign in redirection
+   * Path to redirect to when user is authenticated and tries to load a guarded route
    */
-  private readonly signInRoute: string = '/user/sign-in';
+  private static readonly UN_AUTH_PATH: string[] = ['/start'];
 
   constructor(private router: Router,
-              private cookieService: CookieService) {
+              private auth: AuthService) {
   }
 
   /**
    * A guard deciding if children can be loaded.
-   *
-   * @param route A configuration object that defines a single route.
-   *              A set of routes are collected in a `Routes` array to define a `Router` configuration.
-   *              The router attempts to match segments of a given URL against each route,
-   *              using the configuration options defined in this object.
-   *
-   *              Supports static, parameterized, redirect, and wildcard routes, as well as
-   *              custom route data and resolve methods.
-   * @param segments Represents list of URL segments.
-   *
-   *                 A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
-   *                 parameters associated with the segment.
    */
-  canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-    // If user is logged-in, then allow user to access current route.
-    if (this.cookieService.check('token')) {
+  canLoad(route: Route, segments: UrlSegment[]): boolean {
+    /**
+     * If user is logged-in, then allow user to access current route
+     */
+    if (this.auth.isAuth) {
       return true;
     }
-
-    // Not logged-in prevent user from accessing current route and redirect user to login page with the return url.
-    this.router.navigateByUrl(this.signInRoute);
+    /**
+     * Not logged-in prevent user from accessing current route and redirect user to start page with the return url
+     */
+    this.router.navigate(AuthGuardService.UN_AUTH_PATH);
     return false;
   }
 }

@@ -97,14 +97,15 @@
 
           <!-- Email -->
           <div class="form-group">
-            <input class="form-control" type="email" formControlName="email"
-                   [placeholder]="'EMAIL' | translate" required>
+            <label for="email" translate>EMAIL</label>
+            <input class="form-control" id="email" type="email" formControlName="email" required>
             <span class="text-danger" *ngIf="errors.email">{{ errors.email[0] }}</span>
           </div>
 
           <!-- Role -->
           <div class="form-group">
-            <select class="form-control" formControlName="role">
+            <label for="role" translate>ROLE</label>
+            <select class="form-control" id="role" formControlName="role">
               <option [ngValue]="teamRoles.Administrator">{{ roleNames[teamRoles.Administrator] }}</option>
               <option [ngValue]="teamRoles.Editor">{{ roleNames[teamRoles.Editor] }}</option>
             </select>

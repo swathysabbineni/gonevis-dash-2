@@ -20,5 +20,16 @@
   </div>
 </div>
 
+<!-- Pagination -->
+<div class="pagination-wrapper" *ngIf="pagination && files.length">
+  <pagination [itemsPerPage]="pagination.itemsPerPage"
+              [totalItems]="pagination.totalItems"
+              [disabled]="loading"
+              (pageChanged)="pageChanged($event)"
+              [nextText]="'NEXT' | translate"
+              [previousText]="'PREV' | translate">
+  </pagination>
+</div>
+
 <!-- No data -->
 <div class="my-3" *ngIf="files && !files.length" translate>NOTHING_HERE_YET</div>
