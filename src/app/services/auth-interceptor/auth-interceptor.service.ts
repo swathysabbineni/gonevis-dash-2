@@ -3,6 +3,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { environment } from '@environments/environment';
 import { CookieService } from 'ngx-cookie-service';
+import { ToastrService, ActiveToast } from 'ngx-toastr';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
@@ -13,7 +14,8 @@ import { AuthService } from '../auth/auth.service';
 export class AuthInterceptorService implements HttpInterceptor {
 
   constructor(private cookieService: CookieService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private toast: ToastrService) {
   }
 
   /**
@@ -37,7 +39,22 @@ export class AuthInterceptorService implements HttpInterceptor {
       } else {
         // Sign out if 403 response
         if (error.status === 403) {
-          this.authService.signOut();
+          if (error.error.detail.indexOf('You do not have permission to perform this action.') !== -1) {
+            this.authService.signOut();
+          }
+          if (error.error.detail.indexOf('You need to upgrade your subscription plan to make such action.') !== -1) {
+            /**
+             * Find duplicated toast based on message
+             */
+            const duplicatedToast: ActiveToast<any> = this.toast.findDuplicate(error.error.detail, false, true);
+            /**
+             * On duplicated toast found, clear the it before showing the message again.
+             */
+            if (duplicatedToast) {
+              this.toast.remove(duplicatedToast.toastId);
+            }
+            this.toast.error(error.error.detail);
+          }
         }
         // The backend returned an unsuccessful response code.
         // The response body may contain clues as to what went wrong,
