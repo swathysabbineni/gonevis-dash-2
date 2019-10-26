@@ -234,7 +234,7 @@ export class SettingsAdvancedComponent implements OnInit {
         this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('GOOGLE_ANALYTICS'));
         this.settings = data;
         this.googleAnalyticsErrors = {};
-      }, (error): void => {
+      }, (error: HttpErrorResponseApi): void => {
         this.advancedLoading = false;
         this.googleAnalyticsErrors = error.error;
       });
@@ -250,7 +250,7 @@ export class SettingsAdvancedComponent implements OnInit {
       this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('GOOGLE_ADSENSE'));
       this.settings = data;
       this.googleAdSenseErrors = {};
-    }, (error): void => {
+    }, (error: HttpErrorResponseApi): void => {
       this.advancedLoading = false;
       this.googleAdSenseErrors = error.error;
     });
