@@ -1,6 +1,6 @@
 <!-- Editor -->
 <form class="d-flex flex-column h-100 bg-white" [formGroup]="form">
-  <div class="d-flex align-items-center header" [class.shadow-sm]="scrolled">
+  <div class="d-flex align-items-center px-3 header" [class.shadow-sm]="scrolled">
     <!-- Custom toolbar -->
     <div class="toolbar">
       <div class="ql-formats">
@@ -42,12 +42,23 @@
     </div>
     <!-- Submit buttons -->
     <div class="d-flex ml-auto">
-      <button class="btn btn-primary mr-2" (click)="save(entryStatus.Published)" *ngIf="isEditing">
-        <span *ngIf="form.get('status').value === entryStatus.Draft">Publish</span>
-        <span *ngIf="form.get('status').value === entryStatus.Published">Update</span>
+      <div class="btn-group" role="group">
+      </div>
+      <button class="btn btn-primary" *ngIf="!isEditing" (click)="save()" translate>SUBMIT</button>
+      <button class="btn btn-primary"
+              [ngClass]="{
+                  'btn-success': form.get('status').value === entryStatus.Draft,
+                  'btn-light': form.get('status').value === entryStatus.Published
+                }"
+              (click)="save(entryStatus.Published)" *ngIf="isEditing" [disabled]="loading">
+        <span *ngIf="form.get('status').value === entryStatus.Draft" translate>PUBLISH</span>
+        <span *ngIf="form.get('status').value === entryStatus.Published" translate>UPDATE</span>
       </button>
-      <button class="btn btn-success mr-2" *ngIf="!isEditing" (click)="save()">Submit</button>
-      <button class="btn btn-light mr-2" (click)="hideSidebar = !hideSidebar">
+      <a class="btn btn-light ml-2" [href]="oldEntry.absolute_uri" target="_blank" tooltip="View on blog"
+         placement="bottom" *ngIf="isEditing">
+        <fa-icon icon="eye" [fixedWidth]="true"></fa-icon>
+      </a>
+      <button class="btn btn-light ml-2" (click)="hideSidebar = !hideSidebar">
         <fa-icon icon="cog" [fixedWidth]="true"></fa-icon>
       </button>
     </div>
@@ -81,11 +92,8 @@
     </div>
     <div class="card sidebar" [class.closed]="hideSidebar">
       <!-- Header -->
-      <div class="card-header d-flex">
-        <button class="btn btn-warning" (click)="save()" [disabled]="loading">Update</button>
-        <button class="btn btn-default ml-auto">
-          <fa-icon icon="times" [fixedWidth]="true"></fa-icon>
-        </button>
+      <div class="card-header" *ngIf="isEditing && form.get('status').value === entryStatus.Draft">
+        <button class="btn btn-light" (click)="save()" [disabled]="loading" translate>UPDATE</button>
       </div>
       <!-- Content -->
       <div class="card-body overflow-auto p-0">
@@ -99,7 +107,7 @@
             <!-- Title -->
             <div class="mr-auto">
               <fa-icon [icon]="['far', 'newspaper']" [fixedWidth]="true"></fa-icon>
-              Status
+              {{ 'STATUS' | translate }}
             </div>
             <!-- Caret -->
             <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
@@ -147,8 +155,8 @@
              aria-controls="collapseBasic">
             <!-- Title -->
             <div class="mr-auto">
-              <fa-icon icon="tags" [fixedWidth]="true"></fa-icon>
-              Tags
+              <fa-icon icon="hashtag" [fixedWidth]="true"></fa-icon>
+              {{ 'TAGS' | translate }}
             </div>
             <!-- Caret -->
             <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
@@ -156,7 +164,8 @@
           <!-- Content -->
           <div class="collapse-content" [collapse]="true" #tagsContent=bs-collapse>
             <div class="form-group">
-              <input type="text" placeholder="Search tags" [formControl]="tagQueryControl" class="form-control">
+              <input type="text" [placeholder]="'SEARCH_TAGS' | translate" [formControl]="tagQueryControl"
+                     class="form-control">
             </div>
             <div class="form-group">
               <div class="custom-control custom-checkbox" *ngFor="let tag of tags">
@@ -178,7 +187,7 @@
             <!-- Title -->
             <div class="mr-auto">
               <fa-icon icon="image" [fixedWidth]="true"></fa-icon>
-              Post Cover
+              {{ 'COVER_IMAGE' | translate }}
             </div>
             <!-- Caret -->
             <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
@@ -218,7 +227,7 @@
             <!-- Title -->
             <div class="mr-auto">
               <fa-icon icon="plus" [fixedWidth]="true"></fa-icon>
-              More Options
+              {{ 'MORE_OPTIONS' | translate }}
             </div>
             <!-- Caret -->
             <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
