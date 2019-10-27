@@ -127,7 +127,7 @@
         </th>
         <th>
           <!-- Title -->
-          <a class="font-weight-bold">{{ entry.title }}</a>
+          <a class="font-weight-bold" [routerLink]="['../../../write', entry.id]">{{ entry.title }}</a>
           <!-- Date -->
           <div class="small text-secondary" *ngIf="entry.published">
             <span translate>PUBLISHED_ON</span> {{ entry.published | date }}
