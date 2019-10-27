@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { DashRoutingModule } from './dash-routing.module';
 import { DashComponent } from './dash.component';
@@ -13,6 +14,7 @@ import { DashComponent } from './dash.component';
     CommonModule,
     DashRoutingModule,
     FontAwesomeModule,
+    TranslateModule.forChild(),
   ],
 })
 export class DashModule {

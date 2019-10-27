@@ -4,12 +4,12 @@
   <div class="card dash">
 
     <!-- Header -->
-    <div class="card-header" translate>NAVIGATIONS</div>
+    <div class="card-header" translate>NAVIGATION</div>
 
     <!-- Content -->
-    <div class="card-body" *ngIf="navigations && navigations.length" cdkDropList (cdkDropListDropped)="drop($event)">
+    <div class="card-body" *ngIf="navs && navs.length" cdkDropList (cdkDropListDropped)="drop($event)">
       <div class="d-flex align-items-center mb-2" cdkDrag cdkDragLockAxis="y"
-           *ngFor="let navigation of navigations; let index = index; let last = last" [class.mb-0]="last">
+           *ngFor="let navigation of navs; let index = index; let last = last" [class.mb-0]="last">
         <!-- Handle -->
         <button class="btn btn-link mr-2" cdkDragHandle>
           <fa-icon icon="grip-lines-vertical" [fixedWidth]="true"></fa-icon>
@@ -35,14 +35,14 @@
                [(ngModel)]="navigation.color"
                [class.is-invalid]="errors[index] && errors[index].color">
         <!-- Delete -->
-        <button class="btn btn-link" (click)="navigations.splice(index, 1)">
+        <button class="btn btn-link" (click)="navs.splice(index, 1)">
           <fa-icon icon="trash" [fixedWidth]="true"></fa-icon>
         </button>
       </div>
     </div>
 
     <!-- No data -->
-    <div class="card-body" *ngIf="navigations && !navigations.length">
+    <div class="card-body" *ngIf="navs && !navs.length">
       <div class="card-text" translate>NOTHING_HERE_YET</div>
     </div>
 

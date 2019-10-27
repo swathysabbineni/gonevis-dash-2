@@ -10,9 +10,6 @@ const routes: Routes = [{
     title: 'Dash',
   },
   children: [{
-    path: '',
-    redirectTo: 'main',
-  }, {
     path: 'main',
     loadChildren: () => import('./main/main.module').then(m => m.MainModule),
   }, {
@@ -21,12 +18,11 @@ const routes: Routes = [{
   }, {
     path: 'posts',
     loadChildren: () => import('./entry/entry.module').then(m => m.EntryModule),
+    data: { title: 'POSTS' },
   }, {
     path: 'pages',
-    data: {
-      pages: true,
-    },
     loadChildren: () => import('./entry/entry.module').then(m => m.EntryModule),
+    data: { title: 'PAGES', pages: true },
   }, {
     path: 'comments',
     loadChildren: () => import('./comments/comments.module').then(m => m.CommentsModule),
@@ -48,6 +44,10 @@ const routes: Routes = [{
   }, {
     path: 'help',
     loadChildren: () => import('./help/help.module').then(m => m.HelpModule),
+  }, {
+    path: '**',
+    pathMatch: 'full',
+    redirectTo: 'main',
   }],
 }];
 

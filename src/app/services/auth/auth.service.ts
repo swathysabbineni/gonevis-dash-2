@@ -137,7 +137,8 @@ export class AuthService {
     username: string,
     password: string,
     showToast: boolean = true,
-    redirectPath: string[] = AuthService.signInRedirect): Observable<string> {
+    redirectPath: string[] = AuthService.signInRedirect,
+  ): Observable<string> {
     return this.http.post<AuthResponse>(
       `${this.api.base.v1}account/login/`, { username, password },
     ).pipe(

@@ -6,6 +6,9 @@ import { CommentsComponent } from './comments.component';
 const routes: Routes = [{
   path: '',
   component: CommentsComponent,
+  data: {
+    title: 'COMMENTS',
+  },
 }];
 
 @NgModule({

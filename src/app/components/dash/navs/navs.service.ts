@@ -15,18 +15,18 @@ export class NavsService {
   }
 
   /**
-   * Get blog navgations
+   * Get blog navigation
    */
-  getNavigations(): Observable<{ navigation: Navigation[] }> {
+  getNavs(): Observable<{ navigation: Navigation[] }> {
     return this.http.get<{ navigation: Navigation[] }>(
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/navigation/`,
     );
   }
 
   /**
-   * Update navigations
+   * Update navigation
    *
-   * @param navigation List of navigations to update
+   * @param navigation List of navigation to update
    */
   update(navigation: Navigation[]): Observable<{ navigation: Navigation[] }> {
     return this.http.put<{ navigation: Navigation[] }>(

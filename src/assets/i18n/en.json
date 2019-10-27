@@ -123,7 +123,7 @@
   "TOOLTIP": "Tooltip",
   "UNTITLED": "Untitled",
   "ICON_CLASS": "Icon class",
-  "NAVIGATIONS": "Navigations",
+  "NAVIGATION": "Navigation",
   "COLOR": "Color",
   "ADD_TO_NAVIGATION": "Add to navigation",
   "TEMPLATE_PRIMARY_COLOR": "Template Primary Color",
@@ -240,5 +240,6 @@
   "VIEWS": "Views",
   "SORT_BY": "Sort by",
   "CLEAR": "Clear",
+  "START": "Start",
   "COLLABORATING": "Collaborating"
 }
