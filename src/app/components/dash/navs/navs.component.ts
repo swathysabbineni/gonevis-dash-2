@@ -17,9 +17,9 @@ import { ToastrService } from 'ngx-toastr';
 export class NavsComponent implements OnInit {
 
   /**
-   * List of blog navigations
+   * List of blog navigation
    */
-  navigations: Navigation[];
+  navs: Navigation[];
 
   /**
    * API loading indicator
@@ -42,15 +42,15 @@ export class NavsComponent implements OnInit {
     BlogService.blog.subscribe((blog: BlogMin): void => {
       if (blog) {
         /**
-         * Get navigations
+         * Get navigation
          */
-        this.navsService.getNavigations().subscribe((data: { navigation: Navigation[] }): void => {
-          this.navigations = data.navigation;
+        this.navsService.getNavs().subscribe((data: { navigation: Navigation[] }): void => {
+          this.navs = data.navigation;
           /**
            * Watch router params
            */
           if (history.state.add) {
-            this.navigations.push({
+            this.navs.push({
               label: history.state.add.label,
               url: history.state.add.url,
             });
@@ -61,21 +61,21 @@ export class NavsComponent implements OnInit {
   }
 
   /**
-   * Update navigations
+   * Update navigation
    */
   update(): void {
     this.loading = true;
     /**
      * Set navigation sorting number (based on index)
      */
-    for (const nav of this.navigations) {
-      nav.sort_number = this.navigations.indexOf(nav);
+    for (const nav of this.navs) {
+      nav.sort_number = this.navs.indexOf(nav);
     }
-    this.navsService.update(this.navigations).subscribe((data: { navigation: Navigation[] }): void => {
-      this.navigations = data.navigation;
+    this.navsService.update(this.navs).subscribe((data: { navigation: Navigation[] }): void => {
+      this.navs = data.navigation;
       this.loading = false;
       this.errors = [];
-      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('NAVIGATIONS'));
+      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('NAVIGATION'));
     }, (error) => {
       this.loading = false;
       this.errors = error.error.navigation;
@@ -86,7 +86,7 @@ export class NavsComponent implements OnInit {
    * Add new navigation
    */
   add(): void {
-    this.navigations.push({
+    this.navs.push({
       label: this.translate.instant('UNTITLED'),
       url: '/',
     });
@@ -96,6 +96,6 @@ export class NavsComponent implements OnInit {
    * On navigation drop
    */
   drop(event: CdkDragDrop<Navigation[]>): void {
-    moveItemInArray(this.navigations, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.navs, event.previousIndex, event.currentIndex);
   }
 }

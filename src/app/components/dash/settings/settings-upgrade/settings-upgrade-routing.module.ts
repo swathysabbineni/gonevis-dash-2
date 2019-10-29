@@ -6,6 +6,9 @@ import { SettingsUpgradeComponent } from '@app/components/dash/settings/settings
 const routes: Routes = [{
   path: '',
   component: SettingsUpgradeComponent,
+  data: {
+    title: 'UPGRADE',
+  },
 }];
 
 @NgModule({

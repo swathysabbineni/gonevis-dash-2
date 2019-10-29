@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TagsService } from '@app/components/dash/tags/tags.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { File } from '@app/interfaces/file';
 import { Pagination } from '@app/interfaces/pagination';
 import { Tag } from '@app/interfaces/v1/tag';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
@@ -36,6 +37,11 @@ export class TagsComponent implements OnInit {
   form: FormGroup;
 
   /**
+   * Tag form image
+   */
+  image: File;
+
+  /**
    * Tags modal to edit tags
    */
   tagsModal: BsModalRef;
@@ -49,6 +55,11 @@ export class TagsComponent implements OnInit {
    * Tag form API errors
    */
   errors: ApiError = {};
+
+  /**
+   * File list modal
+   */
+  fileListModalRef: BsModalRef;
 
   constructor(private tag: TagsService,
               private translate: TranslateService,
@@ -69,6 +80,7 @@ export class TagsComponent implements OnInit {
           name: ['', Validators.required],
           slug: [''],
           description: [''],
+          cover_image: [''],
         });
         /**
          * Get tags
@@ -118,6 +130,7 @@ export class TagsComponent implements OnInit {
       this.loading = false;
       this.errors = {};
       this.form.reset();
+      this.image = null;
       this.toast.info(this.translate.instant('TOAST_CREATE'), this.form.value.name || this.form.value.slug);
       this.getTags();
     }, (error): void => {
@@ -127,12 +140,12 @@ export class TagsComponent implements OnInit {
   }
 
   /**
-   * Add entry to navigations
+   * Add entry to navigation
    *
    * @param name Entry name
    * @param slug Entry slug
    */
-  addToNavigation(name: string, slug: string): void {
+  addToNavs(name: string, slug: string): void {
     this.router.navigate(['navs'], {
       relativeTo: this.route.parent.parent,
       state: {
@@ -159,5 +172,27 @@ export class TagsComponent implements OnInit {
    */
   pageChanged(event: PageChangedEvent) {
     this.getTags(event.page);
+  }
+
+  /**
+   * Show file selection modal
+   */
+  showFileListModal(template: TemplateRef<any>) {
+    this.fileListModalRef = this.modalService.show(template, {
+      class: 'modal-lg',
+    });
+  }
+
+  /**
+   * On file selection
+   *
+   * @param file Selected file
+   */
+  onFileSelect(file: File) {
+    this.fileListModalRef.hide();
+    this.form.patchValue({
+      cover_image: file.id,
+    });
+    this.image = file;
   }
 }

@@ -12,6 +12,26 @@
 <!-- Body -->
 <div class="modal-body">
   <form [formGroup]="form" (ngSubmit)="update()">
+
+    <!-- Add image -->
+    <div class="media form-group">
+      <img class="mr-3 rounded" *ngIf="image" [src]="image.thumbnail_128x128" [width]="64">
+      <div class="media-body d-sm-block">
+        <div translate>TAG_IMAGE</div>
+        <div class="btn-group btn-group-sm mt-1">
+          <button class="btn btn-sm btn-secondary" type="button" translate
+                  (click)="showFileListModal(fileListModalTemplate)">
+            SELECT
+          </button>
+          <!-- Remove image-->
+          <button class="btn btn-sm btn-outline-secondary" type="button" *ngIf="image"
+                  (click)="removeCoverImage()">
+            <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Name -->
     <div class="form-group">
       <label for="name" translate>NAME</label>
@@ -34,3 +54,19 @@
     <button class="btn btn-info btn-block" translate>SUBMIT</button>
   </form>
 </div>
+
+<!-- File list modal -->
+<ng-template #fileListModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" translate>SELECT_IMAGE</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="fileListModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-file-list [selection]="true"
+                   [selected]="image && image.id"
+                   (choose)="onFileSelect($event)">
+    </app-file-list>
+  </div>
+</ng-template>

@@ -6,6 +6,9 @@ import { StartComponent } from './start.component';
 const routes: Routes = [{
   path: '',
   component: StartComponent,
+  data: {
+    title: 'START',
+  },
 }];
 
 @NgModule({
