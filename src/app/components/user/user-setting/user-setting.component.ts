@@ -11,7 +11,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 export class UserSettingComponent {
 
   /**
-   * Sidebar navigations
+   * Sidebar navigation
    */
   sidebarNavs: NavPill[] = [{
     label: 'PROFILE',

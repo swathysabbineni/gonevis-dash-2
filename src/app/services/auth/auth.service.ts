@@ -137,7 +137,8 @@ export class AuthService {
     username: string,
     password: string,
     showToast: boolean = true,
-    redirectPath: string[] = AuthService.signInRedirect): Observable<string> {
+    redirectPath: string[] = AuthService.signInRedirect,
+  ): Observable<string> {
     return this.http.post<AuthResponse>(
       `${this.api.base.v1}account/login/`, { username, password },
     ).pipe(
@@ -153,7 +154,12 @@ export class AuthService {
         if (showToast) {
           this.toast.info(this.translate.instant('TOAST_SIGN_IN'), data.user.name);
         }
-        // Redirect
+        // Redirect user to dashboard page if user has at least one blog, otherwise redirect to Feed page
+        if (data.user.sites && data.user.sites.length === 0) {
+          redirectPath = AuthService.signInRedirect;
+        } else if (data.user.sites && data.user.sites.length >= 1) {
+          redirectPath = AuthService.signUpRedirect;
+        }
         this.router.navigate(redirectPath);
         // Return raw user data
         return data.user.username;

@@ -8,7 +8,7 @@ export interface Tag {
   meta_description?: any;
   site: string;
   media: {
-    cover_image: File
+    cover_image: File;
   };
   tagged_items_count: number;
   absolute_uri: string;

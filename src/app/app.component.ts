@@ -19,6 +19,16 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 export class AppComponent implements OnInit {
 
   /**
+   * Window title without suffix
+   */
+  static readonly TITLE = 'GoNevis';
+
+  /**
+   * Window title with suffix
+   */
+  static readonly TITLE_SUFFIX = ` - ${AppComponent.TITLE}`;
+
+  /**
    * Authenticated user data
    */
   user: UserAuth;
@@ -98,9 +108,9 @@ export class AppComponent implements OnInit {
       mergeMap((activatedRoute: ActivatedRoute): Observable<Data> => activatedRoute.data),
     ).subscribe((event: Data): void => {
       if (event.title) {
-        this.translate.get(event.title).subscribe((response: string): void => {
-          this.title.setTitle(response);
-        });
+        this.title.setTitle(`${this.translate.instant(event.title)}${AppComponent.TITLE_SUFFIX}`);
+      } else {
+        this.title.setTitle(AppComponent.TITLE);
       }
     });
   }

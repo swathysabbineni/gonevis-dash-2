@@ -6,7 +6,7 @@ const routes: Routes = [{
   path: '',
   component: FeedComponent,
   data: {
-    title: 'Feed',
+    title: 'FEED',
   },
   children: [{
     path: 'explore',
@@ -39,7 +39,7 @@ const routes: Routes = [{
     path: 'user/:username',
     loadChildren: () => import('./user/user.module').then(m => m.UserModule),
   }, {
-    path: '',
+    path: '**',
     redirectTo: 'explore',
     pathMatch: 'full',
   }],

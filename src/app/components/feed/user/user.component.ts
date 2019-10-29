@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
+import { AppComponent } from '@app/app.component';
 import { BlogService } from '@app/components/feed/blog/blog.service';
 import { FeedService } from '@app/components/feed/feed.service';
 import { UserService } from '@app/components/feed/user/user.service';
@@ -7,7 +9,6 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { User } from '@app/interfaces/user';
 import { Blog } from '@app/interfaces/zero/blog';
 import { Entry } from '@app/interfaces/zero/entry';
-import { UtilService } from '@app/services/util/util.service';
 
 @Component({
   selector: 'app-user',
@@ -51,8 +52,8 @@ export class UserComponent implements OnInit {
    */
   current: 'entries' | 'blogs';
 
-  constructor(public utils: UtilService,
-              private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
+              private title: Title,
               private userService: UserService,
               private feedService: FeedService,
               private blogService: BlogService) {
@@ -77,6 +78,10 @@ export class UserComponent implements OnInit {
        * Get entries or blogs of this user
        */
       this.setCurrent('entries');
+      /**
+       * Update title
+       */
+      this.title.setTitle(`${this.user.display_name}${AppComponent.TITLE_SUFFIX}`);
     });
   }
 

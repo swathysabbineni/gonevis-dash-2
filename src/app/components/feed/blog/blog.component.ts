@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
+import { AppComponent } from '@app/app.component';
 import { BlogService } from '@app/components/feed/blog/blog.service';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiError } from '@app/interfaces/api-error';
@@ -7,7 +9,6 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { Blog } from '@app/interfaces/zero/blog';
 import { Entry } from '@app/interfaces/zero/entry';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
-import { UtilService } from '@app/services/util/util.service';
 
 @Component({
   selector: 'app-blog',
@@ -41,7 +42,7 @@ export class BlogComponent implements OnInit {
    */
   errors: ApiError = {};
 
-  constructor(public utils: UtilService,
+  constructor(private title: Title,
               private route: ActivatedRoute,
               private blogService: BlogService,
               private feedService: FeedService) {
@@ -52,6 +53,10 @@ export class BlogComponent implements OnInit {
     this.route.params.subscribe((params: Params): void => {
       this.blogService.getBlog(params.blogId).subscribe((data: Blog): void => {
         this.blog = data;
+        /**
+         * Update title
+         */
+        this.title.setTitle(`${this.blog.title}${AppComponent.TITLE_SUFFIX}`);
         /**
          * Get entries of this blog
          */

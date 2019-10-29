@@ -5,7 +5,10 @@ import { SettingsBillingComponent } from '@app/components/dash/settings/settings
 
 const routes: Routes = [{
   path: '',
-  component: SettingsBillingComponent
+  component: SettingsBillingComponent,
+  data: {
+    title: 'BILLING',
+  },
 }];
 
 @NgModule({

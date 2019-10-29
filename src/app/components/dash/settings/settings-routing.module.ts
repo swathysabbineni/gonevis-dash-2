@@ -4,30 +4,33 @@ import { SettingsComponent } from '@app/components/dash/settings/settings.compon
 
 import { SettingsAdvancedComponent } from './settings-advanced/settings-advanced.component';
 import { SettingsAppearanceComponent } from './settings-appearance/settings-appearance.component';
-import { SettingsBillingComponent } from './settings-billing/settings-billing.component';
 import { SettingsGeneralComponent } from './settings-general/settings-general.component';
 
 const routes: Routes = [{
   path: '',
   component: SettingsComponent,
   children: [{
-    path: '',
-    redirectTo: 'general',
-  }, {
     path: 'general',
     component: SettingsGeneralComponent,
+    data: { title: 'GENERAL' },
   }, {
     path: 'appearance',
     component: SettingsAppearanceComponent,
+    data: { title: 'APPEARANCE' },
   }, {
     path: 'advanced',
     component: SettingsAdvancedComponent,
+    data: { title: 'ADVANCED' },
   }, {
     path: 'upgrade',
     loadChildren: (): any => import('./settings-upgrade/settings-upgrade.module').then(m => m.SettingsUpgradeModule),
   }, {
     path: 'billing',
     loadChildren: () => import('./settings-billing/settings-billing.module').then(m => m.SettingsBillingModule),
+  }, {
+    path: '**',
+    pathMatch: 'full',
+    redirectTo: 'general',
   }],
 }];
 

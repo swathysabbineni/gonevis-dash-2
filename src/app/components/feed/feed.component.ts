@@ -11,7 +11,7 @@ import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
 export class FeedComponent implements OnInit {
 
   /**
-   * Main navigations
+   * Main navigation
    */
   mainNavs: NavPill[] = [{
     label: 'EXPLORE',
@@ -28,7 +28,7 @@ export class FeedComponent implements OnInit {
   }];
 
   /**
-   * Tag navigations
+   * Tag navigation
    */
   tagNavs: string[] = [
     'Technology',

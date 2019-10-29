@@ -28,47 +28,47 @@ export class DashComponent implements OnInit {
    */
   links: SidebarLink[] = [{
     path: 'main',
-    label: this.translateService.instant('DASHBOARD'),
+    label: 'DASHBOARD',
     icon: faTachometerAlt,
   }, {
     path: 'write',
-    label: this.translateService.instant('WRITE'),
+    label: 'WRITE',
     icon: faPen,
   }, {
     path: 'posts',
-    label: this.translateService.instant('POSTS'),
+    label: 'POSTS',
     icon: faThLarge,
   }, {
     path: 'pages',
-    label: this.translateService.instant('PAGES'),
+    label: 'PAGES',
     icon: faNewspaper,
   }, {
     path: 'comments',
-    label: this.translateService.instant('COMMENTS'),
+    label: 'COMMENTS',
     icon: faComment,
   }, {
     path: 'tags',
-    label: this.translateService.instant('TAGS'),
+    label: 'TAGS',
     icon: faHashtag,
   }, {
     path: 'media',
-    label: this.translateService.instant('MEDIA'),
+    label: 'MEDIA',
     icon: faImage,
   }, {
     path: 'navs',
-    label: this.translateService.instant('NAVS'),
+    label: 'NAVS',
     icon: faBars,
   }, {
     path: 'team',
-    label: this.translateService.instant('TEAM'),
+    label: 'TEAM',
     icon: faUser,
   }, {
     path: 'settings',
-    label: this.translateService.instant('SETTINGS'),
+    label: 'SETTINGS',
     icon: faCog,
   }, {
     path: 'help',
-    label: this.translateService.instant('HELP'),
+    label: 'HELP',
     icon: faInfoCircle,
   }];
 

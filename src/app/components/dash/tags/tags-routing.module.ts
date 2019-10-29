@@ -6,6 +6,9 @@ import { TagsComponent } from './tags.component';
 const routes: Routes = [{
   path: '',
   component: TagsComponent,
+  data: {
+    title: 'TAGS',
+  },
 }];
 
 @NgModule({

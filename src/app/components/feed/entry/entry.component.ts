@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
+import { AppComponent } from '@app/app.component';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -64,7 +65,7 @@ export class EntryComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private changeDetectorRef: ChangeDetectorRef,
-              private titleService: Title,
+              private title: Title,
               private translateService: TranslateService,
               private apiService: ApiService,
               private entryService: EntryService,
@@ -106,7 +107,7 @@ export class EntryComponent implements OnInit {
         /**
          * Set entry title as window title
          */
-        this.titleService.setTitle(this.entry.title);
+        this.title.setTitle(`${this.entry.title}${AppComponent.TITLE_SUFFIX}`);
         /**
          * Load entry comments
          */
