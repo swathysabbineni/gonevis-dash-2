@@ -61,6 +61,9 @@
           </tbody>
         </table>
 
+        <!-- Loading -->
+        <div class="card-body" *ngIf="!tags"><app-loading></app-loading></div>
+
         <!-- No data -->
         <div class="card-body" *ngIf="tags && !tags.length">
           <div class="card-text" translate>NOTHING_HERE_YET</div>

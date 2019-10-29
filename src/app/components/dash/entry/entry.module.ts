@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { LoadingModule } from '@app/shared/loading/loading.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -23,6 +24,7 @@ import { EntryComponent } from './entry.component';
     PaginationModule.forRoot(),
     TooltipModule.forRoot(),
     FormsModule,
+    LoadingModule,
   ],
 })
 export class EntryModule {

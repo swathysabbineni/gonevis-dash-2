@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoadingModule } from '@app/shared/loading/loading.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
@@ -22,6 +23,7 @@ import { TeamComponent } from './team.component';
     TeamRoutingModule,
     FontAwesomeModule,
     TranslateModule.forChild(),
+    LoadingModule,
   ],
 })
 export class TeamModule {

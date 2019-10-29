@@ -2,6 +2,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { LoadingModule } from '@app/shared/loading/loading.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons/faGripLinesVertical';
@@ -24,6 +25,7 @@ import { NavsComponent } from './navs.component';
     FontAwesomeModule,
     FormsModule,
     DragDropModule,
+    LoadingModule,
   ],
 })
 export class NavsModule {

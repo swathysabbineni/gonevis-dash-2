@@ -1,5 +1,8 @@
 <!-- Blog -->
 <app-blog-list [blogs]="[blog]" *ngIf="blog"></app-blog-list>
 
+<!-- Loading -->
+<app-loading *ngIf="!entries" [margin]="3"></app-loading>
+
 <!-- Posts -->
 <app-entry-list [entries]="entries" [next]="next"></app-entry-list>

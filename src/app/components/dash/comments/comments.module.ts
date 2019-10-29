@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { CommentsComponent } from '@app/components/dash/comments/comments.component';
+import { LoadingModule } from '@app/shared/loading/loading.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
@@ -23,6 +24,7 @@ import { CommentsRoutingModule } from './comments-routing.module';
     TranslateModule.forChild(),
     BsDropdownModule,
     PaginationModule.forRoot(),
+    LoadingModule,
   ],
 })
 export class CommentsModule {

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReaderComponent } from '@app/components/feed/reader/reader.component';
 import { EntryListModule } from '@app/shared/entry-list/entry-list.module';
+import { LoadingModule } from '@app/shared/loading/loading.module';
 
 import { ReaderRoutingModule } from './reader-routing.module';
 
@@ -11,6 +12,7 @@ import { ReaderRoutingModule } from './reader-routing.module';
     CommonModule,
     ReaderRoutingModule,
     EntryListModule,
+    LoadingModule,
   ],
 })
 export class ReaderModule {

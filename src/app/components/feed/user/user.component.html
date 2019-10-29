@@ -28,6 +28,7 @@
   </div>
 </div>
 
+<!-- Tabs -->
 <ul class="nav nav-pills mt-3">
   <li class="nav-item">
     <a class="nav-link" translate [class.active]="current === 'entries'" (click)="setCurrent('entries')">POSTS</a>
@@ -36,6 +37,9 @@
     <a class="nav-link" translate [class.active]="current === 'blogs'" (click)="setCurrent('blogs')">BLOGS</a>
   </li>
 </ul>
+
+<!-- Loading -->
+<app-loading *ngIf="(current === 'entries' && !entries) || (current === 'blogs' && !blogs)" [margin]="3"></app-loading>
 
 <!-- User entries -->
 <app-entry-list [entries]="entries" [next]="next" *ngIf="current === 'entries'"></app-entry-list>
