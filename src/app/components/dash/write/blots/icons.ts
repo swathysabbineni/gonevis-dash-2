@@ -73,7 +73,7 @@ const customIcons: CustomIcon[] = [{
  *
  * @returns SVG element based on given icon
  */
-function iconToSVGElement(icon: IconDefinition, classList?: string): SVGSVGElement {
+export function iconToSVGElement(icon: IconDefinition, classList?: string): SVGSVGElement {
   /**
    * Create SVG element
    */
