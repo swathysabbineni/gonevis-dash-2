@@ -18,6 +18,7 @@ import '@app/components/dash/write/blots/soundcloud.ts';
 import '@app/components/dash/write/blots/video.ts';
 import '@app/components/dash/write/modules/clipboard.ts';
 import '@app/components/dash/write/modules/image-drag-drop.ts';
+import '@app/components/dash/write/themes/bootstrap.ts';
 import { WriteService } from '@app/components/dash/write/write.service';
 import { EntryStatus } from '@app/enums/entry-status.enum';
 import { ApiResponse } from '@app/interfaces/api-response';
