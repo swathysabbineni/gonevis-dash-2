@@ -426,14 +426,6 @@ a,
       margin-bottom: $paragraph-margin-bottom;
       color: $body-color;
     }
-
-    a, .ql-tooltip a {
-      color: $blue;
-
-      &:hover {
-        color: darken($blue, 15%);
-      }
-    }
   }
 
   .ql-tooltip {
@@ -465,14 +457,6 @@ a,
       }
     }
 
-    a.ql-preview {
-      color: $blue;
-
-      &:hover {
-        color: darken($blue, 15%);
-      }
-    }
-
     input[type=text] {
       height: $input-height-sm;
       border: $input-border-width solid $input-border-color;
@@ -480,6 +464,16 @@ a,
       padding: $input-padding-y-sm $input-padding-x-sm;
       font-size: $input-font-size-sm;
       width: 100%;
+    }
+  }
+
+  .ql-editor a,
+  .ql-tooltip a.ql-preview {
+    color: $primary;
+    text-decoration: none;
+
+    &:hover {
+      color: darken($primary, 15%);
     }
   }
 }
