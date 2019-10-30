@@ -1,2 +1,5 @@
 <!-- Post -->
 <app-entry-list [entries]="entries" [next]="next"></app-entry-list>
+
+<!-- Loading -->
+<app-loading *ngIf="!entries" [margin]="3"></app-loading>

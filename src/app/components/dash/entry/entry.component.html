@@ -190,6 +190,9 @@
       </tbody>
     </table>
 
+    <!-- Loading -->
+    <div class="card-body" *ngIf="!entries"><app-loading></app-loading></div>
+
     <!-- No data -->
     <div class="card-body" *ngIf="entries && !entries.length">
       <div class="card-text" translate>NOTHING_HERE_YET</div>
