@@ -81,6 +81,7 @@
         <quill-editor formControlName="content"
                       [modules]="options"
                       [placeholder]="'CONTENT' | translate"
+                      theme="bootstrap"
                       scrollingContainer=".editor"
                       bounds=".editor"
                       [styles]="{borderWidth: 0, fontSize: '1rem'}"
@@ -194,9 +195,8 @@
           </a>
           <!-- Content -->
           <div class="collapse-content" [collapse]="true" #coverImageContent=bs-collapse>
-            <div class="form-group">
-              <img [src]="coverImage.thumbnail_256x256" class="mw-100 rounded" *ngIf="form.get('cover_image').value"
-                   alt="">
+            <div class="form-group" *ngIf="form.get('cover_image').value">
+              <img [src]="coverImage.thumbnail_256x256" class="mw-100 rounded" alt="">
             </div>
             <div class="form-group">
               <button class="btn btn-light btn-block" (click)="showFileListModal(fileListModalTemplate, false)"
