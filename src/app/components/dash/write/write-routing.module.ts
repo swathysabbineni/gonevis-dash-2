@@ -4,12 +4,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { WriteComponent } from './write.component';
 
 const routes: Routes = [{
-  path: '',
+  path: ':id',
   component: WriteComponent,
-  children: [{
-    path: ':id',
-    component: WriteComponent,
-  }],
+}, {
+  path: '',
+  redirectTo: 'new',
+  pathMatch: 'full',
 }];
 
 @NgModule({

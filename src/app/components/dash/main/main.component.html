@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mt-3">
   <div class="row">
 
     <!-- Left -->
@@ -14,7 +14,8 @@
           </span>
         </div>
         <div class="list-group-flush">
-          <a class="list-group-item list-group-item-action d-flex" *ngFor="let entry of entries">
+          <a class="list-group-item list-group-item-action d-flex" *ngFor="let entry of entries"
+             [routerLink]="['../../../write', entry.id]">
             <!-- title -->
             <span>{{ entry.title }}</span>
             <!-- Stats -->

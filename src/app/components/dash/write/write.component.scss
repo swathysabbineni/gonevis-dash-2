@@ -1,0 +1,101 @@
+@import "variables";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~ngx-bootstrap/datepicker/bs-datepicker.css";
+
+
+.tags-wrapper {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.header {
+  transition: $transition-base;
+  z-index: 1;
+  box-shadow: 0 1px 0 rgba($black, .075);
+
+  .ql-toolbar.ql-snow {
+    background: #fff;
+    border: 0;
+    height: 50px;
+    padding: 0;
+    display: flex;
+    z-index: 1;
+
+    button {
+      width: 40px;
+      display: flex;
+      justify-content: center;
+      height: 100%;
+      align-items: center;
+    }
+
+    .ql-picker {
+      height: 100%;
+    }
+  }
+}
+
+#title {
+  box-shadow: none !important;
+  background: transparent !important;
+  border: none;
+  font-size: 3rem;
+  margin-top: 60px;
+  color: $dark;
+  font-weight: 700;
+  padding: 0 15px;
+  resize: none;
+  flex: 0 0 auto;
+}
+
+.editor {
+  flex: 1;
+}
+
+.sidebar {
+  height: 100%;
+  min-height: 0;
+  flex-basis: 300px;
+  width: 300px;
+  border-radius: 0;
+  background: #f8f8f8;
+  border-left: $border-width solid $border-color;;
+  overflow: hidden;
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    background: $white;
+    border-bottom: $border-width solid $border-color;
+
+    .collapse-header {
+      display: flex;
+      align-items: center;
+      padding: $card-spacer-y $card-spacer-x;
+      border-radius: 0;
+
+      fa-icon {
+        margin-right: $card-spacer-x / 2;
+      }
+    }
+
+    .collapse-content {
+      padding: 0 $card-spacer-x;
+    }
+  }
+
+  &.closed {
+    flex-basis: 0;
+    width: 0;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .ql-toolbar.ql-snow {
+    overflow: auto;
+
+    .ql-formats {
+      display: flex;
+    }
+  }
+}

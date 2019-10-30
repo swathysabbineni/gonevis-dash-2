@@ -1,1 +1,304 @@
-<p>write works!</p>
+<!-- Editor -->
+<form class="d-flex flex-column h-100 bg-white" [formGroup]="form">
+  <div class="d-flex align-items-center px-3 header" [class.shadow-sm]="scrolled">
+    <!-- Custom toolbar -->
+    <div class="toolbar">
+      <div class="ql-formats">
+        <select class="ql-header ql-picker" tooltip="Direction" placement="bottom"
+                [title]="'Heading'"></select>
+      </div>
+      <div class="ql-formats">
+        <button class="ql-bold" tooltip="Bold (Ctrl + B)" placement="bottom"></button>
+        <button class="ql-italic" tooltip="Italic (Ctrl + I)" placement="bottom"></button>
+        <button class="ql-underline" tooltip="Underline (Ctrl + U)" placement="bottom"></button>
+        <button class="ql-strike" tooltip="Strikethrough" placement="bottom"></button>
+      </div>
+      <div class="divider"></div>
+      <div class="ql-formats">
+        <button class="ql-link" tooltip="Link (Ctrl + K)" placement="bottom"></button>
+        <button class="ql-blockquote" tooltip="Quote" placement="bottom"></button>
+        <button class="ql-code-block" tooltip="Code" placement="bottom"></button>
+        <button class="ql-list" tooltip="List bullet" placement="bottom" value="bullet"></button>
+        <button class="ql-divider" tooltip="Divider" placement="bottom"></button>
+      </div>
+      <div class="divider"></div>
+      <div class="ql-formats">
+        <button class="ql-image" tooltip="Insert image" placement="bottom"></button>
+        <button class="ql-video" tooltip="Insert video" placement="bottom"></button>
+      </div>
+      <div class="divider"></div>
+      <div class="ql-formats">
+        <button class="ql-direction" tooltip="Direction" placement="bottom" value="rtl"></button>
+        <select class="ql-align">
+          <option selected></option>
+          <option value="center"></option>
+          <option value="right"></option>
+          <option value="justify"></option>
+        </select>
+      </div>
+      <div class="ql-formats">
+        <button class="ql-clean" tooltip="Clear format" placement="bottom"></button>
+      </div>
+    </div>
+    <!-- Submit buttons -->
+    <div class="d-flex ml-auto">
+      <div class="btn-group" role="group">
+      </div>
+      <button class="btn btn-primary" *ngIf="!isEditing" (click)="save()" translate>SUBMIT</button>
+      <button class="btn btn-primary"
+              [ngClass]="{
+                  'btn-success': form.get('status').value === entryStatus.Draft,
+                  'btn-light': form.get('status').value === entryStatus.Published
+                }"
+              (click)="save(entryStatus.Published)" *ngIf="isEditing" [disabled]="loading">
+        <span *ngIf="form.get('status').value === entryStatus.Draft" translate>PUBLISH</span>
+        <span *ngIf="form.get('status').value === entryStatus.Published" translate>UPDATE</span>
+      </button>
+      <a class="btn btn-light ml-2" [href]="oldEntry.absolute_uri" target="_blank" tooltip="View on blog"
+         placement="bottom" *ngIf="isEditing">
+        <fa-icon icon="eye" [fixedWidth]="true"></fa-icon>
+      </a>
+      <button class="btn btn-light ml-2" (click)="hideSidebar = !hideSidebar">
+        <fa-icon icon="cog" [fixedWidth]="true"></fa-icon>
+      </button>
+    </div>
+  </div>
+  <!-- Editor -->
+  <div class="d-flex h-100">
+    <div class="editor h-100 overflow-auto"
+         (scroll)="scrolled = $event.target['scrollTop'] > 0">
+      <div class="container d-flex flex-column h-100">
+        <!-- Title -->
+        <textarea id="title"
+                  autosize
+                  class="form-control" formControlName="title"
+                  placeholder="{{ 'TITLE' | translate }}"
+                  autocomplete="off"
+                  (keydown.enter)="$event.preventDefault(); editor.focus()"
+                  (keydown.tab)="$event.preventDefault(); editor.focus()"
+                  [required]="true"></textarea>
+        <!-- Quill editor -->
+        <quill-editor formControlName="content"
+                      [modules]="options"
+                      [placeholder]="'CONTENT' | translate"
+                      theme="bootstrap"
+                      scrollingContainer=".editor"
+                      bounds=".editor"
+                      [styles]="{borderWidth: 0, fontSize: '1rem'}"
+                      style="flex: 1"
+                      classes="text-dark"
+                      (onEditorCreated)="onEditorInit($event)">
+        </quill-editor>
+      </div>
+    </div>
+    <div class="card sidebar" [class.closed]="hideSidebar">
+      <!-- Header -->
+      <div class="card-header" *ngIf="isEditing && form.get('status').value === entryStatus.Draft">
+        <button class="btn btn-light" (click)="save()" [disabled]="loading" translate>UPDATE</button>
+      </div>
+      <!-- Content -->
+      <div class="card-body overflow-auto p-0">
+        <!-- Status -->
+        <div class="section">
+          <!-- Toggle -->
+          <a class="btn btn-link collapse-header"
+             (click)="statusContent.collapse = !statusContent.isCollapsed"
+             [attr.aria-expanded]="statusContent.expanded"
+             aria-controls="collapseBasic">
+            <!-- Title -->
+            <div class="mr-auto">
+              <fa-icon [icon]="['far', 'newspaper']" [fixedWidth]="true"></fa-icon>
+              {{ 'STATUS' | translate }}
+            </div>
+            <!-- Caret -->
+            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+          </a>
+          <!-- Content -->
+          <div class="collapse-content" [collapse]="false" #statusContent=bs-collapse>
+            <!-- Status selection -->
+            <div class="form-group">
+              <label for="status"></label>
+              <select class="custom-select" formControlName="status" id="status">
+                <!-- Draft -->
+                <option [ngValue]="entryStatus.Draft" [title]="'SET_DRAFT' | translate" translate>DRAFT</option>
+                <!-- Published -->
+                <option [ngValue]="entryStatus.Published" [title]="'SET_PUBLISHED' | translate" translate>
+                  PUBLISHED
+                </option>
+              </select>
+            </div>
+            <!-- Start publication -->
+            <div class="form-group">
+              <label for="startPublication" translate>START_PUBLICATION</label>
+              <input type="text"
+                     id="startPublication"
+                     class="form-control"
+                     formControlName="start_publication" bsDatepicker
+                     [minDate]="minDate"
+                     [bsConfig]="{ dateInputFormat: 'YYYY-MM-DDThh:mm' }">
+            </div>
+            <!-- Revert changes -->
+            <div class="form-group">
+              <button type="button" (click)="revertChanges()" *ngIf="postChanged"
+                      class="btn btn-outline-danger btn-sm btn-block" [disabled]="loading">
+                <fa-icon icon="undo" [fixedWidth]="true"></fa-icon>
+                {{ 'DISCARD_CHANGES' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Tags -->
+        <div class="section">
+          <!-- Toggle -->
+          <a class="btn btn-link collapse-header"
+             (click)="tagsContent.collapse = !tagsContent.isCollapsed"
+             [attr.aria-expanded]="tagsContent.expanded"
+             aria-controls="collapseBasic">
+            <!-- Title -->
+            <div class="mr-auto">
+              <fa-icon icon="hashtag" [fixedWidth]="true"></fa-icon>
+              {{ 'TAGS' | translate }}
+            </div>
+            <!-- Caret -->
+            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+          </a>
+          <!-- Content -->
+          <div class="collapse-content" [collapse]="true" #tagsContent=bs-collapse>
+            <div class="form-group">
+              <input type="text" [placeholder]="'SEARCH_TAGS' | translate" [formControl]="tagQueryControl"
+                     class="form-control">
+            </div>
+            <div class="form-group">
+              <div class="custom-control custom-checkbox" *ngFor="let tag of tags">
+                <input type="checkbox" class="custom-control-input"
+                       (click)="isTagSelected(tag.id) ? removeTag(tag.id) : addTag(tag)"
+                       [checked]="isTagSelected(tag.id)" [id]="tag.id">
+                <label class="custom-control-label" [for]="tag.id">{{ tag.slug }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Cover image -->
+        <div class="section">
+          <!-- Toggle -->
+          <a class="btn btn-link collapse-header"
+             (click)="coverImageContent.collapse = !coverImageContent.isCollapsed"
+             [attr.aria-expanded]="coverImageContent.expanded"
+             aria-controls="collapseBasic">
+            <!-- Title -->
+            <div class="mr-auto">
+              <fa-icon icon="image" [fixedWidth]="true"></fa-icon>
+              {{ 'COVER_IMAGE' | translate }}
+            </div>
+            <!-- Caret -->
+            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+          </a>
+          <!-- Content -->
+          <div class="collapse-content" [collapse]="true" #coverImageContent=bs-collapse>
+            <div class="form-group" *ngIf="form.get('cover_image').value">
+              <img [src]="coverImage.thumbnail_256x256" class="mw-100 rounded" alt="">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-light btn-block" (click)="showFileListModal(fileListModalTemplate, false)"
+                      translate
+                      *ngIf="!form.get('cover_image').value">
+                SET_COVER_IMAGE
+              </button>
+              <div class="btn-group btn-block" role="group" *ngIf="form.get('cover_image').value">
+                <button type="button" class="btn btn-light"
+                        (click)="showFileListModal(fileListModalTemplate, false)"
+                        translate>
+                  CHANGE_COVER_IMAGE
+                </button>
+                <button type="button" class="btn btn-danger" (click)="form.get('cover_image').setValue(null)">
+                  <fa-icon icon="times" [fixedWidth]="true"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- More options -->
+        <div class="section">
+          <!-- Toggle -->
+          <a class="btn btn-link collapse-header"
+             (click)="moreOptionsContent.collapse = !moreOptionsContent.isCollapsed"
+             [attr.aria-expanded]="moreOptionsContent.expanded"
+             aria-controls="collapseBasic">
+            <!-- Title -->
+            <div class="mr-auto">
+              <fa-icon icon="plus" [fixedWidth]="true"></fa-icon>
+              {{ 'MORE_OPTIONS' | translate }}
+            </div>
+            <!-- Caret -->
+            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+          </a>
+          <!-- Content -->
+          <div class="collapse-content" [collapse]="true" #moreOptionsContent=bs-collapse>
+            <!-- Excerpt -->
+            <div class="form-group">
+              <!-- Label -->
+              <label for="excerpt" translate>EXCERPT</label>
+              <!-- Input -->
+              <textarea class="form-control" name="excerpt" id="excerpt" rows="5" formControlName="excerpt"
+                        [placeholder]="'EXCERPT' | translate"></textarea>
+            </div>
+            <!-- Slug -->
+            <div class="form-group">
+              <!-- Label -->
+              <label for="slug" translate>SLUG</label>
+              <!-- Input -->
+              <input class="form-control" name="slug" id="slug" formControlName="slug"
+                     [placeholder]="'SLUG_PLACEHOLDER' | translate">
+            </div>
+            <!-- Meta description -->
+            <div class="form-group">
+              <!-- Label -->
+              <label for="meta_description" translate>META_DESCRIPTION</label>
+              <!-- Input -->
+              <input class="form-control" name="meta_description" id="meta_description"
+                     formControlName="meta_description"
+                     [placeholder]="'META_DESCRIPTION_PLACEHOLDER' | translate">
+            </div>
+            <!-- Label -->
+            <p translate>COMMUNITY</p>
+            <!-- Enable commenting -->
+            <div class="form-group custom-control custom-checkbox">
+              <!-- Checkbox -->
+              <input type="checkbox" class="custom-control-input" id="commentEnabled" formControlName="comment_enabled">
+              <!-- Lable; -->
+              <label class="custom-control-label" for="commentEnabled" translate>ENABLE_COMMENTING</label>
+            </div>
+            <!-- Featured -->
+            <div class="form-group custom-control custom-checkbox">
+              <!-- Checkbox -->
+              <input type="checkbox" class="custom-control-input" id="featured" formControlName="featured">
+              <!-- Label -->
+              <label class="custom-control-label" for="featured" translate>FEATURED</label>
+            </div>
+            <!-- Set as page -->
+            <div class="form-group custom-control custom-checkbox">
+              <!-- Checkbox -->
+              <input type="checkbox" class="custom-control-input" id="setAsPage" formControlName="is_page">
+              <!-- Label -->
+              <label class="custom-control-label" for="setAsPage" translate>SET_AS_PAGE</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<!-- File list modal -->
+<ng-template #fileListModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" translate>SELECT_IMAGE</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="fileListModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-file-list [selection]="true" (choose)="onFileSelect($event)">
+    </app-file-list>
+  </div>
+</ng-template>
+
