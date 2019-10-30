@@ -390,6 +390,100 @@ a,
   }
 }
 
+.ql-container.ql-snow {
+  .ql-editor {
+    h1 {
+      font-size: $h1-font-size;
+    }
+
+    h2 {
+      font-size: $h2-font-size;
+    }
+
+    h3 {
+      font-size: $h3-font-size;
+    }
+
+    h4 {
+      font-size: $h4-font-size;
+    }
+
+    h5 {
+      font-size: $h5-font-size;
+    }
+
+    h6 {
+      font-size: $h6-font-size;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      margin-bottom: $headings-margin-bottom;
+      line-height: $headings-line-height;
+      color: $body-color;
+    }
+
+    p {
+      margin-bottom: $paragraph-margin-bottom;
+      color: $body-color;
+    }
+
+    a, .ql-tooltip a {
+      color: $blue;
+
+      &:hover {
+        color: darken($blue, 15%);
+      }
+    }
+  }
+
+  .ql-tooltip {
+    align-items: center;
+    font-size: $small-font-size;
+    padding: map-get($spacers, 2);
+    color: $body-color;
+    background-color: $dropdown-bg;
+    box-shadow: $box-shadow !important;
+    border: $dropdown-border-width solid $dropdown-border-color;
+    border-radius: $dropdown-border-radius;
+
+    &:not(.ql-hidden) {
+      display: flex;
+    }
+
+    .ql-action .ql-action-save {
+      display: none;
+    }
+
+    &.ql-editing {
+      .ql-remove,
+      .ql-action .ql-action-edit {
+        display: none;
+      }
+
+      .ql-action .ql-action-save {
+        display: block;
+      }
+    }
+
+    a.ql-preview {
+      color: $blue;
+
+      &:hover {
+        color: darken($blue, 15%);
+      }
+    }
+
+    input[type=text] {
+      height: $input-height-sm;
+      border: $input-border-width solid $input-border-color;
+      border-radius: $input-border-radius-sm;
+      padding: $input-padding-y-sm $input-padding-x-sm;
+      font-size: $input-font-size-sm;
+      width: 100%;
+    }
+  }
+}
+
 .pagination-wrapper {
   display: flex;
   justify-content: center;
