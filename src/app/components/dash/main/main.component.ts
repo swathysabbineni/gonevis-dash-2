@@ -10,6 +10,11 @@ import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UsersModalComponent } from '@app/shared/users-modal/users-modal.component';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faComments } from '@fortawesome/free-solid-svg-icons/faComments';
+import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
+import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
@@ -18,6 +23,14 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
+
+  private static readonly POSTS_LIMIT = 6;
+  private static readonly COMMENTS_LIMIT = 8;
+
+  readonly faPublications: IconDefinition = faThLarge;
+  readonly faComments: IconDefinition = faComments;
+  readonly faFollowers: IconDefinition = faUserPlus;
+  readonly faFiles: IconDefinition = faDatabase;
 
   /**
    * List of recent blog comments
@@ -60,13 +73,17 @@ export class MainComponent implements OnInit {
         /**
          * Load entries
          */
-        this.entryService.getEntries().subscribe((response: ApiResponse<Entry>): void => {
+        this.entryService.getEntries({
+          limit: MainComponent.POSTS_LIMIT,
+        }).subscribe((response: ApiResponse<Entry>): void => {
           this.entries = response.results;
         });
         /**
          * Load comments
          */
-        this.commentsService.getComments().subscribe((response: ApiResponse<Comment>): void => {
+        this.commentsService.getComments({
+          limit: MainComponent.COMMENTS_LIMIT,
+        }).subscribe((response: ApiResponse<Comment>): void => {
           this.comments = response.results;
         });
         /**

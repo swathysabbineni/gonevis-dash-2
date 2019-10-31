@@ -1,0 +1,49 @@
+@import "variables";
+
+.stat {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  transition: $transition-base;
+
+  .card-body:first-child {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6em;
+    width: 80px;
+    max-width: 80px;
+  }
+
+  .card-body:last-child {
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    h1 {
+      font-weight: bold;
+      color: #6F7A8B;
+      margin: 0;
+    }
+
+    div {
+      font-weight: bold;
+      color: $gray-500;
+    }
+  }
+
+  &.card-link {
+
+    &:hover {
+      .card-body:first-child {
+        opacity: 0.75;
+      }
+    }
+
+    &:active {
+      .card-body:first-child {
+        opacity: 0.5;
+      }
+    }
+  }
+}
