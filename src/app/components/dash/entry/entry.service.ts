@@ -36,14 +36,15 @@ export class EntryService {
       format?: EntryFormat | '',
       status?: EntryStatus | '',
       ordering?: string,
+      limit?: number,
     } = {},
     page: number = 1,
   ): Observable<ApiResponse<Entry>> {
     return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.v1}website/entry`, {
       params: Object.assign(filter, {
         site: BlogService.currentBlog.id,
-        limit: EntryService.PAGE_SIZE.toString(),
-        offset: UtilService.getPageOffset(EntryService.PAGE_SIZE, page),
+        limit: (filter.limit || EntryService.PAGE_SIZE).toString(),
+        offset: UtilService.getPageOffset(filter.limit || EntryService.PAGE_SIZE, page),
       }),
     });
   }

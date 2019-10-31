@@ -24,14 +24,12 @@ export class CommentsService {
 
   /**
    * Get blog tags
-   *
-   * @param page API page
    */
-  getComments(page: number = 1): Observable<ApiResponse<Comment>> {
+  getComments(filters: { limit?: number, } = {}, page: number = 1): Observable<ApiResponse<Comment>> {
     return this.http.get<ApiResponse<Comment>>(`${this.apiService.base.v1}sushial/comment`, {
       params: {
         site: BlogService.currentBlog.id,
-        limit: CommentsService.PAGE_SIZE.toString(),
+        limit: (filters.limit || CommentsService.PAGE_SIZE).toString(),
         offset: UtilService.getPageOffset(CommentsService.PAGE_SIZE, page),
       },
     });
