@@ -74,8 +74,8 @@
                   class="form-control" formControlName="title"
                   placeholder="{{ 'TITLE' | translate }}"
                   autocomplete="off"
-                  (keydown.enter)="$event.preventDefault(); editor.focus()"
-                  (keydown.tab)="$event.preventDefault(); editor.focus()"
+                  (keydown)="preventBreak($event)"
+                  (blur)="updateTitle()"
                   [required]="true"></textarea>
         <!-- Quill editor -->
         <quill-editor formControlName="content"

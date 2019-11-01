@@ -9,7 +9,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AppComponent } from '@app/app.component';
 import { MediaService } from '@app/components/dash/media/media.service';
 import '@app/components/dash/write/blots/divider.ts';
 import '@app/components/dash/write/blots/embed.ts';
@@ -62,11 +64,6 @@ export class WriteComponent implements OnInit, OnDestroy {
   private id: string;
 
   /**
-   * Old entry
-   */
-  private oldEntry: Entry;
-
-  /**
    * Original entry
    */
   private oldForm: Params;
@@ -107,6 +104,11 @@ export class WriteComponent implements OnInit, OnDestroy {
    * Determines whether user was creating post or not
    */
   private wasCreating: boolean;
+
+  /**
+   * Old entry
+   */
+  oldEntry: Entry;
 
   /**
    * Determines whether to show or hide sidebar
@@ -241,6 +243,7 @@ export class WriteComponent implements OnInit, OnDestroy {
 
   constructor(private elementRef: ElementRef,
               private rd: Renderer2,
+              private title: Title,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder,
@@ -313,6 +316,9 @@ export class WriteComponent implements OnInit, OnDestroy {
           clearInterval(this.autoSaveInterval);
           this.getEntry(params.id.toString());
         }
+        setTimeout((): void => {
+          this.updateTitle();
+        });
       });
     });
   }
@@ -346,6 +352,7 @@ export class WriteComponent implements OnInit, OnDestroy {
     });
     this.coverImage = data.media.cover_image;
     this.oldForm = this.form.value;
+    this.updateTitle();
   }
 
   /**
@@ -761,6 +768,34 @@ export class WriteComponent implements OnInit, OnDestroy {
       this.form.get('cover_image').setValue(file.id);
       this.coverImage = file;
     }
+  }
+
+  /**
+   * @description
+   *
+   * Check if key "TAB" || "ENTER" is pressed and focus on editor
+   *
+   * @param event KeyboardEvent
+   *
+   * @returns False which will prevent input's default behavior
+   */
+  preventBreak(event: KeyboardEvent): boolean {
+    if (event.key === 'Enter' || event.key === 'Tab') {
+      this.editor.focus();
+
+      return false;
+    }
+  }
+
+  /**
+   * Set window title to post title
+   */
+  updateTitle(): void {
+    const titleValue: string = this.form.get('title').value ? this.form.get('title').value : 'Untitled';
+    /**
+     * Set window title
+     */
+    this.title.setTitle(`${titleValue}${AppComponent.TITLE_SUFFIX}`);
   }
 
   ngOnDestroy(): void {
