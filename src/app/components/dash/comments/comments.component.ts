@@ -55,9 +55,9 @@ export class CommentsComponent implements OnInit {
    *
    * @param page Page number
    */
-  getComments(page: number = 1) {
+  getComments(page: number = 1): void {
     this.loading = true;
-    this.commentsService.getComments(page).subscribe((response: ApiResponse<Comment>): void => {
+    this.commentsService.getComments({}, page).subscribe((response: ApiResponse<Comment>): void => {
       this.pagination = {
         itemsPerPage: CommentsService.PAGE_SIZE,
         totalItems: response.count,
