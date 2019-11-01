@@ -470,15 +470,18 @@ export class WriteComponent implements OnInit, OnDestroy {
         /**
          * Check if pasted element was an image
          */
-        if (op.insert.hasOwnProperty('image') &&
-          !op.insert['image'].startsWith('https://gonevis-draft.s3.amazonaws.com') &&
-          !op.insert['image'].startsWith('https://gonevis.s3.amazonaws.com')) {
-          this.writeService.getPastedImage(node.getAttribute('src')).subscribe((data: Blob): void => {
-            const file: File = new File([data], 'name', { type: data.type });
-            this.uploadFile(file);
-          });
-          return;
-        }
+        // if (op.insert.hasOwnProperty('image') &&
+        //   !op.insert['image'].startsWith('https://gonevis-draft.s3.amazonaws.com') &&
+        //   !op.insert['image'].startsWith('https://gonevis.s3.amazonaws.com')) {
+        //   const range: RangeStatic = this.editor.getSelection(true);
+        //   this.writeService.getPastedImage(node.getAttribute('src')).subscribe((data: Blob): void => {
+        //     const file: File = new File([data], 'name', { type: data.type });
+        //     this.uploadFile(file);
+        //   }, (): void => {
+        //     this.editor.insertEmbed(range.index, 'image', op.insert['image']);
+        //   });
+        //   return;
+        // }
         /**
          * Check insert whitelist
          */
