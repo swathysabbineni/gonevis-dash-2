@@ -32,7 +32,7 @@
               <!-- Dropdown -->
               <div class="dropdown" dropdown>
                 <button class="btn btn-light btn-sm" type="button" dropdownToggle>
-                  <fa-icon icon="ellipsis-v"></fa-icon>
+                  <fa-icon [icon]="ellipsis"></fa-icon>
                 </button>
                 <!-- Options -->
                 <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
@@ -105,7 +105,7 @@
                 <!-- Remove image-->
                 <button class="btn btn-sm btn-outline-secondary" type="button" *ngIf="image"
                         (click)="image = null">
-                  <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+                  <fa-icon [fixedWidth]="true" [icon]="trash"></fa-icon>
                 </button>
               </div>
             </div>

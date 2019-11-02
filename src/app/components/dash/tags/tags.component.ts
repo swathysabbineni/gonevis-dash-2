@@ -10,6 +10,9 @@ import { Tag } from '@app/interfaces/v1/tag';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TagModalComponent } from '@app/shared/tags-modal/tag-modal.component';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService, PageChangedEvent } from 'ngx-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -20,6 +23,12 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./tags.component.scss'],
 })
 export class TagsComponent implements OnInit {
+
+  /**
+   * Icons
+   */
+  readonly ellipsis: IconDefinition = faEllipsisV;
+  readonly trash: IconDefinition = faTrash;
 
   /**
    * Blog tags

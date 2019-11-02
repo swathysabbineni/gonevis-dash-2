@@ -5,11 +5,6 @@ import { FileListModule } from '@app/shared/file-list/file-list.module';
 import { LoadingModule } from '@app/shared/loading/loading.module';
 import { TagModalModule } from '@app/shared/tags-modal/tag-modal.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
-import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
-import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
-import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateModule } from '@ngx-translate/core';
 import { ModalModule, BsDropdownModule } from 'ngx-bootstrap';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -36,10 +31,4 @@ import { TagsComponent } from './tags.component';
   ],
 })
 export class TagsModule {
-  constructor() {
-    library.add(faBars);
-    library.add(faEdit);
-    library.add(faTrash);
-    library.add(faEye);
-  }
 }
