@@ -6,8 +6,10 @@ import { ApiError } from '@app/interfaces/api-error';
 import { Team } from '@app/interfaces/v1/team';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 @Component({
   selector: 'app-team',
@@ -18,6 +20,11 @@ export class TeamComponent implements OnInit {
 
   readonly roleNames = TeamService.roleNames;
   readonly teamRoles = TeamRoles;
+
+  /**
+   * Icons
+   */
+  readonly trash: IconDefinition = faTrash;
 
   /**
    * Team members

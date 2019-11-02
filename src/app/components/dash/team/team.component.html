@@ -38,7 +38,7 @@
                 <!-- Remove -->
                 <button class="btn btn-light text-secondary" [title]="'REMOVE' | translate"
                         (click)="remove(member.user.id)">
-                  <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+                  <fa-icon [fixedWidth]="true" [icon]="trash"></fa-icon>
                 </button>
               </div>
             </th>
@@ -75,7 +75,7 @@
                 <!-- Remove -->
                 <button class="btn btn-light text-secondary" [title]="'REMOVE' | translate"
                         (click)="remove(member.email, true)">
-                  <fa-icon [fixedWidth]="true" icon="trash"></fa-icon>
+                  <fa-icon [fixedWidth]="true" [icon]="trash"></fa-icon>
                 </button>
               </div>
             </th>
