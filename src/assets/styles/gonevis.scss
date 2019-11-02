@@ -425,6 +425,7 @@ a,
     p {
       margin-bottom: $paragraph-margin-bottom;
       color: $body-color;
+      line-height: $line-height-base;
     }
   }
 
@@ -565,7 +566,6 @@ a,
 .ql-snow.ql-toolbar button svg {
   height: 1em !important;
 }
-
 
 .ql-snow .ql-color-picker .ql-picker-label,
 .ql-snow .ql-icon-picker .ql-picker-label {
