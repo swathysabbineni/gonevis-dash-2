@@ -56,10 +56,10 @@
       </button>
       <a class="btn btn-light ml-2" [href]="oldEntry.absolute_uri" target="_blank" tooltip="View on blog"
          placement="bottom" *ngIf="isEditing">
-        <fa-icon icon="eye" [fixedWidth]="true"></fa-icon>
+        <fa-icon [icon]="eye" [fixedWidth]="true"></fa-icon>
       </a>
       <button class="btn btn-light ml-2" (click)="hideSidebar = !hideSidebar">
-        <fa-icon icon="cog" [fixedWidth]="true"></fa-icon>
+        <fa-icon [icon]="cog" [fixedWidth]="true"></fa-icon>
       </button>
     </div>
   </div>
@@ -106,11 +106,11 @@
              aria-controls="collapseBasic">
             <!-- Title -->
             <div class="mr-auto">
-              <fa-icon [icon]="['far', 'newspaper']" [fixedWidth]="true"></fa-icon>
+              <fa-icon [icon]="newspaper" [fixedWidth]="true"></fa-icon>
               {{ 'STATUS' | translate }}
             </div>
             <!-- Caret -->
-            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+            <fa-icon [icon]="angleDown" [fixedWidth]="true"></fa-icon>
           </a>
           <!-- Content -->
           <div class="collapse-content" [collapse]="false" #statusContent=bs-collapse>
@@ -140,7 +140,7 @@
             <div class="form-group">
               <button type="button" (click)="revertChanges()" *ngIf="postChanged"
                       class="btn btn-outline-danger btn-sm btn-block" [disabled]="loading">
-                <fa-icon icon="undo" [fixedWidth]="true"></fa-icon>
+                <fa-icon [icon]="undo" [fixedWidth]="true"></fa-icon>
                 {{ 'DISCARD_CHANGES' | translate }}
               </button>
             </div>
@@ -155,11 +155,11 @@
              aria-controls="collapseBasic">
             <!-- Title -->
             <div class="mr-auto">
-              <fa-icon icon="hashtag" [fixedWidth]="true"></fa-icon>
+              <fa-icon [icon]="hashtag" [fixedWidth]="true"></fa-icon>
               {{ 'TAGS' | translate }}
             </div>
             <!-- Caret -->
-            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+            <fa-icon [icon]="angleDown" [fixedWidth]="true"></fa-icon>
           </a>
           <!-- Content -->
           <div class="collapse-content" [collapse]="true" #tagsContent=bs-collapse>
@@ -186,11 +186,11 @@
              aria-controls="collapseBasic">
             <!-- Title -->
             <div class="mr-auto">
-              <fa-icon icon="image" [fixedWidth]="true"></fa-icon>
+              <fa-icon [icon]="image" [fixedWidth]="true"></fa-icon>
               {{ 'COVER_IMAGE' | translate }}
             </div>
             <!-- Caret -->
-            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+            <fa-icon [icon]="angleDown" [fixedWidth]="true"></fa-icon>
           </a>
           <!-- Content -->
           <div class="collapse-content" [collapse]="true" #coverImageContent=bs-collapse>
@@ -210,7 +210,7 @@
                   CHANGE_COVER_IMAGE
                 </button>
                 <button type="button" class="btn btn-danger" (click)="form.get('cover_image').setValue(null)">
-                  <fa-icon icon="times" [fixedWidth]="true"></fa-icon>
+                  <fa-icon [icon]="times" [fixedWidth]="true"></fa-icon>
                 </button>
               </div>
             </div>
@@ -225,11 +225,11 @@
              aria-controls="collapseBasic">
             <!-- Title -->
             <div class="mr-auto">
-              <fa-icon icon="plus" [fixedWidth]="true"></fa-icon>
+              <fa-icon [icon]="plus" [fixedWidth]="true"></fa-icon>
               {{ 'MORE_OPTIONS' | translate }}
             </div>
             <!-- Caret -->
-            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+            <fa-icon [icon]="angleDown" [fixedWidth]="true"></fa-icon>
           </a>
           <!-- Content -->
           <div class="collapse-content" [collapse]="true" #moreOptionsContent=bs-collapse>
