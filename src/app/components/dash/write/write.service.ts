@@ -62,9 +62,9 @@ export class WriteService {
   /**
    * Get entry
    *
-   * @param entryId Entry ID
+   * @param entry Entry ID
    */
-  getEntry(entryId: string): Observable<Entry> {
+  getEntry(entry: string): Observable<Entry> {
     return this.http.get<Entry>(`${this.apiService.base.v1}website/entry/${entryId}/`);
   }
 
