@@ -690,6 +690,26 @@ export class WriteComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Delete entry and redirect to posts or pages route based on current entry type
+   */
+  deleteEntry(): void {
+    this.writeService.deleteEntry(this.id).subscribe((): void => {
+      /**
+       * Get translate key for toaster
+       */
+      this.translateService.get('TOAST_DELETE').subscribe((response: string): void => {
+        this.toast.success(response, this.oldEntry.title);
+      });
+      /**
+       * Redirect to posts or pages route based on current entry type
+       */
+      this.router.navigate(['../../', this.oldEntry.is_page ? 'pages' : 'posts'], {
+        relativeTo: this.activatedRoute,
+      });
+    });
+  }
+
+  /**
    * Revert changes
    */
   revertChanges(): void {
