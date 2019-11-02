@@ -85,6 +85,15 @@ export class WriteService {
   }
 
   /**
+   * Delete entry
+   *
+   * @param entryId Entry ID
+   */
+  deleteEntry(entryId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiService.base.v1}website/entry/${entryId}/`);
+  }
+
+  /**
    * Get tags
    *
    * @param search Search text
