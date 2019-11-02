@@ -17,6 +17,9 @@ import { CommentsService } from './comments.service';
 })
 export class CommentsComponent implements OnInit {
 
+  /**
+   * Status to choice situation comment
+   */
   status = CommentStatus;
 
   /**
