@@ -62,10 +62,10 @@ export class WriteService {
   /**
    * Get entry
    *
-   * @param entryId Entry ID
+   * @param entry Entry ID
    */
-  getEntry(entryId: string): Observable<Entry> {
-    return this.http.get<Entry>(`${this.apiService.base.v1}website/entry/${entryId}/`);
+  getEntry(entry: string): Observable<Entry> {
+    return this.http.get<Entry>(`${this.apiService.base.v1}website/entry/${entry}/`);
   }
 
   /**
@@ -82,6 +82,15 @@ export class WriteService {
    */
   addEntry(entry: Entry): Observable<Entry> {
     return this.http.post<Entry>(`${this.apiService.base.v1}website/entry/`, entry);
+  }
+
+  /**
+   * Delete entry
+   *
+   * @param entryId Entry ID
+   */
+  deleteEntry(entryId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiService.base.v1}website/entry/${entryId}/`);
   }
 
   /**

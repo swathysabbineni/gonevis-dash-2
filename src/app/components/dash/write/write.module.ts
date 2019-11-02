@@ -14,6 +14,7 @@ import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUndo } from '@fortawesome/free-solid-svg-icons/faUndo';
 import { TranslateModule } from '@ngx-translate/core';
 import { AutosizeModule } from 'ngx-autosize';
@@ -64,5 +65,6 @@ export class WriteModule {
     library.add(faPlus);
     library.add(faUndo);
     library.add(faCheck);
+    library.add(faTrash);
   }
 }

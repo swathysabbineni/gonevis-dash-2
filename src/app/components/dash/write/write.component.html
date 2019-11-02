@@ -283,6 +283,33 @@
             </div>
           </div>
         </div>
+        <!-- Delete -->
+        <div class="section" *ngIf="isEditing">
+          <!-- Toggle -->
+          <a class="btn btn-link collapse-header"
+             (click)="deleteContent.collapse = !deleteContent.isCollapsed"
+             [attr.aria-expanded]="deleteContent.expanded"
+             aria-controls="collapseBasic">
+            <!-- Title -->
+            <div class="mr-auto">
+              <fa-icon icon="trash" [fixedWidth]="true"></fa-icon>
+              {{ 'DELETE' | translate }}
+            </div>
+            <!-- Caret -->
+            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+          </a>
+          <!-- Content -->
+          <div class="collapse-content" [collapse]="true" #deleteContent=bs-collapse>
+            <div class="form-group">
+              <!-- Description -->
+              <p translate>CONFORM_DELETE_ENTRY</p>
+              <!-- Button -->
+              <button class="btn btn-danger btn-block btn-sm" type="button" (click)="deleteEntry()" translate>
+                CONFIRM_DELETE
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
