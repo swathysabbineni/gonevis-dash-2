@@ -8,7 +8,10 @@ import { Subscription } from '@app/interfaces/subscription';
 import { Transaction } from '@app/interfaces/transaction';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 @Component({
   selector: 'app-settings-billing',
@@ -20,6 +23,12 @@ export class SettingsBillingComponent implements OnInit {
   subscription: Subscription;
 
   modal: BsModalRef;
+
+  /**
+   * Icons
+   */
+  readonly times: IconDefinition = faTimes;
+  readonly circleNotch: IconDefinition = faCircleNotch;
 
   /**
    * Indicates cancelling process
