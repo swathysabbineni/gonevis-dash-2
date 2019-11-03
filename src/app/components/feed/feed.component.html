@@ -13,7 +13,7 @@
       <!-- Tag navs -->
       <div class="nav flex-column nav-pills my-3 small">
         <a class="nav-link" *ngFor="let nav of tagNavs" (click)="selectTag($event)">
-          <fa-icon [fixedWidth]="true" icon="hashtag"></fa-icon>
+          <fa-icon [fixedWidth]="true" [icon]="hashtag"></fa-icon>
           <span class="ml-2">{{ nav }}</span>
         </a>
       </div>
