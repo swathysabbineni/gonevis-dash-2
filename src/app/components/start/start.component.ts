@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { TeamRoles } from '@app/enums/team-roles';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { BlogCreate } from '@app/interfaces/blog-create';
+import { UserAuth } from '@app/interfaces/user-auth';
 import { Template } from '@app/interfaces/v1/template';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
@@ -38,6 +43,11 @@ export class StartComponent implements OnInit {
   registerForm: FormGroup;
 
   /**
+   * Skip template selection step
+   */
+  skip: boolean;
+
+  /**
    * API loading indicator
    */
   loading: boolean;
@@ -62,9 +72,10 @@ export class StartComponent implements OnInit {
    */
   templateSelected: Template;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private router: Router,
+              private formBuilder: FormBuilder,
               private blogService: BlogService,
-              private authService: AuthService) {
+              public authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -124,6 +135,80 @@ export class StartComponent implements OnInit {
     }, error => {
       this.loading = false;
       this.error = error.error;
+    });
+  }
+
+  /**
+   * On template select
+   *
+   * @param template Blog template
+   */
+  onTemplateSelect(template: Template): void {
+    this.templateSelected = template;
+    /**
+     * Create blog if user is authenticated, otherwise go to register step.
+     */
+    if (this.authService.isAuth) {
+      this.createBlog();
+    } else {
+      this.step = 'register';
+    }
+  }
+
+  /**
+   * Create blog
+   */
+  createBlog(): void {
+    this.loading = true;
+    this.blogService.create(
+      this.domainCheckForm.get('domain').value,
+      this.domainCheckForm.get('domain').value,
+    ).subscribe((data: BlogCreate): void => {
+      this.loading = false;
+      const user: UserAuth = JSON.parse(localStorage.getItem('user'));
+      const blog: BlogMin = {
+        role: TeamRoles.Owner,
+        title: data.title,
+        url: data.url,
+        id: data.id,
+        media: {
+          logo: null,
+        },
+      };
+      user.sites.unshift(blog);
+      /**
+       * Update authenticated user data
+       */
+      AuthService.setAuthenticatedUser(user);
+      /**
+       * Add created blog to the blog list
+       */
+      const index: number = BlogService.add(blog);
+      BlogService.setCurrent(blog.id);
+      /**
+       * If user skipped or selected template was 'zero' then ignore setting blog template
+       */
+      if (this.templateSelected && this.templateSelected.name !== 'zero' && !this.skip) {
+        this.setTemplate();
+      }
+      /**
+       * Redirect to blog settings
+       */
+      this.router.navigate(['dash', index, 'settings']);
+    }, (): void => {
+      this.loading = false;
+    });
+  }
+
+  /**
+   * Set blog template
+   */
+  setTemplate(): void {
+    this.loading = true;
+    this.blogService.setTemplate(this.templateSelected.id).subscribe((): void => {
+      this.loading = false;
+    }, (): void => {
+      this.loading = false;
     });
   }
 }
