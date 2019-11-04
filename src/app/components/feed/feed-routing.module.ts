@@ -40,7 +40,7 @@ const routes: Routes = [{
     loadChildren: () => import('./user/user.module').then(m => m.UserModule),
   }, {
     path: '**',
-    redirectTo: 'explore',
+    redirectTo: 'updates',
     pathMatch: 'full',
   }],
 }];
