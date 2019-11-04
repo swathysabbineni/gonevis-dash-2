@@ -40,7 +40,7 @@
                 <fa-icon [fixedWidth]="true" [icon]="['fas', 'heart']" *ngIf="comment.is_voted"
                          class="text-danger"></fa-icon>
               </button>
-              <div *ngIf="comment.user.id === user.id">
+              <div *ngIf="comment.user.id === user.id && showActionButton">
                 <!-- Edit -->
                 <ng-template #editTemplate>
                   <app-comment-form [comment]="comment" [canComment]="entry.can_comment"
@@ -52,7 +52,8 @@
                 </button>
               </div>
               <!-- Delete -->
-              <button class="btn btn-link" [disabled]="loading" (click)="removeComment(comment.id, index)">
+              <button class="btn btn-link" [disabled]="loading" (click)="removeComment(comment.id, index)"
+                      *ngIf="showActionButton">
                 <fa-icon icon="trash"></fa-icon>
               </button>
             </div>

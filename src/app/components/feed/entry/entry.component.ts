@@ -24,6 +24,11 @@ import { TranslateService } from '@ngx-translate/core';
 export class EntryComponent implements OnInit {
 
   /**
+   * @Todo - Remove me once user ID issue for comments is fixed
+   */
+  readonly showActionButton = false;
+
+  /**
    * Authenticated user data
    */
   user: UserAuth;
