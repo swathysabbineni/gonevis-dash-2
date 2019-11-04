@@ -26,6 +26,11 @@ export class CommentFormComponent implements AfterViewInit {
   @Input() comment: Comment;
 
   /**
+   * Determine whether can comment on post or not
+   */
+  @Input() canComment: boolean;
+
+  /**
    * Form submission event
    */
   @Output() formSubmitted: EventEmitter<CommentFormEvent> = new EventEmitter<CommentFormEvent>();
