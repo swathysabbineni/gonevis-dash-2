@@ -3,10 +3,13 @@
 
 <!-- Comment section -->
 <div class="card feed shadow-sm my-3" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+     fromRoot="false"
+     infiniteScrollContainer=".main-scroller"
      (scrolled)="loadMore(next)" *ngIf="comments">
 
   <!-- Comment form -->
-  <app-comment-form [entryId]="entry.id" (formSubmitted)="onCommentSubmit($event)" *ngIf="entry"></app-comment-form>
+  <app-comment-form [entryId]="entry.id" [canComment]="entry.can_comment" (formSubmitted)="onCommentSubmit($event)"
+                    *ngIf="entry"></app-comment-form>
 
   <!-- Comment list -->
   <ul class="list-group list-group-flush">
@@ -37,10 +40,11 @@
                 <fa-icon [fixedWidth]="true" [icon]="heartFill" *ngIf="comment.is_voted"
                          class="text-danger"></fa-icon>
               </button>
-              <div *ngIf="comment.user.id === user.id">
+              <div *ngIf="comment.user.id === user.id && showActionButton">
                 <!-- Edit -->
                 <ng-template #editTemplate>
-                  <app-comment-form [comment]="comment" (formSubmitted)="onCommentSubmit($event)"></app-comment-form>
+                  <app-comment-form [comment]="comment" [canComment]="entry.can_comment"
+                                    (formSubmitted)="onCommentSubmit($event)"></app-comment-form>
                 </ng-template>
                 <button class="btn btn-link" [disabled]="loading" [popover]="editTemplate"
                         popoverTitle="Edit" placement="top" outsideClick="true" container="body">

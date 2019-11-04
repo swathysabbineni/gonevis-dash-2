@@ -1,5 +1,5 @@
 <!-- Comment form -->
-<form class="card-header bg-light" [formGroup]="form" (ngSubmit)="submit()">
+<form class="card-header bg-light" [formGroup]="form" (ngSubmit)="submit()" *ngIf="canComment">
   <div class="media">
     <!-- Comment user (current user) -->
     <img class="rounded-circle mr-3 bg-secondary" *ngIf="!user.media">

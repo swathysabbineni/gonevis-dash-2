@@ -14,7 +14,6 @@ import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dash',
@@ -72,8 +71,7 @@ export class DashComponent implements OnInit {
     icon: faInfoCircle,
   }];
 
-  constructor(private route: ActivatedRoute,
-              private translateService: TranslateService) {
+  constructor(private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { BlogCreate } from '@app/interfaces/blog-create';
 import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Metrics } from '@app/interfaces/v1/metrics';
@@ -107,11 +108,14 @@ export class BlogService {
    * Add a blog to the blog list
    *
    * @param blog Blog to add
+   *
+   * @returns Index of the new blog
    */
-  static add(blog: BlogMin): void {
+  static add(blog: BlogMin): number {
     const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
     blogs.push(blog);
     BlogService.blogsSubject.next(blogs);
+    return blogs.length - 1;
   }
 
   /**
@@ -145,6 +149,24 @@ export class BlogService {
    */
   static get currentBlog(): BlogMin {
     return BlogService.blogSubject.getValue();
+  }
+
+  /**
+   * @returns Whether user has blogs or not
+   */
+  static get hasBlogs(): boolean {
+    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
+    return Boolean(blogs && blogs.length);
+  }
+
+  /**
+   * Create blog
+   *
+   * @param url Blog's URL
+   * @param title Blog's title
+   */
+  create(url: string, title: string): Observable<BlogCreate> {
+    return this.http.post<BlogCreate>(`${this.api.base.v1}website/site/`, { url, title });
   }
 
   /**

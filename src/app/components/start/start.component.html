@@ -42,12 +42,18 @@
   <div class="step my-5" *ngIf="step === 'theme'">
 
     <!-- Header -->
-    <h2 class="text-center font-weight-bold mb-4" translate>PICK_A_TEMPLATE</h2>
+    <h2 class="d-flex align-items-center font-weight-bold mb-4">
+      <span class="text-center flex-grow-1" translate>PICK_A_TEMPLATE</span>
+      <button class="btn btn-link ml-auto" *ngIf="authService.isAuth" [disabled]="loading"
+              (click)="skip = true; createBlog()" translate>
+        SKIP
+      </button>
+    </h2>
 
     <!-- Content -->
     <div class="row">
       <div class="col-lg-4 col-md-6" *ngFor="let template of templates">
-        <a class="card card-link shadow-sm mt-4" (click)="templateSelected = template; step = 'register'">
+        <a class="card card-link shadow-sm mt-4" (click)="onTemplateSelect(template)">
           <div class="card-header bg-secondary text-white text-center text-uppercase font-weight-bold py-3">
             {{ template.name }}
           </div>

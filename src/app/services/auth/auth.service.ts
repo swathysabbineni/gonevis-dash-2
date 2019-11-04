@@ -19,19 +19,29 @@ import { map } from 'rxjs/operators';
 export class AuthService {
 
   /**
-   * Sign in redirect
+   * Storage version to use to force user to sign in again (should only be increased)
    */
-  private static readonly signInRedirect: string[] = ['feed'];
+  static readonly STORAGE_VERSION = 6;
 
   /**
-   * Sign up redirect
+   * Storage key for storage version
    */
-  private static readonly signUpRedirect: string[] = ['dash'];
+  static readonly STORAGE_VERSION_KEY = 'version';
 
   /**
-   * Sign out redirect
+   * Sign in redirect path
    */
-  private static readonly signOutRedirect: string[] = ['start'];
+  private static readonly REDIRECT_SIGN_IN = ['dash'];
+
+  /**
+   * Sign up redirect path
+   */
+  private static readonly REDIRECT_SIGN_UP = ['feed', 'explore'];
+
+  /**
+   * Sign out redirect path
+   */
+  private static readonly REDIRECT_SIGN_OUT = ['user', 'sign-up'];
 
   /**
    * Authenticated user (subject)
@@ -50,10 +60,21 @@ export class AuthService {
               private cookie: CookieService,
               private api: ApiService) {
     /**
-     * Update user (subject) and blogs (subject) if user is authenticated
-     * @see isAuth
+     * Check if user is authenticated
      */
     if (this.isAuth) {
+      /**
+       * Sign user out if authentication version is old
+       */
+      if (AuthService.STORAGE_VERSION !== Number(localStorage.getItem(AuthService.STORAGE_VERSION_KEY))) {
+        this.signOut(false, ['user', 'sign-in']).then(() => {
+          this.toast.info(this.translate.instant('TEXT_OLD_AUTH_VERSION'), this.translate.instant('SIGN_IN_AGAIN'));
+        });
+        return;
+      }
+      /**
+       * Update authenticated user and blog data
+       */
       const user: UserAuth = JSON.parse(localStorage.getItem('user'));
       AuthService.userSubject.next(user);
       BlogService.set(user.sites.reverse());
@@ -61,25 +82,21 @@ export class AuthService {
   }
 
   /**
-   * Parse JWT token
-   *
-   * @param token JWT.
-   *
-   * @return Parsed JWT token.
+   * @return Parsed JTW token
+   * @param token JWT token
    */
-  private static parseJwt(token: string): AuthToken | null {
-    const base64Url = token.split('.')[1];
-    if (typeof base64Url === 'undefined') {
-      return null;
+  private static parseJwt(token: string): AuthToken {
+    const BASE64_URL: string = token.split('.')[1];
+    if (typeof BASE64_URL === 'undefined') {
+      return;
     }
-    const base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(atob(base64));
+    return JSON.parse(atob(BASE64_URL.replace('-', '+').replace('_', '/')));
   }
 
   /**
-   * Set/update authenticated user data
+   * Set authenticated user data
    *
-   * @param userData UserSettings data
+   * @param userData User data to set to
    */
   static setAuthenticatedUser(userData: UserAuth): void {
     localStorage.setItem('user', JSON.stringify(userData));
@@ -87,15 +104,14 @@ export class AuthService {
   }
 
   /**
-   * @return Is user authenticated or not
+   * @return Whether user authenticated or not
    */
   get isAuth(): boolean {
     return this.cookie.check('token');
   }
 
   /**
-   * Save/update token to localStorage
-   *
+   * Update authentication token
    * @param token Authentication token
    */
   setToken(token: string): void {
@@ -115,12 +131,14 @@ export class AuthService {
   /**
    * Un-authenticate user by cleaning localStorage and cookies
    */
-  signOut(): void {
+  signOut(toast: boolean = true, redirect: string[] = AuthService.REDIRECT_SIGN_OUT): Promise<boolean> {
     this.cookie.deleteAll('/');
     localStorage.clear();
     AuthService.userSubject.next(null);
-    this.toast.info(this.translate.instant('TOAST_SIGN_OUT'));
-    this.router.navigate(AuthService.signOutRedirect);
+    if (toast) {
+      this.toast.info(this.translate.instant('TOAST_SIGN_OUT'));
+    }
+    return this.router.navigate(redirect);
   }
 
   /**
@@ -130,14 +148,12 @@ export class AuthService {
    * @param password User password
    * @param showToast Show sign in toast
    * @param redirectPath Redirect after signing up
-   *
-   * @return String observable which can be subscribed to.
    */
   signIn(
     username: string,
     password: string,
     showToast: boolean = true,
-    redirectPath: string[] = AuthService.signInRedirect,
+    redirectPath?: string[],
   ): Observable<string> {
     return this.http.post<AuthResponse>(
       `${this.api.base.v1}account/login/`, { username, password },
@@ -147,6 +163,8 @@ export class AuthService {
         this.setToken(data.token);
         // Store user into local storage
         localStorage.setItem('user', JSON.stringify(data.user));
+        // Store storage version
+        localStorage.setItem(AuthService.STORAGE_VERSION_KEY, AuthService.STORAGE_VERSION.toString());
         // Update user and blogs subject data
         AuthService.userSubject.next(data.user);
         BlogService.set(data.user.sites.reverse());
@@ -155,12 +173,11 @@ export class AuthService {
           this.toast.info(this.translate.instant('TOAST_SIGN_IN'), data.user.name);
         }
         // Redirect user to dashboard page if user has at least one blog, otherwise redirect to Feed page
-        if (data.user.sites && data.user.sites.length === 0) {
-          redirectPath = AuthService.signInRedirect;
+        if (!redirectPath) {
+          this.router.navigate(BlogService.hasBlogs ? AuthService.REDIRECT_SIGN_IN : ['feed', 'explore']);
         } else if (data.user.sites && data.user.sites.length >= 1) {
-          redirectPath = AuthService.signUpRedirect;
+          this.router.navigate(redirectPath);
         }
-        this.router.navigate(redirectPath);
         // Return raw user data
         return data.user.username;
       }),
@@ -180,7 +197,7 @@ export class AuthService {
     }).pipe(
       map((): void => {
         this.toast.info(this.translate.instant('TOAST_SIGN_UP'), username);
-        this.signIn(username, password, false).subscribe();
+        this.signIn(username, password, false, AuthService.REDIRECT_SIGN_UP).subscribe();
       }),
     );
   }
@@ -210,7 +227,7 @@ export class AuthService {
     }).pipe(
       map((data: RegisterWithBlogResponse): RegisterWithBlogResponse => {
         this.toast.info(this.translate.instant('TOAST_SIGN_UP'), blogName);
-        this.signIn(email, password, false, AuthService.signUpRedirect).subscribe();
+        this.signIn(email, password, false).subscribe();
         return data;
       }),
     );
