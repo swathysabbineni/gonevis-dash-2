@@ -73,15 +73,15 @@ export class UserComponent implements OnInit {
        */
       this.userService.getUser(params.username).subscribe((data: User): void => {
         this.user = data;
+        /**
+         * Update title
+         */
+        this.title.setTitle(`${this.user.display_name}${AppComponent.TITLE_SUFFIX}`);
       });
       /**
        * Get entries or blogs of this user
        */
       this.setCurrent('entries');
-      /**
-       * Update title
-       */
-      this.title.setTitle(`${this.user.display_name}${AppComponent.TITLE_SUFFIX}`);
     });
   }
 
