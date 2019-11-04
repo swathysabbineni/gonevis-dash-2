@@ -3,6 +3,8 @@
 
 <!-- Comment section -->
 <div class="card feed shadow-sm my-3" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+     fromRoot="false"
+     infiniteScrollContainer=".main-scroller"
      (scrolled)="loadMore(next)" *ngIf="comments">
 
   <!-- Comment form -->
