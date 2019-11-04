@@ -5,10 +5,10 @@ if ! [ -x "$(command -v rsync)" ]; then
   exit 1
 fi
 
-if [ "${CI_BUILD_REF_NAME}" == "master" ]; then
+if [ "${CIRCLE_BRANCH}" == "master" ]; then
     ENVIRONMENT="staging"
     DEPLOY_PATH="~/public_html/dash-draft.gonevis.com"
-elif [ "${CI_BUILD_REF_NAME}" == "production" ]; then
+elif [ "${CIRCLE_BRANCH}" == "production" ]; then
     ENVIRONMENT="production"
     DEPLOY_PATH="~/dash.gonevis.com"
 else
