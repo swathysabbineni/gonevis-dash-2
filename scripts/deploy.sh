@@ -5,12 +5,24 @@ if ! [ -x "$(command -v rsync)" ]; then
   exit 1
 fi
 
-npm run build-production
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DEPLOY_USER@$DEPLOY_HOST -p$DEPLOY_SSH_PORT 'rm -rf dash.gonevis.com/*'
+if [ "${CI_BUILD_REF_NAME}" == "master" ]; then
+    ENVIRONMENT="staging"
+    DEPLOY_PATH="~/public_html/dash-draft.gonevis.com"
+elif [ "${CI_BUILD_REF_NAME}" == "production" ]; then
+    ENVIRONMENT="production"
+    DEPLOY_PATH="~/dash.gonevis.com"
+else
+    echo "NO DEPLOYMENT FOR NOW."
+    exit
+fi
+
+echo "Deployment on ${ENVIRONMENT} environment!"
+
+npm run build-$ENVIRONMENT
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DEPLOY_USER@$DEPLOY_HOST -p$DEPLOY_SSH_PORT 'rm -rf $DEPLOY_PATH/*'
 rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p$DEPLOY_SSH_PORT" --progress .htaccess dist/gonevis/* $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
 
 # Notifying Rollbar of the deployment
-ENVIRONMENT=production
 LOCAL_USERNAME=`whoami`
 REVISION=`git log -n 1 --pretty=format:"%H"`
 
