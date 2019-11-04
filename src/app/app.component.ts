@@ -125,7 +125,14 @@ export class AppComponent implements OnInit {
       filter((event: RouterEvent): boolean => event instanceof NavigationEnd && event.url === '/'),
     ).subscribe((): void => {
       if (this.auth.isAuth) {
-        this.router.navigateByUrl(BlogService.hasBlogs ? 'dash' : 'feed');
+        /**
+         * Redirect to 'dash' route if user has blogs, otherwise redirect to 'feed' route
+         */
+        if (BlogService.hasBlogs) {
+          this.router.navigateByUrl('dash');
+        } else {
+          this.router.navigateByUrl('feed');
+        }
       } else {
         this.router.navigateByUrl('start');
       }
