@@ -8,7 +8,8 @@
      (scrolled)="loadMore(next)" *ngIf="comments">
 
   <!-- Comment form -->
-  <app-comment-form [entryId]="entry.id" (formSubmitted)="onCommentSubmit($event)" *ngIf="entry"></app-comment-form>
+  <app-comment-form [entryId]="entry.id" [canComment]="entry.can_comment" (formSubmitted)="onCommentSubmit($event)"
+                    *ngIf="entry"></app-comment-form>
 
   <!-- Comment list -->
   <ul class="list-group list-group-flush">
@@ -42,7 +43,8 @@
               <div *ngIf="comment.user.id === user.id">
                 <!-- Edit -->
                 <ng-template #editTemplate>
-                  <app-comment-form [comment]="comment" (formSubmitted)="onCommentSubmit($event)"></app-comment-form>
+                  <app-comment-form [comment]="comment" [canComment]="entry.can_comment"
+                                    (formSubmitted)="onCommentSubmit($event)"></app-comment-form>
                 </ng-template>
                 <button class="btn btn-link" [disabled]="loading" [popover]="editTemplate"
                         popoverTitle="Edit" placement="top" outsideClick="true" container="body">
