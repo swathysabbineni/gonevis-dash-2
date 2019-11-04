@@ -3,6 +3,8 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { ApiError } from '@app/interfaces/api-error';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-sign-in',
@@ -10,6 +12,12 @@ import { AuthService } from '@app/services/auth/auth.service';
   styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
+
+  /**
+   * Icons
+   */
+  readonly user: IconDefinition = faUser;
+  readonly lock: IconDefinition = faLock;
 
   // Sign in form
   form: FormGroup;
