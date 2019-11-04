@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { UserService } from '@app/services/user/user.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-forgot-password',
@@ -10,6 +12,11 @@ import { UserService } from '@app/services/user/user.service';
   styleUrls: ['./forgot-password.component.scss'],
 })
 export class ForgotPasswordComponent implements OnInit {
+
+  /**
+   * Icons
+   */
+  readonly envelope: IconDefinition = faEnvelope;
 
   // Forgot password form
   form: FormGroup;
