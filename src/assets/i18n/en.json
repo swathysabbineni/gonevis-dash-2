@@ -187,6 +187,7 @@
   "TRANSACTIONS": "Transactions",
   "SUBSCRIPTION_DETAILS": "Subscription Detail",
   "TEXT_DISCORD": "Feel free to join our new Discord server!",
+  "TEXT_OLD_AUTH_VERSION": "Client authentication version is old, signing out.",
   "TOAST_SIGN_IN": "Signed in, welcome back!",
   "TOAST_SIGN_UP": "Welcome to GoNevis!",
   "TOAST_SIGN_OUT": "You are now signed out",
@@ -266,5 +267,6 @@
   "SORT_BY": "Sort by",
   "CLEAR": "Clear",
   "START": "Start",
+  "SIGN_IN_AGAIN": "Sign in again",
   "COLLABORATING": "Collaborating"
 }
