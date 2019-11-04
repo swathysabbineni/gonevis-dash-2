@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
@@ -14,7 +14,6 @@ import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dash',
@@ -73,7 +72,7 @@ export class DashComponent implements OnInit {
   }];
 
   constructor(private route: ActivatedRoute,
-              private translateService: TranslateService) {
+              private router: Router) {
   }
 
   ngOnInit(): void {
