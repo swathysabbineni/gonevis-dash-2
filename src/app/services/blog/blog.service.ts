@@ -156,7 +156,7 @@ export class BlogService {
    */
   static get hasBlogs(): boolean {
     const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
-    return !!(blogs && blogs.length);
+    return Boolean(blogs && blogs.length);
   }
 
   /**
