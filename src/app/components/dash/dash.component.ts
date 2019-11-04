@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
@@ -71,8 +71,7 @@ export class DashComponent implements OnInit {
     icon: faInfoCircle,
   }];
 
-  constructor(private route: ActivatedRoute,
-              private router: Router) {
+  constructor(private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
