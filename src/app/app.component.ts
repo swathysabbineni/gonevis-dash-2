@@ -62,6 +62,10 @@ export class AppComponent implements OnInit {
      */
     this.router.events.pipe(
       filter((event: RouterEvent): boolean => event instanceof NavigationEnd),
+      map((): ActivatedRoute => this.route),
+      filter((activatedRoute: ActivatedRoute): boolean => {
+        return activatedRoute.outlet === 'primary' && !!activatedRoute.firstChild;
+      }),
     ).subscribe((): void => {
       this.inDash = this.route.root.firstChild.snapshot.routeConfig.path === 'dash';
     });
@@ -111,6 +115,19 @@ export class AppComponent implements OnInit {
         this.title.setTitle(`${this.translate.instant(event.title)}${AppComponent.TITLE_SUFFIX}`);
       } else {
         this.title.setTitle(AppComponent.TITLE);
+      }
+    });
+
+    /**
+     * On '/' route visit redirect user conditionally based on authentication state and blogs count
+     */
+    this.router.events.pipe(
+      filter((event: RouterEvent): boolean => event instanceof NavigationEnd && event.url === '/'),
+    ).subscribe((): void => {
+      if (this.auth.isAuth) {
+        this.router.navigateByUrl(BlogService.hasBlogs ? 'dash' : 'feed');
+      } else {
+        this.router.navigateByUrl('start');
       }
     });
   }
