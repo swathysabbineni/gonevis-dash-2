@@ -1,74 +1,77 @@
-<div class="container mt-3">
+<!-- Cover -->
+<div class="container-fluid pt-5 cover" [style.background-image]="blogCover">
+  <div class="container">
+    <div class="row">
 
-  <!-- Top -->
-  <div class="row">
+      <!-- Stat: Publication -->
+      <div class="col-lg-3 col-md-6">
+        <a class="card card-link dash stat mb-4" routerLink="../../../posts">
+          <div class="card-body bg-success">
+            <fa-icon [fixedWidth]="true" [icon]="faPublications"></fa-icon>
+          </div>
+          <div class="card-body">
+            <h1>
+              <span *ngIf="metrics">{{ metrics.metrics.published_entry_count | number }}</span>
+              <span *ngIf="!metrics">0</span>
+            </h1>
+            <div translate>PUBLICATION</div>
+          </div>
+        </a>
+      </div>
 
-    <!-- Stat: Publication -->
-    <div class="col-lg-3">
-      <a class="card card-link dash stat mb-4" routerLink="../../../posts">
-        <div class="card-body bg-success">
-          <fa-icon [fixedWidth]="true" [icon]="faPublications"></fa-icon>
-        </div>
-        <div class="card-body">
-          <h1>
-            <span *ngIf="metrics">{{ metrics.metrics.published_entry_count | number }}</span>
-            <span *ngIf="!metrics">0</span>
-          </h1>
-          <div translate>PUBLICATION</div>
-        </div>
-      </a>
-    </div>
+      <!-- Stat: Comments -->
+      <div class="col-lg-3 col-md-6">
+        <a class="card card-link dash stat mb-4" routerLink="../../../comments">
+          <div class="card-body bg-info">
+            <fa-icon [fixedWidth]="true" [icon]="faComments"></fa-icon>
+          </div>
+          <div class="card-body">
+            <h1>
+              <span *ngIf="metrics">{{ metrics.metrics.active_comment_count | number }}</span>
+              <span *ngIf="!metrics">0</span>
+            </h1>
+            <div translate>COMMENTS</div>
+          </div>
+        </a>
+      </div>
 
-    <!-- Stat: Comments -->
-    <div class="col-lg-3">
-      <a class="card card-link dash stat mb-4" routerLink="../../../comments">
-        <div class="card-body bg-info">
-          <fa-icon [fixedWidth]="true" [icon]="faComments"></fa-icon>
-        </div>
-        <div class="card-body">
-          <h1>
-            <span *ngIf="metrics">{{ metrics.metrics.active_comment_count | number }}</span>
-            <span *ngIf="!metrics">0</span>
-          </h1>
-          <div translate>COMMENTS</div>
-        </div>
-      </a>
-    </div>
+      <!-- Stat: Followers -->
+      <div class="col-lg-3 col-md-6">
+        <a class="card card-link dash stat mb-4" (click)="showSubscribers()">
+          <div class="card-body bg-warning">
+            <fa-icon [fixedWidth]="true" [icon]="faFollowers"></fa-icon>
+          </div>
+          <div class="card-body">
+            <h1>
+              <span *ngIf="metrics">{{ metrics.metrics.subscriber_count | number }}</span>
+              <span *ngIf="!metrics">0</span>
+            </h1>
+            <div translate>FOLLOWERS</div>
+          </div>
+        </a>
+      </div>
 
-    <!-- Stat: Followers -->
-    <div class="col-lg-3">
-      <a class="card card-link dash stat mb-4" (click)="showSubscribers()">
-        <div class="card-body bg-warning">
-          <fa-icon [fixedWidth]="true" [icon]="faFollowers"></fa-icon>
-        </div>
-        <div class="card-body">
-          <h1>
-            <span *ngIf="metrics">{{ metrics.metrics.subscriber_count | number }}</span>
-            <span *ngIf="!metrics">0</span>
-          </h1>
-          <div translate>FOLLOWERS</div>
-        </div>
-      </a>
-    </div>
-
-    <!-- Stat: Storage -->
-    <div class="col-lg-3">
-      <div class="card dash stat mb-4">
-        <div class="card-body bg-danger">
-          <fa-icon [fixedWidth]="true" [icon]="faFiles"></fa-icon>
-        </div>
-        <div class="card-body">
-          <h1>
-            <span *ngIf="metrics">{{ metrics.metrics.dolphin.file_count | number }}</span>
-            <span *ngIf="!metrics">0</span>
-          </h1>
-          <div translate>FILES</div>
+      <!-- Stat: Storage -->
+      <div class="col-lg-3 col-md-6">
+        <div class="card dash stat mb-4">
+          <div class="card-body bg-danger">
+            <fa-icon [fixedWidth]="true" [icon]="faFiles"></fa-icon>
+          </div>
+          <div class="card-body">
+            <h1>
+              <span *ngIf="metrics">{{ metrics.metrics.dolphin.file_count | number }}</span>
+              <span *ngIf="!metrics">0</span>
+            </h1>
+            <div translate>FILES</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Left and right -->
+<!-- Cards -->
+<div class="container mt-3">
   <div class="row">
 
     <!-- Left -->
