@@ -5,9 +5,9 @@ import { ApiError } from '@app/interfaces/api-error';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
 import { UserService } from '@app/services/user/user.service';
-import { TranslateService } from '@ngx-translate/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reset-password',
