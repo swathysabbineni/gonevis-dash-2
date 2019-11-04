@@ -7,7 +7,7 @@ fi
 
 npm run build-production
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DEPLOY_USER@$DEPLOY_HOST -p$DEPLOY_SSH_PORT 'rm -rf dash.gonevis.com/*'
-rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p$DEPLOY_SSH_PORT" --progress .htaccess dist/* $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p$DEPLOY_SSH_PORT" --progress .htaccess dist/gonevis/* $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
 
 # Notifying Rollbar of the deployment
 ENVIRONMENT=production
