@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router, NavigationEnd, RouterEvent } from '@angular/router';
 import { AppComponent } from '@app/app.component';
 import { BlogService } from '@app/components/feed/blog/blog.service';
 import { FeedService } from '@app/components/feed/feed.service';
@@ -9,13 +9,14 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { User } from '@app/interfaces/user';
 import { Blog } from '@app/interfaces/zero/blog';
 import { Entry } from '@app/interfaces/zero/entry';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
 
   /**
    * User username (from params)
@@ -53,10 +54,20 @@ export class UserComponent implements OnInit {
   current: 'entries' | 'blogs';
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private title: Title,
               private userService: UserService,
               private feedService: FeedService,
               private blogService: BlogService) {
+    /**
+     * Scroll to top on route enter
+     */
+    this.router.events.pipe(untilComponentDestroyed(this)).subscribe((event: RouterEvent): void => {
+      if (!(event instanceof NavigationEnd)) {
+        return;
+      }
+      document.getElementsByClassName('main-scroller')[0].scrollTo(0, 0);
+    });
   }
 
   ngOnInit(): void {
@@ -107,5 +118,8 @@ export class UserComponent implements OnInit {
         this.loading = false;
       });
     }
+  }
+
+  ngOnDestroy(): void {
   }
 }
