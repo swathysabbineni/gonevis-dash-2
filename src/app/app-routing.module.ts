@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DashGuardService } from '@app/components/dash/dash-guard.service';
 import { AuthGuardService } from '@app/services/auth-guard/auth-guard.service';
 
 const routes: Routes = [{
@@ -7,6 +8,7 @@ const routes: Routes = [{
   children: [{
     path: ':blog',
     loadChildren: () => import('./components/dash/dash.module').then(m => m.DashModule),
+    canLoad: [DashGuardService],
   }, {
     path: '**',
     redirectTo: '0',
@@ -23,10 +25,6 @@ const routes: Routes = [{
 }, {
   path: 'start',
   loadChildren: () => import('./components/start/start.module').then(m => m.StartModule),
-}, {
-  path: '**',
-  redirectTo: 'start',
-  pathMatch: 'full',
 }];
 
 @NgModule({

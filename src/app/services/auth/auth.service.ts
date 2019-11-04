@@ -1,5 +1,4 @@
 import { HttpClient } from '@angular/common/http';
-import { ConsoleLogger } from '@angular/compiler-cli/ngcc';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthResponse } from '@app/interfaces/auth-response';
@@ -32,12 +31,12 @@ export class AuthService {
   /**
    * Sign in redirect path
    */
-  private static readonly REDIRECT_SIGN_IN = ['feed'];
+  private static readonly REDIRECT_SIGN_IN = ['dash'];
 
   /**
    * Sign up redirect path
    */
-  private static readonly REDIRECT_SIGN_UP = ['dash'];
+  private static readonly REDIRECT_SIGN_UP = ['feed', 'explore'];
 
   /**
    * Sign out redirect path
@@ -154,7 +153,7 @@ export class AuthService {
     username: string,
     password: string,
     showToast: boolean = true,
-    redirectPath: string[] = AuthService.REDIRECT_SIGN_IN,
+    redirectPath?: string[],
   ): Observable<string> {
     return this.http.post<AuthResponse>(
       `${this.api.base.v1}account/login/`, { username, password },
@@ -174,12 +173,11 @@ export class AuthService {
           this.toast.info(this.translate.instant('TOAST_SIGN_IN'), data.user.name);
         }
         // Redirect user to dashboard page if user has at least one blog, otherwise redirect to Feed page
-        if (data.user.sites && data.user.sites.length === 0) {
-          redirectPath = AuthService.REDIRECT_SIGN_IN;
+        if (!redirectPath) {
+          this.router.navigate(BlogService.hasBlogs ? AuthService.REDIRECT_SIGN_IN : ['feed', 'explore']);
         } else if (data.user.sites && data.user.sites.length >= 1) {
-          redirectPath = AuthService.REDIRECT_SIGN_UP;
+          this.router.navigate(redirectPath);
         }
-        this.router.navigate(redirectPath);
         // Return raw user data
         return data.user.username;
       }),
@@ -199,7 +197,7 @@ export class AuthService {
     }).pipe(
       map((): void => {
         this.toast.info(this.translate.instant('TOAST_SIGN_UP'), username);
-        this.signIn(username, password, false).subscribe();
+        this.signIn(username, password, false, AuthService.REDIRECT_SIGN_UP).subscribe();
       }),
     );
   }
@@ -229,7 +227,7 @@ export class AuthService {
     }).pipe(
       map((data: RegisterWithBlogResponse): RegisterWithBlogResponse => {
         this.toast.info(this.translate.instant('TOAST_SIGN_UP'), blogName);
-        this.signIn(email, password, false, AuthService.REDIRECT_SIGN_UP).subscribe();
+        this.signIn(email, password, false).subscribe();
         return data;
       }),
     );

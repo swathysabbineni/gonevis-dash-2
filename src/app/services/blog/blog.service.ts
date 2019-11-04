@@ -152,6 +152,14 @@ export class BlogService {
   }
 
   /**
+   * @returns Whether user has blogs or not
+   */
+  static get hasBlogs(): boolean {
+    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
+    return Boolean(blogs && blogs.length);
+  }
+
+  /**
    * Create blog
    *
    * @param url Blog's URL
