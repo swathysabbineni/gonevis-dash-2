@@ -6,4 +6,5 @@ export interface Environment {
     zero: string;
   };
   paymentPublicId: string;
+  googleAnalytics: string;
 }
