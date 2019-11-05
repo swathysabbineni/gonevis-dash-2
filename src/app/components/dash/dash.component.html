@@ -1,6 +1,6 @@
 <div class="wrapper">
-  <div class="sidebar">
-    <ul>
+  <div class="sidebar" [class.is-closed]="!openSidebar">
+    <ul class="overflow-auto">
       <li *ngFor="let link of links">
         <a [routerLink]="[link.path]" routerLinkActive="active">
           <fa-icon [icon]="link.icon" [fixedWidth]="true"></fa-icon>
@@ -8,6 +8,12 @@
         </a>
       </li>
     </ul>
+    <!-- Toggler -->
+    <a class="mt-auto toggler" (click)="toggleSidebar(!openSidebar)">
+      <!-- Icon -->
+      <fa-icon [icon]="faAngleDoubleLeft" [flip]="!openSidebar ? 'horizontal' : null" [fixedWidth]="true"></fa-icon>
+      {{ 'COLLAPSE_SIDEBAR' | translate }}
+    </a>
   </div>
   <div class="content">
     <div class="h-100 overflow-auto">
