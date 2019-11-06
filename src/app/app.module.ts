@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-interceptor.service';
 import { FeedbackModalModule } from '@app/shared/feedback-modal/feedback-modal.module';
+import { environment } from '@environments/environment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
@@ -15,6 +16,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CookieService } from 'ngx-cookie-service';
+import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -47,6 +49,8 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     ModalModule.forRoot(),
+    NgxGoogleAnalyticsModule.forRoot(environment.googleAnalytics),
+    NgxGoogleAnalyticsRouterModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       positionClass: 'toast-bottom-right',

@@ -3,6 +3,7 @@ import { CommentsService } from '@app/components/dash/comments/comments.service'
 import { EntryService } from '@app/components/dash/entry/entry.service';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Comment } from '@app/interfaces/v1/comment';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Metrics } from '@app/interfaces/v1/metrics';
@@ -40,6 +41,11 @@ export class MainComponent implements OnInit, OnDestroy {
   readonly eye: IconDefinition = faEye;
   readonly like: IconDefinition = faThumbsUp;
   /**
+   * Blog settings data
+   */
+  blog: BlogSettings;
+
+  /**
    * List of recent blog comments
    */
   comments: Comment[];
@@ -70,6 +76,20 @@ export class MainComponent implements OnInit, OnDestroy {
               private modalService: BsModalService) {
   }
 
+  /**
+   * @returns Cover image or logo (CSS) of current blog
+   */
+  get blogCover(): string {
+    if (this.blog) {
+      if (this.blog.media.cover_image) {
+        return `url(${this.blog.media.cover_image.file})`;
+      }
+      if (this.blog.media.logo) {
+        return `url(${this.blog.media.logo.file})`;
+      }
+    }
+  }
+
   ngOnInit(): void {
     BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
@@ -77,6 +97,12 @@ export class MainComponent implements OnInit, OnDestroy {
          * Reset data
          */
         this.templateConfig = null;
+        /**
+         * Load blog data
+         */
+        this.blogService.getSettings().subscribe((data: BlogSettings): void => {
+          this.blog = data;
+        });
         /**
          * Load entries
          */
@@ -103,9 +129,9 @@ export class MainComponent implements OnInit, OnDestroy {
          * Load template config (for owner and admins)
          */
         if (blog.role !== TeamRoles.Editor) {
-          this.blogService.getTemplateConfig()
-            .pipe(untilComponentDestroyed(this))
-            .subscribe((data: { template_config: TemplateConfig }): void => {
+          this.blogService.getTemplateConfig().pipe(
+            untilComponentDestroyed(this),
+          ).subscribe((data: { template_config: TemplateConfig }): void => {
             this.templateConfig = data.template_config;
           });
         }

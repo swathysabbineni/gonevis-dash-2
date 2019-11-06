@@ -8,4 +8,5 @@ export const environment: Environment = {
     zero: 'http://gonevis.local:8000/api/zero/',
   },
   paymentPublicId: 'pk_b2b6a7bc011e7f2aac971ab51e96a',
+  googleAnalytics: '',
 };
