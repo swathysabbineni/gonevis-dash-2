@@ -24,9 +24,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class TagsComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly ellipsis: IconDefinition = faEllipsisV;
   readonly trash: IconDefinition = faTrash;
 

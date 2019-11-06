@@ -26,9 +26,6 @@ declare var cp: any;
 })
 export class SettingsUpgradeComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly dollarSign: IconDefinition = faDollarSign;
   readonly check: IconDefinition = faCheck;
 

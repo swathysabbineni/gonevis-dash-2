@@ -28,9 +28,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class EntryComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly heart: IconDefinition = faHeart;
   readonly heartFill: IconDefinition = faHeartFill;
   readonly edit: IconDefinition = faEdit;

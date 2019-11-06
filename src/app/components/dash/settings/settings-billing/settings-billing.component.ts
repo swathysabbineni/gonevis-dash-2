@@ -24,9 +24,6 @@ export class SettingsBillingComponent implements OnInit {
 
   modal: BsModalRef;
 
-  /**
-   * Icons
-   */
   readonly times: IconDefinition = faTimes;
   readonly circleNotch: IconDefinition = faCircleNotch;
 

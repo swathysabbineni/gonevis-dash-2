@@ -12,9 +12,6 @@ import { BsModalRef } from 'ngx-bootstrap';
 })
 export class FeedbackModalComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly times: IconDefinition = faTimes;
 
   /**

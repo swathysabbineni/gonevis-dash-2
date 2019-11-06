@@ -32,9 +32,6 @@ import { EntryService } from './entry.service';
 })
 export class EntryComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly filter: IconDefinition = faFilter;
   readonly sort: IconDefinition = faSort;
   readonly comment: IconDefinition = faComment;

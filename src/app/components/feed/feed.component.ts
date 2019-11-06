@@ -12,9 +12,6 @@ import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
 })
 export class FeedComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly hashtag: IconDefinition = faHashtag;
 
   /**

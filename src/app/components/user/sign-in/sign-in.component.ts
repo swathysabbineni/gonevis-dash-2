@@ -13,9 +13,6 @@ import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 })
 export class SignInComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly user: IconDefinition = faUser;
   readonly lock: IconDefinition = faLock;
 

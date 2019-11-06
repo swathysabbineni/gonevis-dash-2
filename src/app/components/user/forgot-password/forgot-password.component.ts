@@ -13,9 +13,6 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 })
 export class ForgotPasswordComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly envelope: IconDefinition = faEnvelope;
 
   // Forgot password form

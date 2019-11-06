@@ -20,9 +20,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class NavsComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly plus: IconDefinition = faPlus;
   readonly gripLinesVertical: IconDefinition = faGripLinesVertical;
   readonly trush: IconDefinition = faTrash;

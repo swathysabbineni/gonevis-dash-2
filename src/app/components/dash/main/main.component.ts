@@ -31,9 +31,6 @@ export class MainComponent implements OnInit, OnDestroy {
   private static readonly POSTS_LIMIT = 6;
   private static readonly COMMENTS_LIMIT = 8;
 
-  /**
-   * Icons
-   */
   readonly faPublications: IconDefinition = faThLarge;
   readonly faComments: IconDefinition = faComments;
   readonly faFollowers: IconDefinition = faUserPlus;

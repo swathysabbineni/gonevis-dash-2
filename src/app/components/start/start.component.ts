@@ -24,9 +24,6 @@ import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 })
 export class StartComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly arrowRight: IconDefinition = faArrowRight;
   readonly envelope: IconDefinition = faEnvelope;
   readonly lock: IconDefinition = faLock;

@@ -10,9 +10,6 @@ import { faCheckCircle } from '@fortawesome/free-regular-svg-icons/faCheckCircle
 })
 export class HelpComponent {
 
-  /**
-   * Icons
-   */
   readonly checkCircle: IconDefinition = faCheckCircle;
   readonly discord: IconDefinition = faDiscord;
 }

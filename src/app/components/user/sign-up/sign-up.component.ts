@@ -15,9 +15,6 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope';
 })
 export class SignUpComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly user: IconDefinition = faUser;
   readonly lock: IconDefinition = faLock;
   readonly envelope: IconDefinition = faEnvelope;

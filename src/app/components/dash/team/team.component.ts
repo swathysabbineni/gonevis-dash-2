@@ -21,9 +21,6 @@ export class TeamComponent implements OnInit {
   readonly roleNames = TeamService.roleNames;
   readonly teamRoles = TeamRoles;
 
-  /**
-   * Icons
-   */
   readonly trash: IconDefinition = faTrash;
 
   /**

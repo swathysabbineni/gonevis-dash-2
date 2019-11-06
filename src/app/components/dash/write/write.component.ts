@@ -63,9 +63,6 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 })
 export class WriteComponent implements OnInit, OnDestroy {
 
-  /**
-   * Icons
-   */
   readonly eye: IconDefinition = faEye;
   readonly cog: IconDefinition = faCog;
   readonly times: IconDefinition = faTimes;

@@ -24,9 +24,6 @@ export class CommentsComponent implements OnInit {
    */
   status = CommentStatus;
 
-  /**
-   * Icons
-   */
   readonly ellipsis: IconDefinition = faEllipsisV;
 
   /**

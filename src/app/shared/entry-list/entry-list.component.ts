@@ -23,9 +23,6 @@ import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 })
 export class EntryListComponent {
 
-  /**
-   * Icons
-   */
   readonly faBookmark: IconDefinition = faBookmark;
   readonly comment: IconDefinition = faComment;
   readonly eye: IconDefinition = faEye;

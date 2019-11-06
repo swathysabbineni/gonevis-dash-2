@@ -17,9 +17,6 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 })
 export class CommentFormComponent implements AfterViewInit {
 
-  /**
-   * Icons
-   */
   readonly paper: IconDefinition = faPaperPlane;
 
   /**

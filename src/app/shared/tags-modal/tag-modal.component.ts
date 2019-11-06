@@ -15,9 +15,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 })
 export class TagModalComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly times: IconDefinition = faTimes;
 
   /**

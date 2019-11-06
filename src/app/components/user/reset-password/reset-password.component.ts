@@ -16,9 +16,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ResetPasswordComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly lock: IconDefinition = faLock;
 
   // Reset password token

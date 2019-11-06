@@ -30,9 +30,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class FileModalComponent {
 
-  /**
-   * Icons
-   */
   readonly back: IconDefinition = faArrowLeft;
   readonly trash: IconDefinition = faTrash;
   readonly download: IconDefinition = faDownload;

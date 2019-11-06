@@ -14,9 +14,6 @@ import { BsModalRef } from 'ngx-bootstrap';
 })
 export class UsersModalComponent implements OnInit {
 
-  /**
-   * Icons
-   */
   readonly times: IconDefinition = faTimes;
 
   /**
