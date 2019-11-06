@@ -6,14 +6,12 @@ import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-inte
 import { FeedbackModalModule } from '@app/shared/feedback-modal/feedback-modal.module';
 import { environment } from '@environments/environment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
@@ -70,7 +68,4 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor() {
-    library.add(faBars);
-  }
 }
