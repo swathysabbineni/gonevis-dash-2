@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { FeedbackService } from '@app/services/feedback/feedback.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { BsModalRef } from 'ngx-bootstrap';
 
 @Component({
@@ -9,6 +11,11 @@ import { BsModalRef } from 'ngx-bootstrap';
   templateUrl: './feedback-modal.component.html',
 })
 export class FeedbackModalComponent implements OnInit {
+
+  /**
+   * Icons
+   */
+  readonly times: IconDefinition = faTimes;
 
   /**
    * Feedback form
