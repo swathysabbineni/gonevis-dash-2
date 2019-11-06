@@ -61,7 +61,7 @@
     </div>
     <!-- Close -->
     <button class="ml-auto btn btn-link p-0" (click)="modal.hide()">
-      <fa-icon [fixedWidth]="true" icon="times"></fa-icon>
+      <fa-icon [fixedWidth]="true" [icon]="times"></fa-icon>
     </button>
   </div>
   <div class="modal-body">
@@ -71,7 +71,7 @@
     </span>
     <!-- Reloading icon -->
     <div class="text-center" *ngIf="canceling">
-      <fa-icon icon="circle-notch" class="text-center" size="3x" [fixedWidth]="true" [spin]="true"></fa-icon>
+      <fa-icon [icon]="circleNotch" class="text-center" size="3x" [fixedWidth]="true" [spin]="true"></fa-icon>
     </div>
   </div>
   <!-- Buttons -->

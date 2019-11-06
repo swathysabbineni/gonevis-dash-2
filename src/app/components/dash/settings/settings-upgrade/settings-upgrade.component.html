@@ -17,7 +17,7 @@
         <!-- Plan price -->
         <div *ngIf="plan.plan" class="price py-3 bg-{{ plan.color }}">
           <h2 class="font-weight-bold mb-2">
-            <fa-icon icon="dollar-sign"></fa-icon>
+            <fa-icon [icon]="dollarSign"></fa-icon>
             {{ plan.plan.price }}
           </h2>
           <small>MONTHLY</small>
@@ -27,7 +27,7 @@
       <div class="col-12 col-sm-6">
         <ul class="list-unstyled m-0">
           <li *ngFor="let feature of plan.features">
-            <fa-icon icon="check" class="mr-2 text-{{ plan.color }}"></fa-icon>
+            <fa-icon [icon]="check" class="mr-2 text-{{ plan.color }}"></fa-icon>
             {{ feature }}
           </li>
         </ul>

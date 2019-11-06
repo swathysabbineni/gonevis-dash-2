@@ -7,9 +7,9 @@ import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UtilService } from '@app/services/util/util.service';
 import { FileModalComponent } from '@app/shared/file-modal/file-modal.component';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
 import { faFileArchive } from '@fortawesome/free-solid-svg-icons/faFileArchive';
-import { faFileCsv } from '@fortawesome/free-solid-svg-icons/faFileCsv';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons/faFileExcel';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
 import { faFilePowerpoint } from '@fortawesome/free-solid-svg-icons/faFilePowerpoint';
@@ -18,7 +18,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { PageChangedEvent } from 'ngx-bootstrap';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 @Component({
   selector: 'app-file-list',

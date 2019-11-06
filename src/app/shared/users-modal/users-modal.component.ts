@@ -3,6 +3,8 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { Metrics } from '@app/interfaces/v1/metrics';
 import { Subscriber } from '@app/interfaces/v1/subscriber';
 import { BlogService } from '@app/services/blog/blog.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { BsModalRef } from 'ngx-bootstrap';
 
 @Component({
@@ -11,6 +13,11 @@ import { BsModalRef } from 'ngx-bootstrap';
   styleUrls: ['./users-modal.component.scss'],
 })
 export class UsersModalComponent implements OnInit {
+
+  /**
+   * Icons
+   */
+  readonly times: IconDefinition = faTimes;
 
   /**
    * Metrics (data count, etc)

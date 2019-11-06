@@ -36,8 +36,8 @@
             <div class="btn-group btn-group-sm float-right">
               <!-- Like -->
               <button class="btn btn-link" [disabled]="loading" (click)="likeComment(comment)">
-                <fa-icon [fixedWidth]="true" [icon]="['far', 'heart']" *ngIf="!comment.is_voted"></fa-icon>
-                <fa-icon [fixedWidth]="true" [icon]="['fas', 'heart']" *ngIf="comment.is_voted"
+                <fa-icon [fixedWidth]="true" [icon]="heart" *ngIf="!comment.is_voted"></fa-icon>
+                <fa-icon [fixedWidth]="true" [icon]="heartFill" *ngIf="comment.is_voted"
                          class="text-danger"></fa-icon>
               </button>
               <div *ngIf="comment.user.id === user.id && showActionButton">
@@ -48,13 +48,12 @@
                 </ng-template>
                 <button class="btn btn-link" [disabled]="loading" [popover]="editTemplate"
                         popoverTitle="Edit" placement="top" outsideClick="true" container="body">
-                  <fa-icon icon="edit"></fa-icon>
+                  <fa-icon [icon]="edit"></fa-icon>
                 </button>
               </div>
               <!-- Delete -->
-              <button class="btn btn-link" [disabled]="loading" (click)="removeComment(comment.id, index)"
-                      *ngIf="showActionButton">
-                <fa-icon icon="trash"></fa-icon>
+              <button class="btn btn-link" [disabled]="loading" (click)="removeComment(comment.id, index)">
+                <fa-icon [icon]="trash"></fa-icon>
               </button>
             </div>
           </div>

@@ -10,6 +10,7 @@ import { Template } from '@app/interfaces/v1/template';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
@@ -23,9 +24,12 @@ import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 })
 export class StartComponent implements OnInit {
 
-  readonly arrowRight = faArrowRight;
-  readonly envelope = faEnvelope;
-  readonly lock = faLock;
+  /**
+   * Icons
+   */
+  readonly arrowRight: IconDefinition = faArrowRight;
+  readonly envelope: IconDefinition = faEnvelope;
+  readonly lock: IconDefinition = faLock;
 
   /**
    * Current step of getting started

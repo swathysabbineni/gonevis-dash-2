@@ -9,6 +9,9 @@ import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { environment } from '@environments/environment';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
+import { faDollarSign } from '@fortawesome/free-solid-svg-icons/faDollarSign';
 import { BsModalService } from 'ngx-bootstrap';
 
 import { PaymentValidationComponent } from './payment-validation/payment-validation.component';
@@ -22,6 +25,12 @@ declare var cp: any;
   styleUrls: ['./settings-upgrade.component.scss'],
 })
 export class SettingsUpgradeComponent implements OnInit {
+
+  /**
+   * Icons
+   */
+  readonly dollarSign: IconDefinition = faDollarSign;
+  readonly check: IconDefinition = faCheck;
 
   /**
    * Upgrade plans to show in view
