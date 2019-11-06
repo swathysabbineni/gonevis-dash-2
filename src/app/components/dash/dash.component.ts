@@ -85,7 +85,7 @@ export class DashComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) {
     if (JSON.parse(localStorage.getItem('sidebar')) === null) {
-      this.toggleSidebar(true);
+      this.toggleSidebar();
     } else {
       this.openSidebar = JSON.parse(localStorage.getItem('sidebar'));
     }
@@ -116,11 +116,9 @@ export class DashComponent implements OnInit {
 
   /**
    * Toggle sidebar and update local storage value
-   *
-   * @param value Determines whether to close or open sidebar
    */
-  toggleSidebar(value: boolean): void {
-    localStorage.setItem('sidebar', String(value));
-    this.openSidebar = value;
+  toggleSidebar(): void {
+    localStorage.setItem('sidebar', String(!this.openSidebar));
+    this.openSidebar = !this.openSidebar;
   }
 }

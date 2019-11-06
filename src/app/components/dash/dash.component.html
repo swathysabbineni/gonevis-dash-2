@@ -9,7 +9,7 @@
       </li>
     </ul>
     <!-- Toggler -->
-    <a class="mt-auto toggler" (click)="toggleSidebar(!openSidebar)">
+    <a class="mt-auto toggler" (click)="toggleSidebar()">
       <!-- Icon -->
       <fa-icon [icon]="faAngleDoubleLeft" [flip]="!openSidebar ? 'horizontal' : null" [fixedWidth]="true"></fa-icon>
       {{ 'COLLAPSE_SIDEBAR' | translate }}
