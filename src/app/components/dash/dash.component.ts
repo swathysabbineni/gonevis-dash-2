@@ -115,8 +115,6 @@ export class DashComponent implements OnInit {
   }
 
   /**
-   * @description
-   *
    * Toggle sidebar and update local storage value
    *
    * @param value Determines whether to close or open sidebar
