@@ -33,6 +33,8 @@ export class EntryComponent implements OnInit {
   readonly edit: IconDefinition = faEdit;
   readonly trash: IconDefinition = faTrash;
 
+  readonly showActionButton = false;
+
   /**
    * Authenticated user data
    */

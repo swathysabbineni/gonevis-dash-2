@@ -40,7 +40,7 @@
                 <fa-icon [fixedWidth]="true" [icon]="heartFill" *ngIf="comment.is_voted"
                          class="text-danger"></fa-icon>
               </button>
-              <div *ngIf="comment.user.id === user.id && showActionButton">
+              <div *ngIf="showActionButton">
                 <!-- Edit -->
                 <ng-template #editTemplate>
                   <app-comment-form [comment]="comment" [canComment]="entry.can_comment"
