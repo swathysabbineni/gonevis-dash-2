@@ -63,6 +63,11 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 })
 export class WriteComponent implements OnInit, OnDestroy {
 
+  /**
+   * Pasted video embed URL
+   */
+  private static pastedVideoEmbed: string;
+
   readonly eye: IconDefinition = faEye;
   readonly cog: IconDefinition = faCog;
   readonly times: IconDefinition = faTimes;
@@ -73,11 +78,6 @@ export class WriteComponent implements OnInit, OnDestroy {
   readonly plus: IconDefinition = faPlus;
   readonly undo: IconDefinition = faUndo;
   readonly check: IconDefinition = faCheck;
-
-  /**
-   * Pasted video embed URL
-   */
-  private static pastedVideoEmbed: string;
 
   /**
    * Current entry ID
