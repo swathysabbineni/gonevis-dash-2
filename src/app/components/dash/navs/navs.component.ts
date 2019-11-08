@@ -6,6 +6,10 @@ import { ApiError } from '@app/interfaces/api-error';
 import { Navigation } from '@app/interfaces/v1/navigation';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons/faGripLinesVertical';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 
@@ -16,6 +20,9 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class NavsComponent implements OnInit {
 
+  readonly plus: IconDefinition = faPlus;
+  readonly gripLinesVertical: IconDefinition = faGripLinesVertical;
+  readonly trush: IconDefinition = faTrash;
   /**
    * List of blog navigation
    */

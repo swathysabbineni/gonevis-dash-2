@@ -13,8 +13,8 @@
                   autocomplete="off" formControlName="comment" [class.is-invalid]="errors.comment"></textarea>
         <!-- Comment button -->
         <div class="input-group-append">
-          <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading">
-            <fa-icon icon="paper-plane"></fa-icon>
+          <button class="btn btn-primary">
+            <fa-icon [icon]="paper"></fa-icon>
           </button>
         </div>
       </div>

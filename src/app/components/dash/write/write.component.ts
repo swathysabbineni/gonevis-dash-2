@@ -33,6 +33,16 @@ import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { environment } from '@environments/environment';
+import { faNewspaper } from '@fortawesome/free-regular-svg-icons/faNewspaper';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
+import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
+import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
+import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faUndo } from '@fortawesome/free-solid-svg-icons/faUndo';
 import { TranslateService } from '@ngx-translate/core';
 import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
@@ -43,6 +53,7 @@ import { Quill, RangeStatic } from 'quill';
 import Delta from 'quill-delta';
 import Op from 'quill/node_modules/quill-delta/dist/Op';
 import { debounceTime } from 'rxjs/operators';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 
 @Component({
@@ -51,6 +62,17 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./write.component.scss'],
 })
 export class WriteComponent implements OnInit, OnDestroy {
+
+  readonly eye: IconDefinition = faEye;
+  readonly cog: IconDefinition = faCog;
+  readonly times: IconDefinition = faTimes;
+  readonly newspaper: IconDefinition = faNewspaper;
+  readonly angleDown: IconDefinition = faAngleDown;
+  readonly hashtag: IconDefinition = faHashtag;
+  readonly image: IconDefinition = faImage;
+  readonly plus: IconDefinition = faPlus;
+  readonly undo: IconDefinition = faUndo;
+  readonly check: IconDefinition = faCheck;
 
   /**
    * Pasted video embed URL

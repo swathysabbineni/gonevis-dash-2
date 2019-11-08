@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { ApiError } from '@app/interfaces/api-error';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope';
 
 @Component({
   selector: 'app-sign-up',
@@ -11,6 +14,10 @@ import { AuthService } from '@app/services/auth/auth.service';
   styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
+
+  readonly user: IconDefinition = faUser;
+  readonly lock: IconDefinition = faLock;
+  readonly envelope: IconDefinition = faEnvelope;
 
   // Sign up form
   form: FormGroup;

@@ -12,6 +12,8 @@ import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UsersModalComponent } from '@app/shared/users-modal/users-modal.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
+import { faThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faComments } from '@fortawesome/free-solid-svg-icons/faComments';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
@@ -33,7 +35,8 @@ export class MainComponent implements OnInit, OnDestroy {
   readonly faComments: IconDefinition = faComments;
   readonly faFollowers: IconDefinition = faUserPlus;
   readonly faFiles: IconDefinition = faDatabase;
-
+  readonly eye: IconDefinition = faEye;
+  readonly like: IconDefinition = faThumbsUp;
   /**
    * Blog settings data
    */

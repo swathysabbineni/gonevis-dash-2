@@ -4,8 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResetPasswordComponent } from '@app/components/user/reset-password/reset-password.component';
 import { PageCoverModule } from '@app/shared/page-cover/page-cover.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { ResetPasswordRoutingModule } from './reset-password-routing.module';
@@ -23,7 +21,4 @@ import { ResetPasswordRoutingModule } from './reset-password-routing.module';
   ],
 })
 export class ResetPasswordModule {
-  constructor() {
-    library.add(faLock);
-  }
 }

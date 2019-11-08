@@ -4,6 +4,8 @@ import { ApiError } from '@app/interfaces/api-error';
 import { File } from '@app/interfaces/file';
 import { Tag } from '@app/interfaces/v1/tag';
 import { BlogService } from '@app/services/blog/blog.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
@@ -12,6 +14,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
   styleUrls: ['./tag-modal.component.scss'],
 })
 export class TagModalComponent implements OnInit {
+
+  readonly times: IconDefinition = faTimes;
 
   /**
    * Editing tag

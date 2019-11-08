@@ -13,6 +13,12 @@
     flex-basis: 200px;
     max-width: 200px;
     overflow-y: auto;
+    transition: $transition-base;
+
+    &.is-closed {
+      flex-basis: 54px;
+      max-width: 54px;
+    }
 
     ul {
       list-style: none;
@@ -21,41 +27,46 @@
 
       li {
         position: relative;
+      }
+    }
 
-        a {
-          color: #40454D;
-          font-size: 0.85rem;
-          font-weight: 600;
-          display: flex;
-          align-items: center;
-          padding: 0 1.25em;
-          height: 42px;
-          overflow: hidden;
-          white-space: nowrap;
-          border-left: 3px solid transparent;
+    ul li a,
+    .toggler {
+      color: #40454D;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      padding: 0 1.25em;
+      height: 42px;
+      overflow: hidden;
+      white-space: nowrap;
+      border-left: 3px solid transparent;
 
-          &:hover,
-          &.active {
-            user-select: none;
-            cursor: pointer;
-            text-decoration: none;
-            background: #f1f1f1;
-          }
+      &:hover,
+      &.active {
+        user-select: none;
+        cursor: pointer;
+        text-decoration: none;
+        background: #f1f1f1;
+      }
 
-          &.active {
-            border-left-color: $primary;
+      &.active {
+        border-left-color: $primary;
 
-            fa-icon {
-              color: $primary;
-            }
-          }
-
-          fa-icon {
-            margin-right: 1.25em;
-            color: #7d7d8f;
-          }
+        fa-icon {
+          color: $primary;
         }
       }
+
+      fa-icon {
+        margin-right: 1.25em;
+        color: #7d7d8f;
+      }
+    }
+
+    .toggler {
+      flex: 0 0 auto;
     }
   }
 

@@ -6,6 +6,15 @@ import { Entry } from '@app/interfaces/zero/entry';
 import { ApiService } from '@app/services/api/api.service';
 import { EntryService } from '@app/services/entry/entry.service';
 import { UtilService } from '@app/services/util/util.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faBookmark } from '@fortawesome/free-regular-svg-icons/faBookmark';
+import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
+import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
+import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
+import { faShareSquare } from '@fortawesome/free-regular-svg-icons/faShareSquare';
+import { faHeart as faHeartFill } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as faBookmarkFill } from '@fortawesome/free-solid-svg-icons/faBookmark';
+import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 
 @Component({
   selector: 'app-entry-list',
@@ -13,6 +22,15 @@ import { UtilService } from '@app/services/util/util.service';
   styleUrls: ['./entry-list.component.scss'],
 })
 export class EntryListComponent {
+
+  readonly faBookmark: IconDefinition = faBookmark;
+  readonly comment: IconDefinition = faComment;
+  readonly eye: IconDefinition = faEye;
+  readonly heart: IconDefinition = faHeart;
+  readonly shareSquare: IconDefinition = faShareSquare;
+  readonly heartFill: IconDefinition = faHeartFill;
+  readonly bookmarkFill: IconDefinition = faBookmarkFill;
+  readonly star: IconDefinition = faStar;
 
   /**
    * Current entry list

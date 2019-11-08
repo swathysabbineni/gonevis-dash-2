@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NavPill } from '@app/interfaces/nav-pill';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
 
 @Component({
   selector: 'app-feed',
@@ -9,6 +11,8 @@ import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./feed.component.scss'],
 })
 export class FeedComponent implements OnInit {
+
+  readonly hashtag: IconDefinition = faHashtag;
 
   /**
    * Main navigation

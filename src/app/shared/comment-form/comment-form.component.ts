@@ -7,6 +7,8 @@ import { UserAuth } from '@app/interfaces/user-auth';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
 import { CommentService } from '@app/services/comment/comment.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-comment-form',
@@ -14,6 +16,8 @@ import { CommentService } from '@app/services/comment/comment.service';
   styleUrls: ['./comment-form.component.scss'],
 })
 export class CommentFormComponent implements AfterViewInit {
+
+  readonly paper: IconDefinition = faPaperPlane;
 
   /**
    * Entry ID of the comment

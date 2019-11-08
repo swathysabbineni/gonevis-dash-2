@@ -5,6 +5,8 @@ import { Pagination } from '@app/interfaces/pagination';
 import { Comment } from '@app/interfaces/v1/comment';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { TranslateService } from '@ngx-translate/core';
 import { PageChangedEvent } from 'ngx-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -17,7 +19,12 @@ import { CommentsService } from './comments.service';
 })
 export class CommentsComponent implements OnInit {
 
+  /**
+   * Status to choice situation comment
+   */
   status = CommentStatus;
+
+  readonly ellipsis: IconDefinition = faEllipsisV;
 
   /**
    * List of comments

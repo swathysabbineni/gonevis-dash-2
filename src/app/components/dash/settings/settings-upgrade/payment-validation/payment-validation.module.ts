@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch';
+import { LoadingModule } from '@app/shared/loading/loading.module';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { PaymentValidationComponent } from './payment-validation.component';
@@ -13,15 +11,12 @@ import { PaymentValidationComponent } from './payment-validation.component';
   ],
   imports: [
     CommonModule,
-    FontAwesomeModule,
     TranslateModule.forChild(),
+    LoadingModule,
   ],
   entryComponents: [
     PaymentValidationComponent,
   ],
 })
 export class PaymentValidationModule {
-  constructor() {
-    library.add(faCircleNotch);
-  }
 }

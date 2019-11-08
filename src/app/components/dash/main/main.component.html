@@ -95,17 +95,17 @@
             <div class="text-secondary bg-light ml-auto px-2">
               <!-- Likes -->
               <small class="mr-2">
-                <fa-icon [fixedWidth]="true" [icon]="['far', 'thumbs-up']"></fa-icon>
+                <fa-icon [fixedWidth]="true" [icon]="like"></fa-icon>
                 {{ entry.vote_count | number }}
               </small>
               <!-- Comments -->
               <small class="mr-2">
-                <fa-icon [fixedWidth]="true" [icon]="['far', 'comment']"></fa-icon>
+                <fa-icon [fixedWidth]="true" [icon]="faComments"></fa-icon>
                 {{ entry.comment_count | number }}
               </small>
               <!-- Votes -->
               <small>
-                <fa-icon [fixedWidth]="true" [icon]="['far', 'eye']"></fa-icon>
+                <fa-icon [fixedWidth]="true" [icon]="eye"></fa-icon>
                 {{ entry.view_count | number }}
               </small>
             </div>

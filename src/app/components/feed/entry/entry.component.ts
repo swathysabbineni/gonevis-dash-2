@@ -8,13 +8,18 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { Comment } from '@app/interfaces/comment';
 import { CommentFormEvent } from '@app/interfaces/comment-form-event';
-import { Entry } from '@app/interfaces/zero/entry';
 import { UserAuth } from '@app/interfaces/user-auth';
+import { Entry } from '@app/interfaces/zero/entry';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { ApiService } from '@app/services/api/api.service';
 import { AuthService } from '@app/services/auth/auth.service';
 import { CommentService } from '@app/services/comment/comment.service';
 import { EntryService } from '@app/services/entry/entry.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
+import { faHeart as faHeartFill } from '@fortawesome/free-solid-svg-icons';
+import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -23,10 +28,10 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class EntryComponent implements OnInit {
 
-  /**
-   * @Todo - Remove me once user ID issue for comments is fixed
-   */
-  readonly showActionButton = false;
+  readonly heart: IconDefinition = faHeart;
+  readonly heartFill: IconDefinition = faHeartFill;
+  readonly edit: IconDefinition = faEdit;
+  readonly trash: IconDefinition = faTrash;
 
   /**
    * Authenticated user data
