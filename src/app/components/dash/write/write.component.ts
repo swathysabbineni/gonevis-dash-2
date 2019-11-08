@@ -192,7 +192,10 @@ export class WriteComponent implements OnInit, OnDestroy {
    */
   private static validatePastedVideo(clipboard: string): boolean {
     this.pastedVideoEmbed = null;
-    clipboard.match(/^(http:\/\/|https:\/\/|)(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+    const regex: RegExp = new RegExp('^(http:\/\/|https:\/\/|)(player.|www.)?' +
+      '(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?' +
+      '([A-Za-z0-9._%-]*)(\&\S+)?');
+    clipboard.match(regex);
     let isValid = false;
     // Check URL regex
     if (RegExp.$3.indexOf('youtu') > -1) {
@@ -597,7 +600,7 @@ export class WriteComponent implements OnInit, OnDestroy {
       if (!this.wasCreating) {
         this.patchForm(data);
       }
-      this.editor['history'].clear();
+      (this.editor as any).history.clear();
       // Initial auto-save
       this.initAutoSave();
     });
