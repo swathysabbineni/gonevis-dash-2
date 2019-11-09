@@ -1,7 +1,12 @@
 import { Environment } from '@app/interfaces/environment';
-import { environment as environmentProd } from '@environments/environment.prod';
 
-environmentProd.development = false;
-environmentProd.googleAnalytics = 'UA-58251754-3';
-
-export const environment: Environment = environmentProd;
+export const environment: Environment = {
+  name: 'production',
+  development: false,
+  api: {
+    v1: 'https://www.gonevis.com/api/v1/',
+    zero: 'https://www.gonevis.com/api/zero/',
+  },
+  paymentPublicId: 'pk_05c99b78fc3af3c7338276d58b74e',
+  googleAnalytics: 'UA-58251754-3',
+};
