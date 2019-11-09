@@ -152,6 +152,16 @@ export class BlogService {
   }
 
   /**
+   * @return Current blog index
+   */
+  static get currentBlogIndex(): number {
+    const currentBlog: BlogMin = BlogService.currentBlog;
+    if (currentBlog) {
+      return this.blogsSubject.getValue().findIndex((blog: BlogMin): boolean => currentBlog.id === blog.id);
+    }
+  }
+
+  /**
    * @returns Whether user has blogs or not
    */
   static get hasBlogs(): boolean {
