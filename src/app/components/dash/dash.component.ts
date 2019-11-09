@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
@@ -83,7 +83,8 @@ export class DashComponent implements OnInit {
     icon: faInfoCircle,
   }];
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,
+              private router: Router) {
     if (JSON.parse(localStorage.getItem('sidebar')) === null) {
       this.toggleSidebar();
     } else {
@@ -100,12 +101,12 @@ export class DashComponent implements OnInit {
         /**
          * Get blog index from param (and watch for changes)
          */
-        this.route.params.subscribe((params: Params) => {
+        this.route.params.subscribe((params: Params): void => {
           const index: number = Number(params.blog);
-          if (index && blogs[index]) {
+          if (index >= 0 && blogs[index]) {
             BlogService.setCurrent(blogs[index].id);
           } else if (blogs && blogs.length) {
-            BlogService.setCurrent(blogs[0].id);
+            this.router.navigate(['dash', 0]);
           } else {
             BlogService.setCurrent(null);
           }
