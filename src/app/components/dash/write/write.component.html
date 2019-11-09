@@ -292,11 +292,11 @@
              aria-controls="collapseBasic">
             <!-- Title -->
             <div class="mr-auto">
-              <fa-icon icon="trash" [fixedWidth]="true"></fa-icon>
+              <fa-icon [icon]="faTrash" [fixedWidth]="true"></fa-icon>
               {{ 'DELETE' | translate }}
             </div>
             <!-- Caret -->
-            <fa-icon icon="angle-down" [fixedWidth]="true"></fa-icon>
+            <fa-icon [icon]="angleDown" [fixedWidth]="true"></fa-icon>
           </a>
           <!-- Content -->
           <div class="collapse-content" [collapse]="true" #deleteContent=bs-collapse>

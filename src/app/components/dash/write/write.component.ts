@@ -42,6 +42,7 @@ import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUndo } from '@fortawesome/free-solid-svg-icons/faUndo';
 import { TranslateService } from '@ngx-translate/core';
 import equal from 'deep-equal';
@@ -78,6 +79,7 @@ export class WriteComponent implements OnInit, OnDestroy {
   readonly plus: IconDefinition = faPlus;
   readonly undo: IconDefinition = faUndo;
   readonly check: IconDefinition = faCheck;
+  readonly faTrash: IconDefinition = faTrash;
 
   /**
    * Current entry ID
