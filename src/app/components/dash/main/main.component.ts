@@ -20,11 +20,13 @@ import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BytesPipe } from 'ngx-pipes';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
+  providers: [BytesPipe],
 })
 export class MainComponent implements OnInit, OnDestroy {
 
@@ -70,7 +72,8 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(private blogService: BlogService,
               private entryService: EntryService,
               private commentsService: CommentsService,
-              private modalService: BsModalService) {
+              private modalService: BsModalService,
+              private bytes: BytesPipe) {
   }
 
   /**
@@ -84,6 +87,18 @@ export class MainComponent implements OnInit, OnDestroy {
       if (this.blog.media.logo) {
         return `url(${this.blog.media.logo.file})`;
       }
+    }
+  }
+
+  /**
+   * @returns Used and free storage in MB
+   * @example 120.66 MB / 367.62 MB
+   */
+  get storageTooltip(): string {
+    if (this.metrics) {
+      const USED = this.bytes.transform(this.metrics.metrics.dolphin.used_storage * 1000000, 2);
+      const FREE = this.bytes.transform(this.metrics.metrics.dolphin.available_storage * 1000000, 2);
+      return `${USED} / ${FREE}`;
     }
   }
 

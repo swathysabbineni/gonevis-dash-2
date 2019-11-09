@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { UsersModalModule } from '@app/shared/users-modal/users-modal.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
-import { ModalModule } from 'ngx-bootstrap';
-import { NgMathPipesModule } from 'ngx-pipes';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './main.component';
@@ -18,8 +18,8 @@ import { MainComponent } from './main.component';
     MainRoutingModule,
     TranslateModule.forChild(),
     FontAwesomeModule,
-    NgMathPipesModule,
     ModalModule.forRoot(),
+    TooltipModule.forRoot(),
     UsersModalModule,
   ],
 })
