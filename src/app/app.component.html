@@ -41,7 +41,7 @@
         </li>
         <!-- Dashboard -->
         <li class="nav-item" *ngIf="!inDash">
-          <a class="nav-link" routerLinkActive="active" routerLink="dash" translate>DASHBOARD</a>
+          <a class="nav-link" routerLinkActive="active" [routerLink]="navigateToDash" translate>DASHBOARD</a>
         </li>
         <!-- Feedback -->
         <li class="nav-item" (click)="feedback()">

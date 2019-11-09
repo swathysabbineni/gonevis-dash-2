@@ -129,7 +129,7 @@ export class AppComponent implements OnInit {
          * Redirect to 'dash' route if user has blogs, otherwise redirect to 'feed' route
          */
         if (BlogService.hasBlogs) {
-          this.router.navigateByUrl('dash');
+          this.router.navigate(['dash', BlogService.currentBlog ? BlogService.currentBlogIndex : 0]);
         } else {
           this.router.navigateByUrl('feed');
         }
@@ -137,6 +137,17 @@ export class AppComponent implements OnInit {
         this.router.navigateByUrl('start');
       }
     });
+  }
+
+  /**
+   * Redirect to 'dash' route if user has blogs, otherwise redirect to 'start' route
+   */
+  get navigateToDash(): any[] {
+    if (BlogService.hasBlogs) {
+      return ['dash', BlogService.currentBlog ? BlogService.currentBlogIndex : 0];
+    } else {
+      return ['start'];
+    }
   }
 
   /**
