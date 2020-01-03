@@ -238,7 +238,7 @@ export default class BootstrapTheme extends SnowTheme {
     /**
      * Setup tooltip
      */
-    this.tooltip = new BootstrapTooltip(this.quill, this.options.bounds);
+    // this.tooltip = new BootstrapTooltip(this.quill, this.options.bounds);
     /**
      * Check if toolbar contains link format
      */
