@@ -9,6 +9,7 @@
     "build": "ng build",
     "build-staging": "ng build --configuration=staging",
     "build-production": "ng build --configuration=production",
+    "deploy-staging": "ng deploy --configuration=staging",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -35,6 +36,7 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "@types/quill": "^2.0.2",
     "@w11k/ngx-componentdestroyed": "^4.1.4",
+    "angular-cli-ghpages": "^0.6.1",
     "bootstrap": "^4.3.1",
     "core-js": "^2.6.9",
     "deep-equal": "^1.0.1",
