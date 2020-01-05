@@ -31,6 +31,7 @@ export class EntryService {
    */
   getEntries(
     filter: {
+      search?: string,
       is_page?: boolean,
       user?: string,
       format?: EntryFormat | '',
@@ -40,7 +41,7 @@ export class EntryService {
     } = {},
     page: number = 1,
   ): Observable<ApiResponse<Entry>> {
-    return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.v1}website/entry`, {
+    return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.v1}website/entry/`, {
       params: Object.assign(filter, {
         site: BlogService.currentBlog.id,
         limit: (filter.limit || EntryService.PAGE_SIZE).toString(),
