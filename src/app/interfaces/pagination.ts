@@ -7,4 +7,8 @@ export interface Pagination {
    * Number of items in total
    */
   totalItems: number;
+  /**
+   * Number of current page
+   */
+  currentPage: number;
 }
