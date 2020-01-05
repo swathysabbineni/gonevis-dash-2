@@ -26,11 +26,13 @@ export class TagsService {
    * Get blog tags
    *
    * @param page API page
+   * @param search Search text
    */
-  getTags(page: number = 1): Observable<ApiResponse<Tag>> {
-    return this.http.get<ApiResponse<Tag>>(`${this.apiService.base.v1}tagool/tag`, {
+  getTags(page: number = 1, search: string = ''): Observable<ApiResponse<Tag>> {
+    return this.http.get<ApiResponse<Tag>>(`${this.apiService.base.v1}tagool/tag/`, {
       params: {
         site: BlogService.currentBlog.id,
+        search,
         ordering: '-tagged_items_count',
         limit: TagsService.PAGE_SIZE.toString(),
         offset: UtilService.getPageOffset(TagsService.PAGE_SIZE, page),
