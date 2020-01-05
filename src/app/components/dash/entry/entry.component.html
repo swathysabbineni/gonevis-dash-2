@@ -1,5 +1,8 @@
 <div class="container mt-3">
 
+  <!-- Search bar -->
+  <app-search-bar [loading]="loading" (search)="search = $event; getEntries()"></app-search-bar>
+
   <!-- Entries -->
   <div class="card dash">
 
@@ -111,7 +114,7 @@
     <!-- Content -->
     <table class="table rounded bg-white m-0">
       <tbody>
-      <tr *ngFor="let entry of entries">
+      <tr *ngFor="let entry of entries | paginate: pagination">
         <!-- Select -->
         <th class="checkbox">
           <div class="custom-control custom-checkbox">
@@ -191,7 +194,9 @@
     </table>
 
     <!-- Loading -->
-    <div class="card-body" *ngIf="!entries"><app-loading></app-loading></div>
+    <div class="card-body" *ngIf="!entries">
+      <app-loading></app-loading>
+    </div>
 
     <!-- No data -->
     <div class="card-body" *ngIf="entries && !entries.length">
@@ -200,13 +205,5 @@
   </div>
 
   <!-- Pagination -->
-  <div class="pagination-wrapper mt-3" *ngIf="pagination && entries.length">
-    <pagination [itemsPerPage]="pagination.itemsPerPage"
-                [totalItems]="pagination.totalItems"
-                [disabled]="loading"
-                (pageChanged)="pageChanged($event)"
-                [nextText]="'NEXT' | translate"
-                [previousText]="'PREV' | translate">
-    </pagination>
-  </div>
+  <app-pagination (pageChange)="getEntries($event)"></app-pagination>
 </div>
