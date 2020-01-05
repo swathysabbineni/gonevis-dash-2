@@ -8,7 +8,6 @@ import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { TranslateService } from '@ngx-translate/core';
-import { PageChangedEvent } from 'ngx-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { CommentsService } from './comments.service';
 
@@ -27,6 +26,11 @@ export class CommentsComponent implements OnInit {
   readonly ellipsis: IconDefinition = faEllipsisV;
 
   /**
+   * Current search text
+   */
+  search: string;
+
+  /**
    * List of comments
    */
   comments: Comment[];
@@ -34,7 +38,11 @@ export class CommentsComponent implements OnInit {
   /**
    * API pagination data
    */
-  pagination: Pagination;
+  pagination: Pagination = {
+    itemsPerPage: CommentsService.PAGE_SIZE,
+    totalItems: 0,
+    currentPage: 1,
+  };
 
   /**
    * API loading indicator
@@ -63,12 +71,12 @@ export class CommentsComponent implements OnInit {
    * @param page Page number
    */
   getComments(page: number = 1): void {
+    this.pagination.currentPage = page;
     this.loading = true;
-    this.commentsService.getComments({}, page).subscribe((response: ApiResponse<Comment>): void => {
-      this.pagination = {
-        itemsPerPage: CommentsService.PAGE_SIZE,
-        totalItems: response.count,
-      };
+    this.commentsService.getComments({
+      search: this.search || '',
+    }, page).subscribe((response: ApiResponse<Comment>): void => {
+      this.pagination.totalItems = response.count;
       this.comments = response.results;
       this.loading = false;
     });
@@ -106,12 +114,5 @@ export class CommentsComponent implements OnInit {
       this.toast.info(this.translate.instant('TOAST_DELETE'), this.translate.instant('COMMENT'));
       this.comments.splice(this.comments.indexOf(comment), 1);
     });
-  }
-
-  /**
-   * Pagination event
-   */
-  pageChanged(event: PageChangedEvent) {
-    this.getComments(event.page);
   }
 }

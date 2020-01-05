@@ -1,5 +1,8 @@
 <div class="container mt-3">
 
+  <!-- Search bar -->
+  <app-search-bar [loading]="loading" (search)="search = $event; getComments()"></app-search-bar>
+
   <!-- Comments -->
   <div class="card dash">
 
@@ -9,7 +12,7 @@
     <!-- Content -->
     <table class="table rounded bg-white m-0">
       <tbody>
-      <tr *ngFor="let comment of comments">
+      <tr *ngFor="let comment of comments | paginate: pagination">
         <!-- Image -->
         <th class="image" [class.p-0]="!comment.user.media">
           <img class="rounded-circle" *ngIf="comment.user.media" [src]="comment.user.media.thumbnail_48x48">
@@ -78,7 +81,9 @@
     </table>
 
     <!-- Loading -->
-    <div class="card-body" *ngIf="!comments"><app-loading></app-loading></div>
+    <div class="card-body" *ngIf="!comments">
+      <app-loading></app-loading>
+    </div>
 
     <!-- No data -->
     <div class="card-body" *ngIf="comments && !comments.length">
@@ -87,13 +92,5 @@
   </div>
 
   <!-- Pagination -->
-  <div class="pagination-wrapper mt-3" *ngIf="pagination && comments.length">
-    <pagination [itemsPerPage]="pagination.itemsPerPage"
-                [totalItems]="pagination.totalItems"
-                [disabled]="loading"
-                (pageChanged)="pageChanged($event)"
-                [nextText]="'NEXT' | translate"
-                [previousText]="'PREV' | translate">
-    </pagination>
-  </div>
+  <app-pagination (pageChange)="getComments($event)"></app-pagination>
 </div>
