@@ -3,6 +3,10 @@
 
     <!-- Tags -->
     <div class="col-lg-9">
+
+      <!-- Search bar -->
+      <app-search-bar [loading]="loading" (search)="search = $event; getTags()"></app-search-bar>
+
       <div class="card dash">
 
         <!-- Header -->
@@ -11,7 +15,7 @@
         <!-- Content -->
         <table class="table rounded bg-white m-0">
           <tbody>
-          <tr *ngFor="let tag of tags">
+          <tr *ngFor="let tag of tags | paginate: pagination">
             <!-- Image -->
             <th class="image" [class.p-0]="!tag.media.cover_image">
               <img class="rounded" *ngIf="tag.media.cover_image" [src]="tag.media.cover_image.thumbnail_48x48">
@@ -62,7 +66,9 @@
         </table>
 
         <!-- Loading -->
-        <div class="card-body" *ngIf="!tags"><app-loading></app-loading></div>
+        <div class="card-body" *ngIf="!tags">
+          <app-loading></app-loading>
+        </div>
 
         <!-- No data -->
         <div class="card-body" *ngIf="tags && !tags.length">
@@ -71,15 +77,7 @@
       </div>
 
       <!-- Pagination -->
-      <div class="pagination-wrapper mt-3" *ngIf="pagination && tags.length">
-        <pagination [itemsPerPage]="pagination.itemsPerPage"
-                    [totalItems]="pagination.totalItems"
-                    [disabled]="loading"
-                    (pageChanged)="pageChanged($event)"
-                    [nextText]="'NEXT' | translate"
-                    [previousText]="'PREV' | translate">
-        </pagination>
-      </div>
+      <app-pagination (pageChange)="getTags($event)"></app-pagination>
     </div>
 
     <!-- Create tag -->

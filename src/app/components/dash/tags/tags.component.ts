@@ -14,7 +14,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
-import { BsModalRef, BsModalService, PageChangedEvent } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -28,6 +28,11 @@ export class TagsComponent implements OnInit {
   readonly trash: IconDefinition = faTrash;
 
   /**
+   * Current search text
+   */
+  search: string;
+
+  /**
    * Blog tags
    */
   tags: Tag[];
@@ -35,7 +40,11 @@ export class TagsComponent implements OnInit {
   /**
    * API pagination data
    */
-  pagination: Pagination;
+  pagination: Pagination = {
+    itemsPerPage: TagsService.PAGE_SIZE,
+    totalItems: 0,
+    currentPage: 1,
+  };
 
   /**
    * Tag form
@@ -102,12 +111,10 @@ export class TagsComponent implements OnInit {
    * @param page API number
    */
   getTags(page: number = 1): void {
+    this.pagination.currentPage = page;
     this.loading = true;
-    this.tag.getTags(page).subscribe((response: ApiResponse<Tag>): void => {
-      this.pagination = {
-        itemsPerPage: TagsService.PAGE_SIZE,
-        totalItems: response.count,
-      };
+    this.tag.getTags(page, this.search || '').subscribe((response: ApiResponse<Tag>): void => {
+      this.pagination.totalItems = response.count;
       this.tags = response.results;
       this.loading = false;
     });
@@ -171,13 +178,6 @@ export class TagsComponent implements OnInit {
       class: 'modal-sm',
       initialState: { tag },
     });
-  }
-
-  /**
-   * Pagination event
-   */
-  pageChanged(event: PageChangedEvent) {
-    this.getTags(event.page);
   }
 
   /**
