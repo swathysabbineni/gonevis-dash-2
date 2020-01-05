@@ -66,11 +66,13 @@ export class MediaService {
    * Get blog media
    *
    * @param page API page
+   * @param search Search text
    */
-  getMedia(page: number = 1): Observable<ApiResponse<FileMedia>> {
+  getMedia(page: number = 1, search: string = ''): Observable<ApiResponse<FileMedia>> {
     return this.http.get<ApiResponse<FileMedia>>(`${this.api.base.v1}dolphin/file/`, {
       params: {
         site: BlogService.currentBlog.id,
+        search,
         limit: MediaService.PAGE_SIZE.toString(),
         offset: UtilService.getPageOffset(MediaService.PAGE_SIZE, page),
       },
