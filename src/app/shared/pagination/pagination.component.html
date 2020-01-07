@@ -1,0 +1,32 @@
+<pagination-template #paginationApi="paginationApi"
+                     (pageChange)="pageChange.emit($event)">
+  <nav class="mt-3" *ngIf="paginationApi.pages.length">
+    <!-- Pagination -->
+    <ul class="pagination justify-content-center">
+      <!-- Previous page -->
+      <li class="page-item" [class.disabled]="paginationApi.isFirstPage()">
+        <button class="page-link"
+                type="button"
+                (click)="paginationApi.previous()" translate>PREV</button>
+      </li>
+      <!-- Page list -->
+      <li class="page-item" *ngFor="let page of paginationApi.pages"
+          [class.active]="paginationApi.getCurrent() === page.value">
+        <button class="page-link" (click)="paginationApi.setCurrent(page.value)"
+                type="button"
+                *ngIf="paginationApi.getCurrent() !== page.value">
+          <span>{{ page.label }}</span>
+        </button>
+        <div class="page-link" *ngIf="paginationApi.getCurrent() === page.value">
+          <span>{{ page.label }}</span>
+        </div>
+      </li>
+      <!-- Next page -->
+      <li class="page-item" [class.disabled]="paginationApi.isLastPage()">
+        <button class="page-link"
+                type="button"
+                (click)="paginationApi.next()" translate>NEXT</button>
+      </li>
+    </ul>
+  </nav>
+</pagination-template>

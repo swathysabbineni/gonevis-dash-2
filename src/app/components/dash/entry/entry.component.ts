@@ -81,6 +81,8 @@ export class EntryComponent implements OnInit {
     icon: this.comment,
   }];
 
+  currentPage: number;
+
   /**
    * List of entries (pages or posts)
    */
@@ -89,12 +91,21 @@ export class EntryComponent implements OnInit {
   /**
    * API pagination data
    */
-  pagination: Pagination;
+  pagination: Pagination = {
+    itemsPerPage: EntryService.PAGE_SIZE,
+    totalItems: 0,
+    currentPage: 1,
+  };
 
   /**
    * API loading indicator
    */
   loading: boolean;
+
+  /**
+   * Current search text
+   */
+  search: string;
 
   /**
    * Current status filter
@@ -168,8 +179,10 @@ export class EntryComponent implements OnInit {
    * Load entries (posts or pages)
    *
    * @param page Page number
+   * @param resetPagination Reset pagination
    */
-  getEntries(page: number = 1): void {
+  getEntries(page: number = 1, resetPagination?: boolean): void {
+    this.pagination.currentPage = page;
     this.loading = true;
     let ordering = '';
     if (this.sortField) {
@@ -181,12 +194,10 @@ export class EntryComponent implements OnInit {
     this.entryService.getEntries({
       is_page: this.isPages,
       status: this.statusFilter.value,
+      search: this.search || '',
       ordering,
     }, page).subscribe((response: ApiResponse<Entry>): void => {
-      this.pagination = {
-        itemsPerPage: EntryService.PAGE_SIZE,
-        totalItems: response.count,
-      };
+      this.pagination.totalItems = response.count;
       this.entries = response.results;
       this.loading = false;
     });
@@ -224,13 +235,6 @@ export class EntryComponent implements OnInit {
         },
       },
     });
-  }
-
-  /**
-   * Pagination event
-   */
-  pageChanged(event: PageChangedEvent) {
-    this.getEntries(event.page);
   }
 
   /**

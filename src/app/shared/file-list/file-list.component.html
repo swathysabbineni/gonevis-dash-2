@@ -1,10 +1,15 @@
 <!-- Loading -->
-<div class="card-body" *ngIf="!files"><app-loading></app-loading></div>
+<div class="card-body" *ngIf="!files">
+  <app-loading></app-loading>
+</div>
+
+<!-- Search bar -->
+<app-search-bar (search)="search = $event; getFiles()"></app-search-bar>
 
 <!-- Files -->
 <div class="files">
   <div class="row">
-    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let file of files"
+    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let file of files | paginate: pagination"
          [class.col-xl-2]="!selection">
       <div class="file pointer rounded-sm shadow-sm my-3"
            (click)="onChoose(file)"
@@ -24,15 +29,7 @@
 </div>
 
 <!-- Pagination -->
-<div class="pagination-wrapper" *ngIf="pagination && files.length">
-  <pagination [itemsPerPage]="pagination.itemsPerPage"
-              [totalItems]="pagination.totalItems"
-              [disabled]="loading"
-              (pageChanged)="pageChanged($event)"
-              [nextText]="'NEXT' | translate"
-              [previousText]="'PREV' | translate">
-  </pagination>
-</div>
+<app-pagination (pageChange)="getFiles($event)"></app-pagination>
 
 <!-- No data -->
 <div class="my-3" *ngIf="files && !files.length" translate>NOTHING_HERE_YET</div>
