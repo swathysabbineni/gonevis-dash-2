@@ -1,19 +1,11 @@
-<form (ngSubmit)="emitQuery()">
-  <div class="input-group mb-3">
-    <!-- Input -->
-    <input type="text" class="form-control" [formControl]="queryControl" [placeholder]="'SEARCH' | translate">
-    <!-- Submit button -->
+<form (ngSubmit)="submit()">
+  <div class="input-group">
+    <input type="text" class="form-control" [formControl]="query" [placeholder]="'SEARCH' | translate">
     <div class="input-group-append">
-      <button class="btn btn-default" type="button"
-              *ngIf="queryControl.value"
-              (click)="emitQuery(true)"
-              [disabled]="loading">
-        <!-- Close icon -->
+      <a class="text-secondary" *ngIf="query.value" (click)="query.setValue(''); submit()">
         <fa-icon [icon]="faTimes"></fa-icon>
-      </button>
-      <button class="btn btn-light" type="submit"
-              [disabled]="loading">
-        <!-- Search Icon -->
+      </a>
+      <button class="btn btn-secondary" type="submit">
         <fa-icon [icon]="faSearch"></fa-icon>
       </button>
     </div>

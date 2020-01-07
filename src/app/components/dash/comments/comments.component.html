@@ -1,13 +1,16 @@
 <div class="container mt-3">
 
-  <!-- Search bar -->
-  <app-search-bar [loading]="loading" (search)="search = $event; getComments()"></app-search-bar>
-
   <!-- Comments -->
   <div class="card dash">
 
     <!-- Header -->
-    <div class="card-header" translate>COMMENTS</div>
+    <div class="card-header">
+      <span translate>COMMENTS</span>
+      <!-- Search bar -->
+      <div class="search-bar">
+        <app-search-bar (search)="search = $event; getComments()"></app-search-bar>
+      </div>
+    </div>
 
     <!-- Content -->
     <table class="table rounded bg-white m-0">

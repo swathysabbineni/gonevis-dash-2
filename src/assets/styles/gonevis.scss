@@ -354,6 +354,15 @@ a,
       padding-bottom: 18px;
       border-bottom: 2px solid $body-bg;
 
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      & > .search-bar {
+        width: 300px;
+      }
+
       &,
       > a {
         color: #6F7A8B;

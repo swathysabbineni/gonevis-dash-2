@@ -4,7 +4,7 @@
 </div>
 
 <!-- Search bar -->
-<app-search-bar [loading]="loading" (search)="search = $event; getFiles()"></app-search-bar>
+<app-search-bar (search)="search = $event; getFiles()"></app-search-bar>
 
 <!-- Files -->
 <div class="files">

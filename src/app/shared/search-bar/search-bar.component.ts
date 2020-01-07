@@ -1,6 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 
@@ -11,29 +11,13 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 })
 export class SearchBarComponent {
 
-  /**
-   * Current loading state
-   */
-  private loadingState: boolean;
+  readonly faSearch: IconDefinition = faSearch;
+  readonly faTimes: IconDefinition = faTimes;
 
   /**
-   * API loading indicator setter
+   * Search query (form control)
    */
-  @Input() set loading(value: boolean) {
-    this.loadingState = value;
-    if (value) {
-      this.queryControl.disable();
-    } else {
-      this.queryControl.enable();
-    }
-  }
-
-  /**
-   * API loading indicator getter
-   */
-  get loading(): boolean {
-    return this.loadingState;
-  }
+  query: FormControl = new FormControl('');
 
   /**
    * On form submit
@@ -41,38 +25,9 @@ export class SearchBarComponent {
   @Output() readonly search: EventEmitter<string> = new EventEmitter<string>();
 
   /**
-   * FontAwesome search icon
+   * Submit search query (empty query means clear)
    */
-  readonly faSearch: IconDefinition = faSearch;
-
-  /**
-   * FontAwesome close icon
-   */
-  readonly faTimes: IconDefinition = faTimes;
-
-  /**
-   * Query control for searching
-   */
-  queryControl: FormControl = new FormControl('');
-
-  constructor() {
-  }
-
-  /**
-   * Emit query value
-   *
-   * @param clearInput Whether or not input should be empty
-   */
-  emitQuery(clearInput: boolean = false): void {
-    /**
-     * Clear input
-     */
-    if (clearInput) {
-      this.queryControl.setValue('');
-    }
-    /**
-     * Emit query value
-     */
-    this.search.emit(this.queryControl.value);
+  submit(): void {
+    this.search.emit(this.query.value);
   }
 }
