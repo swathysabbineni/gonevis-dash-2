@@ -49,6 +49,62 @@ interface TooltipInterface {
 /**
  * @description
  *
+ * Custom theme which is called Bootstrap that extends Snow theme
+ */
+export default class BootstrapTheme extends SnowTheme {
+
+  /**
+   * Quill instance
+   */
+  quill: Quill;
+
+  /**
+   * Quill options
+   */
+  options: QuillOptionsStatic;
+
+  tooltip: BootstrapTooltip;
+
+  constructor(quill: Quill, options: QuillOptionsStatic) {
+    super(quill, options);
+  }
+
+  /**
+   * @description
+   *
+   * Update toolbar class and add button and icons to it and configure it manually
+   */
+  extendToolbar(toolbar: StringMap): void {
+    /**
+     * Add 'ql-snow' class to toolbar DOM element
+     */
+    toolbar.container.classList.add('ql-snow');
+    /**
+     * Build buttons and pickers with QuillJS icons
+     */
+    this.buildButtons([].slice.call(toolbar.container.querySelectorAll('button')), Icons);
+    this.buildPickers([].slice.call(toolbar.container.querySelectorAll('select')), Icons);
+    /**
+     * Setup tooltip
+     */
+    this.tooltip = new BootstrapTooltip(this.quill, this.options.bounds);
+    /**
+     * Check if toolbar contains link format
+     */
+    if (toolbar.container.querySelector('.ql-link')) {
+      /**
+       * Add key shortcut binding 'K' to link
+       */
+      this.quill.keyboard.addBinding({ key: 'K', shortKey: true }, (range: RangeStatic, context: any): void => {
+        toolbar.handlers.link.call(toolbar, !context.format.link);
+      });
+    }
+  }
+}
+
+/**
+ * @description
+ *
  * Custom tooltip which is called BootstrapTooltip that extends BaseTooltip
  */
 class BootstrapTooltip extends BaseTooltip implements TooltipInterface {
@@ -198,57 +254,3 @@ BootstrapTooltip.TEMPLATE = [
   `<button class="ql-remove btn btn-link btn-sm">${tooltipDeleteIcon}</button>`,
 ].join('');
 
-
-/**
- * @description
- *
- * Custom theme which is called Bootstrap that extends Snow theme
- */
-export default class BootstrapTheme extends SnowTheme {
-
-  /**
-   * Quill instance
-   */
-  quill: Quill;
-
-  /**
-   * Quill options
-   */
-  options: QuillOptionsStatic;
-
-  constructor(quill: Quill, options: QuillOptionsStatic) {
-    super(quill, options);
-  }
-
-  /**
-   * @description
-   *
-   * Update toolbar class and add button and icons to it and configure it manually
-   */
-  extendToolbar(toolbar: StringMap): void {
-    /**
-     * Add 'ql-snow' class to toolbar DOM element
-     */
-    toolbar.container.classList.add('ql-snow');
-    /**
-     * Build buttons and pickers with QuillJS icons
-     */
-    this.buildButtons([].slice.call(toolbar.container.querySelectorAll('button')), Icons);
-    this.buildPickers([].slice.call(toolbar.container.querySelectorAll('select')), Icons);
-    /**
-     * Setup tooltip
-     */
-    // this.tooltip = new BootstrapTooltip(this.quill, this.options.bounds);
-    /**
-     * Check if toolbar contains link format
-     */
-    if (toolbar.container.querySelector('.ql-link')) {
-      /**
-       * Add key shortcut binding 'K' to link
-       */
-      this.quill.keyboard.addBinding({ key: 'K', shortKey: true }, (range: RangeStatic, context: any): void => {
-        toolbar.handlers.link.call(toolbar, !context.format.link);
-      });
-    }
-  }
-}
