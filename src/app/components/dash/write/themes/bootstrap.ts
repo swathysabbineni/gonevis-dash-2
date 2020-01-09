@@ -1,4 +1,5 @@
 import { iconToSVGElement } from '@app/components/dash/write/blots/icons';
+import { ImageDragDrop } from '@app/components/dash/write/modules/image-drag-drop';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
@@ -188,18 +189,6 @@ class BootstrapTooltip extends BaseTooltip implements TooltipInterface {
 }
 
 /**
- * Bootstrap tooltip template
- */
-BootstrapTooltip.TEMPLATE = [
-  '<a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>',
-  '<input type="text" class="form-control form-control-sm" ' +
-  'data-formula="e=mc^2" data-link="https://google.com" data-video="Embed URL">',
-  `<button class="ql-action btn btn-link btn-sm ml-2">${tooltipEditIcon}${tooltipSaveIcon}</button>`,
-  `<button class="ql-remove btn btn-link btn-sm">${tooltipDeleteIcon}</button>`,
-].join('');
-
-
-/**
  * @description
  *
  * Custom theme which is called Bootstrap that extends Snow theme
@@ -215,6 +204,8 @@ export default class BootstrapTheme extends SnowTheme {
    * Quill options
    */
   options: QuillOptionsStatic;
+
+  tooltip: BootstrapTooltip;
 
   constructor(quill: Quill, options: QuillOptionsStatic) {
     super(quill, options);
@@ -238,7 +229,7 @@ export default class BootstrapTheme extends SnowTheme {
     /**
      * Setup tooltip
      */
-    // this.tooltip = new BootstrapTooltip(this.quill, this.options.bounds);
+    this.tooltip = new BootstrapTooltip(this.quill, this.options.bounds);
     /**
      * Check if toolbar contains link format
      */
@@ -252,3 +243,16 @@ export default class BootstrapTheme extends SnowTheme {
     }
   }
 }
+
+/**
+ * Bootstrap tooltip template
+ */
+BootstrapTooltip.TEMPLATE = [
+  '<a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>',
+  '<input type="text" class="form-control form-control-sm" ' +
+  'data-formula="e=mc^2" data-link="https://google.com" data-video="Embed URL">',
+  `<button class="ql-action btn btn-link btn-sm ml-2">${tooltipEditIcon}${tooltipSaveIcon}</button>`,
+  `<button class="ql-remove btn btn-link btn-sm">${tooltipDeleteIcon}</button>`,
+].join('');
+
+Quill.register('themes/bootstrap', BootstrapTheme);

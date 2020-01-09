@@ -9,6 +9,9 @@ import { Template } from '@app/interfaces/v1/template';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { CarouselComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
 
@@ -18,6 +21,9 @@ import { CarouselComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
   styleUrls: ['./settings-appearance.component.scss'],
 })
 export class SettingsAppearanceComponent implements OnInit, OnDestroy {
+
+  readonly faTrash: IconDefinition = faTrash;
+  readonly faEye: IconDefinition = faEye;
 
   /**
    * @see BlogService.highlightThemes
