@@ -56,6 +56,7 @@ import Op from 'quill/node_modules/quill-delta/dist/Op';
 import { debounceTime } from 'rxjs/operators';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
+import '@app/components/dash/write/themes/bootstrap.ts';
 
 @Component({
   selector: 'app-write',
