@@ -1,4 +1,5 @@
 import { iconToSVGElement } from '@app/components/dash/write/blots/icons';
+import { ImageDragDrop } from '@app/components/dash/write/modules/image-drag-drop';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
@@ -44,62 +45,6 @@ interface TooltipInterface {
   position(bounds: BoundsStatic): number;
 
   edit(mode: string, preview: string): void;
-}
-
-/**
- * @description
- *
- * Custom theme which is called Bootstrap that extends Snow theme
- */
-export default class BootstrapTheme extends SnowTheme {
-
-  /**
-   * Quill instance
-   */
-  quill: Quill;
-
-  /**
-   * Quill options
-   */
-  options: QuillOptionsStatic;
-
-  tooltip: BootstrapTooltip;
-
-  constructor(quill: Quill, options: QuillOptionsStatic) {
-    super(quill, options);
-  }
-
-  /**
-   * @description
-   *
-   * Update toolbar class and add button and icons to it and configure it manually
-   */
-  extendToolbar(toolbar: StringMap): void {
-    /**
-     * Add 'ql-snow' class to toolbar DOM element
-     */
-    toolbar.container.classList.add('ql-snow');
-    /**
-     * Build buttons and pickers with QuillJS icons
-     */
-    this.buildButtons([].slice.call(toolbar.container.querySelectorAll('button')), Icons);
-    this.buildPickers([].slice.call(toolbar.container.querySelectorAll('select')), Icons);
-    /**
-     * Setup tooltip
-     */
-    this.tooltip = new BootstrapTooltip(this.quill, this.options.bounds);
-    /**
-     * Check if toolbar contains link format
-     */
-    if (toolbar.container.querySelector('.ql-link')) {
-      /**
-       * Add key shortcut binding 'K' to link
-       */
-      this.quill.keyboard.addBinding({ key: 'K', shortKey: true }, (range: RangeStatic, context: any): void => {
-        toolbar.handlers.link.call(toolbar, !context.format.link);
-      });
-    }
-  }
 }
 
 /**
@@ -244,6 +189,62 @@ class BootstrapTooltip extends BaseTooltip implements TooltipInterface {
 }
 
 /**
+ * @description
+ *
+ * Custom theme which is called Bootstrap that extends Snow theme
+ */
+export default class BootstrapTheme extends SnowTheme {
+
+  /**
+   * Quill instance
+   */
+  quill: Quill;
+
+  /**
+   * Quill options
+   */
+  options: QuillOptionsStatic;
+
+  tooltip: BootstrapTooltip;
+
+  constructor(quill: Quill, options: QuillOptionsStatic) {
+    super(quill, options);
+  }
+
+  /**
+   * @description
+   *
+   * Update toolbar class and add button and icons to it and configure it manually
+   */
+  extendToolbar(toolbar: StringMap): void {
+    /**
+     * Add 'ql-snow' class to toolbar DOM element
+     */
+    toolbar.container.classList.add('ql-snow');
+    /**
+     * Build buttons and pickers with QuillJS icons
+     */
+    this.buildButtons([].slice.call(toolbar.container.querySelectorAll('button')), Icons);
+    this.buildPickers([].slice.call(toolbar.container.querySelectorAll('select')), Icons);
+    /**
+     * Setup tooltip
+     */
+    this.tooltip = new BootstrapTooltip(this.quill, this.options.bounds);
+    /**
+     * Check if toolbar contains link format
+     */
+    if (toolbar.container.querySelector('.ql-link')) {
+      /**
+       * Add key shortcut binding 'K' to link
+       */
+      this.quill.keyboard.addBinding({ key: 'K', shortKey: true }, (range: RangeStatic, context: any): void => {
+        toolbar.handlers.link.call(toolbar, !context.format.link);
+      });
+    }
+  }
+}
+
+/**
  * Bootstrap tooltip template
  */
 BootstrapTooltip.TEMPLATE = [
@@ -254,3 +255,4 @@ BootstrapTooltip.TEMPLATE = [
   `<button class="ql-remove btn btn-link btn-sm">${tooltipDeleteIcon}</button>`,
 ].join('');
 
+Quill.register('themes/bootstrap', BootstrapTheme);
