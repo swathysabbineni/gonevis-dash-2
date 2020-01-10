@@ -1,5 +1,4 @@
 import { iconToSVGElement } from '@app/components/dash/write/blots/icons';
-import { ImageDragDrop } from '@app/components/dash/write/modules/image-drag-drop';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
@@ -9,6 +8,8 @@ import Emitter from 'quill/core/emitter';
 import { Range } from 'quill/core/selection';
 import Link from 'quill/formats/link';
 import { BaseTooltip } from 'quill/themes/base';
+import MarkdownShortcuts from 'quill-markdown-shortcuts';
+
 
 const SnowTheme = Quill.import('themes/snow');
 const LinkBlot = Quill.import('formats/link');
@@ -256,3 +257,4 @@ BootstrapTooltip.TEMPLATE = [
 ].join('');
 
 Quill.register('themes/bootstrap', BootstrapTheme);
+Quill.register('modules/markdownShortcuts', MarkdownShortcuts);
