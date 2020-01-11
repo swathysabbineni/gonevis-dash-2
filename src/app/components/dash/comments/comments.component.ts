@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommentStatus } from '@app/enums/comment-status';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Pagination } from '@app/interfaces/pagination';
@@ -8,6 +8,7 @@ import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { TranslateService } from '@ngx-translate/core';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ToastrService } from 'ngx-toastr';
 import { CommentsService } from './comments.service';
 
@@ -16,7 +17,7 @@ import { CommentsService } from './comments.service';
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss'],
 })
-export class CommentsComponent implements OnInit {
+export class CommentsComponent implements OnInit, OnDestroy {
 
   /**
    * Status to choice situation comment
@@ -55,7 +56,7 @@ export class CommentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    BlogService.blog.subscribe((blog: BlogMin): void => {
+    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
         /**
          * Get comments
@@ -114,5 +115,8 @@ export class CommentsComponent implements OnInit {
       this.toast.info(this.translate.instant('TOAST_DELETE'), this.translate.instant('COMMENT'));
       this.comments.splice(this.comments.indexOf(comment), 1);
     });
+  }
+
+  ngOnDestroy(): void {
   }
 }
