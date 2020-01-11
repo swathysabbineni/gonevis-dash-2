@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Subscription } from '@app/interfaces/subscription';
@@ -12,6 +12,7 @@ import { environment } from '@environments/environment';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons/faDollarSign';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BsModalService } from 'ngx-bootstrap';
 
 import { PaymentValidationComponent } from './payment-validation/payment-validation.component';
@@ -24,7 +25,7 @@ declare var cp: any;
   templateUrl: './settings-upgrade.component.html',
   styleUrls: ['./settings-upgrade.component.scss'],
 })
-export class SettingsUpgradeComponent implements OnInit {
+export class SettingsUpgradeComponent implements OnInit, OnDestroy {
 
   readonly dollarSign: IconDefinition = faDollarSign;
   readonly check: IconDefinition = faCheck;
@@ -108,7 +109,7 @@ export class SettingsUpgradeComponent implements OnInit {
      * Get current user
      */
     AuthService.user.subscribe((data: UserAuth): UserAuth => this.user = data);
-    BlogService.blog.subscribe((data: BlogMin): void => {
+    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((data: BlogMin): void => {
       if (data) {
         /**
          * Check to see if user's role is owner which owner can only upgrade plans
@@ -192,5 +193,8 @@ export class SettingsUpgradeComponent implements OnInit {
     }, (): void => {
       this.bsModalService.show(PaymentValidationComponent);
     });
+  }
+
+  ngOnDestroy(): void {
   }
 }

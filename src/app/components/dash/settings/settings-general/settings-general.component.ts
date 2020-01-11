@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
@@ -6,13 +6,14 @@ import { Domain } from '@app/interfaces/v1/domain';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 
 @Component({
   selector: 'app-settings-general',
   templateUrl: './settings-general.component.html',
   styleUrls: ['./settings-general.component.scss'],
 })
-export class SettingsGeneralComponent implements OnInit {
+export class SettingsGeneralComponent implements OnInit, OnDestroy {
 
   /**
    * Blog settings data
@@ -60,7 +61,7 @@ export class SettingsGeneralComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    BlogService.blog.subscribe((blog: BlogMin): void => {
+    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
         this.getSettings();
       }
@@ -137,5 +138,8 @@ export class SettingsGeneralComponent implements OnInit {
    */
   getDomainLink(domain: Domain): string {
     return `//${domain.domain}`;
+  }
+
+  ngOnDestroy(): void {
   }
 }

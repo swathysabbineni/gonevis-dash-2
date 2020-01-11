@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntryStatus } from '@app/enums/entry-status.enum';
 import { Order } from '@app/enums/order';
@@ -21,7 +21,7 @@ import { faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons/faSortAmo
 import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { TranslateService } from '@ngx-translate/core';
-import { PageChangedEvent } from 'ngx-bootstrap';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ToastrService } from 'ngx-toastr';
 import { EntryService } from './entry.service';
 
@@ -30,7 +30,7 @@ import { EntryService } from './entry.service';
   templateUrl: './entry.component.html',
   styleUrls: ['./entry.component.scss'],
 })
-export class EntryComponent implements OnInit {
+export class EntryComponent implements OnInit, OnDestroy {
 
   readonly filter: IconDefinition = faFilter;
   readonly sort: IconDefinition = faSort;
@@ -149,7 +149,7 @@ export class EntryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    BlogService.blog.subscribe((blog: BlogMin): void => {
+    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
         /**
          * Load entries
@@ -266,5 +266,8 @@ export class EntryComponent implements OnInit {
       this.sortOrder = Order.ASCENDING;
     }
     this.getEntries();
+  }
+
+  ngOnDestroy(): void {
   }
 }

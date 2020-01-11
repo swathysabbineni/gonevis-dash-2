@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TagsService } from '@app/components/dash/tags/tags.service';
@@ -14,6 +14,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
@@ -22,7 +23,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.scss'],
 })
-export class TagsComponent implements OnInit {
+export class TagsComponent implements OnInit, OnDestroy {
 
   readonly ellipsis: IconDefinition = faEllipsisV;
   readonly trash: IconDefinition = faTrash;
@@ -86,7 +87,7 @@ export class TagsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    BlogService.blog.subscribe((blog: BlogMin): void => {
+    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
         /**
          * Setup tag form
@@ -200,5 +201,8 @@ export class TagsComponent implements OnInit {
       cover_image: file.id,
     });
     this.image = file;
+  }
+
+  ngOnDestroy(): void {
   }
 }

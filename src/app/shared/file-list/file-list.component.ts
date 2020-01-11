@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File } from '@app/interfaces/file';
@@ -15,6 +15,7 @@ import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
 import { faFilePowerpoint } from '@fortawesome/free-solid-svg-icons/faFilePowerpoint';
 import { faFileWord } from '@fortawesome/free-solid-svg-icons/faFileWord';
 import { TranslateService } from '@ngx-translate/core';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 
@@ -23,7 +24,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss'],
 })
-export class FileListComponent implements OnInit {
+export class FileListComponent implements OnInit, OnDestroy {
 
   /**
    * Selection mode
@@ -72,7 +73,7 @@ export class FileListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    BlogService.blog.subscribe((blog: BlogMin): void => {
+    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
         this.getFiles();
       }
@@ -145,5 +146,8 @@ export class FileListComponent implements OnInit {
       default:
         return faFile;
     }
+  }
+
+  ngOnDestroy(): void {
   }
 }
