@@ -25,13 +25,13 @@ export class CommentsService {
   /**
    * Get blog tags
    */
-  getComments(filters: { limit?: number, } = {}, page: number = 1): Observable<ApiResponse<Comment>> {
-    return this.http.get<ApiResponse<Comment>>(`${this.apiService.base.v1}sushial/comment`, {
-      params: {
+  getComments(filters: { limit?: number, search?: string } = {}, page: number = 1): Observable<ApiResponse<Comment>> {
+    return this.http.get<ApiResponse<Comment>>(`${this.apiService.base.v1}sushial/comment/`, {
+      params: Object.assign(filters, {
         site: BlogService.currentBlog.id,
         limit: (filters.limit || CommentsService.PAGE_SIZE).toString(),
         offset: UtilService.getPageOffset(CommentsService.PAGE_SIZE, page),
-      },
+      }),
     });
   }
 

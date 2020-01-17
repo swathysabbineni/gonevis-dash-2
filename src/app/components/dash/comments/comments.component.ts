@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommentStatus } from '@app/enums/comment-status';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Pagination } from '@app/interfaces/pagination';
@@ -8,7 +8,7 @@ import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { TranslateService } from '@ngx-translate/core';
-import { PageChangedEvent } from 'ngx-bootstrap';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ToastrService } from 'ngx-toastr';
 import { CommentsService } from './comments.service';
 
@@ -17,7 +17,7 @@ import { CommentsService } from './comments.service';
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss'],
 })
-export class CommentsComponent implements OnInit {
+export class CommentsComponent implements OnInit, OnDestroy {
 
   /**
    * Status to choice situation comment
@@ -27,6 +27,11 @@ export class CommentsComponent implements OnInit {
   readonly ellipsis: IconDefinition = faEllipsisV;
 
   /**
+   * Current search text
+   */
+  search: string;
+
+  /**
    * List of comments
    */
   comments: Comment[];
@@ -34,7 +39,11 @@ export class CommentsComponent implements OnInit {
   /**
    * API pagination data
    */
-  pagination: Pagination;
+  pagination: Pagination = {
+    itemsPerPage: CommentsService.PAGE_SIZE,
+    totalItems: 0,
+    currentPage: 1,
+  };
 
   /**
    * API loading indicator
@@ -47,7 +56,7 @@ export class CommentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    BlogService.blog.subscribe((blog: BlogMin): void => {
+    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
         /**
          * Get comments
@@ -63,12 +72,12 @@ export class CommentsComponent implements OnInit {
    * @param page Page number
    */
   getComments(page: number = 1): void {
+    this.pagination.currentPage = page;
     this.loading = true;
-    this.commentsService.getComments({}, page).subscribe((response: ApiResponse<Comment>): void => {
-      this.pagination = {
-        itemsPerPage: CommentsService.PAGE_SIZE,
-        totalItems: response.count,
-      };
+    this.commentsService.getComments({
+      search: this.search || '',
+    }, page).subscribe((response: ApiResponse<Comment>): void => {
+      this.pagination.totalItems = response.count;
       this.comments = response.results;
       this.loading = false;
     });
@@ -108,10 +117,6 @@ export class CommentsComponent implements OnInit {
     });
   }
 
-  /**
-   * Pagination event
-   */
-  pageChanged(event: PageChangedEvent) {
-    this.getComments(event.page);
+  ngOnDestroy(): void {
   }
 }

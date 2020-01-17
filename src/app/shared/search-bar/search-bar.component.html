@@ -1,0 +1,13 @@
+<form (ngSubmit)="submit()">
+  <div class="input-group">
+    <input type="text" class="form-control" [formControl]="query" [placeholder]="'SEARCH' | translate">
+    <div class="input-group-append">
+      <a class="text-secondary" *ngIf="query.value" (click)="query.setValue(''); submit()">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </a>
+      <button class="btn btn-secondary" type="submit">
+        <fa-icon [icon]="faSearch"></fa-icon>
+      </button>
+    </div>
+  </div>
+</form>

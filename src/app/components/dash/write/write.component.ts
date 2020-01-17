@@ -45,6 +45,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUndo } from '@fortawesome/free-solid-svg-icons/faUndo';
 import { TranslateService } from '@ngx-translate/core';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
@@ -55,7 +56,7 @@ import Delta from 'quill-delta';
 import Op from 'quill/node_modules/quill-delta/dist/Op';
 import { debounceTime } from 'rxjs/operators';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-
+import '@app/components/dash/write/themes/bootstrap.ts';
 
 @Component({
   selector: 'app-write',
@@ -183,6 +184,7 @@ export class WriteComponent implements OnInit, OnDestroy {
    */
   options: QuillModules = {
     imageDragDrop: true,
+    markdownShortcuts: {},
     toolbar: {
       container: '.toolbar',
       handlers: {
@@ -299,7 +301,7 @@ export class WriteComponent implements OnInit, OnDestroy {
       cover_image: [null],
       meta_description: [''],
     });
-    BlogService.blog.subscribe((blog: BlogMin): void => {
+    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (!blog) {
         return;
       }

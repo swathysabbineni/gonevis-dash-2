@@ -21,7 +21,7 @@
               <!-- Delete logo-->
               <button class="btn btn-sm btn-outline-secondary" *ngIf="settings && settings.media.logo"
                       (click)="submitSettings({ logo: null })">
-                <fa-icon icon="trash"></fa-icon>
+                <fa-icon [icon]="faTrash"></fa-icon>
               </button>
             </div>
           </div>
@@ -43,7 +43,7 @@
               <!-- Delete cover -->
               <button class="btn btn-sm btn-outline-secondary" *ngIf="settings && settings.media.cover_image"
                       (click)="submitSettings({ cover_image: null })">
-                <fa-icon icon="trash"></fa-icon>
+                <fa-icon [icon]="faTrash"></fa-icon>
               </button>
             </div>
           </div>
@@ -66,7 +66,7 @@
       <!-- Preview -->
       <a class="btn btn-light" [title]="'PREVIEW' | translate" target="_blank"
          href="{{ settings.absolute_uri }}?preview-template={{ getThemeViewing().name }}">
-        <fa-icon [fixedWidth]="true" icon="eye"></fa-icon>
+        <fa-icon [fixedWidth]="true" [icon]="faEye"></fa-icon>
       </a>
       <!-- Select button -->
       <button class="btn btn-primary" type="button" translate (click)="setTemplate()"

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SettingsBillingService } from '@app/components/dash/settings/settings-billing/settings-billing.service';
 import { SettingsUpgradeService } from '@app/components/dash/settings/settings-upgrade/settings-upgrade.service';
@@ -10,6 +10,7 @@ import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
@@ -18,7 +19,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
   templateUrl: './settings-billing.component.html',
   styleUrls: ['./settings-billing.component.scss'],
 })
-export class SettingsBillingComponent implements OnInit {
+export class SettingsBillingComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
 
@@ -55,7 +56,7 @@ export class SettingsBillingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    BlogService.blog.subscribe((data: BlogMin): void => {
+    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((data: BlogMin): void => {
       this.loading = true;
       if (data) {
         /**
@@ -103,5 +104,8 @@ export class SettingsBillingComponent implements OnInit {
    */
   showModal(template: TemplateRef<any>): void {
     this.modal = this.bsModalService.show(template);
+  }
+
+  ngOnDestroy(): void {
   }
 }

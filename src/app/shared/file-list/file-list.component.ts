@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File } from '@app/interfaces/file';
@@ -15,7 +15,7 @@ import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
 import { faFilePowerpoint } from '@fortawesome/free-solid-svg-icons/faFilePowerpoint';
 import { faFileWord } from '@fortawesome/free-solid-svg-icons/faFileWord';
 import { TranslateService } from '@ngx-translate/core';
-import { PageChangedEvent } from 'ngx-bootstrap';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 
@@ -24,7 +24,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss'],
 })
-export class FileListComponent implements OnInit {
+export class FileListComponent implements OnInit, OnDestroy {
 
   /**
    * Selection mode
@@ -42,6 +42,11 @@ export class FileListComponent implements OnInit {
   @Output() choose: EventEmitter<File> = new EventEmitter<File>();
 
   /**
+   * Current search text
+   */
+  search: string;
+
+  /**
    * List of blog media files
    */
   files: File[];
@@ -49,7 +54,11 @@ export class FileListComponent implements OnInit {
   /**
    * API pagination data
    */
-  pagination: Pagination;
+  pagination: Pagination = {
+    itemsPerPage: MediaService.PAGE_SIZE,
+    totalItems: 0,
+    currentPage: 1,
+  };
 
   /**
    * API loading indicator
@@ -64,7 +73,7 @@ export class FileListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    BlogService.blog.subscribe((blog: BlogMin): void => {
+    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
         this.getFiles();
       }
@@ -78,13 +87,11 @@ export class FileListComponent implements OnInit {
    * @todo Add filter for getting only images for file selection
    */
   getFiles(page: number = 1): void {
+    this.pagination.currentPage = page;
     this.loading = true;
-    this.mediaService.getMedia(page).subscribe((response: ApiResponse<File>): void => {
+    this.mediaService.getMedia(page, this.search).subscribe((response: ApiResponse<File>): void => {
       this.files = response.results;
-      this.pagination = {
-        itemsPerPage: MediaService.PAGE_SIZE,
-        totalItems: response.count,
-      };
+      this.pagination.totalItems = response.count;
       this.loading = false;
     });
   }
@@ -108,13 +115,6 @@ export class FileListComponent implements OnInit {
         }
       });
     }
-  }
-
-  /**
-   * Pagination event
-   */
-  pageChanged(event: PageChangedEvent) {
-    this.getFiles(event.page);
   }
 
   /**
@@ -146,5 +146,8 @@ export class FileListComponent implements OnInit {
       default:
         return faFile;
     }
+  }
+
+  ngOnDestroy(): void {
   }
 }

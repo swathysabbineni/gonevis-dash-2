@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
@@ -16,13 +16,14 @@ import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 
 @Component({
   selector: 'app-dash',
   templateUrl: './dash.component.html',
   styleUrls: ['./dash.component.scss'],
 })
-export class DashComponent implements OnInit {
+export class DashComponent implements OnInit, OnDestroy {
 
   /**
    * Angle double left icon
@@ -96,7 +97,7 @@ export class DashComponent implements OnInit {
     /**
      * Get blog list (and watch for changes)
      */
-    BlogService.blogs.subscribe((blogs: BlogMin[]): void => {
+    BlogService.blogs.pipe(untilComponentDestroyed(this)).subscribe((blogs: BlogMin[]): void => {
       setTimeout(() => {
         /**
          * Get blog index from param (and watch for changes)
@@ -121,5 +122,8 @@ export class DashComponent implements OnInit {
   toggleSidebar(): void {
     localStorage.setItem('sidebar', String(!this.openSidebar));
     this.openSidebar = !this.openSidebar;
+  }
+
+  ngOnDestroy(): void {
   }
 }

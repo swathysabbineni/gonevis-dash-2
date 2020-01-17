@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavsService } from '@app/components/dash/navs/navs.service';
 import { ApiError } from '@app/interfaces/api-error';
@@ -11,6 +11,7 @@ import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons/faGripLin
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -18,7 +19,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './navs.component.html',
   styleUrls: ['./navs.component.scss'],
 })
-export class NavsComponent implements OnInit {
+export class NavsComponent implements OnInit, OnDestroy {
 
   readonly plus: IconDefinition = faPlus;
   readonly gripLinesVertical: IconDefinition = faGripLinesVertical;
@@ -46,7 +47,7 @@ export class NavsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    BlogService.blog.subscribe((blog: BlogMin): void => {
+    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
         /**
          * Get navigation
@@ -104,5 +105,8 @@ export class NavsComponent implements OnInit {
    */
   drop(event: CdkDragDrop<Navigation[]>): void {
     moveItemInArray(this.navs, event.previousIndex, event.currentIndex);
+  }
+
+  ngOnDestroy(): void {
   }
 }

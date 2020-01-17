@@ -8,6 +8,8 @@ import Emitter from 'quill/core/emitter';
 import { Range } from 'quill/core/selection';
 import Link from 'quill/formats/link';
 import { BaseTooltip } from 'quill/themes/base';
+import MarkdownShortcuts from 'quill-markdown-shortcuts';
+
 
 const SnowTheme = Quill.import('themes/snow');
 const LinkBlot = Quill.import('formats/link');
@@ -188,18 +190,6 @@ class BootstrapTooltip extends BaseTooltip implements TooltipInterface {
 }
 
 /**
- * Bootstrap tooltip template
- */
-BootstrapTooltip.TEMPLATE = [
-  '<a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>',
-  '<input type="text" class="form-control form-control-sm" ' +
-  'data-formula="e=mc^2" data-link="https://google.com" data-video="Embed URL">',
-  `<button class="ql-action btn btn-link btn-sm ml-2">${tooltipEditIcon}${tooltipSaveIcon}</button>`,
-  `<button class="ql-remove btn btn-link btn-sm">${tooltipDeleteIcon}</button>`,
-].join('');
-
-
-/**
  * @description
  *
  * Custom theme which is called Bootstrap that extends Snow theme
@@ -215,6 +205,8 @@ export default class BootstrapTheme extends SnowTheme {
    * Quill options
    */
   options: QuillOptionsStatic;
+
+  tooltip: BootstrapTooltip;
 
   constructor(quill: Quill, options: QuillOptionsStatic) {
     super(quill, options);
@@ -252,3 +244,17 @@ export default class BootstrapTheme extends SnowTheme {
     }
   }
 }
+
+/**
+ * Bootstrap tooltip template
+ */
+BootstrapTooltip.TEMPLATE = [
+  '<a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>',
+  '<input type="text" class="form-control form-control-sm" ' +
+  'data-formula="e=mc^2" data-link="https://google.com" data-video="Embed URL">',
+  `<button class="ql-action btn btn-link btn-sm ml-2">${tooltipEditIcon}${tooltipSaveIcon}</button>`,
+  `<button class="ql-remove btn btn-link btn-sm">${tooltipDeleteIcon}</button>`,
+].join('');
+
+Quill.register('themes/bootstrap', BootstrapTheme);
+Quill.register('modules/markdownShortcuts', MarkdownShortcuts);
