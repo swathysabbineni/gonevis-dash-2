@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { TeamRoles } from '@app/enums/team-roles';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { BlogService } from '@app/services/blog/blog.service';
 
 @Component({
   selector: 'app-settings',
@@ -18,4 +21,17 @@ export class SettingsComponent {
     'upgrade',
     'billing',
   ];
+
+  /**
+   * Determines whether or not the user's role in current blog is editor
+   */
+  isEditor: boolean;
+
+  constructor() {
+    BlogService.blog.subscribe((blog: BlogMin): void => {
+      if (blog) {
+        this.isEditor = BlogService.currentBlog.role === TeamRoles.Editor;
+      }
+    });
+  }
 }

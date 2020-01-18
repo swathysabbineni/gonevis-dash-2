@@ -44,6 +44,11 @@ export class TeamComponent implements OnInit, OnDestroy {
    */
   errors: ApiError = {};
 
+  /**
+   * Determines whether or not the user's role in current blog is editor
+   */
+  isEditor: boolean;
+
   constructor(private teamService: TeamService,
               private translate: TranslateService,
               private formBuilder: FormBuilder,
@@ -53,6 +58,10 @@ export class TeamComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
+        this.isEditor = BlogService.currentBlog.role === TeamRoles.Editor;
+        if (this.isEditor) {
+          return;
+        }
         /**
          * Setup invite form
          */
