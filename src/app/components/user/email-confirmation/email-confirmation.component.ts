@@ -5,6 +5,8 @@ import { AuthResponse } from '@app/interfaces/auth-response';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
 import { UserService } from '@app/services/user/user.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
 
 @Component({
   selector: 'app-email-confirmation',
@@ -12,6 +14,11 @@ import { UserService } from '@app/services/user/user.service';
   styleUrls: ['./email-confirmation.component.scss'],
 })
 export class EmailConfirmationComponent implements OnInit {
+
+  /**
+   * Danger icon
+   */
+  faExclamationTriangle: IconDefinition = faExclamationTriangle;
 
   /**
    * API loading indicator

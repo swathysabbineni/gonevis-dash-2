@@ -269,5 +269,7 @@
   "START": "Start",
   "SIGN_IN_AGAIN": "Sign in again",
   "SEARCH": "Search",
+  "VERIFYING_EMAIL": "Verifying your email...",
+  "INVALID_VERIFICATION_LINK": "Oh... Invalid verification link.",
   "COLLABORATING": "Collaborating"
 }
