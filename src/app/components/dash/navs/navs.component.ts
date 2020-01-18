@@ -2,6 +2,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavsService } from '@app/components/dash/navs/navs.service';
+import { TeamRoles } from '@app/enums/team-roles';
 import { ApiError } from '@app/interfaces/api-error';
 import { Navigation } from '@app/interfaces/v1/navigation';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
@@ -39,6 +40,11 @@ export class NavsComponent implements OnInit, OnDestroy {
    */
   errors: ApiError[] = [];
 
+  /**
+   * Determines whether or not the user's role in current blog is editor
+   */
+  isEditor: boolean;
+
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private navsService: NavsService,
@@ -49,6 +55,10 @@ export class NavsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
+        this.isEditor = BlogService.currentBlog.role === TeamRoles.Editor;
+        if (this.isEditor) {
+          return;
+        }
         /**
          * Get navigation
          */

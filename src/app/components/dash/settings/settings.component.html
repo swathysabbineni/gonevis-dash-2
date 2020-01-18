@@ -1,5 +1,5 @@
 <div class="container mt-3">
-  <div class="row justify-content-center">
+  <div class="row justify-content-center" *ngIf="!isEditor">
     <div class="col-xl-6 col-lg-8">
 
       <!-- Tabs -->
@@ -13,4 +13,7 @@
       <router-outlet></router-outlet>
     </div>
   </div>
+
+  <!-- Permission access error -->
+  <app-permission-access *ngIf="isEditor"></app-permission-access>
 </div>
