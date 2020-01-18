@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileListModule } from '@app/shared/file-list/file-list.module';
+import { PermissionAccessModule } from '@app/shared/permission-access/permission-access.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -31,6 +32,7 @@ import { SettingsComponent } from './settings.component';
     CarouselModule,
     FileListModule,
     ModalModule.forRoot(),
+    PermissionAccessModule,
   ],
 })
 export class SettingsModule {
