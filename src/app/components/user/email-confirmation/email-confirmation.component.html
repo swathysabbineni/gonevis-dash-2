@@ -5,7 +5,7 @@
     <!-- Text -->
     <h3 class="text-secondary" translate>VERIFYING_EMAIL</h3>
   </div>
-  <div  *ngIf="!loading && error">
+  <div  *ngIf="!loading && error.token">
     <!-- Error icon -->
     <fa-icon [icon]="faExclamationTriangle" size="3x"></fa-icon>
     <!-- Text -->
