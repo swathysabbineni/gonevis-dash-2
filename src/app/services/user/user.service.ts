@@ -49,7 +49,7 @@ export class UserService {
    * Get user information
    */
   getUser(): Observable<UserSettings> {
-    return this.http.get<UserSettings>(`${this.apiService.base.v1}account/users/${this.userId}/`);
+      return this.http.get<UserSettings>(`${this.apiService.base.v1}account/me/`);
   }
 
   /**
@@ -58,7 +58,7 @@ export class UserService {
    * @param payload User settings data
    */
   updateProfile(payload: UserSettingsPatch): Observable<UserSettingsPatch> {
-    return this.http.patch<UserSettingsPatch>(`${this.apiService.base.v1}account/update-profile/`, payload);
+    return this.http.patch<UserSettingsPatch>(`${this.apiService.base.v1}account/me/`, payload);
   }
 
   /**
@@ -71,7 +71,7 @@ export class UserService {
     const formData: FormData = new FormData();
     formData.append('picture', picture);
     formData.append('key', picture.name);
-    return this.http.patch<UserSettingsPatch>(`${this.apiService.base.v1}account/update-profile/`, formData);
+    return this.http.patch<UserSettingsPatch>(`${this.apiService.base.v1}account/me/`, formData);
   }
 
   /**
