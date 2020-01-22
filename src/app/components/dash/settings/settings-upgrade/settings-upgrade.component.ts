@@ -8,6 +8,7 @@ import { Plan } from '@app/interfaces/v1/plan';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UserService } from '@app/services/user/user.service';
 import { environment } from '@environments/environment';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
@@ -108,7 +109,7 @@ export class SettingsUpgradeComponent implements OnInit, OnDestroy {
     /**
      * Get current user
      */
-    AuthService.user.subscribe((data: UserAuth): UserAuth => this.user = data);
+    UserService.userObservable.subscribe((data: UserAuth): UserAuth => this.user = data);
     BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((data: BlogMin): void => {
       if (data) {
         /**
