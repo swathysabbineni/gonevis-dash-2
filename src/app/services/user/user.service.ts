@@ -4,9 +4,9 @@ import { AuthResponse } from '@app/interfaces/auth-response';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { UserSettings } from '@app/interfaces/user-settings';
 import { UserSettingsPatch } from '@app/interfaces/user-settings-patch';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { ApiService } from '@app/services/api/api.service';
-import { AuthService } from '@app/services/auth/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -14,17 +14,53 @@ import { Observable } from 'rxjs';
 export class UserService {
 
   /**
-   * Authenticated user ID
+   * @description
+   *
+   * Authentication user subject which emits authenticated user's data information value whenever it is subscribed to.
+   *
+   * @see BehaviorSubject
    */
-  userId: string;
+  private static userSubject: BehaviorSubject<UserAuth> = new BehaviorSubject<UserAuth>(null);
+
+  /**
+   * @description
+   *
+   * An observable snapshot data of {@link userSubject} value
+   *
+   * @see Observable
+   */
+  static userObservable: Observable<UserAuth> = UserService.userSubject.asObservable();
 
   constructor(private http: HttpClient,
               private apiService: ApiService) {
-    AuthService.user.subscribe((data: UserAuth): void => {
-      if (data) {
-        this.userId = data.id;
-      }
-    });
+  }
+
+  /**
+   * @description
+   *
+   * Set and update current authenticated user's data by updating {@link userSubject}'s value and local storage's
+   * 'user' item
+   *
+   * @param data User data information
+   */
+  static set user(data: UserAuth) {
+    UserService.userSubject.next(data);
+    localStorage.setItem('user', JSON.stringify(data));
+  }
+
+  /**
+   * @returns Latest authenticated user's data information from local storage
+   */
+  static get user(): UserAuth {
+    return localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+  }
+
+  /**
+   * @returns Whether or not user has blogs
+   */
+  static get hasBlogs(): boolean {
+    const blogs: BlogMin[] = UserService.user.sites;
+    return Boolean(blogs && blogs.length);
   }
 
   /**
@@ -49,7 +85,7 @@ export class UserService {
    * Get user information
    */
   getUser(): Observable<UserSettings> {
-      return this.http.get<UserSettings>(`${this.apiService.base.v1}account/me/`);
+    return this.http.get<UserSettings>(`${this.apiService.base.v1}account/me/`);
   }
 
   /**
