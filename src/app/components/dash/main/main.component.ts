@@ -8,7 +8,6 @@ import { Comment } from '@app/interfaces/v1/comment';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Metrics } from '@app/interfaces/v1/metrics';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UsersModalComponent } from '@app/shared/users-modal/users-modal.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -103,52 +102,48 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
-      if (blog) {
-        /**
-         * Reset data
-         */
-        this.templateConfig = null;
-        /**
-         * Load blog data
-         */
-        this.blogService.getSettings().subscribe((data: BlogSettings): void => {
-          this.blog = data;
-        });
-        /**
-         * Load entries
-         */
-        this.entryService.getEntries({
-          limit: MainComponent.POSTS_LIMIT,
-        }).pipe(untilComponentDestroyed(this)).subscribe((response: ApiResponse<Entry>): void => {
-          this.entries = response.results;
-        });
-        /**
-         * Load comments
-         */
-        this.commentsService.getComments({
-          limit: MainComponent.COMMENTS_LIMIT,
-        }).pipe(untilComponentDestroyed(this)).subscribe((response: ApiResponse<Comment>): void => {
-          this.comments = response.results;
-        });
-        /**
-         * Load metrics
-         */
-        this.blogService.getMetrics().pipe(untilComponentDestroyed(this)).subscribe((data: Metrics): void => {
-          this.metrics = data;
-        });
-        /**
-         * Load template config (for owner and admins)
-         */
-        if (blog.role !== TeamRoles.Editor) {
-          this.blogService.getTemplateConfig().pipe(
-            untilComponentDestroyed(this),
-          ).subscribe((data: { template_config: TemplateConfig }): void => {
-            this.templateConfig = data.template_config;
-          });
-        }
-      }
+    /**
+     * Reset data
+     */
+    this.templateConfig = null;
+    /**
+     * Load blog data
+     */
+    this.blogService.getSettings().subscribe((data: BlogSettings): void => {
+      this.blog = data;
     });
+    /**
+     * Load entries
+     */
+    this.entryService.getEntries({
+      limit: MainComponent.POSTS_LIMIT,
+    }).pipe(untilComponentDestroyed(this)).subscribe((response: ApiResponse<Entry>): void => {
+      this.entries = response.results;
+    });
+    /**
+     * Load comments
+     */
+    this.commentsService.getComments({
+      limit: MainComponent.COMMENTS_LIMIT,
+    }).pipe(untilComponentDestroyed(this)).subscribe((response: ApiResponse<Comment>): void => {
+      this.comments = response.results;
+    });
+    /**
+     * Load metrics
+     */
+    this.blogService.getMetrics().pipe(untilComponentDestroyed(this)).subscribe((data: Metrics): void => {
+      this.metrics = data;
+    });
+    /**
+     * Load template config (for owner and admins)
+     */
+    if (BlogService.currentBlog.role !== TeamRoles.Editor) {
+      this.blogService.getTemplateConfig().pipe(
+        untilComponentDestroyed(this),
+      ).subscribe((data: { template_config: TemplateConfig }): void => {
+        this.templateConfig = data.template_config;
+      });
+    }
   }
 
   /**
