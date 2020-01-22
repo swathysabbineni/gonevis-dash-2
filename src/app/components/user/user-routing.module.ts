@@ -32,6 +32,9 @@ const routes: Routes = [{
     path: 'email-confirmation/:token',
     loadChildren: () => import('./email-confirmation/email-confirmation.module').then(m => m.EmailConfirmationModule),
   }, {
+    path: 'start',
+    loadChildren: () => import('./start/start.module').then(m => m.StartModule),
+  }, {
     path: '',
     redirectTo: 'setting',
     pathMatch: 'full',
