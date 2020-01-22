@@ -14,6 +14,7 @@ import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { TemplateConfigFields } from '@app/interfaces/v1/template-config-fields';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { ApiService } from '@app/services/api/api.service';
+import { UserService } from '@app/services/user/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -70,22 +71,22 @@ export class BlogService {
   ];
 
   /**
-   * Blog list (subject)
-   */
-  private static blogsSubject: BehaviorSubject<BlogMin[]> = new BehaviorSubject<BlogMin[]>(null);
-
-  /**
-   * Blog list (observable)
-   */
-  static blogs: Observable<BlogMin[]> = BlogService.blogsSubject.asObservable();
-
-  /**
-   * Current blog (subject)
+   * @description
+   *
+   * Blog subject which emits current blog's data information value whenever it is subscribed to.
+   *
+   * @see BehaviorSubject
    */
   private static blogSubject: BehaviorSubject<BlogMin> = new BehaviorSubject<BlogMin>(null);
 
   /**
-   * Current blog (observable)
+   * @description
+   *
+   * Creates a new Observable with {@link blogSubject} subject as the source.
+   * When subscribe to, it will emit current blog's latest data information.
+   *
+   * @see Observable
+   * @see Subject.asObservable
    */
   static blog: Observable<BlogMin> = BlogService.blogSubject.asObservable();
 
@@ -96,77 +97,44 @@ export class BlogService {
   }
 
   /**
-   * Set the blog list
-   *
-   * @param blogs Blogs to set the list to
-   */
-  static set(blogs: BlogMin[]): void {
-    BlogService.blogsSubject.next(blogs);
-  }
-
-  /**
-   * Add a blog to the blog list
-   *
-   * @param blog Blog to add
-   *
-   * @returns Index of the new blog
-   */
-  static add(blog: BlogMin): number {
-    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
-    blogs.push(blog);
-    BlogService.blogsSubject.next(blogs);
-    return blogs.length - 1;
-  }
-
-  /**
-   * Update a blog from the blog list
-   *
-   * @param id Blog ID to update
-   * @param blog Blog data to update
-   */
-  static update(id: string, blog: BlogMin): void {
-    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
-    blogs[blogs.findIndex(item => item.id === id)] = blog;
-    BlogService.blogsSubject.next(blogs);
-  }
-
-  /**
-   * Set current blog
-   *
-   * @param id Blog ID to set as current
-   */
-  static setCurrent(id: string): void {
-    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
-    if (id) {
-      BlogService.blogSubject.next(blogs.find(blog => blog.id === id));
-    } else {
-      BlogService.blogSubject.next(null);
-    }
-  }
-
-  /**
-   * @return Current blog
+   * @return Latest current blog's data information from local storage
    */
   static get currentBlog(): BlogMin {
-    return BlogService.blogSubject.getValue();
+    return localStorage.getItem('blog') ? JSON.parse(localStorage.getItem('blog')) : null;
+  }
+
+  /**
+   * @description
+   *
+   * Set and update current blog's data by updating {@link blogSubject}'s value and local storage's
+   * 'blog' item
+   *
+   * @param data User data information
+   */
+  static set currentBlog(data: BlogMin) {
+    BlogService.blogSubject.next(data);
+    localStorage.setItem('blog', JSON.stringify(data));
   }
 
   /**
    * @return Current blog index
    */
   static get currentBlogIndex(): number {
+    /**
+     * @description
+     *
+     * Get current blog
+     */
     const currentBlog: BlogMin = BlogService.currentBlog;
+    /**
+     * @description
+     *
+     * Get blog list from current user's data information
+     */
+    const blogList: BlogMin[] = UserService.user.sites.reverse();
     if (currentBlog) {
-      return this.blogsSubject.getValue().findIndex((blog: BlogMin): boolean => currentBlog.id === blog.id);
+      return blogList.findIndex((blog: BlogMin): boolean => currentBlog.id === blog.id);
     }
-  }
-
-  /**
-   * @returns Whether user has blogs or not
-   */
-  static get hasBlogs(): boolean {
-    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
-    return Boolean(blogs && blogs.length);
   }
 
   /**
