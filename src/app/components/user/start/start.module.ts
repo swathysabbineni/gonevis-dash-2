@@ -5,8 +5,8 @@ import { PasswordStrengthModule } from '@app/shared/password-strength/password-s
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { StartRoutingModule } from './start-routing.module';
-import { StartComponent } from './start.component';
+import { StartRoutingModule } from 'src/app/components/user/start/start-routing.module';
+import { StartComponent } from 'src/app/components/user/start/start.component';
 
 @NgModule({
   declarations: [

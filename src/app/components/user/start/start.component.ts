@@ -10,6 +10,7 @@ import { Template } from '@app/interfaces/v1/template';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UserService } from '@app/services/user/user.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope';
@@ -166,7 +167,7 @@ export class StartComponent implements OnInit {
       this.domainCheckForm.get('domain').value,
     ).subscribe((data: BlogCreate): void => {
       this.loading = false;
-      const user: UserAuth = JSON.parse(localStorage.getItem('user'));
+      const user: UserAuth = UserService.user;
       const blog: BlogMin = {
         role: TeamRoles.Owner,
         title: data.title,
@@ -180,12 +181,11 @@ export class StartComponent implements OnInit {
       /**
        * Update authenticated user data
        */
-      AuthService.setAuthenticatedUser(user);
+      UserService.user = user;
       /**
        * Add created blog to the blog list
        */
-      const index: number = BlogService.add(blog);
-      BlogService.setCurrent(blog.id);
+      BlogService.currentBlog = blog;
       /**
        * If user skipped or selected template was 'zero' then ignore setting blog template
        */
@@ -195,7 +195,7 @@ export class StartComponent implements OnInit {
       /**
        * Redirect to blog settings
        */
-      this.router.navigate(['dash', index, 'settings']);
+      this.router.navigate(['dash', BlogService.currentBlogIndex, 'settings']);
     }, (): void => {
       this.loading = false;
     });
