@@ -63,7 +63,6 @@ export class EntryListComponent {
       if (this.useContent) {
         entry.content = this.utilService.sanitizeHtml(entry.content) as string;
       }
-      entry.excerpt = this.utilService.sanitizeHtml(entry.excerpt) as string;
     });
     this.currentEntries = entries;
   }
@@ -146,7 +145,6 @@ export class EntryListComponent {
       this.next = data.next;
       this.loading = false;
       data.results.map((entry: Entry): void => {
-        entry.excerpt = this.utilService.sanitizeHtml(entry.excerpt) as string;
         this.entries.push(entry);
       });
     });
