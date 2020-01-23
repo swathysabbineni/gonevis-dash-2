@@ -7,7 +7,10 @@ import { Entry } from '@app/interfaces/v1/entry';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UtilService } from '@app/services/util/util.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +23,9 @@ export class EntryService {
   static readonly PAGE_SIZE: number = 20;
 
   constructor(private http: HttpClient,
-              private apiService: ApiService) {
+              private apiService: ApiService,
+              private toast: ToastrService,
+              private translate: TranslateService) {
   }
 
   /**
@@ -67,5 +72,25 @@ export class EntryService {
    */
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiService.base.v1}website/entry/${id}`);
+  }
+
+  /**
+   * Draft an entry
+   *
+   * @param title Entry title
+   * @param content Entry content
+   */
+  draft(title: string, content: string): Observable<Entry> {
+    return this.http.post<Entry>(`${this.apiService.base.v1}website/entry/`, {
+      content,
+      title,
+      status: EntryStatus.Draft,
+      site: BlogService.currentBlog.id,
+    }).pipe(
+      map((data: Entry): Entry => {
+        this.toast.info(this.translate.instant('TOAST_CREATE'), title);
+        return data;
+      }),
+    );
   }
 }

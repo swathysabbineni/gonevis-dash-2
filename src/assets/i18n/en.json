@@ -271,5 +271,7 @@
   "SEARCH": "Search",
   "VERIFYING_EMAIL": "Verifying your email...",
   "INVALID_VERIFICATION_LINK": "Oh... Invalid verification link.",
+  "QUICK_DRAFT": "Quick Draft",
+  "WRITE_AWAY": "Write away...",
   "COLLABORATING": "Collaborating"
 }

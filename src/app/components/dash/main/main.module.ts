@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { UsersModalModule } from '@app/shared/users-modal/users-modal.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
@@ -21,6 +22,7 @@ import { MainComponent } from './main.component';
     ModalModule.forRoot(),
     TooltipModule.forRoot(),
     UsersModalModule,
+    ReactiveFormsModule,
   ],
 })
 export class MainModule {
