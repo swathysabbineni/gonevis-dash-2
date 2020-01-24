@@ -36,7 +36,7 @@
       <h5 class="card-title"><a [routerLink]="['/feed/entry', entry.id]">{{ entry.title }}</a></h5>
 
       <!-- Excerpt -->
-      <p class="card-text" *ngIf="!useContent" [innerHTML]="entry.excerpt"></p>
+      <p class="card-text" *ngIf="!useContent" [innerHTML]="entry.excerpt.toString() | stripTags"></p>
 
       <!-- Content -->
       <p class="card-text" *ngIf="useContent" [innerHTML]="entry.content"></p>
