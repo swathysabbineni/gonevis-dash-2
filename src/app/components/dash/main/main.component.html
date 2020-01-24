@@ -155,6 +155,23 @@
     <!-- Right -->
     <div class="col-md-4">
 
+      <!-- Quick Draft -->
+      <form class="card dash mb-4" *ngIf="quickDraftForm.form"
+            [formGroup]="quickDraftForm.form" (ngSubmit)="submitQuickDraft()">
+
+        <!-- Header -->
+        <div class="card-header text-capitalize" translate>QUICK_DRAFT</div>
+
+        <!-- Input -->
+        <textarea class="card-body form-control border-0 shadow-none" rows="4"
+                  formControlName="content" [placeholder]="'WRITE_AWAY' | translate"></textarea>
+
+        <!-- Button -->
+        <div class="card-footer text-right" *ngIf="quickDraftForm.form.get('content').value">
+          <button class="btn btn-primary" [disabled]="quickDraftForm.loading" translate>SAVE</button>
+        </div>
+      </form>
+
       <!-- Publication -->
       <div class="card dash mb-4">
         <div class="card-header text-capitalize" translate>PUBLICATION</div>

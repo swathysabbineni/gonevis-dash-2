@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CommentsService } from '@app/components/dash/comments/comments.service';
 import { EntryService } from '@app/components/dash/entry/entry.service';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { ReactiveFormData } from '@app/interfaces/reactive-form-data';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Comment } from '@app/interfaces/v1/comment';
 import { Entry } from '@app/interfaces/v1/entry';
@@ -18,6 +20,7 @@ import { faComments } from '@fortawesome/free-solid-svg-icons/faComments';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
+import { TranslateService } from '@ngx-translate/core';
 import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { BytesPipe } from 'ngx-pipes';
@@ -39,6 +42,7 @@ export class MainComponent implements OnInit, OnDestroy {
   readonly faFiles: IconDefinition = faDatabase;
   readonly eye: IconDefinition = faEye;
   readonly like: IconDefinition = faThumbsUp;
+
   /**
    * Blog settings data
    */
@@ -69,11 +73,18 @@ export class MainComponent implements OnInit, OnDestroy {
    */
   templateConfig: TemplateConfig;
 
+  /**
+   * Quick draft
+   */
+  quickDraftForm: ReactiveFormData = {};
+
   constructor(private blogService: BlogService,
               private entryService: EntryService,
               private commentsService: CommentsService,
               private modalService: BsModalService,
-              private bytes: BytesPipe) {
+              private bytes: BytesPipe,
+              private formBuilder: FormBuilder,
+              private translate: TranslateService) {
   }
 
   /**
@@ -103,6 +114,15 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    /**
+     * Setup quick draft form
+     */
+    this.quickDraftForm.form = this.formBuilder.group({
+      content: ['', Validators.required],
+    });
+    /**
+     * Get current blog
+     */
     BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
       if (blog) {
         /**
@@ -159,5 +179,16 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+  }
+
+  submitQuickDraft(): void {
+    this.quickDraftForm.loading = true;
+    this.entryService.draft(
+      this.translate.instant('QUICK_DRAFT'),
+      this.quickDraftForm.form.get('content').value,
+    ).subscribe((): void => {
+      this.quickDraftForm.loading = false;
+      this.quickDraftForm.form.reset();
+    });
   }
 }
