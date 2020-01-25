@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
@@ -7,12 +7,10 @@ import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Template } from '@app/interfaces/v1/template';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { CarouselComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
 
 @Component({
@@ -20,7 +18,7 @@ import { CarouselComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
   templateUrl: './settings-appearance.component.html',
   styleUrls: ['./settings-appearance.component.scss'],
 })
-export class SettingsAppearanceComponent implements OnInit, OnDestroy {
+export class SettingsAppearanceComponent implements OnInit {
 
   readonly faTrash: IconDefinition = faTrash;
   readonly faEye: IconDefinition = faEye;
@@ -102,40 +100,34 @@ export class SettingsAppearanceComponent implements OnInit, OnDestroy {
       highlight_theme: [HighlightTheme.DEFAULT],
       template_primary_color: [TemplatePrimaryColor.DEFAULT],
     });
-    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
-      if (blog) {
+    /**
+     * Get settings
+     */
+    this.getSettings();
+    /**
+     * Load template config
+     */
+    this.blogService.getTemplateConfig()
+      .subscribe((data: { template_config: TemplateConfig }): void => {
         /**
-         * Get settings
+         * Get templates
          */
-        this.getSettings();
-        /**
-         * Load template config
-         */
-        this.blogService.getTemplateConfig()
-          .pipe(untilComponentDestroyed(this))
-          .subscribe((data: { template_config: TemplateConfig }): void => {
+        this.blogService.getBlogTemplates()
+          .subscribe((response: { templates: Template[] }): void => {
+            this.templates = response.templates;
             /**
-             * Get templates
+             * Set current viewing theme
              */
-            this.blogService.getBlogTemplates()
-              .pipe(untilComponentDestroyed(this))
-              .subscribe((response: { templates: Template[] }): void => {
-                this.templates = response.templates;
-                /**
-                 * Set current viewing theme
-                 */
-                this.changeDetectorRef.detectChanges();
-                this.themeCarousel.activeSlide = this.templates.findIndex(
-                  theme => this.templateConfig.name === theme.name,
-                );
-              });
+            this.changeDetectorRef.detectChanges();
+            this.themeCarousel.activeSlide = this.templates.findIndex(
+              theme => this.templateConfig.name === theme.name,
+            );
           });
-        /**
-         * Get current theme and config
-         */
-        this.getTemplateConfig();
-      }
-    });
+      });
+    /**
+     * Get current theme and config
+     */
+    this.getTemplateConfig();
   }
 
   /**
@@ -245,8 +237,5 @@ export class SettingsAppearanceComponent implements OnInit, OnDestroy {
     if (this.selectingFor && this.settings && this.settings.media[this.selectingFor]) {
       return this.settings.media[this.selectingFor].id;
     }
-  }
-
-  ngOnDestroy(): void {
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Subscription } from '@app/interfaces/subscription';
@@ -24,7 +24,7 @@ declare var cp: any;
   templateUrl: './settings-upgrade.component.html',
   styleUrls: ['./settings-upgrade.component.scss'],
 })
-export class SettingsUpgradeComponent implements OnInit, OnDestroy {
+export class SettingsUpgradeComponent implements OnInit {
 
   readonly dollarSign: IconDefinition = faDollarSign;
   readonly check: IconDefinition = faCheck;
@@ -188,8 +188,5 @@ export class SettingsUpgradeComponent implements OnInit, OnDestroy {
     }, (): void => {
       this.bsModalService.show(PaymentValidationComponent);
     });
-  }
-
-  ngOnDestroy(): void {
   }
 }
