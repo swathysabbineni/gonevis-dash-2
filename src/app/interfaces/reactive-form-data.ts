@@ -7,6 +7,6 @@ import { ApiError } from '@app/interfaces/api-error';
 export interface ReactiveFormData {
   form?: FormGroup;
   loading?: boolean;
-  error?: ApiError;
+  error: ApiError;
   success?: boolean;
 }
