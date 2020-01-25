@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TagsService } from '@app/components/dash/tags/tags.service';
@@ -7,14 +7,11 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { File } from '@app/interfaces/file';
 import { Pagination } from '@app/interfaces/pagination';
 import { Tag } from '@app/interfaces/v1/tag';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
-import { BlogService } from '@app/services/blog/blog.service';
 import { TagModalComponent } from '@app/shared/tags-modal/tag-modal.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
@@ -23,7 +20,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.scss'],
 })
-export class TagsComponent implements OnInit, OnDestroy {
+export class TagsComponent implements OnInit {
 
   readonly ellipsis: IconDefinition = faEllipsisV;
   readonly trash: IconDefinition = faTrash;
@@ -87,23 +84,19 @@ export class TagsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
-      if (blog) {
-        /**
-         * Setup tag form
-         */
-        this.form = this.formBuilder.group({
-          name: ['', Validators.required],
-          slug: [''],
-          description: [''],
-          cover_image: [''],
-        });
-        /**
-         * Get tags
-         */
-        this.getTags();
-      }
+    /**
+     * Setup tag form
+     */
+    this.form = this.formBuilder.group({
+      name: ['', Validators.required],
+      slug: [''],
+      description: [''],
+      cover_image: [''],
     });
+    /**
+     * Get tags
+     */
+    this.getTags();
   }
 
   /**
@@ -201,8 +194,5 @@ export class TagsComponent implements OnInit, OnDestroy {
       cover_image: file.id,
     });
     this.image = file;
-  }
-
-  ngOnDestroy(): void {
   }
 }
