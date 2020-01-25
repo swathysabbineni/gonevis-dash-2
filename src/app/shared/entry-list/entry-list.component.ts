@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { EntryFormat } from '@app/enums/entry-format.enum';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { Entry } from '@app/interfaces/zero/entry';
@@ -31,6 +32,8 @@ export class EntryListComponent {
   readonly heartFill: IconDefinition = faHeartFill;
   readonly bookmarkFill: IconDefinition = faBookmarkFill;
   readonly star: IconDefinition = faStar;
+
+  readonly entryFormat = EntryFormat;
 
   /**
    * Current entry list
