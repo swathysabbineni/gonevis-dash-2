@@ -6,17 +6,6 @@
 
       <!-- Main navs -->
       <app-nav-pills [navPills]="mainNavs"></app-nav-pills>
-
-      <!-- Tag navs title -->
-      <div class="font-weight-bold small text-secondary pl-3 mt-5" translate>POPULAR_TAGS</div>
-
-      <!-- Tag navs -->
-      <div class="nav flex-column nav-pills my-3 small">
-        <a class="nav-link" *ngFor="let nav of tagNavs" (click)="selectTag()">
-          <fa-icon [fixedWidth]="true" [icon]="faTag"></fa-icon>
-          <span class="ml-2">{{ nav }}</span>
-        </a>
-      </div>
     </div>
 
     <!-- Middle -->

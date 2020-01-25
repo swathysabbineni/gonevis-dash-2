@@ -4,8 +4,6 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
-import { TranslateService } from '@ngx-translate/core';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-feed',
@@ -32,27 +30,4 @@ export class FeedComponent {
     route: 'bookmarks',
     icon: faBookmark,
   }];
-
-  /**
-   * Tag navigation
-   */
-  readonly tagNavs: string[] = [
-    'Technology',
-    'Fashion',
-    'Personal',
-    'How To',
-    'Entertainment',
-    'Story',
-  ];
-
-  constructor(private toast: ToastrService,
-              private translate: TranslateService) {
-  }
-
-  /**
-   * Tag selection, tho not ready yet
-   */
-  selectTag(): void {
-    this.toast.info(this.translate.instant('NOT_IMPLEMENTED_POSTS_BY_TAG'));
-  }
 }
