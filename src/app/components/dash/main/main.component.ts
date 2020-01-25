@@ -12,6 +12,7 @@ import { Metrics } from '@app/interfaces/v1/metrics';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UtilService } from '@app/services/util/util.service';
 import { UsersModalComponent } from '@app/shared/users-modal/users-modal.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
@@ -80,7 +81,8 @@ export class MainComponent implements OnInit, OnDestroy {
     error: {},
   };
 
-  constructor(private blogService: BlogService,
+  constructor(public utils: UtilService,
+              private blogService: BlogService,
               private entryService: EntryService,
               private commentsService: CommentsService,
               private modalService: BsModalService,

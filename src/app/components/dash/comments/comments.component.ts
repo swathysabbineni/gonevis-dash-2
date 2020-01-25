@@ -5,6 +5,7 @@ import { Pagination } from '@app/interfaces/pagination';
 import { Comment } from '@app/interfaces/v1/comment';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UtilService } from '@app/services/util/util.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { TranslateService } from '@ngx-translate/core';
@@ -50,7 +51,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
    */
   loading = false;
 
-  constructor(private commentsService: CommentsService,
+  constructor(public utils: UtilService,
+              private commentsService: CommentsService,
               private translate: TranslateService,
               private toast: ToastrService) {
   }

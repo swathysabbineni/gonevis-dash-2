@@ -15,6 +15,7 @@ import { ApiService } from '@app/services/api/api.service';
 import { AuthService } from '@app/services/auth/auth.service';
 import { CommentService } from '@app/services/comment/comment.service';
 import { EntryService } from '@app/services/entry/entry.service';
+import { UtilService } from '@app/services/util/util.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
 import { faHeart as faHeartFill } from '@fortawesome/free-solid-svg-icons';
@@ -75,7 +76,8 @@ export class EntryComponent implements OnInit {
    */
   loading: boolean;
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(public utils: UtilService,
+              private activatedRoute: ActivatedRoute,
               private changeDetectorRef: ChangeDetectorRef,
               private title: Title,
               private translateService: TranslateService,
