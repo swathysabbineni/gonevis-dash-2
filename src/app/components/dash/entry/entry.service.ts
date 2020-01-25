@@ -56,6 +56,16 @@ export class EntryService {
   }
 
   /**
+   * Create an entry
+   *
+   * @param payload Entry data
+   */
+  create(payload: Partial<Entry>): Observable<Entry> {
+    payload.site = payload.site || BlogService.currentBlog.id;
+    return this.http.post<Entry>(`${this.apiService.base.v1}website/entry/`, payload);
+  }
+
+  /**
    * Update an entry
    *
    * @param id Entry ID
@@ -81,11 +91,10 @@ export class EntryService {
    * @param content Entry content
    */
   draft(title: string, content: string): Observable<Entry> {
-    return this.http.post<Entry>(`${this.apiService.base.v1}website/entry/`, {
+    return this.create({
       content,
       title,
       status: EntryStatus.Draft,
-      site: BlogService.currentBlog.id,
     }).pipe(
       map((data: Entry): Entry => {
         this.toast.info(this.translate.instant('TOAST_CREATE'), title);
