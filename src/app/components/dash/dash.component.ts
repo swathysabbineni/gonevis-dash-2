@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { UserAuth } from '@app/interfaces/user-auth';
@@ -119,7 +119,7 @@ export class DashComponent implements OnInit, OnDestroy {
      */
     UserService.userObservable.subscribe((user: UserAuth): void => {
       this.user = user;
-      this.blogs = user.sites.reverse();
+      this.blogs = JSON.parse(JSON.stringify(user.sites)).reverse();
     });
     /**
      * Get current blog (and watch for changes)
