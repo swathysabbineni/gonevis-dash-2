@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { EntryFormat } from '@app/enums/entry-format.enum';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { Entry } from '@app/interfaces/zero/entry';
@@ -32,6 +33,8 @@ export class EntryListComponent {
   readonly bookmarkFill: IconDefinition = faBookmarkFill;
   readonly star: IconDefinition = faStar;
 
+  readonly entryFormat = EntryFormat;
+
   /**
    * Current entry list
    */
@@ -63,7 +66,6 @@ export class EntryListComponent {
       if (this.useContent) {
         entry.content = this.utilService.sanitizeHtml(entry.content) as string;
       }
-      entry.excerpt = this.utilService.sanitizeHtml(entry.excerpt) as string;
     });
     this.currentEntries = entries;
   }
@@ -146,7 +148,6 @@ export class EntryListComponent {
       this.next = data.next;
       this.loading = false;
       data.results.map((entry: Entry): void => {
-        entry.excerpt = this.utilService.sanitizeHtml(entry.excerpt) as string;
         this.entries.push(entry);
       });
     });

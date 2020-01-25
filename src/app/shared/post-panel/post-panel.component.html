@@ -1,0 +1,28 @@
+<form class="card feed shadow-sm my-3" *ngIf="blog" [formGroup]="form.form" (ngSubmit)="submit()">
+  <div class="card-body d-flex flex-row align-items-start">
+    <img [src]="blog.media.logo.thumbnail_48x48" [alt]="blog.title" [width]="32" class="rounded-circle mr-3">
+    <div class="d-flex w-100">
+      <textarea class="form-control border-0 p-0 shadow-none font-weight-normal"
+                formControlName="content"
+                [placeholder]="'WRITE_AWAY' | translate"
+                [rows]="focus ? 3 : 1"
+                (focus)="focus = true"
+                (blur)="focus = form.form.valid"></textarea>
+      <div *ngIf="form.error">
+        <div class="text-danger" *ngIf="form.error.content">{{ form.error.content[0] }}</div>
+        <div class="text-danger" *ngIf="form.error.non_field_errors">{{ form.error.non_field_errors[0] }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer" *ngIf="form.form.valid">
+    <a class="btn btn-sm btn-light ml-2" [routerLink]="getEditorLink()" translate>EDITOR</a>
+    <button class="btn btn-sm btn-primary float-right ml-2"
+            [disabled]="form.loading" translate>
+      POST
+    </button>
+    <select class="form-control form-control-sm w-auto float-right bg-light border-0" formControlName="status">
+      <option [ngValue]="entryStatus.Published" translate>PUBLISHED</option>
+      <option [ngValue]="entryStatus.Draft" translate>DRAFT</option>
+    </select>
+  </div>
+</form>

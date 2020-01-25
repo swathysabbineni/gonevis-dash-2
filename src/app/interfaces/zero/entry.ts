@@ -1,3 +1,4 @@
+import { EntryFormat } from '@app/enums/entry-format.enum';
 import { File } from '@app/interfaces/file';
 import { UserMin } from '@app/interfaces/user-min';
 import { BlogMin } from '@app/interfaces/zero/feed/blog-min';
@@ -9,6 +10,7 @@ export interface Entry {
   title: string;
   content: string;
   excerpt: string;
+  format: EntryFormat;
   media: {
     cover_image: File
   };

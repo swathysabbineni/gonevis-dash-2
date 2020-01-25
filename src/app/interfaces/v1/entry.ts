@@ -1,3 +1,5 @@
+import { EntryFormat } from '@app/enums/entry-format.enum';
+import { EntryStatus } from '@app/enums/entry-status.enum';
 import { File } from '@app/interfaces/file';
 import { TagMin } from '@app/interfaces/v1/tag-min';
 import { UserMin } from '@app/interfaces/v1/user-min';
@@ -20,8 +22,8 @@ export interface Entry {
   excerpt: string;
   content: string;
   meta_description?: string;
-  status: number;
-  format: number;
+  status: EntryStatus;
+  format: EntryFormat;
   comment_enabled: boolean;
   featured: boolean;
   is_page: boolean;

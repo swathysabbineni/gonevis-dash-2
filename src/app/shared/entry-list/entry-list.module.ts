@@ -8,6 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { PopoverModule, TooltipModule } from 'ngx-bootstrap';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NgStringPipesModule } from 'ngx-pipes';
 
 import { EntryListComponent } from './entry-list.component';
 
@@ -26,6 +27,7 @@ import { EntryListComponent } from './entry-list.component';
     ShareModule,
     EmbedModule,
     LoadingModule,
+    NgStringPipesModule,
   ],
   exports: [
     EntryListComponent,

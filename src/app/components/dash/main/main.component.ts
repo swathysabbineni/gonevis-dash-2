@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { CommentsService } from '@app/components/dash/comments/comments.service';
 import { EntryService } from '@app/components/dash/entry/entry.service';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
+import { ReactiveFormData } from '@app/interfaces/reactive-form-data';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Comment } from '@app/interfaces/v1/comment';
 import { Entry } from '@app/interfaces/v1/entry';
@@ -20,7 +22,7 @@ import { faComments } from '@fortawesome/free-solid-svg-icons/faComments';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
+import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap';
 import { BytesPipe } from 'ngx-pipes';
 
@@ -30,7 +32,7 @@ import { BytesPipe } from 'ngx-pipes';
   styleUrls: ['./main.component.scss'],
   providers: [BytesPipe],
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnInit {
 
   private static readonly POSTS_LIMIT = 6;
   private static readonly COMMENTS_LIMIT = 8;
@@ -67,13 +69,22 @@ export class MainComponent implements OnInit, OnDestroy {
    */
   templateConfig: TemplateConfig;
 
+  /**
+   * Quick draft
+   */
+  quickDraftForm: ReactiveFormData = {
+    error: {},
+  };
+
   constructor(private activatedRoute: ActivatedRoute,
               private utilService: UtilService,
               private blogService: BlogService,
               private entryService: EntryService,
               private commentsService: CommentsService,
               private modalService: BsModalService,
-              private bytes: BytesPipe) {
+              private bytes: BytesPipe,
+              private formBuilder: FormBuilder,
+              private translate: TranslateService) {
   }
 
   /**
@@ -104,9 +115,15 @@ export class MainComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     /**
+     * Setup quick draft form
+     */
+    this.quickDraftForm.form = this.formBuilder.group({
+      content: ['', Validators.required],
+    });
+    /**
      * Watch for current blog changes
      */
-    this.activatedRoute.parent.parent.params.pipe(untilComponentDestroyed(this)).subscribe((): void => {
+    this.activatedRoute.parent.parent.params.subscribe((): void => {
       /**
        * Reset data
        */
@@ -122,7 +139,7 @@ export class MainComponent implements OnInit, OnDestroy {
        */
       this.entryService.getEntries({
         limit: MainComponent.POSTS_LIMIT,
-      }).pipe(untilComponentDestroyed(this)).subscribe((response: ApiResponse<Entry>): void => {
+      }).subscribe((response: ApiResponse<Entry>): void => {
         this.entries = response.results;
       });
       /**
@@ -157,6 +174,14 @@ export class MainComponent implements OnInit, OnDestroy {
     this.modalService.show(UsersModalComponent);
   }
 
-  ngOnDestroy(): void {
+  submitQuickDraft(): void {
+    this.quickDraftForm.loading = true;
+    this.entryService.draft(
+      this.translate.instant('QUICK_DRAFT'),
+      this.quickDraftForm.form.get('content').value,
+    ).subscribe((): void => {
+      this.quickDraftForm.loading = false;
+      this.quickDraftForm.form.reset();
+    });
   }
 }

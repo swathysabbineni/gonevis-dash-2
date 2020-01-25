@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavPill } from '@app/interfaces/nav-pill';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
 
 @Component({
@@ -10,14 +10,14 @@ import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.scss'],
 })
-export class FeedComponent implements OnInit {
+export class FeedComponent {
 
-  readonly hashtag: IconDefinition = faHashtag;
+  readonly faTag: IconDefinition = faHashtag;
 
   /**
    * Main navigation
    */
-  mainNavs: NavPill[] = [{
+  readonly mainNavs: NavPill[] = [{
     label: 'EXPLORE',
     route: 'explore',
     icon: faSearch,
@@ -30,33 +30,4 @@ export class FeedComponent implements OnInit {
     route: 'bookmarks',
     icon: faBookmark,
   }];
-
-  /**
-   * Tag navigation
-   */
-  tagNavs: string[] = [
-    'Technology',
-    'Fashion',
-    'Personal',
-    'How To',
-    'Entertainment',
-    'Story',
-  ];
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
-  /**
-   * Tag selection, tho not ready yet
-   *
-   * @todo Use toast instead of alert
-   * @todo Use translation
-   * @todo Do me in back-end
-   */
-  selectTag(event): void {
-    alert('Exploring posts by tag is not yet implemented.');
-  }
 }

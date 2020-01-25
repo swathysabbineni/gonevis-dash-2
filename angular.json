@@ -169,12 +169,6 @@
               "devServerTarget": "gonevis:serve:production"
             }
           }
-        },
-        "deploy": {
-          "builder": "angular-cli-ghpages:deploy",
-          "options": {
-            "cname": "gonevis-dash-beta.savandbros.com"
-          }
         }
       }
     }

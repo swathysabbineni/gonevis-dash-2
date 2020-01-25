@@ -120,21 +120,14 @@ export class BlogService {
    * @return Current blog index
    */
   static get currentBlogIndex(): number {
-    /**
-     * @description
-     *
-     * Get current blog
-     */
-    const currentBlog: BlogMin = BlogService.currentBlog;
-    /**
-     * @description
-     *
-     * Get blog list from current user's data information
-     */
-    const blogList: BlogMin[] = UserService.user.sites.reverse();
-    if (currentBlog) {
-      return blogList.findIndex((blog: BlogMin): boolean => currentBlog.id === blog.id);
-    }
+    return BlogService.getBlogIndex(BlogService.currentBlog.id);
+  }
+
+  /**
+   * @return Blog index
+   */
+  static getBlogIndex(id: string): number {
+    return UserService.user.sites.reverse().findIndex((blog: BlogMin): boolean => blog.id === id);
   }
 
   /**
