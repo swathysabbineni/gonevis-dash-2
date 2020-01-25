@@ -155,10 +155,7 @@ export class BlogService {
    * @return Current blog index
    */
   static get currentBlogIndex(): number {
-    const currentBlog: BlogMin = BlogService.currentBlog;
-    if (currentBlog) {
-      return this.blogsSubject.getValue().findIndex((blog: BlogMin): boolean => currentBlog.id === blog.id);
-    }
+    return BlogService.getBlogIndex(BlogService.currentBlog.id);
   }
 
   /**
@@ -167,6 +164,13 @@ export class BlogService {
   static get hasBlogs(): boolean {
     const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
     return Boolean(blogs && blogs.length);
+  }
+
+  /**
+   * @return Blog index
+   */
+  static getBlogIndex(id: string): number {
+    return this.blogsSubject.getValue().findIndex((blog: BlogMin): boolean => blog.id === id);
   }
 
   /**
