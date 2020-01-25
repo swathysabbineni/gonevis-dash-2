@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { CommentsService } from '@app/components/dash/comments/comments.service';
 import { EntryService } from '@app/components/dash/entry/entry.service';
 import { TeamRoles } from '@app/enums/team-roles';
@@ -76,7 +76,9 @@ export class MainComponent implements OnInit, OnDestroy {
   /**
    * Quick draft
    */
-  quickDraftForm: ReactiveFormData = {};
+  quickDraftForm: ReactiveFormData = {
+    error: {},
+  };
 
   constructor(private blogService: BlogService,
               private entryService: EntryService,
