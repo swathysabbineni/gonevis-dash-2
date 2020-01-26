@@ -43,9 +43,16 @@
 
     <!-- Header -->
     <h2 class="d-flex align-items-center font-weight-bold mb-4">
+      <button class="btn btn-secondary mr-auto" (click)="goBack()">
+        <fa-icon [fixedWidth]="true" [icon]="faBack"></fa-icon>
+      </button>
       <span class="text-center flex-grow-1" translate>PICK_A_TEMPLATE</span>
-      <button class="btn btn-link ml-auto" *ngIf="authService.isAuth" [disabled]="loading"
+      <button class="btn btn-secondary ml-auto" *ngIf="authService.isAuth" [disabled]="loading"
               (click)="skip = true; createBlog()" translate>
+        SKIP
+      </button>
+      <button class="btn btn-secondary ml-auto" *ngIf="!authService.isAuth" [disabled]="loading"
+              (click)="onTemplateSelect(templates[0])" translate>
         SKIP
       </button>
     </h2>
@@ -71,7 +78,13 @@
   <div class="step my-5" *ngIf="step === 'register'">
 
     <!-- Header -->
-    <h2 class="text-center font-weight-bold mb-5" translate>ALMOST_DONE</h2>
+    <h2 class="d-flex align-items-center font-weight-bold mb-4">
+      <button class="btn btn-secondary mr-auto" (click)="goBack()">
+        <fa-icon [fixedWidth]="true" [icon]="faBack"></fa-icon>
+      </button>
+      <span class="text-center flex-grow-1" translate>ALMOST_DONE</span>
+      <span class="mrl-auto w-60px"></span>
+    </h2>
 
     <!-- Content -->
     <form class="row justify-content-center" [formGroup]="registerForm" (ngSubmit)="register()">

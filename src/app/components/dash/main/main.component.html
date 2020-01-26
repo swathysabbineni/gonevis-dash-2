@@ -140,7 +140,7 @@
             <!-- Name-->
             <small class="text-secondary">{{ comment.user.name }}: </small>
             <!-- Comment -->
-            <span>{{ comment.comment }}</span>
+            <span [innerHTML]="utils.sanitizeHtml(comment.comment)"></span>
             <!-- Date -->
             <small class="float-right">{{ comment.created | date }}</small>
           </a>

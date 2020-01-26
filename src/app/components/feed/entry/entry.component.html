@@ -58,7 +58,7 @@
             </div>
           </div>
           <!-- Comment content -->
-          <div class="white-space-pre-line">{{ comment.comment }}</div>
+          <div class="white-space-pre-line" [innerHTML]="utils.sanitizeHtml(comment.comment)"></div>
         </div>
       </div>
     </li>

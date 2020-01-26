@@ -1,0 +1,20 @@
+@import "variables";
+
+.card-link {
+  &:hover,
+  &:focus {
+    opacity: 0.8;
+    transition: $transition-base !important;
+    box-shadow: $box-shadow-lg !important;
+  }
+
+  &:active {
+    transition: none !important;
+    box-shadow: none !important;
+  }
+}
+
+.w-60px {
+  width: 60px;
+}
+

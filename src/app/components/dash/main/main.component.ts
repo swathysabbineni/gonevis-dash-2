@@ -78,6 +78,7 @@ export class MainComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private utilService: UtilService,
+              public utils: UtilService,
               private blogService: BlogService,
               private entryService: EntryService,
               private commentsService: CommentsService,
