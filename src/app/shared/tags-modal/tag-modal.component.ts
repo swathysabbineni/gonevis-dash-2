@@ -6,6 +6,7 @@ import { Tag } from '@app/interfaces/v1/tag';
 import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
@@ -16,6 +17,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 export class TagModalComponent implements OnInit {
 
   readonly times: IconDefinition = faTimes;
+  readonly trash: IconDefinition = faTrash;
 
   /**
    * Editing tag

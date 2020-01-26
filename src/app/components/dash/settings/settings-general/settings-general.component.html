@@ -45,7 +45,7 @@
       <div class="card-body">
         <a [href]="getDomainLink(domain)" target="_blank" [title]="'DNS_NAME' | translate">{{ domain.domain }}</a>
         <a class="small text-secondary float-right" (click)="removeDomain(domain)">
-          <fa-icon icon="trash"></fa-icon>
+          <fa-icon [icon]="trash"></fa-icon>
         </a>
         <div class="small text-muted" [title]="'DNS_TARGET' | translate"><code>{{ domain.cname }}</code></div>
       </div>

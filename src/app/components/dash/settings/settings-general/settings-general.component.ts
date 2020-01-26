@@ -5,8 +5,10 @@ import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Domain } from '@app/interfaces/v1/domain';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
 import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 @Component({
   selector: 'app-settings-general',
@@ -14,6 +16,8 @@ import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
   styleUrls: ['./settings-general.component.scss'],
 })
 export class SettingsGeneralComponent implements OnInit, OnDestroy {
+
+  readonly trash: IconDefinition = faTrash;
 
   /**
    * Blog settings data
