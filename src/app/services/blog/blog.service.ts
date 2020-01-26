@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -120,7 +121,9 @@ export class BlogService {
    * @return Current blog index
    */
   static get currentBlogIndex(): number {
-    return BlogService.getBlogIndex(BlogService.currentBlog.id);
+    if (location.pathname.indexOf('/dash/') === 0) {
+      return Number(location.pathname.split('/')[2]);
+    }
   }
 
   /**
