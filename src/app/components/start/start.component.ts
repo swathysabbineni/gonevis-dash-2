@@ -11,6 +11,7 @@ import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
@@ -27,6 +28,7 @@ export class StartComponent implements OnInit {
   readonly arrowRight: IconDefinition = faArrowRight;
   readonly envelope: IconDefinition = faEnvelope;
   readonly lock: IconDefinition = faLock;
+  readonly faBack: IconDefinition = faArrowLeft;
 
   /**
    * Current step of getting started
@@ -211,5 +213,19 @@ export class StartComponent implements OnInit {
     }, (): void => {
       this.loading = false;
     });
+  }
+
+  /**
+   * Go to previous step
+   */
+  goBack(): void {
+    switch (this.step) {
+      case 'theme':
+        this.step = 'address';
+        break;
+      case 'register':
+        this.step = 'theme';
+        break;
+    }
   }
 }
