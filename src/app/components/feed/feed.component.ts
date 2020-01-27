@@ -1,18 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { BlogService } from '@app/components/feed/blog/blog.service';
+import { ApiResponse } from '@app/interfaces/api-response';
 import { NavPill } from '@app/interfaces/nav-pill';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { Blog } from '@app/interfaces/v1/blog';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
-import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
 
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.scss'],
 })
-export class FeedComponent {
-
-  readonly faTag: IconDefinition = faHashtag;
+export class FeedComponent implements OnInit {
 
   /**
    * Main navigation
@@ -30,4 +29,21 @@ export class FeedComponent {
     route: 'bookmarks',
     icon: faBookmark,
   }];
+
+  /**
+   * Following blogs
+   */
+  blogs: Blog[];
+
+  constructor(private blogService: BlogService) {
+  }
+
+  ngOnInit(): void {
+    /**
+     * Get following blogs
+     */
+    this.blogService.getFollowingBlogs({ limit: 10 }).subscribe((data: ApiResponse<Blog>): void => {
+      this.blogs = data.results;
+    });
+  }
 }

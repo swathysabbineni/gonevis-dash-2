@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseFollow } from '@app/interfaces/v1/api-response-follow';
+import { Blog as v1Blog } from '@app/interfaces/v1/blog';
 import { Blog } from '@app/interfaces/zero/blog';
 import { ApiService } from '@app/services/api/api.service';
 import { Observable } from 'rxjs';
@@ -34,6 +35,19 @@ export class BlogService {
       params: {
         user__username: user,
       },
+    });
+  }
+
+  /**
+   * Get list of blogs that current user is following (subscribed to)
+   */
+  getFollowingBlogs(filters: {
+    limit?: number,
+  } = {}): Observable<ApiResponse<v1Blog>> {
+    return this.http.get<ApiResponse<v1Blog>>(`${this.apiService.base.v1}website/site/`, {
+      params: Object.assign(filters, {
+        show: 'subscribed',
+      }),
     });
   }
 
