@@ -1,6 +1,7 @@
 <form class="card feed shadow-sm my-3" *ngIf="blog" [formGroup]="form.form" (ngSubmit)="submit()">
   <div class="card-body d-flex flex-row align-items-start">
-    <img [src]="blog.media.logo.thumbnail_48x48" [alt]="blog.title" [width]="32" class="rounded-circle mr-3">
+    <img [src]="blog.media.logo.thumbnail_48x48" [alt]="blog.title" [width]="32" class="rounded-circle mr-3"
+         *ngIf="blog.media.logo">
     <div class="d-flex w-100">
       <textarea class="form-control border-0 p-0 shadow-none font-weight-normal"
                 formControlName="content"

@@ -3,8 +3,6 @@ import { MediaService } from '@app/components/dash/media/media.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File } from '@app/interfaces/file';
 import { Pagination } from '@app/interfaces/pagination';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
-import { BlogService } from '@app/services/blog/blog.service';
 import { UtilService } from '@app/services/util/util.service';
 import { FileModalComponent } from '@app/shared/file-modal/file-modal.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -15,7 +13,6 @@ import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
 import { faFilePowerpoint } from '@fortawesome/free-solid-svg-icons/faFilePowerpoint';
 import { faFileWord } from '@fortawesome/free-solid-svg-icons/faFileWord';
 import { TranslateService } from '@ngx-translate/core';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 
@@ -73,11 +70,7 @@ export class FileListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
-      if (blog) {
-        this.getFiles();
-      }
-    });
+    this.getFiles();
   }
 
   /**

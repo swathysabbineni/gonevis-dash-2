@@ -69,7 +69,7 @@ export class UserProfileComponent implements OnInit {
     /**
      * Get authenticated user
      */
-    AuthService.user.subscribe((data: UserAuth): void => {
+    UserService.userObservable.subscribe((data: UserAuth): void => {
       this.userAuth = data;
     });
     /**
@@ -108,7 +108,7 @@ export class UserProfileComponent implements OnInit {
     this.userService.setPicture(this.fileElement.nativeElement.files[0]).subscribe((data: UserSettingsPatch): void => {
       this.userAuth.media = data.media;
       this.user.media = data.media;
-      AuthService.setAuthenticatedUser(this.userAuth);
+      UserService.user = this.userAuth;
       this.loading = false;
     });
   }
@@ -140,7 +140,7 @@ export class UserProfileComponent implements OnInit {
           this.userAuth[key] = data[key];
         }
       }
-      AuthService.setAuthenticatedUser(this.userAuth);
+      UserService.user = this.userAuth;
       this.loading = false;
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;

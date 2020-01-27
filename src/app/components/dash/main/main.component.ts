@@ -1,5 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { SafeStyle } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { CommentsService } from '@app/components/dash/comments/comments.service';
 import { EntryService } from '@app/components/dash/entry/entry.service';
 import { TeamRoles } from '@app/enums/team-roles';
@@ -10,7 +12,6 @@ import { Comment } from '@app/interfaces/v1/comment';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Metrics } from '@app/interfaces/v1/metrics';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UtilService } from '@app/services/util/util.service';
 import { UsersModalComponent } from '@app/shared/users-modal/users-modal.component';
@@ -22,8 +23,7 @@ import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { TranslateService } from '@ngx-translate/core';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalService } from 'ngx-bootstrap';
 import { BytesPipe } from 'ngx-pipes';
 
 @Component({
@@ -32,7 +32,7 @@ import { BytesPipe } from 'ngx-pipes';
   styleUrls: ['./main.component.scss'],
   providers: [BytesPipe],
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnInit {
 
   private static readonly POSTS_LIMIT = 6;
   private static readonly COMMENTS_LIMIT = 8;
@@ -60,11 +60,6 @@ export class MainComponent implements OnInit, OnDestroy {
   entries: Entry[];
 
   /**
-   * Subscriber modal to show subscribers
-   */
-  subscriberModal: BsModalRef;
-
-  /**
    * Metrics (data count, etc)
    */
   metrics: Metrics;
@@ -81,7 +76,9 @@ export class MainComponent implements OnInit, OnDestroy {
     error: {},
   };
 
-  constructor(public utils: UtilService,
+  constructor(private activatedRoute: ActivatedRoute,
+              private utilService: UtilService,
+              public utils: UtilService,
               private blogService: BlogService,
               private entryService: EntryService,
               private commentsService: CommentsService,
@@ -94,13 +91,13 @@ export class MainComponent implements OnInit, OnDestroy {
   /**
    * @returns Cover image or logo (CSS) of current blog
    */
-  get blogCover(): string {
+  blogCover(): SafeStyle {
     if (this.blog) {
       if (this.blog.media.cover_image) {
-        return `url(${this.blog.media.cover_image.file})`;
+        return this.utilService.sanitizeBackgroundImage(this.blog.media.cover_image.file);
       }
       if (this.blog.media.logo) {
-        return `url(${this.blog.media.logo.file})`;
+        return this.utilService.sanitizeBackgroundImage(this.blog.media.logo.file);
       }
     }
   }
@@ -109,7 +106,7 @@ export class MainComponent implements OnInit, OnDestroy {
    * @returns Used and free storage in MB
    * @example 120.66 MB / 367.62 MB
    */
-  get storageTooltip(): string {
+  storageTooltip(): string {
     if (this.metrics) {
       const USED = this.bytes.transform(this.metrics.metrics.dolphin.used_storage * 1000000, 2);
       const FREE = this.bytes.transform(this.metrics.metrics.dolphin.available_storage * 1000000, 2);
@@ -125,52 +122,48 @@ export class MainComponent implements OnInit, OnDestroy {
       content: ['', Validators.required],
     });
     /**
-     * Get current blog
+     * Watch for current blog changes
      */
-    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
-      if (blog) {
-        /**
-         * Reset data
-         */
-        this.templateConfig = null;
-        /**
-         * Load blog data
-         */
-        this.blogService.getSettings().subscribe((data: BlogSettings): void => {
-          this.blog = data;
+    this.activatedRoute.parent.parent.params.subscribe((): void => {
+      /**
+       * Reset data
+       */
+      this.templateConfig = null;
+      /**
+       * Load blog data
+       */
+      this.blogService.getSettings().subscribe((data: BlogSettings): void => {
+        this.blog = data;
+      });
+      /**
+       * Load entries
+       */
+      this.entryService.getEntries({
+        limit: MainComponent.POSTS_LIMIT,
+      }).subscribe((response: ApiResponse<Entry>): void => {
+        this.entries = response.results;
+      });
+      /**
+       * Load comments
+       */
+      this.commentsService.getComments({
+        limit: MainComponent.COMMENTS_LIMIT,
+      }).subscribe((response: ApiResponse<Comment>): void => {
+        this.comments = response.results;
+      });
+      /**
+       * Load metrics
+       */
+      this.blogService.getMetrics().subscribe((data: Metrics): void => {
+        this.metrics = data;
+      });
+      /**
+       * Load template config (for owner and admins)
+       */
+      if (BlogService.currentBlog.role !== TeamRoles.Editor) {
+        this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
+          this.templateConfig = data.template_config;
         });
-        /**
-         * Load entries
-         */
-        this.entryService.getEntries({
-          limit: MainComponent.POSTS_LIMIT,
-        }).pipe(untilComponentDestroyed(this)).subscribe((response: ApiResponse<Entry>): void => {
-          this.entries = response.results;
-        });
-        /**
-         * Load comments
-         */
-        this.commentsService.getComments({
-          limit: MainComponent.COMMENTS_LIMIT,
-        }).pipe(untilComponentDestroyed(this)).subscribe((response: ApiResponse<Comment>): void => {
-          this.comments = response.results;
-        });
-        /**
-         * Load metrics
-         */
-        this.blogService.getMetrics().pipe(untilComponentDestroyed(this)).subscribe((data: Metrics): void => {
-          this.metrics = data;
-        });
-        /**
-         * Load template config (for owner and admins)
-         */
-        if (blog.role !== TeamRoles.Editor) {
-          this.blogService.getTemplateConfig().pipe(
-            untilComponentDestroyed(this),
-          ).subscribe((data: { template_config: TemplateConfig }): void => {
-            this.templateConfig = data.template_config;
-          });
-        }
       }
     });
   }
@@ -178,11 +171,8 @@ export class MainComponent implements OnInit, OnDestroy {
   /**
    * Show modal to show blog followers
    */
-  showSubscribers() {
-    this.subscriberModal = this.modalService.show(UsersModalComponent);
-  }
-
-  ngOnDestroy(): void {
+  showSubscribers(): void {
+    this.modalService.show(UsersModalComponent);
   }
 
   submitQuickDraft(): void {

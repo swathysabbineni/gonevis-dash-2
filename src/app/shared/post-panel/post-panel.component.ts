@@ -9,6 +9,7 @@ import { ReactiveFormData } from '@app/interfaces/reactive-form-data';
 import { Entry } from '@app/interfaces/v1/entry';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UserService } from '@app/services/user/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 
@@ -47,14 +48,9 @@ export class PostPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /**
-     * Get a blog
-     */
-    BlogService.blogs.subscribe((data: BlogMin[]): void => {
-      if (data && data.length) {
-        this.blog = data[0];
-      }
-    });
+    if (UserService.hasBlogs) {
+      this.blog = JSON.parse(JSON.stringify(UserService.user.sites)).reverse()[0];
+    }
     /**
      * Setup post form
      */

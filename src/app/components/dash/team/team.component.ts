@@ -1,23 +1,21 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TeamService } from '@app/components/dash/team/team.service';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiError } from '@app/interfaces/api-error';
 import { Team } from '@app/interfaces/v1/team';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ToastrService } from 'ngx-toastr';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 @Component({
   selector: 'app-team',
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss'],
 })
-export class TeamComponent implements OnInit, OnDestroy {
+export class TeamComponent implements OnInit {
 
   readonly roleNames = TeamService.roleNames;
   readonly teamRoles = TeamRoles;
@@ -56,25 +54,21 @@ export class TeamComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
-      if (blog) {
-        this.isEditor = BlogService.currentBlog.role === TeamRoles.Editor;
-        if (this.isEditor) {
-          return;
-        }
-        /**
-         * Setup invite form
-         */
-        this.form = this.formBuilder.group({
-          email: ['', Validators.required],
-          role: [TeamRoles.Editor],
-        });
-        /**
-         * Get teams
-         */
-        this.getTeam();
-      }
+    this.isEditor = BlogService.currentBlog.role === TeamRoles.Editor;
+    if (this.isEditor) {
+      return;
+    }
+    /**
+     * Setup invite form
+     */
+    this.form = this.formBuilder.group({
+      email: ['', Validators.required],
+      role: [TeamRoles.Editor],
     });
+    /**
+     * Get teams
+     */
+    this.getTeam();
   }
 
   /**
@@ -124,8 +118,5 @@ export class TeamComponent implements OnInit, OnDestroy {
       this.loading = false;
       this.errors = error.error;
     });
-  }
-
-  ngOnDestroy(): void {
   }
 }

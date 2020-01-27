@@ -1,13 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { BlogService } from '@app/services/blog/blog.service';
 import { TranslateService } from '@ngx-translate/core';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -15,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './settings-advanced.component.html',
   styleUrls: ['./settings-advanced.component.scss'],
 })
-export class SettingsAdvancedComponent implements OnInit, OnDestroy {
+export class SettingsAdvancedComponent implements OnInit {
 
   /**
    * Number of Posts Per Page
@@ -123,14 +121,10 @@ export class SettingsAdvancedComponent implements OnInit, OnDestroy {
       show_views_count: [null],
       search_engine_visibility: [null],
     });
-    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
-      if (blog) {
-        /**
-         * Get blog settings
-         */
-        this.getSettings();
-      }
-    });
+    /**
+     * Get blog settings
+     */
+    this.getSettings();
   }
 
   /**
@@ -255,8 +249,5 @@ export class SettingsAdvancedComponent implements OnInit, OnDestroy {
       this.advancedLoading = false;
       this.googleAdSenseErrors = error.error;
     });
-  }
-
-  ngOnDestroy(): void {
   }
 }

@@ -5,13 +5,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-interceptor.service';
 import { FeedbackModalModule } from '@app/shared/feedback-modal/feedback-modal.module';
 import { environment } from '@environments/environment';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BsDropdownModule } from 'ngx-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
@@ -39,14 +37,12 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    FeedbackModalModule,
     HttpClientModule,
-    FontAwesomeModule,
+    BsDropdownModule.forRoot(),
+    ModalModule.forRoot(),
+    FeedbackModalModule,
     LoadingBarModule,
     LoadingBarHttpClientModule,
-    BsDropdownModule.forRoot(),
-    CollapseModule.forRoot(),
-    ModalModule.forRoot(),
     NgxGoogleAnalyticsModule.forRoot(environment.googleAnalytics),
     NgxGoogleAnalyticsRouterModule,
     ToastrModule.forRoot({

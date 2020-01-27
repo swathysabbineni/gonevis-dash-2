@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { UserAuth } from '@app/interfaces/user-auth';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UserService } from '@app/services/user/user.service';
 import { FeedbackModalComponent } from '@app/shared/feedback-modal/feedback-modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap';
@@ -34,68 +34,29 @@ export class AppComponent implements OnInit {
   user: UserAuth;
 
   /**
-   * Authenticated user blog list
-   */
-  blogs: BlogMin[];
-
-  /**
-   * Current blog
-   */
-  blogCurrent: BlogMin;
-
-  /**
    * Is user in any dash page
    */
   inDash: boolean;
 
-  constructor(public auth: AuthService,
+  constructor(public authService: AuthService,
+              private modalService: BsModalService,
               private translate: TranslateService,
               private router: Router,
               private route: ActivatedRoute,
-              private title: Title,
-              private modalService: BsModalService) {
+              private title: Title) {
   }
 
   ngOnInit(): void {
     /**
-     * Is user in any dash page
-     */
-    this.router.events.pipe(
-      filter((event: RouterEvent): boolean => event instanceof NavigationEnd),
-      map((): ActivatedRoute => this.route),
-      filter((activatedRoute: ActivatedRoute): boolean => {
-        return activatedRoute.outlet === 'primary' && !!activatedRoute.firstChild;
-      }),
-    ).subscribe((): void => {
-      this.inDash = this.route.root.firstChild.snapshot.routeConfig.path === 'dash';
-    });
-
-    /**
      * Set the default language
      */
     this.translate.setDefaultLang('en');
-
     /**
      * Get authenticated user data (and watch for changes)
      */
-    AuthService.user.subscribe((user: UserAuth): void => {
+    UserService.userObservable.subscribe((user: UserAuth): void => {
       this.user = user;
     });
-
-    /**
-     * Get authenticated user blogs (and watch for changes)
-     */
-    BlogService.blogs.subscribe((blogs: BlogMin[]): void => {
-      this.blogs = blogs;
-    });
-
-    /**
-     * Get current blog (and watch for changes)
-     */
-    BlogService.blog.subscribe((blog: BlogMin): void => {
-      this.blogCurrent = blog;
-    });
-
     /**
      * Watch for page changes then update window title with translation
      */
@@ -111,24 +72,29 @@ export class AppComponent implements OnInit {
       filter((activatedRoute: ActivatedRoute): boolean => activatedRoute.outlet === 'primary'),
       mergeMap((activatedRoute: ActivatedRoute): Observable<Data> => activatedRoute.data),
     ).subscribe((event: Data): void => {
+      /**
+       * Is user in any dash page
+       */
+      if (this.route.root.firstChild) {
+        this.inDash = this.route.root.firstChild.snapshot.routeConfig.path === 'dash';
+      }
       if (event.title) {
         this.title.setTitle(`${this.translate.instant(event.title)}${AppComponent.TITLE_SUFFIX}`);
       } else {
         this.title.setTitle(AppComponent.TITLE);
       }
     });
-
     /**
      * On '/' route visit redirect user conditionally based on authentication state and blogs count
      */
     this.router.events.pipe(
       filter((event: RouterEvent): boolean => event instanceof NavigationEnd && event.url === '/'),
     ).subscribe((): void => {
-      if (this.auth.isAuth) {
+      if (this.authService.isAuth) {
         /**
          * Redirect to 'dash' route if user has blogs, otherwise redirect to 'feed' route
          */
-        if (BlogService.hasBlogs) {
+        if (UserService.hasBlogs) {
           this.router.navigate(['dash', BlogService.currentBlog ? BlogService.currentBlogIndex : 0]);
         } else {
           this.router.navigateByUrl('feed');
@@ -140,10 +106,17 @@ export class AppComponent implements OnInit {
   }
 
   /**
+   * Check if user is authenticated
+   */
+  get isAuth(): boolean {
+    return this.authService.isAuth;
+  }
+
+  /**
    * Redirect to 'dash' route if user has blogs, otherwise redirect to 'start' route
    */
   get navigateToDash(): any[] {
-    if (BlogService.hasBlogs) {
+    if (UserService.hasBlogs) {
       return ['dash', BlogService.currentBlog ? BlogService.currentBlogIndex : 0];
     } else {
       return ['start'];
@@ -151,18 +124,10 @@ export class AppComponent implements OnInit {
   }
 
   /**
-   * Set current blog
-   *
-   * @param index Blog index
+   * Sign out user by a confirm message
    */
-  setCurrentBlog(index: number): void {
-    /**
-     * Find current blog index
-     */
-    const blogIndex: number = this.user.sites.findIndex((data: BlogMin): boolean => {
-      return BlogService.currentBlog.id === data.id;
-    });
-    this.router.navigateByUrl(this.router.url.replace(blogIndex.toString(), index.toString()));
+  signOut(): void {
+    this.authService.signOut();
   }
 
   /**

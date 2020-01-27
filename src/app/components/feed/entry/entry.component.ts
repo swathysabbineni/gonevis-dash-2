@@ -12,9 +12,9 @@ import { UserAuth } from '@app/interfaces/user-auth';
 import { Entry } from '@app/interfaces/zero/entry';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { ApiService } from '@app/services/api/api.service';
-import { AuthService } from '@app/services/auth/auth.service';
 import { CommentService } from '@app/services/comment/comment.service';
 import { EntryService } from '@app/services/entry/entry.service';
+import { UserService } from '@app/services/user/user.service';
 import { UtilService } from '@app/services/util/util.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
@@ -99,7 +99,7 @@ export class EntryComponent implements OnInit {
     /**
      * Get authenticated user
      */
-    AuthService.user.subscribe((user: UserAuth): void => {
+    UserService.userObservable.subscribe((user: UserAuth): void => {
       this.user = user;
     });
 

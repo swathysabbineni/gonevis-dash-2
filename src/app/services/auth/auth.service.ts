@@ -7,10 +7,11 @@ import { UserAuth } from '@app/interfaces/user-auth';
 import { RegisterWithBlogResponse } from '@app/interfaces/v1/register-with-blog-response';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UserService } from '@app/services/user/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -43,16 +44,6 @@ export class AuthService {
    */
   private static readonly REDIRECT_SIGN_OUT = ['user', 'sign-up'];
 
-  /**
-   * Authenticated user (subject)
-   */
-  private static userSubject: BehaviorSubject<UserAuth> = new BehaviorSubject<UserAuth>(null);
-
-  /**
-   * Authenticated user (observable)
-   */
-  static user: Observable<UserAuth> = AuthService.userSubject.asObservable();
-
   constructor(private http: HttpClient,
               private toast: ToastrService,
               private translate: TranslateService,
@@ -75,9 +66,7 @@ export class AuthService {
       /**
        * Update authenticated user and blog data
        */
-      const user: UserAuth = JSON.parse(localStorage.getItem('user'));
-      AuthService.userSubject.next(user);
-      BlogService.set(user.sites.reverse());
+      UserService.user = JSON.parse(localStorage.getItem('user'));
     }
   }
 
@@ -91,16 +80,6 @@ export class AuthService {
       return;
     }
     return JSON.parse(atob(BASE64_URL.replace('-', '+').replace('_', '/')));
-  }
-
-  /**
-   * Set authenticated user data
-   *
-   * @param userData User data to set to
-   */
-  static setAuthenticatedUser(userData: UserAuth): void {
-    localStorage.setItem('user', JSON.stringify(userData));
-    AuthService.userSubject.next(userData);
   }
 
   /**
@@ -133,8 +112,8 @@ export class AuthService {
    */
   signOut(toast: boolean = true, redirect: string[] = AuthService.REDIRECT_SIGN_OUT): Promise<boolean> {
     this.cookie.deleteAll('/');
+    UserService.user = null;
     localStorage.clear();
-    AuthService.userSubject.next(null);
     if (toast) {
       this.toast.info(this.translate.instant('TOAST_SIGN_OUT'));
     }
@@ -161,20 +140,17 @@ export class AuthService {
       map((data: AuthResponse): string => {
         // Store token into cookies
         this.setToken(data.token);
-        // Store user into local storage
-        localStorage.setItem('user', JSON.stringify(data.user));
+        // Store user into localstorage
+        UserService.user = data.user;
         // Store storage version
         localStorage.setItem(AuthService.STORAGE_VERSION_KEY, AuthService.STORAGE_VERSION.toString());
-        // Update user and blogs subject data
-        AuthService.userSubject.next(data.user);
-        BlogService.set(data.user.sites.reverse());
         // Show toast
         if (showToast) {
           this.toast.info(this.translate.instant('TOAST_SIGN_IN'), data.user.name);
         }
         // Redirect user to dashboard page if user has at least one blog, otherwise redirect to Feed page
         if (!redirectPath) {
-          this.router.navigate(BlogService.hasBlogs ? AuthService.REDIRECT_SIGN_IN : ['feed', 'explore']);
+          this.router.navigate(UserService.hasBlogs ? AuthService.REDIRECT_SIGN_IN : ['feed', 'explore']);
         } else if (data.user.sites && data.user.sites.length >= 1) {
           this.router.navigate(redirectPath);
         }
