@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { UserAuth } from '@app/interfaces/user-auth';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UserService } from '@app/services/user/user.service';
@@ -28,7 +27,9 @@ import { BsModalService } from 'ngx-bootstrap';
   templateUrl: './dash.component.html',
   styleUrls: ['./dash.component.scss'],
 })
-export class DashComponent implements OnInit, OnDestroy {
+export class DashComponent implements OnInit {
+
+  readonly blogService = BlogService;
 
   /**
    * Angle double left icon
@@ -39,13 +40,6 @@ export class DashComponent implements OnInit, OnDestroy {
    * Authenticated user data
    */
   user: UserAuth;
-
-  blogs: BlogMin[] = [];
-
-  /**
-   * Current blog
-   */
-  currentBlob: BlogMin;
 
   /**
    * Determines whether sidebar is closed or not
@@ -106,6 +100,19 @@ export class DashComponent implements OnInit, OnDestroy {
               private modalService: BsModalService,
               private translateService: TranslateService,
               private authService: AuthService) {
+    /**
+     * Get blog index from param (and watch for changes)
+     */
+    this.route.params.subscribe((params: Params): void => {
+      const index: number = +params.blog;
+
+      /**
+       * If blog doesn't exist by given index in params, then redirect to first blog.
+       */
+      if (!BlogService.blogs[index]) {
+        this.router.navigate(['dash', 0]);
+      }
+    });
     if (JSON.parse(localStorage.getItem('sidebar')) === null) {
       this.toggleSidebar();
     } else {
@@ -119,27 +126,6 @@ export class DashComponent implements OnInit, OnDestroy {
      */
     UserService.userObservable.subscribe((user: UserAuth): void => {
       this.user = user;
-      this.blogs = JSON.parse(JSON.stringify(user.sites)).reverse();
-    });
-    /**
-     * Get current blog (and watch for changes)
-     */
-    BlogService.blog.subscribe((blog: BlogMin): void => {
-      this.currentBlob = blog;
-    });
-    /**
-     * Get blog index from param (and watch for changes)
-     */
-    this.route.params.subscribe((params: Params): void => {
-      const blogs: BlogMin[] = UserService.user.sites.reverse();
-      const index: number = Number(params.blog);
-      if (index >= 0 && blogs[index]) {
-        BlogService.currentBlog = blogs[index];
-      } else if (blogs && blogs.length) {
-        this.router.navigate(['dash', 0]);
-      } else {
-        BlogService.currentBlog = null;
-      }
     });
   }
 
@@ -165,8 +151,5 @@ export class DashComponent implements OnInit, OnDestroy {
     if (confirm(this.translateService.instant('SIGN_OUT_PROMPT'))) {
       this.authService.signOut();
     }
-  }
-
-  ngOnDestroy(): void {
   }
 }

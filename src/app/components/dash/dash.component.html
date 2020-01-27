@@ -13,14 +13,14 @@
         <li class="nav-item dropdown" dropdown>
           <!-- Current blog -->
           <div class="nav-link dropdown-toggle" dropdownToggle>
-            <span *ngIf="currentBlob">{{ currentBlob.title }}</span>
+            <span *ngIf="blogService.currentBlog">{{ blogService.currentBlog.title }}</span>
           </div>
           <!-- Dropdown menu -->
           <ul class="dropdown-menu" *dropdownMenu>
             <!-- Blogs -->
-            <li *ngFor="let blog of blogs; let index = index">
+            <li *ngFor="let blog of blogService.blogs; let index = index">
               <a class="dropdown-item" [routerLink]="['/dash', index]"
-                 [class.active]="currentBlob && currentBlob.id === blog.id">
+                 [class.active]="blogService.currentBlog && blogService.currentBlog.id === blog.id">
                 {{ blog.title }}
               </a>
             </li>
