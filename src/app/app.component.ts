@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { UserAuth } from '@app/interfaces/user-auth';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UserService } from '@app/services/user/user.service';
@@ -35,11 +34,6 @@ export class AppComponent implements OnInit {
   user: UserAuth;
 
   /**
-   * Current blog
-   */
-  currentBlob: BlogMin;
-
-  /**
    * Is user in any dash page
    */
   inDash: boolean;
@@ -62,12 +56,6 @@ export class AppComponent implements OnInit {
      */
     UserService.userObservable.subscribe((user: UserAuth): void => {
       this.user = user;
-    });
-    /**
-     * Get current blog (and watch for changes)
-     */
-    BlogService.blog.subscribe((blog: BlogMin): void => {
-      this.currentBlob = blog;
     });
     /**
      * Watch for page changes then update window title with translation
@@ -101,8 +89,7 @@ export class AppComponent implements OnInit {
      */
     this.router.events.pipe(
       filter((event: RouterEvent): boolean => event instanceof NavigationEnd && event.url === '/'),
-    ).subscribe((event): void => {
-      console.log(event);
+    ).subscribe((): void => {
       if (this.authService.isAuth) {
         /**
          * Redirect to 'dash' route if user has blogs, otherwise redirect to 'feed' route
