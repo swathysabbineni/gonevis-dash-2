@@ -207,7 +207,7 @@ export class BlogService {
       blog.title = data.title;
       if (data.media.logo) {
         blog.media.logo = {
-          thumbnail_48x48: data.media.logo ? data.media.logo.thumbnail_48x48 : null,
+          thumbnail_48x48: data.media.logo.thumbnail_48x48,
         };
       } else {
         blog.media.logo = null;

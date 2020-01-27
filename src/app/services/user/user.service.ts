@@ -52,7 +52,10 @@ export class UserService {
    * @returns Latest authenticated user's data information from local storage
    */
   static get user(): UserAuth {
-    return localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+    if (localStorage.getItem('user')) {
+      return JSON.parse(localStorage.getItem('user'))
+    }
+    return null;
   }
 
   /**
