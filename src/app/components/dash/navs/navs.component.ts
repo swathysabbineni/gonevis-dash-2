@@ -1,18 +1,16 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavsService } from '@app/components/dash/navs/navs.service';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiError } from '@app/interfaces/api-error';
 import { Navigation } from '@app/interfaces/v1/navigation';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons/faGripLinesVertical';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -20,7 +18,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './navs.component.html',
   styleUrls: ['./navs.component.scss'],
 })
-export class NavsComponent implements OnInit, OnDestroy {
+export class NavsComponent implements OnInit {
 
   readonly plus: IconDefinition = faPlus;
   readonly gripLinesVertical: IconDefinition = faGripLinesVertical;
@@ -53,26 +51,22 @@ export class NavsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
-      if (blog) {
-        this.isEditor = BlogService.currentBlog.role === TeamRoles.Editor;
-        if (this.isEditor) {
-          return;
-        }
-        /**
-         * Get navigation
-         */
-        this.navsService.getNavs().subscribe((data: { navigation: Navigation[] }): void => {
-          this.navs = data.navigation;
-          /**
-           * Watch router params
-           */
-          if (history.state.add) {
-            this.navs.push({
-              label: history.state.add.label,
-              url: history.state.add.url,
-            });
-          }
+    this.isEditor = BlogService.currentBlog.role === TeamRoles.Editor;
+    if (this.isEditor) {
+      return;
+    }
+    /**
+     * Get navigation
+     */
+    this.navsService.getNavs().subscribe((data: { navigation: Navigation[] }): void => {
+      this.navs = data.navigation;
+      /**
+       * Watch router params
+       */
+      if (history.state.add) {
+        this.navs.push({
+          label: history.state.add.label,
+          url: history.state.add.url,
         });
       }
     });
@@ -115,8 +109,5 @@ export class NavsComponent implements OnInit, OnDestroy {
    */
   drop(event: CdkDragDrop<Navigation[]>): void {
     moveItemInArray(this.navs, event.previousIndex, event.currentIndex);
-  }
-
-  ngOnDestroy(): void {
   }
 }

@@ -20,6 +20,7 @@ import '@app/components/dash/write/blots/soundcloud.ts';
 import '@app/components/dash/write/blots/video.ts';
 import '@app/components/dash/write/modules/clipboard.ts';
 import '@app/components/dash/write/modules/image-drag-drop.ts';
+import '@app/components/dash/write/themes/bootstrap.ts';
 import { WriteService } from '@app/components/dash/write/write.service';
 import { EntryStatus } from '@app/enums/entry-status.enum';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -30,9 +31,9 @@ import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
 import { TagMin } from '@app/interfaces/v1/tag-min';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { environment } from '@environments/environment';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faNewspaper } from '@fortawesome/free-regular-svg-icons/faNewspaper';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
@@ -45,7 +46,6 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUndo } from '@fortawesome/free-solid-svg-icons/faUndo';
 import { TranslateService } from '@ngx-translate/core';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
@@ -55,8 +55,6 @@ import { Quill, RangeStatic } from 'quill';
 import Delta from 'quill-delta';
 import Op from 'quill/node_modules/quill-delta/dist/Op';
 import { debounceTime } from 'rxjs/operators';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import '@app/components/dash/write/themes/bootstrap.ts';
 
 @Component({
   selector: 'app-write',
@@ -301,52 +299,47 @@ export class WriteComponent implements OnInit, OnDestroy {
       cover_image: [null],
       meta_description: [''],
     });
-    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((blog: BlogMin): void => {
-      if (!blog) {
-        return;
-      }
-      /**
-       * Set up tag query form
-       */
-      this.tagQueryControl.valueChanges.pipe(debounceTime(300)).subscribe((value: string): void => {
-        this.getTags(value);
-      });
-      this.getTags();
-      /**
-       * Make a copy of entry
-       */
-      this.oldEntry = cloneDeep(this.form.value);
-      this.oldForm = cloneDeep(this.form.value);
-      /**
-       * Subscribe to current state's params changes
-       */
-      this.activatedRoute.params.subscribe((params: Params): void => {
-        if (params.id === 'new') {
-          this.form.reset({
-            title: '',
-            content: '',
-            excerpt: '',
-            tags: [],
-            status: EntryStatus.Draft,
-            slug: '',
-            comment_enabled: true,
-            featured: false,
-            is_page: false,
-            start_publication: null,
-            cover_image: null,
-            meta_description: '',
-          });
-          clearInterval(this.autoSaveInterval);
-          this.isEditing = false;
-          this.initAutoSave();
-        }
-        if (params.id && params.id !== 'new') {
-          clearInterval(this.autoSaveInterval);
-          this.getEntry(params.id.toString());
-        }
-        setTimeout((): void => {
-          this.updateTitle();
+    /**
+     * Set up tag query form
+     */
+    this.tagQueryControl.valueChanges.pipe(debounceTime(300)).subscribe((value: string): void => {
+      this.getTags(value);
+    });
+    this.getTags();
+    /**
+     * Make a copy of entry
+     */
+    this.oldEntry = cloneDeep(this.form.value);
+    this.oldForm = cloneDeep(this.form.value);
+    /**
+     * Subscribe to current state's params changes
+     */
+    this.activatedRoute.params.subscribe((params: Params): void => {
+      if (params.id === 'new') {
+        this.form.reset({
+          title: '',
+          content: '',
+          excerpt: '',
+          tags: [],
+          status: EntryStatus.Draft,
+          slug: '',
+          comment_enabled: true,
+          featured: false,
+          is_page: false,
+          start_publication: null,
+          cover_image: null,
+          meta_description: '',
         });
+        clearInterval(this.autoSaveInterval);
+        this.isEditing = false;
+        this.initAutoSave();
+      }
+      if (params.id && params.id !== 'new') {
+        clearInterval(this.autoSaveInterval);
+        this.getEntry(params.id.toString());
+      }
+      setTimeout((): void => {
+        this.updateTitle();
       });
     });
   }

@@ -5,6 +5,7 @@ import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { BlogCreate } from '@app/interfaces/blog-create';
 import { Params } from '@app/interfaces/params';
+import { UserAuth } from '@app/interfaces/user-auth';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Metrics } from '@app/interfaces/v1/metrics';
 import { Subscriber } from '@app/interfaces/v1/subscriber';
@@ -14,9 +15,10 @@ import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { TemplateConfigFields } from '@app/interfaces/v1/template-config-fields';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { ApiService } from '@app/services/api/api.service';
+import { UserService } from '@app/services/user/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -69,26 +71,6 @@ export class BlogService {
     { id: HighlightTheme.ZENBURN, label: 'Zenburn' },
   ];
 
-  /**
-   * Blog list (subject)
-   */
-  private static blogsSubject: BehaviorSubject<BlogMin[]> = new BehaviorSubject<BlogMin[]>(null);
-
-  /**
-   * Blog list (observable)
-   */
-  static blogs: Observable<BlogMin[]> = BlogService.blogsSubject.asObservable();
-
-  /**
-   * Current blog (subject)
-   */
-  private static blogSubject: BehaviorSubject<BlogMin> = new BehaviorSubject<BlogMin>(null);
-
-  /**
-   * Current blog (observable)
-   */
-  static blog: Observable<BlogMin> = BlogService.blogSubject.asObservable();
-
   constructor(private http: HttpClient,
               private api: ApiService,
               private translate: TranslateService,
@@ -96,81 +78,39 @@ export class BlogService {
   }
 
   /**
-   * Set the blog list
-   *
-   * @param blogs Blogs to set the list to
+   * @return Latest blog list data information from local storage
    */
-  static set(blogs: BlogMin[]): void {
-    BlogService.blogsSubject.next(blogs);
+  static get blogs(): BlogMin[] {
+    return JSON.parse(localStorage.getItem('user')).sites.reverse();
+  }
+
+  static set blogs(value: BlogMin[]) {
+    const data: UserAuth = JSON.parse(localStorage.getItem('user'));
+    data.sites = value;
+    localStorage.setItem('user', JSON.stringify(data));
   }
 
   /**
-   * Add a blog to the blog list
-   *
-   * @param blog Blog to add
-   *
-   * @returns Index of the new blog
-   */
-  static add(blog: BlogMin): number {
-    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
-    blogs.push(blog);
-    BlogService.blogsSubject.next(blogs);
-    return blogs.length - 1;
-  }
-
-  /**
-   * Update a blog from the blog list
-   *
-   * @param id Blog ID to update
-   * @param blog Blog data to update
-   */
-  static update(id: string, blog: BlogMin): void {
-    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
-    blogs[blogs.findIndex(item => item.id === id)] = blog;
-    BlogService.blogsSubject.next(blogs);
-  }
-
-  /**
-   * Set current blog
-   *
-   * @param id Blog ID to set as current
-   */
-  static setCurrent(id: string): void {
-    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
-    if (id) {
-      BlogService.blogSubject.next(blogs.find(blog => blog.id === id));
-    } else {
-      BlogService.blogSubject.next(null);
-    }
-  }
-
-  /**
-   * @return Current blog
+   * @return Latest current blog's data information from local storage
    */
   static get currentBlog(): BlogMin {
-    return BlogService.blogSubject.getValue();
+    return BlogService.blogs[BlogService.currentBlogIndex];
   }
 
   /**
    * @return Current blog index
    */
   static get currentBlogIndex(): number {
-    return BlogService.getBlogIndex(BlogService.currentBlog.id);
-  }
-
-  /**
-   * @returns Whether user has blogs or not
-   */
-  static get hasBlogs(): boolean {
-    const blogs: BlogMin[] = BlogService.blogsSubject.getValue();
-    return Boolean(blogs && blogs.length);
+    if (location.pathname.indexOf('/dash/') === 0) {
+      return Number(location.pathname.split('/')[2]);
+    }
   }
 
   /**
    * @return Blog index
    */
   static getBlogIndex(id: string): number {
-    return this.blogsSubject.getValue().findIndex((blog: BlogMin): boolean => blog.id === id);
+    return BlogService.blogs.findIndex((blog: BlogMin): boolean => blog.id === id);
   }
 
   /**
@@ -262,6 +202,17 @@ export class BlogService {
     return this.http.put<BlogSettings>(
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/update-settings/`, payload,
     ).pipe(map((data => {
+      const blogs: BlogMin[] = BlogService.blogs;
+      const blog: BlogMin = blogs.find(item => item.id === BlogService.currentBlog.id);
+      blog.title = data.title;
+      if (data.media.logo) {
+        blog.media.logo = {
+          thumbnail_48x48: data.media.logo.thumbnail_48x48,
+        };
+      } else {
+        blog.media.logo = null;
+      }
+      BlogService.blogs = blogs.reverse();
       this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('SETTINGS'));
       return data;
     })));

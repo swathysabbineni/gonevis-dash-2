@@ -6,8 +6,8 @@ import { UserAuth } from '@app/interfaces/user-auth';
 import { ApiResponseFollow } from '@app/interfaces/v1/api-response-follow';
 import { Blog } from '@app/interfaces/zero/blog';
 import { ApiService } from '@app/services/api/api.service';
-import { AuthService } from '@app/services/auth/auth.service';
 import { EntryService } from '@app/services/entry/entry.service';
+import { UserService } from '@app/services/user/user.service';
 import { UtilService } from '@app/services/util/util.service';
 
 @Component({
@@ -48,7 +48,7 @@ export class BlogListComponent implements OnInit {
     /**
      * Get current user data
      */
-    AuthService.user.subscribe((user: UserAuth): void => {
+    UserService.userObservable.subscribe((user: UserAuth): void => {
       this.user = user;
     });
   }
