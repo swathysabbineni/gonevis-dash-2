@@ -26,7 +26,11 @@
             </li>
             <li class="dropdown-divider"></li>
             <!-- New blog -->
-            <li><a class="dropdown-item" routerLink="/user/start" routerLinkActive="active" translate>START_NEW_BLOG</a></li>
+            <li>
+              <a class="dropdown-item" routerLink="/user/start" routerLinkActive="active" translate>
+                START_NEW_BLOG
+              </a>
+            </li>
           </ul>
         </li>
       </ul>
@@ -63,7 +67,7 @@
             <li class="dropdown-divider"></li>
             <!-- Sign out -->
             <li>
-              <button class="dropdown-item" (click)="signOut()" translate>SIGN_OUT</button>
+              <button class="dropdown-item" (click)="authService.signOut()" translate>SIGN_OUT</button>
             </li>
           </ul>
         </li>
