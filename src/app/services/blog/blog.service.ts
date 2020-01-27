@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { BlogCreate } from '@app/interfaces/blog-create';
 import { Params } from '@app/interfaces/params';
+import { UserAuth } from '@app/interfaces/user-auth';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Metrics } from '@app/interfaces/v1/metrics';
 import { Subscriber } from '@app/interfaces/v1/subscriber';
@@ -18,7 +18,7 @@ import { ApiService } from '@app/services/api/api.service';
 import { UserService } from '@app/services/user/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -71,26 +71,6 @@ export class BlogService {
     { id: HighlightTheme.ZENBURN, label: 'Zenburn' },
   ];
 
-  /**
-   * @description
-   *
-   * Blog subject which emits current blog's data information value whenever it is subscribed to.
-   *
-   * @see BehaviorSubject
-   */
-  private static blogSubject: BehaviorSubject<BlogMin> = new BehaviorSubject<BlogMin>(null);
-
-  /**
-   * @description
-   *
-   * Creates a new Observable with {@link blogSubject} subject as the source.
-   * When subscribe to, it will emit current blog's latest data information.
-   *
-   * @see Observable
-   * @see Subject.asObservable
-   */
-  static blog: Observable<BlogMin> = BlogService.blogSubject.asObservable();
-
   constructor(private http: HttpClient,
               private api: ApiService,
               private translate: TranslateService,
@@ -98,23 +78,23 @@ export class BlogService {
   }
 
   /**
-   * @return Latest current blog's data information from local storage
+   * @return Latest blog list data information from local storage
    */
-  static get currentBlog(): BlogMin {
-    return localStorage.getItem('blog') ? JSON.parse(localStorage.getItem('blog')) : null;
+  static get blogs(): BlogMin[] {
+    return JSON.parse(localStorage.getItem('user')).sites.reverse();
+  }
+
+  static set blogs(value: BlogMin[]) {
+    const data: UserAuth = JSON.parse(localStorage.getItem('user'));
+    data.sites = value;
+    localStorage.setItem('user', JSON.stringify(data));
   }
 
   /**
-   * @description
-   *
-   * Set and update current blog's data by updating {@link blogSubject}'s value and local storage's
-   * 'blog' item
-   *
-   * @param data User data information
+   * @return Latest current blog's data information from local storage
    */
-  static set currentBlog(data: BlogMin) {
-    BlogService.blogSubject.next(data);
-    localStorage.setItem('blog', JSON.stringify(data));
+  static get currentBlog(): BlogMin {
+    return BlogService.blogs[BlogService.currentBlogIndex];
   }
 
   /**
@@ -130,7 +110,7 @@ export class BlogService {
    * @return Blog index
    */
   static getBlogIndex(id: string): number {
-    return UserService.user.sites.reverse().findIndex((blog: BlogMin): boolean => blog.id === id);
+    return BlogService.blogs.findIndex((blog: BlogMin): boolean => blog.id === id);
   }
 
   /**
@@ -222,6 +202,17 @@ export class BlogService {
     return this.http.put<BlogSettings>(
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/update-settings/`, payload,
     ).pipe(map((data => {
+      const blogs: BlogMin[] = BlogService.blogs;
+      const blog: BlogMin = blogs.find(item => item.id === BlogService.currentBlog.id);
+      blog.title = data.title;
+      if (data.media.logo) {
+        blog.media.logo = {
+          thumbnail_48x48: data.media.logo ? data.media.logo.thumbnail_48x48 : null,
+        };
+      } else {
+        blog.media.logo = null;
+      }
+      BlogService.blogs = blogs.reverse();
       this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('SETTINGS'));
       return data;
     })));
