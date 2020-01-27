@@ -185,19 +185,16 @@ export class StartComponent implements OnInit {
        */
       UserService.user = user;
       /**
-       * Add created blog to the blog list
-       */
-      BlogService.currentBlog = blog;
-      /**
-       * If user skipped or selected template was 'zero' then ignore setting blog template
-       */
-      if (this.templateSelected && this.templateSelected.name !== 'zero' && !this.skip) {
-        this.setTemplate();
-      }
-      /**
        * Redirect to blog settings
        */
-      this.router.navigate(['dash', BlogService.currentBlogIndex, 'settings']);
+      this.router.navigate(['dash', BlogService.blogs.length - 1, 'main']).then((): void => {
+        /**
+         * If user skipped or selected template was 'zero' then ignore setting blog template
+         */
+        if (this.templateSelected && this.templateSelected.name !== 'zero' && !this.skip) {
+          this.setTemplate();
+        }
+      });
     }, (): void => {
       this.loading = false;
     });
