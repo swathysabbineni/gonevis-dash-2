@@ -5,6 +5,7 @@
   "SIGN_OUT": "Sign Out",
   "USERNAME": "Username",
   "PASSWORD": "Password",
+  "USERNAME_OR_EMAIL": "Username or Email",
   "CONFIRM_PASSWORD": "Confirm password",
   "CURRENT_PASSWORD": "Current password",
   "NEW_PASSWORD": "New password",

@@ -10,7 +10,7 @@
           <h4 class="text-center text-uppercase mb-5" translate>SIGN_IN</h4>
           <!-- Form -->
           <form [formGroup]="form" (ngSubmit)="submit()">
-            <!-- Username -->
+            <!-- Username or email -->
             <div class="form-group">
               <div class="input-group">
                 <div class="input-group-prepend">
@@ -19,7 +19,7 @@
                   </span>
                 </div>
                 <input type="text" class="form-control" formControlName="username"
-                       [placeholder]="'USERNAME' | translate">
+                       [placeholder]="'USERNAME_OR_EMAIL' | translate">
               </div>
               <span class="text-danger" *ngIf="error.username">{{ error.username[0] }}</span>
             </div>
