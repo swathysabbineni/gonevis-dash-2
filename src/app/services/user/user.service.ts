@@ -44,8 +44,8 @@ export class UserService {
    * @param data User data information
    */
   static set user(data: UserAuth) {
-    UserService.userSubject.next(data);
     localStorage.setItem('user', JSON.stringify(data));
+    UserService.userSubject.next(data);
   }
 
   /**
