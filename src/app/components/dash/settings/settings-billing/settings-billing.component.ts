@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SettingsBillingService } from '@app/components/dash/settings/settings-billing/settings-billing.service';
 import { SettingsUpgradeService } from '@app/components/dash/settings/settings-upgrade/settings-upgrade.service';
@@ -6,20 +6,18 @@ import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Subscription } from '@app/interfaces/subscription';
 import { Transaction } from '@app/interfaces/transaction';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 @Component({
   selector: 'app-settings-billing',
   templateUrl: './settings-billing.component.html',
   styleUrls: ['./settings-billing.component.scss'],
 })
-export class SettingsBillingComponent implements OnInit, OnDestroy {
+export class SettingsBillingComponent implements OnInit {
 
   subscription: Subscription;
 
@@ -36,7 +34,7 @@ export class SettingsBillingComponent implements OnInit, OnDestroy {
   /**
    * Blog owner indicator
    */
-  isOwner: boolean;
+  isOwner: boolean = BlogService.currentBlog.role === TeamRoles.Owner;
 
   /**
    * API loading indicator
@@ -56,28 +54,20 @@ export class SettingsBillingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((data: BlogMin): void => {
-      this.loading = true;
-      if (data) {
-        /**
-         * Is owner of this blog
-         */
-        this.isOwner = data.role === TeamRoles.Owner;
-        /**
-         * Get current subscription
-         */
-        this.settingsUpgradeService.getSubscription().subscribe(
-          (subscription: { subscription: Subscription }): void => {
-            this.subscription = subscription.subscription;
-            this.loading = false;
-          });
-        /**
-         * Get transactions list
-         */
-        this.settingsBillingService.getTransactions().subscribe((transactions: ApiResponse<Transaction>): void => {
-          this.transactions = transactions.results;
-        });
-      }
+    this.loading = true;
+    /**
+     * Get current subscription
+     */
+    this.settingsUpgradeService.getSubscription().subscribe(
+      (subscription: { subscription: Subscription }): void => {
+        this.subscription = subscription.subscription;
+        this.loading = false;
+      });
+    /**
+     * Get transactions list
+     */
+    this.settingsBillingService.getTransactions().subscribe((transactions: ApiResponse<Transaction>): void => {
+      this.transactions = transactions.results;
     });
   }
 
@@ -104,8 +94,5 @@ export class SettingsBillingComponent implements OnInit, OnDestroy {
    */
   showModal(template: TemplateRef<any>): void {
     this.modal = this.bsModalService.show(template);
-  }
-
-  ngOnDestroy(): void {
   }
 }

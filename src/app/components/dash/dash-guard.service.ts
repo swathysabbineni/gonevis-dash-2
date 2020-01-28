@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Route, UrlSegment, CanLoad, Router } from '@angular/router';
-import { BlogService } from '@app/services/blog/blog.service';
+import { UserService } from '@app/services/user/user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +19,7 @@ export class DashGuardService implements CanLoad {
     /**
      * If user has blogs, then allow user to access current route
      */
-    if (BlogService.hasBlogs) {
+    if (UserService.hasBlogs) {
       return true;
     }
     /**

@@ -1,18 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Subscription } from '@app/interfaces/subscription';
 import { UpgradePlan } from '@app/interfaces/upgrade-plan';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { Plan } from '@app/interfaces/v1/plan';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UserService } from '@app/services/user/user.service';
 import { environment } from '@environments/environment';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons/faDollarSign';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { BsModalService } from 'ngx-bootstrap';
 
 import { PaymentValidationComponent } from './payment-validation/payment-validation.component';
@@ -25,7 +24,7 @@ declare var cp: any;
   templateUrl: './settings-upgrade.component.html',
   styleUrls: ['./settings-upgrade.component.scss'],
 })
-export class SettingsUpgradeComponent implements OnInit, OnDestroy {
+export class SettingsUpgradeComponent implements OnInit {
 
   readonly dollarSign: IconDefinition = faDollarSign;
   readonly check: IconDefinition = faCheck;
@@ -108,35 +107,31 @@ export class SettingsUpgradeComponent implements OnInit, OnDestroy {
     /**
      * Get current user
      */
-    AuthService.user.subscribe((data: UserAuth): UserAuth => this.user = data);
-    BlogService.blog.pipe(untilComponentDestroyed(this)).subscribe((data: BlogMin): void => {
-      if (data) {
-        /**
-         * Check to see if user's role is owner which owner can only upgrade plans
-         */
-        this.isOwner = data.role === TeamRoles.Owner;
-        /**
-         * Get current subscription plan
-         */
-        this.settingsUpgradeService.getSubscription().subscribe((response: {
-          subscription: Subscription
-        }): void => {
-          this.subscription = response.subscription;
-          if (response.subscription && response.subscription.active) {
-            this.currentPlan = response.subscription.plan;
-          }
-        });
-        /**
-         * Get plan list and set the plans "plan" property
-         */
-        this.settingsUpgradeService.getPlans().subscribe((response: ApiResponse<Plan>): void => {
-          for (const upgradePlan of this.plans) {
-            const plan: Plan = response.results.find(item => item.name === upgradePlan.name);
-            if (plan) {
-              upgradePlan.plan = plan;
-            }
-          }
-        });
+    UserService.userObservable.subscribe((data: UserAuth): UserAuth => this.user = data);
+    /**
+     * Check to see if user's role is owner which owner can only upgrade plans
+     */
+    this.isOwner = BlogService.currentBlog.role === TeamRoles.Owner;
+    /**
+     * Get current subscription plan
+     */
+    this.settingsUpgradeService.getSubscription().subscribe((response: {
+      subscription: Subscription
+    }): void => {
+      this.subscription = response.subscription;
+      if (response.subscription && response.subscription.active) {
+        this.currentPlan = response.subscription.plan;
+      }
+    });
+    /**
+     * Get plan list and set the plans "plan" property
+     */
+    this.settingsUpgradeService.getPlans().subscribe((response: ApiResponse<Plan>): void => {
+      for (const upgradePlan of this.plans) {
+        const plan: Plan = response.results.find(item => item.name === upgradePlan.name);
+        if (plan) {
+          upgradePlan.plan = plan;
+        }
       }
     });
   }
@@ -193,8 +188,5 @@ export class SettingsUpgradeComponent implements OnInit, OnDestroy {
     }, (): void => {
       this.bsModalService.show(PaymentValidationComponent);
     });
-  }
-
-  ngOnDestroy(): void {
   }
 }

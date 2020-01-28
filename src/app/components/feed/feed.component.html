@@ -1,16 +1,32 @@
-<div class="container">
-  <div class="row">
+<!-- Main wrapper -->
+<div class="d-flex flex-column h-100">
+  <!-- Pages -->
+  <div class="overflow-auto flex-grow-1 main-scroller">
+    <div class="container">
+      <div class="row">
 
-    <!-- Left -->
-    <div class="col-lg-3">
+        <!-- Left -->
+        <div class="col-lg-3">
 
-      <!-- Main navs -->
-      <app-nav-pills [navPills]="mainNavs"></app-nav-pills>
-    </div>
+          <!-- Main navs -->
+          <app-nav-pills [navPills]="mainNavs"></app-nav-pills>
 
-    <!-- Middle -->
-    <div class="col-lg-6">
-      <router-outlet></router-outlet>
+          <!-- Following blogs title -->
+          <div class="font-weight-bold small text-secondary pl-3 mt-5" *ngIf="blogs" translate>FOLLOWING_BLOGS</div>
+
+          <!-- Following blogs -->
+          <div class="nav flex-column nav-pills my-3 small" *ngIf="blogs">
+            <a class="nav-link" *ngFor="let blog of blogs" [routerLink]="['blog', blog.id]" routerLinkActive="active">
+              <span class="pl-2">{{ blog.title }}</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Middle -->
+        <div class="col-lg-6">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
     </div>
   </div>
 </div>

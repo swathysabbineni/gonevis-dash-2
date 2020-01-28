@@ -10,6 +10,7 @@ import { Template } from '@app/interfaces/v1/template';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UserService } from '@app/services/user/user.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
@@ -168,7 +169,7 @@ export class StartComponent implements OnInit {
       this.domainCheckForm.get('domain').value,
     ).subscribe((data: BlogCreate): void => {
       this.loading = false;
-      const user: UserAuth = JSON.parse(localStorage.getItem('user'));
+      const user: UserAuth = UserService.user;
       const blog: BlogMin = {
         role: TeamRoles.Owner,
         title: data.title,
@@ -182,22 +183,18 @@ export class StartComponent implements OnInit {
       /**
        * Update authenticated user data
        */
-      AuthService.setAuthenticatedUser(user);
-      /**
-       * Add created blog to the blog list
-       */
-      const index: number = BlogService.add(blog);
-      BlogService.setCurrent(blog.id);
-      /**
-       * If user skipped or selected template was 'zero' then ignore setting blog template
-       */
-      if (this.templateSelected && this.templateSelected.name !== 'zero' && !this.skip) {
-        this.setTemplate();
-      }
+      UserService.user = user;
       /**
        * Redirect to blog settings
        */
-      this.router.navigate(['dash', index, 'settings']);
+      this.router.navigate(['dash', BlogService.blogs.length - 1, 'main']).then((): void => {
+        /**
+         * If user skipped or selected template was 'zero' then ignore setting blog template
+         */
+        if (this.templateSelected && this.templateSelected.name !== 'zero' && !this.skip) {
+          this.setTemplate();
+        }
+      });
     }, (): void => {
       this.loading = false;
     });

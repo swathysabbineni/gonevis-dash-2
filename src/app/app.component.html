@@ -1,46 +1,17 @@
 <!-- Loading bar -->
 <ngx-loading-bar [includeSpinner]="false" color="white"></ngx-loading-bar>
-
-<!-- Main wrapper -->
 <div class="d-flex flex-column h-100">
   <!-- Navbar -->
-  <nav class="navbar navbar-expand navbar-dark sticky-top" [class.bg-primary]="!inDash" [class.bg-dark]="inDash">
-    <div [class.container]="!inDash" [class.container-fluid]="inDash">
+  <nav class="navbar navbar-expand navbar-dark sticky-top bg-primary" *ngIf="!inDash">
+    <div class="container">
       <!-- Brand -->
       <a class="navbar-brand" routerLink="/" translate>
         <img src="../assets/img/logo.png" alt="GoNevis">
       </a>
-      <!-- Navs -->
-      <ul class="navbar-nav" *ngIf="inDash && blogs">
-        <!-- Blog dropdown -->
-        <li class="nav-item dropdown" dropdown>
-          <!-- Current blog -->
-          <div class="nav-link dropdown-toggle" dropdownToggle>
-            <span *ngIf="blogCurrent">{{ blogCurrent.title }}</span>
-          </div>
-          <!-- Dropdown menu -->
-          <ul class="dropdown-menu" *dropdownMenu>
-            <!-- Blogs -->
-            <li *ngFor="let blog of blogs; let index = index">
-              <a class="dropdown-item" [routerLink]="['dash', index]"
-                 [class.active]="blogCurrent && blogCurrent.id === blog.id">
-                {{ blog.title }}
-              </a>
-            </li>
-            <li class="dropdown-divider"></li>
-            <!-- New blog -->
-            <li><a class="dropdown-item" routerLink="start" routerLinkActive="active" translate>START_NEW_BLOG</a></li>
-          </ul>
-        </li>
-      </ul>
-      <!-- Navs when authenticated -->
-      <ul class="navbar-nav ml-auto" *ngIf="auth.isAuth && user">
-        <!-- Feed -->
-        <li class="nav-item" *ngIf="inDash">
-          <a class="nav-link" routerLinkActive="active" routerLink="feed" translate>FEED</a>
-        </li>
+      <!-- Right Navs -->
+      <ul class="navbar-nav ml-auto" *ngIf="isAuth && user">
         <!-- Dashboard -->
-        <li class="nav-item" *ngIf="!inDash">
+        <li class="nav-item">
           <a class="nav-link" routerLinkActive="active" [routerLink]="navigateToDash" translate>DASHBOARD</a>
         </li>
         <!-- Feedback -->
@@ -70,20 +41,13 @@
             <li class="dropdown-divider"></li>
             <!-- Sign out -->
             <li>
-              <button class="dropdown-item" (click)="auth.signOut()" translate>SIGN_OUT</button>
+              <button class="dropdown-item" (click)="signOut()" translate>SIGN_OUT</button>
             </li>
           </ul>
         </li>
       </ul>
-      <!-- Navs when not authenticated (left) -->
-      <ul class="navbar-nav" *ngIf="!auth.isAuth">
-        <!-- Start -->
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="/start" translate>GET_STARTED</a>
-        </li>
-      </ul>
       <!-- Navs when not authenticated (right) -->
-      <ul class="navbar-nav ml-auto" *ngIf="!auth.isAuth">
+      <ul class="navbar-nav ml-auto" *ngIf="!isAuth">
         <!-- Sign in -->
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="/user/sign-in" translate>SIGN_IN</a>
@@ -95,9 +59,9 @@
       </ul>
     </div>
   </nav>
-
-  <!-- Pages -->
   <div class="overflow-auto flex-grow-1 main-scroller">
     <router-outlet></router-outlet>
   </div>
 </div>
+<!-- Loading bar -->
+<ngx-loading-bar [includeSpinner]="false" color="white"></ngx-loading-bar>

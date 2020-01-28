@@ -5,8 +5,8 @@ import { Comment } from '@app/interfaces/comment';
 import { CommentFormEvent } from '@app/interfaces/comment-form-event';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
-import { AuthService } from '@app/services/auth/auth.service';
 import { CommentService } from '@app/services/comment/comment.service';
+import { UserService } from '@app/services/user/user.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
@@ -65,7 +65,7 @@ export class CommentFormComponent implements AfterViewInit {
     /**
      * Get authenticated user data
      */
-    AuthService.user.subscribe((data: UserAuth): void => {
+    UserService.userObservable.subscribe((data: UserAuth): void => {
       this.user = data;
     });
 
