@@ -5,6 +5,7 @@ import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 
 @Component({
   selector: 'app-sign-in',
@@ -15,6 +16,7 @@ export class SignInComponent implements OnInit {
 
   readonly user: IconDefinition = faUser;
   readonly lock: IconDefinition = faLock;
+  readonly faShowPassword: IconDefinition = faEyeSlash;
 
   // Sign in form
   form: FormGroup;
@@ -24,6 +26,9 @@ export class SignInComponent implements OnInit {
 
   // API loading indicator
   loading: boolean;
+
+  // Show password input
+  showPassword: boolean;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService) {

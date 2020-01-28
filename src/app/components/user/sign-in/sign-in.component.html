@@ -31,8 +31,15 @@
                     <fa-icon [icon]="lock"></fa-icon>
                   </span>
                 </div>
-                <input type="password" class="form-control" formControlName="password"
+                <input [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="password"
                        [placeholder]="'PASSWORD' | translate">
+                <!-- Show password button -->
+                <div class="input-group-append">
+                  <button class="btn btn-secondary" type="button"
+                          (click)="showPassword = !showPassword" [class.active]="showPassword">
+                    <fa-icon [fixedWidth]="true" [icon]="faShowPassword"></fa-icon>
+                  </button>
+                </div>
               </div>
               <span class="text-danger" *ngIf="error.password">{{ error.password[0] }}</span>
             </div>

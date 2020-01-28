@@ -7,6 +7,7 @@ import { AuthService } from '@app/services/auth/auth.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 
 @Component({
   selector: 'app-sign-up',
@@ -18,6 +19,7 @@ export class SignUpComponent implements OnInit {
   readonly user: IconDefinition = faUser;
   readonly lock: IconDefinition = faLock;
   readonly envelope: IconDefinition = faEnvelope;
+  readonly faShowPassword: IconDefinition = faEyeSlash;
 
   // Sign up form
   form: FormGroup;
@@ -27,6 +29,9 @@ export class SignUpComponent implements OnInit {
 
   // API loading indicator
   loading: boolean;
+
+  // Show password input
+  showPassword: boolean;
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
