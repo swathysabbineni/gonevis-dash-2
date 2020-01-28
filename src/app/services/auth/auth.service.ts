@@ -42,7 +42,7 @@ export class AuthService {
   /**
    * Sign out redirect path
    */
-  private static readonly REDIRECT_SIGN_OUT = ['user', 'sign-up'];
+  private static readonly REDIRECT_SIGN_OUT = ['user', 'sign-in'];
 
   constructor(private http: HttpClient,
               private toast: ToastrService,
