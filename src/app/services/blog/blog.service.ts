@@ -293,6 +293,19 @@ export class BlogService {
   }
 
   /**
+   * Set a domain as primary
+   *
+   * @param domain Domain ID
+   */
+  setDomainPrimary(domain: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-primary-domain/`, { domain_id: domain },
+    ).pipe(map((() => {
+      this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('PRIMARY_DOMAIN'));
+    })));
+  }
+
+  /**
    * Check sub-domain availability
    *
    * @param domain Domain slug

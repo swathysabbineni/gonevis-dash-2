@@ -7,6 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 
 import { SettingsAdvancedComponent } from './settings-advanced/settings-advanced.component';
 import { SettingsAppearanceComponent } from './settings-appearance/settings-appearance.component';
@@ -32,6 +33,7 @@ import { SettingsComponent } from './settings.component';
     CarouselModule,
     FileListModule,
     ModalModule.forRoot(),
+    PopoverModule.forRoot(),
     PermissionAccessModule,
   ],
 })

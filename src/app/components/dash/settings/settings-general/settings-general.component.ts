@@ -5,6 +5,9 @@ import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Domain } from '@app/interfaces/v1/domain';
 import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { dom } from '@fortawesome/fontawesome-svg-core';
+import { faStar as farStar } from '@fortawesome/free-regular-svg-icons/faStar';
+import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -15,7 +18,9 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class SettingsGeneralComponent implements OnInit {
 
-  readonly trash: IconDefinition = faTrash;
+  readonly faDelete: IconDefinition = faTrash;
+  readonly faPrimary: IconDefinition = faStar;
+  readonly faNotPrimary: IconDefinition = farStar;
 
   /**
    * Blog settings data
@@ -128,6 +133,22 @@ export class SettingsGeneralComponent implements OnInit {
     this.blogService.removeDomain(domain.id).subscribe((): void => {
       this.settings.domains.splice(this.settings.domains.indexOf(domain), 1);
       this.domainsLoading = false;
+    });
+  }
+
+  /**
+   * Set blog domain as primary domain
+   *
+   * @param domain Blog domain
+   */
+  setPrimaryDomain(domain: Domain) {
+    this.blogService.setDomainPrimary(domain.id).subscribe((): void => {
+      /**
+       * Set only this domain as primary
+       */
+      for (const blogDomain of this.settings.domains) {
+        blogDomain.is_primary = blogDomain.id === domain.id;
+      }
     });
   }
 
