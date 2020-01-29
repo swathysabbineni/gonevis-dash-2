@@ -9,4 +9,5 @@ export const environment: Environment = {
   },
   paymentPublicId: 'pk_b2b6a7bc011e7f2aac971ab51e96a',
   googleAnalytics: '',
+  sentry: 'https://b8e92571fb7741a0a6bcae8d6338fc42@sentry.io/1886804',
 };

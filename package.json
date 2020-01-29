@@ -33,6 +33,7 @@
     "@ngx-loading-bar/http-client": "^4.2.0",
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
+    "@sentry/browser": "^5.11.2",
     "@types/quill": "^2.0.3",
     "@w11k/ngx-componentdestroyed": "^4.1.4",
     "bootstrap": "^4.4.1",
