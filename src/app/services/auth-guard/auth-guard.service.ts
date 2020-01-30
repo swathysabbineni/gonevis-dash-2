@@ -10,7 +10,7 @@ export class AuthGuardService implements CanLoad {
   /**
    * Path to redirect to when user is authenticated and tries to load a guarded route
    */
-  private static readonly UN_AUTH_PATH: string[] = ['/start'];
+  private static readonly UN_AUTH_PATH: string[] = ['/user/start'];
 
   constructor(private router: Router,
               private auth: AuthService) {
