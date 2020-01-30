@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { DashGuardService } from '@app/components/dash/dash-guard.service';
 import { AuthResponse } from '@app/interfaces/auth-response';
 import { AuthToken } from '@app/interfaces/auth-token';
 import { UserAuth } from '@app/interfaces/user-auth';
@@ -43,6 +44,11 @@ export class AuthService {
    * Sign out redirect path
    */
   private static readonly REDIRECT_SIGN_OUT = ['user', 'sign-in'];
+
+  /**
+   * No blogs redirect path
+   */
+  private static readonly NO_BLOGS_PATH = ['/user/start'];
 
   constructor(private http: HttpClient,
               private toast: ToastrService,
@@ -151,8 +157,10 @@ export class AuthService {
         // Redirect user to dashboard page if user has at least one blog, otherwise redirect to Feed page
         if (!redirectPath) {
           this.router.navigate(UserService.hasBlogs ? AuthService.REDIRECT_SIGN_IN : ['feed', 'explore']);
-        } else if (data.user.sites && data.user.sites.length >= 1) {
+        } else if (UserService.hasBlogs) {
           this.router.navigate(redirectPath);
+        } else {
+          this.router.navigate(AuthService.NO_BLOGS_PATH);
         }
         // Return raw user data
         return data.user.username;
