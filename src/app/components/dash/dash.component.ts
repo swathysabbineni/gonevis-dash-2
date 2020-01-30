@@ -99,7 +99,7 @@ export class DashComponent implements OnInit {
               private router: Router,
               private modalService: BsModalService,
               private translateService: TranslateService,
-              private authService: AuthService) {
+              public authService: AuthService) {
     /**
      * Get blog index from param (and watch for changes)
      */
