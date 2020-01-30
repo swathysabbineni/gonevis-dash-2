@@ -8,13 +8,12 @@ const routes: Routes = [{
   children: [{
     path: ':blog',
     loadChildren: () => import('./components/dash/dash.module').then(m => m.DashModule),
-    canLoad: [DashGuardService],
+    canLoad: [AuthGuardService, DashGuardService],
   }, {
     path: '**',
     redirectTo: '0',
     pathMatch: 'full',
   }],
-  canLoad: [AuthGuardService],
 }, {
   path: 'feed',
   loadChildren: () => import('./components/feed/feed.module').then(m => m.FeedModule),
