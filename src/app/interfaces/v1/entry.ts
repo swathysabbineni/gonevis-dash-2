@@ -7,7 +7,6 @@ import { UserMin } from '@app/interfaces/v1/user-min';
 export interface Entry {
   id: string;
   tags: TagMin[];
-  tag_ids?: string[];
   media: {
     cover_image: File;
   };
