@@ -9,6 +9,7 @@ const routes: Routes = [{
     path: ':blog',
     loadChildren: () => import('./components/dash/dash.module').then(m => m.DashModule),
     canLoad: [AuthGuardService, DashGuardService],
+    canActivate: [AuthGuardService]
   }, {
     path: '**',
     redirectTo: '0',
@@ -18,6 +19,7 @@ const routes: Routes = [{
   path: 'feed',
   loadChildren: () => import('./components/feed/feed.module').then(m => m.FeedModule),
   canLoad: [AuthGuardService],
+  canActivate: [AuthGuardService]
 }, {
   path: 'user',
   loadChildren: () => import('./components/user/user.module').then(m => m.UserModule),
@@ -30,6 +32,7 @@ const routes: Routes = [{
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
+  providers: [AuthGuardService],
 })
 export class AppRoutingModule {
 }
