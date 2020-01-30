@@ -29,7 +29,6 @@ import { Params } from '@app/interfaces/params';
 import { SoundCloudEmbed } from '@app/interfaces/sound-cloud-embed';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
-import { TagMin } from '@app/interfaces/v1/tag-min';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { BlogService } from '@app/services/blog/blog.service';
 import { environment } from '@environments/environment';
@@ -646,7 +645,6 @@ export class WriteComponent implements OnInit, OnDestroy {
     payload.content = this.editor.root.innerHTML;
     payload.id = this.id;
     payload.site = BlogService.currentBlog.id;
-    payload.tag_ids = (this.tagsControl.value as TagMin[]).map((tag: TagMin): string => tag.id);
     if (status !== undefined) {
       payload.status = status;
     }
@@ -757,29 +755,32 @@ export class WriteComponent implements OnInit, OnDestroy {
   /**
    * Add tag
    *
-   * @param tag Tag to add
+   * @param tag Tag slugs
    */
-  addTag(tag: Tag): void {
-    const tags: TagMin[] = this.tagsControl.value;
+  addTag(tag: string): void {
+    const tags: string[] = this.tagsControl.value;
     this.tagsControl.setValue([...tags, ...[tag]]);
   }
 
   /**
    * Remove tag from entry
    *
-   * @param id Tag ID
+   * @param slug Tag slug
    */
-  removeTag(id: string): void {
-    this.tagsControl.setValue((this.tagsControl.value as TagMin[]).filter((tag: TagMin): boolean => tag.id !== id));
+  removeTag(slug: string): void {
+    const newValue: string[] = (this.tagsControl.value as string[])
+      .filter((tagSlug: string): boolean => tagSlug !== slug);
+    this.tagsControl.setValue(newValue);
   }
 
   /**
-   * @param tagId Tag ID
+   * @param tagSlug Tag ID
    *
    * @return Determine whether entry has given tag or not
    */
-  isTagSelected(tagId: string): boolean {
-    return (this.tagsControl.value as TagMin[]).some((tag: Tag): boolean => tag.id === tagId);
+  isTagSelected(tagSlug: string): boolean {
+    const tags: string[] = this.tagsControl.value;
+    return tags.includes(tagSlug);
   }
 
   /**

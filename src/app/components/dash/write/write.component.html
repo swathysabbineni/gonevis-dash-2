@@ -171,8 +171,8 @@
             <div class="form-group">
               <div class="custom-control custom-checkbox" *ngFor="let tag of tags">
                 <input type="checkbox" class="custom-control-input"
-                       (click)="isTagSelected(tag.id) ? removeTag(tag.id) : addTag(tag)"
-                       [checked]="isTagSelected(tag.id)" [id]="tag.id">
+                       (click)="isTagSelected(tag.slug) ? removeTag(tag.slug) : addTag(tag.slug)"
+                       [checked]="isTagSelected(tag.slug)" [id]="tag.id">
                 <label class="custom-control-label" [for]="tag.id">{{ tag.slug }}</label>
               </div>
             </div>
