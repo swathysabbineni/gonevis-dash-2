@@ -7,7 +7,7 @@ import { UserService } from '@app/services/user/user.service';
 })
 export class DashGuardService implements CanLoad {
 
-  private static readonly NO_BLOGS_PATH = ['start'];
+  private static readonly NO_BLOGS_PATH = ['/user/start'];
 
   constructor(private router: Router) {
   }
