@@ -73,6 +73,7 @@ export class AuthService {
        * Update authenticated user and blog data
        */
       UserService.user = JSON.parse(localStorage.getItem('user'));
+      BlogService.blogs = JSON.parse(localStorage.getItem('user')).sites;
     }
   }
 
@@ -148,6 +149,7 @@ export class AuthService {
         this.setToken(data.token);
         // Store user into localstorage
         UserService.user = data.user;
+        BlogService.blogs = data.user.sites;
         // Store storage version
         localStorage.setItem(AuthService.STORAGE_VERSION_KEY, AuthService.STORAGE_VERSION.toString());
         // Show toast
