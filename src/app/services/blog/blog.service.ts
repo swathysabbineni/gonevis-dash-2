@@ -15,10 +15,9 @@ import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { TemplateConfigFields } from '@app/interfaces/v1/template-config-fields';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { ApiService } from '@app/services/api/api.service';
-import { UserService } from '@app/services/user/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -71,6 +70,24 @@ export class BlogService {
     { id: HighlightTheme.ZENBURN, label: 'Zenburn' },
   ];
 
+  /**
+   * @description
+   *
+   * Blogs subject which emits list of blogs data information value whenever it is subscribed to.
+   *
+   * @see BehaviorSubject
+   */
+  private static blogsSubject: BehaviorSubject<BlogMin[]> = new BehaviorSubject<BlogMin[]>([]);
+
+  /**
+   * @description
+   *
+   * An observable snapshot data of {@link blogsSubject} value
+   *
+   * @see Observable
+   */
+  static blogsObservable: Observable<BlogMin[]> = BlogService.blogsSubject.asObservable();
+
   constructor(private http: HttpClient,
               private api: ApiService,
               private translate: TranslateService,
@@ -88,13 +105,21 @@ export class BlogService {
     const data: UserAuth = JSON.parse(localStorage.getItem('user'));
     data.sites = value;
     localStorage.setItem('user', JSON.stringify(data));
+    BlogService.blogsSubject.next(value.reverse());
+  }
+
+  /**
+   * @returns Latest list of blogs
+   */
+  static blogsValue(): BlogMin[] {
+    return BlogService.blogsSubject.value;
   }
 
   /**
    * @return Latest current blog's data information from local storage
    */
   static get currentBlog(): BlogMin {
-    return BlogService.blogs[BlogService.currentBlogIndex];
+    return BlogService.blogsValue()[BlogService.currentBlogIndex];
   }
 
   /**
@@ -110,7 +135,7 @@ export class BlogService {
    * @return Blog index
    */
   static getBlogIndex(id: string): number {
-    return BlogService.blogs.findIndex((blog: BlogMin): boolean => blog.id === id);
+    return BlogService.blogsValue().findIndex((blog: BlogMin): boolean => blog.id === id);
   }
 
   /**
@@ -202,7 +227,7 @@ export class BlogService {
     return this.http.put<BlogSettings>(
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/update-settings/`, payload,
     ).pipe(map((data => {
-      const blogs: BlogMin[] = BlogService.blogs;
+      const blogs: BlogMin[] = BlogService.blogsValue();
       const blog: BlogMin = blogs.find(item => item.id === BlogService.currentBlog.id);
       blog.title = data.title;
       if (data.media.logo) {

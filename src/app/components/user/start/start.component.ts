@@ -187,7 +187,7 @@ export class StartComponent implements OnInit {
       /**
        * Redirect to blog settings
        */
-      this.router.navigate(['dash', BlogService.blogs.length - 1, 'main']).then((): void => {
+      this.router.navigate(['dash', BlogService.blogsValue().length - 1, 'main']).then((): void => {
         /**
          * If user skipped or selected template was 'zero' then ignore setting blog template
          */

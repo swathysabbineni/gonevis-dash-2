@@ -18,7 +18,7 @@
           <!-- Dropdown menu -->
           <ul class="dropdown-menu" *dropdownMenu>
             <!-- Blogs -->
-            <li *ngFor="let blog of blogService.blogs; let index = index">
+            <li *ngFor="let blog of blogs; let index = index">
               <a class="dropdown-item" [routerLink]="['/dash', index]"
                  [class.active]="blogService.currentBlog && blogService.currentBlog.id === blog.id">
                 {{ blog.title }}

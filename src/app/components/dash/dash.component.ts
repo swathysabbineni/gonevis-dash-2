@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { UserAuth } from '@app/interfaces/user-auth';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UserService } from '@app/services/user/user.service';
@@ -35,6 +36,11 @@ export class DashComponent implements OnInit {
    * Angle double left icon
    */
   readonly faAngleDoubleLeft: IconDefinition = faAngleDoubleLeft;
+
+  /**
+   * List of blogs
+   */
+  blogs: BlogMin[] = BlogService.blogsValue();
 
   /**
    * Authenticated user data
@@ -109,7 +115,7 @@ export class DashComponent implements OnInit {
       /**
        * If blog doesn't exist by given index in params, then redirect to first blog.
        */
-      if (!BlogService.blogs[index]) {
+      if (!BlogService.blogsValue()[index]) {
         this.router.navigate(['dash', 0]);
       }
     });
@@ -126,6 +132,12 @@ export class DashComponent implements OnInit {
      */
     UserService.userObservable.subscribe((user: UserAuth): void => {
       this.user = user;
+    });
+    /**
+     * Get blog list's data (and watch for changes)
+     */
+    BlogService.blogsObservable.subscribe((blogs: BlogMin[]): void => {
+      this.blogs = blogs;
     });
   }
 
