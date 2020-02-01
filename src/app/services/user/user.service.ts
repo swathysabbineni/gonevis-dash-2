@@ -53,7 +53,7 @@ export class UserService {
    */
   static get user(): UserAuth {
     if (localStorage.getItem('user')) {
-      return JSON.parse(localStorage.getItem('user'))
+      return JSON.parse(localStorage.getItem('user'));
     }
     return null;
   }
