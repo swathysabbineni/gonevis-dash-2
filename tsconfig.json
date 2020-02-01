@@ -4,6 +4,8 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
+    "inlineSources": true,
+    "sourceRoot": "/",
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
