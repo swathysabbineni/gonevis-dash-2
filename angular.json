@@ -46,11 +46,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": {
-                "hidden": true,
-                "scripts": true,
-                "styles": true
-              },
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
@@ -74,11 +70,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": {
-                "hidden": true,
-                "scripts": true,
-                "styles": true
-              },
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
