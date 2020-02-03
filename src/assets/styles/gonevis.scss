@@ -403,16 +403,18 @@ a,
 
 .ql-container.ql-snow {
   .ql-editor {
+    color: #616161;
+
     h1 {
-      font-size: $h1-font-size;
+      font-size: 60px;
     }
 
     h2 {
-      font-size: $h2-font-size;
+      font-size: 20px;
     }
 
     h3 {
-      font-size: $h3-font-size;
+      font-size: 18px;
     }
 
     h4 {
@@ -428,15 +430,53 @@ a,
     }
 
     h1, h2, h3, h4, h5, h6 {
-      margin-bottom: $headings-margin-bottom;
-      line-height: $headings-line-height;
-      color: $body-color;
+      margin: 24px 0 8px;
+      line-height: 1.2;
+      color: #212121;
+    }
+
+    h1, h2, h3 {
+      font-weight: bold;
     }
 
     p {
       margin-bottom: $paragraph-margin-bottom;
-      color: $body-color;
       line-height: $line-height-base;
+    }
+
+    ul, ol {
+      line-height: 1.8;
+      margin-bottom: 10px;
+      padding-left: 2rem;
+
+      li {
+        &.ql-direction-rtl {
+          margin-right: 2rem;
+        }
+
+        &:not([class*=ql-indent-]) {
+          padding: 0;
+        }
+      }
+    }
+
+    ul {
+      list-style: disc inside;
+      padding-left: 2.5rem;
+
+      > li {
+        list-style: disc inside;
+        text-indent: calc(-2rem + 10px);
+      }
+
+      li:before {
+        content: unset;
+      }
+    }
+
+    p + ul,
+    p + ol {
+      margin-top: -8px;
     }
   }
 
@@ -481,8 +521,8 @@ a,
 
   .ql-editor a,
   .ql-tooltip a.ql-preview {
-    color: $primary;
     text-decoration: none;
+    color: $primary;
 
     &:hover {
       color: darken($primary, 15%);
