@@ -84,25 +84,6 @@ export class AppComponent implements OnInit {
         this.title.setTitle(AppComponent.TITLE);
       }
     });
-    /**
-     * On '/' route visit redirect user conditionally based on authentication state and blogs count
-     */
-    this.router.events.pipe(
-      filter((event: RouterEvent): boolean => event instanceof NavigationEnd && event.url === '/'),
-    ).subscribe((): void => {
-      if (this.authService.isAuth) {
-        /**
-         * Redirect to 'dash' route if user has blogs, otherwise redirect to 'feed' route
-         */
-        if (UserService.hasBlogs) {
-          this.router.navigate(['dash', BlogService.currentBlog ? BlogService.currentBlogIndex : 0]);
-        } else {
-          this.router.navigateByUrl('feed');
-        }
-      } else {
-        this.router.navigateByUrl('start');
-      }
-    });
   }
 
   /**
