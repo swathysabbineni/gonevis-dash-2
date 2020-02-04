@@ -184,10 +184,11 @@ export class StartComponent implements OnInit {
        * Update authenticated user data
        */
       UserService.user = user;
+      BlogService.blogs = user.sites;
       /**
        * Redirect to blog settings
        */
-      this.router.navigate(['dash', BlogService.blogsValue().length - 1, 'main']).then((): void => {
+      this.router.navigate(['dash', BlogService.getBlogIndex(data.id), 'main']).then((): void => {
         /**
          * If user skipped or selected template was 'zero' then ignore setting blog template
          */
