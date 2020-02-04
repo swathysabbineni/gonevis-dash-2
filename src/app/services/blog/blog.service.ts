@@ -109,17 +109,10 @@ export class BlogService {
   }
 
   /**
-   * @returns Latest list of blogs
-   */
-  static blogsValue(): BlogMin[] {
-    return BlogService.blogsSubject.value;
-  }
-
-  /**
    * @return Latest current blog's data information from local storage
    */
   static get currentBlog(): BlogMin {
-    return BlogService.blogsValue()[BlogService.currentBlogIndex];
+    return BlogService.blogsSubject.value[BlogService.currentBlogIndex];
   }
 
   /**
@@ -135,7 +128,7 @@ export class BlogService {
    * @return Blog index
    */
   static getBlogIndex(id: string): number {
-    return BlogService.blogsValue().findIndex((blog: BlogMin): boolean => blog.id === id);
+    return BlogService.blogsSubject.value.findIndex((blog: BlogMin): boolean => blog.id === id);
   }
 
   /**
@@ -227,7 +220,7 @@ export class BlogService {
     return this.http.put<BlogSettings>(
       `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/update-settings/`, payload,
     ).pipe(map((data => {
-      const blogs: BlogMin[] = BlogService.blogsValue();
+      const blogs: BlogMin[] = BlogService.blogsSubject.value;
       const blog: BlogMin = blogs.find(item => item.id === BlogService.currentBlog.id);
       blog.title = data.title;
       if (data.media.logo) {
