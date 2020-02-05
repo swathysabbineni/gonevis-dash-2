@@ -40,7 +40,7 @@ export class DashComponent implements OnInit {
   /**
    * List of blogs
    */
-  blogs: BlogMin[] = BlogService.blogsValue();
+  blogs: BlogMin[] = [];
 
   /**
    * Authenticated user data
@@ -111,11 +111,10 @@ export class DashComponent implements OnInit {
      */
     this.route.params.subscribe((params: Params): void => {
       const index: number = +params.blog;
-
       /**
        * If blog doesn't exist by given index in params, then redirect to first blog.
        */
-      if (!BlogService.blogsValue()[index]) {
+      if (!BlogService.blogs[index]) {
         this.router.navigate(['dash', 0]);
       }
     });
