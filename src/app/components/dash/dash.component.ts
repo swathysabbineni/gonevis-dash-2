@@ -85,13 +85,13 @@ export class DashComponent implements OnInit {
     label: 'MEDIA',
     icon: faImage,
   }, {
-    path: 'navs',
-    label: 'NAVS',
-    icon: faBars,
-  }, {
     path: 'circle',
     label: 'CIRCLES',
     icon: faSpinner,
+  }, {
+    path: 'navs',
+    label: 'NAVS',
+    icon: faBars,
   }, {
     path: 'team',
     label: 'TEAM',
