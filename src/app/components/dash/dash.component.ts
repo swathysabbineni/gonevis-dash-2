@@ -17,11 +17,12 @@ import { faComment } from '@fortawesome/free-solid-svg-icons/faComment';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { TranslateService } from '@ngx-translate/core';
-import { BsModalService } from 'ngx-bootstrap';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-dash',
@@ -87,6 +88,10 @@ export class DashComponent implements OnInit {
     path: 'navs',
     label: 'NAVS',
     icon: faBars,
+  }, {
+    path: 'circle',
+    label: 'CIRCLES',
+    icon: faSpinner,
   }, {
     path: 'team',
     label: 'TEAM',

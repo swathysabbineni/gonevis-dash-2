@@ -279,5 +279,6 @@
   "PRIMARY_DOMAIN_INFO": "If someone tries to open {{ settings.absolute_uri }} they will be redirected to {{ domain.domain }}.",
   "SET_PRIMARY": "Set As Primary",
   "DOMAIN": "Domain",
+  "CIRCLES": "Circles",
   "COLLABORATING": "Collaborating"
 }
