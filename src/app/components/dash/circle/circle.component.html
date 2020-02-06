@@ -1,1 +1,19 @@
-<p>circle works!</p>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-4" *ngFor="let circle of circles">
+      <div class="card dash mt-3">
+        <div class="card-header">{{ circle.name }}</div>
+        <div class="card-body">
+          <p>{{ circle.description }}</p>
+          <hr>
+          <p class="m-0 mt-2" *ngFor="let member of circleMembers">{{ member.name }}</p>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-sm btn-link">
+            <fa-icon [fixedWidth]="true" [icon]="faDelete"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
