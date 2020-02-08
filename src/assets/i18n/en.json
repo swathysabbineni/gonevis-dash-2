@@ -71,6 +71,7 @@
   "CONFORM_DELETE_FILE": "Are you sure you want to delete this file?",
   "CONFORM_DELETE_ENTRY": "Are you sure you want to delete this post?",
   "CONFORM_DELETE_COMMENT": "Are you sure you want to delete this comment?",
+  "CONFIRM_DELETE_CIRCLE": "Are you sure you want to delete this circle?",
   "CONFIRM_DELETE": "Confirm delete",
   "CONFIRM_CONTINUE": "Are you sure you want to continue?",
   "DOWNLOAD": "Download",
@@ -280,5 +281,7 @@
   "SET_PRIMARY": "Set As Primary",
   "DOMAIN": "Domain",
   "CIRCLES": "Circles",
+  "NO_CIRCLE_MEMBERS": "This circle doesn't have any members.",
+  "MEMBERS": "Members",
   "COLLABORATING": "Collaborating"
 }
