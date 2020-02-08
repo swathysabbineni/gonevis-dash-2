@@ -8,7 +8,7 @@ import { Params } from '@app/interfaces/params';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Metrics } from '@app/interfaces/v1/metrics';
-import { Subscriber } from '@app/interfaces/v1/subscriber';
+import { Subscriber } from '@app/interfaces/zero/subscriber';
 import { Tag } from '@app/interfaces/v1/tag';
 import { Template } from '@app/interfaces/v1/template';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
