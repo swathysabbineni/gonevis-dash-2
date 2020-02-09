@@ -13,13 +13,12 @@
     justify-content: center;
 
     .circle-info {
-      color: $primary;
       border: 4px solid $secondary;
       width: 80%;
       height: 80%;
       border-radius: 100%;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
 
@@ -27,10 +26,12 @@
         font-weight: bold;
         font-size: $font-size-lg;
         text-transform: uppercase;
+        color: $primary;
       }
 
       .circle-members-count {
-
+        font-size: $font-size-lg * 2;
+        color: lighten($primary, 5%);
       }
     }
 

@@ -38,18 +38,10 @@ export class CircleService {
    * Create a circle for the current bog
    *
    * @param payload Circle data
-   * @param members Circle members (list of IDs)
    */
-  create(payload: Partial<Circle>, members: string[]): Observable<Circle> {
+  create(payload: Partial<Circle>): Observable<Circle> {
     payload.site = BlogService.currentBlog.id;
-    return this.http.post<Circle>(
-      `${this.api.base.v1}sushial/circles/`, payload,
-    ).pipe(map((data: Circle): Circle => {
-      for (const member of members) {
-        this.addMember(data.id, member).subscribe();
-      }
-      return data;
-    }));
+    return this.http.post<Circle>(`${this.api.base.v1}sushial/circles/`, payload);
   }
 
   /**
@@ -106,8 +98,8 @@ export class CircleService {
    * @param id Circle ID
    * @param member Member ID
    */
-  addMember(id: string, member: string): Observable<any> {
-    return this.http.post<any>(`${this.api.base.v1}sushial/circles/${id}/add-member/`, {
+  addMember(id: string, member: string): Observable<Subscriber> {
+    return this.http.post<Subscriber>(`${this.api.base.v1}sushial/circles/${id}/add-member/`, {
       subscription_id: member,
     });
   }

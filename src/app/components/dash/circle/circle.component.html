@@ -9,11 +9,11 @@
             <div class="circle">
               <div class="circle-info">
                 <div class="circle-name">{{ circle.name }}</div>
-                <div class="circle-members-count" *ngIf="circlesData[circle.id]">
-                  {{ circlesData[circle.id].membersCount }}
+                <div class="circle-members-count">
+                  {{ circlesData[circle.id].membersCount | number }}
                 </div>
               </div>
-              <div class="circle-members" *ngIf="circlesData[circle.id]">
+              <div class="circle-members">
                 <div class="circle-member" *ngFor="let member of circlesData[circle.id].members"
                      [style.background-image]="'url(' + member.user.media.thumbnail_48x48 + ')'">
                 </div>

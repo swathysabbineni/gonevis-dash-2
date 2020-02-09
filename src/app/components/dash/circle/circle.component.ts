@@ -69,8 +69,10 @@ export class CircleComponent implements OnInit {
        * Load circle members
        */
       for (const circle of this.circles) {
-        this.circlesData[circle.id].membersCount = 0;
-        this.circlesData[circle.id].members = [];
+        this.circlesData[circle.id] = {
+          membersCount: 0,
+          members: [],
+        };
         this.circleService.getMembers(circle.id, {
           limit: 8,
         }).subscribe((members: ApiResponse<Subscriber>): void => {
@@ -93,14 +95,26 @@ export class CircleComponent implements OnInit {
   submit(): void {
     this.form.loading = true;
     const payload = this.form.form.value;
-    delete payload.member_ids;
     this.circleService.create(
       payload,
-      this.form.form.get('member_ids').value,
     ).subscribe((data: Circle): void => {
-      this.circles.unshift(data);
-      this.circlesData[data.id].membersCount = 0;
-      this.circlesData[data.id].members = [];
+      this.circles.unshift({
+        id: data.id,
+        name: data.name,
+        description: data.description,
+      });
+      this.circlesData[data.id] = {
+        membersCount: 0,
+        members: [],
+      };
+      if (this.form.form.get('member_ids').value) {
+        for (const member of this.form.form.get('member_ids').value) {
+          this.circleService.addMember(data.id, member).subscribe((circleMember: Subscriber): void => {
+            this.circlesData[data.id].membersCount++;
+            this.circlesData[data.id].members.push(circleMember);
+          });
+        }
+      }
       this.form.form.reset();
       this.form.loading = false;
       this.form.error = {};
