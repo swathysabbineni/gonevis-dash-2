@@ -14,6 +14,11 @@ import { map } from 'rxjs/operators';
 })
 export class CircleService {
 
+  /**
+   * API page size
+   */
+  static readonly PAGE_SIZE = 100;
+
   constructor(private http: HttpClient,
               private api: ApiService) {
   }
@@ -79,12 +84,18 @@ export class CircleService {
 
   /**
    * Get list of members of a circle
+   *
    * @param id Circle ID
+   * @param filters API filters
    */
-  getMembers(id: string): Observable<ApiResponse<Subscriber>> {
+  getMembers(id: string, filters: { limit?: number } = {}): Observable<ApiResponse<Subscriber>> {
     return this.http.get<ApiResponse<Subscriber>>(
       `${this.api.base.v1}sushial/followers/`, {
-        params: { circle_id: id, site_id: BlogService.currentBlog.id },
+        params: Object.assign(filters, {
+          circle_id: id,
+          limit: (filters.limit || CircleService.PAGE_SIZE).toString(),
+          site_id: BlogService.currentBlog.id,
+        }),
       },
     );
   }
@@ -96,8 +107,8 @@ export class CircleService {
    * @param member Member ID
    */
   addMember(id: string, member: string): Observable<any> {
-    return this.http.patch<any>(`${this.api.base.v1}sushial/circles/${id}/`, {
-      member_ids: member,
+    return this.http.post<any>(`${this.api.base.v1}sushial/circles/${id}/add-member/`, {
+      subscription_id: member,
     });
   }
 

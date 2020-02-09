@@ -2,13 +2,24 @@
   <div class="row">
 
     <!-- Circles -->
-    <div class="col-lg-3 col-md-6 mt-4" *ngFor="let circle of circles">
-      <div class="card dash h-100">
-        <div class="card-header">{{ circle.name }}</div>
-        <div class="card-body">
-          <p *ngFor="let member of circleMembers[circle.id]">{{ member.name }}</p>
-          <p class="text-muted small" *ngIf="!circleMembers[circle.id].length" translate>NO_CIRCLE_MEMBERS</p>
-          <p class="m-0" *ngIf="circle.description">{{ circle.description }}</p>
+    <div class="col-lg-4 col-md-6 mt-4" *ngFor="let circle of circles">
+      <div class="card dash">
+        <div class="card-body p-0">
+          <div class="circle-wrapper">
+            <div class="circle">
+              <div class="circle-info">
+                <div class="circle-name">{{ circle.name }}</div>
+                <div class="circle-members-count" *ngIf="circlesData[circle.id]">
+                  {{ circlesData[circle.id].membersCount }}
+                </div>
+              </div>
+              <div class="circle-members" *ngIf="circlesData[circle.id]">
+                <div class="circle-member" *ngFor="let member of circlesData[circle.id].members"
+                     [style.background-image]="'url(' + member.user.media.thumbnail_48x48 + ')'">
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="card-footer text-right">
           <button class="btn btn-sm btn-link" (click)="delete(circle)">
@@ -17,11 +28,9 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Form -->
-  <div class="row">
-    <div class="col-lg-3 col-md-6 mt-4">
+    <!-- Form -->
+    <div class="col-lg-4 col-md-6 mt-4">
       <form class="card dash h-100" [formGroup]="form.form" (submit)="submit()">
         <div class="card-header" translate>CREATE</div>
         <div class="card-body">

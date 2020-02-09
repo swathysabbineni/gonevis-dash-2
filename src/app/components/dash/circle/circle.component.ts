@@ -26,10 +26,15 @@ export class CircleComponent implements OnInit {
   circles: CircleMin[];
 
   /**
-   * List of circle members
-   * Key is circle ID and value is members of that circle.
+   * Extra data for blog circles
+   * Key is circle ID.
    */
-  circleMembers: { [circle: string]: Subscriber[] } = {};
+  circlesData: {
+    [circle: string]: {
+      members: Subscriber[],
+      membersCount: number,
+    }
+  } = {};
 
   /**
    * Form data
@@ -64,9 +69,13 @@ export class CircleComponent implements OnInit {
        * Load circle members
        */
       for (const circle of this.circles) {
-        this.circleMembers[circle.id] = [];
-        this.circleService.getMembers(circle.id).subscribe((members: ApiResponse<Subscriber>): void => {
-          this.circleMembers[circle.id] = members.results;
+        this.circlesData[circle.id].membersCount = 0;
+        this.circlesData[circle.id].members = [];
+        this.circleService.getMembers(circle.id, {
+          limit: 8,
+        }).subscribe((members: ApiResponse<Subscriber>): void => {
+          this.circlesData[circle.id].membersCount = members.count;
+          this.circlesData[circle.id].members = members.results;
         });
       }
     });
@@ -90,7 +99,8 @@ export class CircleComponent implements OnInit {
       this.form.form.get('member_ids').value,
     ).subscribe((data: Circle): void => {
       this.circles.unshift(data);
-      this.circleMembers[data.id] = [];
+      this.circlesData[data.id].membersCount = 0;
+      this.circlesData[data.id].members = [];
       this.form.form.reset();
       this.form.loading = false;
       this.form.error = {};
