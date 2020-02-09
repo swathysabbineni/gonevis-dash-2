@@ -1,19 +1,60 @@
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-lg-4" *ngFor="let circle of circles">
-      <div class="card dash mt-3">
+<div class="container mb-4 px-4">
+  <div class="row">
+
+    <!-- Circles -->
+    <div class="col-lg-3 col-md-6 mt-4" *ngFor="let circle of circles">
+      <div class="card dash h-100">
         <div class="card-header">{{ circle.name }}</div>
         <div class="card-body">
-          <p>{{ circle.description }}</p>
-          <hr>
-          <p class="m-0 mt-2" *ngFor="let member of circleMembers">{{ member.name }}</p>
+          <p *ngFor="let member of circleMembers[circle.id]">{{ member.name }}</p>
+          <p class="text-muted small" *ngIf="!circleMembers[circle.id].length" translate>NO_CIRCLE_MEMBERS</p>
+          <p class="m-0" *ngIf="circle.description">{{ circle.description }}</p>
         </div>
         <div class="card-footer text-right">
-          <button class="btn btn-sm btn-link">
+          <button class="btn btn-sm btn-link" (click)="delete(circle)">
             <fa-icon [fixedWidth]="true" [icon]="faDelete"></fa-icon>
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="row">
+    <div class="col-lg-3 col-md-6 mt-4">
+      <form class="card dash h-100" [formGroup]="form.form" (submit)="submit()">
+        <div class="card-header" translate>CREATE</div>
+        <div class="card-body">
+          <!-- Name -->
+          <div class="form-group">
+            <label for="name" translate>NAME</label>
+            <input id="name" type="text" class="form-control" formControlName="name">
+            <span class="text-danger" *ngIf="form.error.name">{{ form.error.name[0] }}</span>
+          </div>
+          <!-- Description -->
+          <div class="form-group">
+            <label for="description" translate>DESCRIPTION</label>
+            <input id="description" type="text" class="form-control" formControlName="description">
+            <span class="text-danger" *ngIf="form.error.description">{{ form.error.description[0] }}</span>
+          </div>
+          <!-- Members -->
+          <div class="form-group">
+            <label for="member_ids" translate>MEMBERS</label>
+            <select id="member_ids" multiple class="form-control" formControlName="member_ids">
+              <option *ngFor="let member of availableCircleMembers" [ngValue]="member.user.id">
+                {{ member.user.username }}
+              </option>
+            </select>
+          </div>
+          <!-- Errors -->
+          <p class="text-danger" *ngIf="form.error.non_field_errors">{{ form.error.non_field_errors[0] }}</p>
+          <p class="text-danger" *ngIf="form.error.detail">{{ form.error.detail }}</p>
+        </div>
+        <!-- Submit -->
+        <div class="card-footer">
+          <button class="btn btn-block btn-info" [disabled]="form.loading" translate>SUBMIT</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

@@ -1,10 +1,7 @@
-import { Media } from '@app/interfaces/media';
+import { SubscriberUser } from '@app/interfaces/v1/subscriber-user';
 
 export interface Subscriber {
-  username: string;
-  name: string;
-  media: Media;
-  location: string;
-  date_joined: string;
-  get_absolute_uri: string;
+  id: string;
+  user: SubscriberUser;
+  created: string;
 }

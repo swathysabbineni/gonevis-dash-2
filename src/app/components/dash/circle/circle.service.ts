@@ -33,10 +33,18 @@ export class CircleService {
    * Create a circle for the current bog
    *
    * @param payload Circle data
+   * @param members Circle members (list of IDs)
    */
-  create(payload: Partial<Circle>): Observable<Circle> {
+  create(payload: Partial<Circle>, members: string[]): Observable<Circle> {
     payload.site = BlogService.currentBlog.id;
-    return this.http.post<Circle>(`${this.api.base.v1}sushial/circles/`, payload);
+    return this.http.post<Circle>(
+      `${this.api.base.v1}sushial/circles/`, payload,
+    ).pipe(map((data: Circle): Circle => {
+      for (const member of members) {
+        this.addMember(data.id, member).subscribe();
+      }
+      return data;
+    }));
   }
 
   /**
@@ -59,13 +67,24 @@ export class CircleService {
   }
 
   /**
+   * Get list of available members to add to circles
+   */
+  getAvailableMembers(): Observable<ApiResponse<Subscriber>> {
+    return this.http.get<ApiResponse<Subscriber>>(
+      `${this.api.base.v1}sushial/followers/`, {
+        params: { site_id: BlogService.currentBlog.id },
+      },
+    );
+  }
+
+  /**
    * Get list of members of a circle
    * @param id Circle ID
    */
   getMembers(id: string): Observable<ApiResponse<Subscriber>> {
     return this.http.get<ApiResponse<Subscriber>>(
-      `${this.api.base.zero}website/site/${BlogService.currentBlog.id}/subscribers/`, {
-        params: { circle_id: id },
+      `${this.api.base.v1}sushial/followers/`, {
+        params: { circle_id: id, site_id: BlogService.currentBlog.id },
       },
     );
   }
@@ -77,7 +96,9 @@ export class CircleService {
    * @param member Member ID
    */
   addMember(id: string, member: string): Observable<any> {
-    return this.http.post<any>(`${this.api.base.v1}sushial/circles/${id}/`, { member });
+    return this.http.patch<any>(`${this.api.base.v1}sushial/circles/${id}/`, {
+      member_ids: member,
+    });
   }
 
   /**
