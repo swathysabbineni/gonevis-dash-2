@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MediaService } from '@app/components/dash/media/media.service';
+import { DragDropModule } from '@app/shared/drag-drop/drag-drop.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { UploadComponent } from 'src/app/shared/upload/upload.component';
@@ -15,6 +17,8 @@ import { UploadComponent } from 'src/app/shared/upload/upload.component';
     CommonModule,
     ReactiveFormsModule,
     TranslateModule.forChild(),
+    DragDropModule,
+    FontAwesomeModule,
   ],
   providers: [
     MediaService,
