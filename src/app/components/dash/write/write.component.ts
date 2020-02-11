@@ -31,6 +31,7 @@ import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { BlogService } from '@app/services/blog/blog.service';
+import { FileSelectionComponent } from '@app/shared/file-selection/file-selection.component';
 import { environment } from '@environments/environment';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faNewspaper } from '@fortawesome/free-regular-svg-icons/faNewspaper';
@@ -589,7 +590,7 @@ export class WriteComponent implements OnInit, OnDestroy {
       /**
        * File selection
        */
-      this.showFileListModal(this.fileListModalTemplate, true);
+      this.showFileListModal(true);
     });
   }
 
@@ -786,30 +787,29 @@ export class WriteComponent implements OnInit, OnDestroy {
   /**
    * Show file selection modal
    *
-   * @param template Template to show as a modal
    * @param isEditorImage Determines whether selecting image for editor or not
    */
-  showFileListModal(template: TemplateRef<any>, isEditorImage: boolean): void {
+  showFileListModal(isEditorImage: boolean): void {
     this.isEditorImage = isEditorImage;
-    this.fileListModalRef = this.modalService.show(template, {
-      class: 'modal-lg',
-    });
-  }
-
-  /**
-   * On file selection
-   *
-   * @param file Selected file
-   */
-  onFileSelect(file: FileMedia): void {
-    this.fileListModalRef.hide();
-    if (this.isEditorImage) {
-      this.editor.insertEmbed(this.cursorIndex, 'image', file.file);
-      this.editor.setSelection({ index: this.cursorIndex + 1, length: 0 });
-    } else {
-      this.form.get('cover_image').setValue(file.id);
-      this.coverImage = file;
+    let selected: string = null;
+    if (!isEditorImage && this.form.get('cover_image').value) {
+      selected = this.form.get('cover_image').value;
     }
+    this.fileListModalRef = this.modalService.show(FileSelectionComponent, {
+      class: 'modal-lg',
+      initialState: {
+        selected,
+      },
+    });
+    this.fileListModalRef.content.choose.subscribe((file: FileMedia): void => {
+      if (this.isEditorImage) {
+        this.editor.insertEmbed(this.cursorIndex, 'image', file.file);
+        this.editor.setSelection({ index: this.cursorIndex + 1, length: 0 });
+      } else {
+        this.form.get('cover_image').setValue(file.id);
+        this.coverImage = file;
+      }
+    });
   }
 
   /**
