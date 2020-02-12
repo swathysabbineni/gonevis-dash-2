@@ -171,7 +171,7 @@ export class BlogService {
    */
   setTemplate(template: string): Observable<void> {
     return this.http.put<void>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-template`, {
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-template/`, {
         site_template_id: template,
       },
     ).pipe(map((() => {
