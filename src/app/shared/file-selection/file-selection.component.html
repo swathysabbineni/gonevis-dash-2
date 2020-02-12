@@ -1,0 +1,19 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left" translate>SELECT_IMAGE</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <tabset #tabset>
+    <!-- Images -->
+    <tab heading="Images" class="py-3" id="images">
+      <app-file-list [selection]="true" [selected]="selected" (choose)="onFileSelect($event)" #fileListComponent>
+      </app-file-list>
+    </tab>
+    <!-- Upload -->
+    <tab heading="Upload" class="py-3">
+      <app-upload (upload)="onUpload($event)" dropZone="true"></app-upload>
+    </tab>
+  </tabset>
+</div>
