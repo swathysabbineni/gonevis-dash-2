@@ -279,6 +279,8 @@
   "PRIMARY_DOMAIN_INFO": "If someone tries to open {{ settings.absolute_uri }} they will be redirected to {{ domain.domain }}.",
   "SET_PRIMARY": "Set As Primary",
   "DOMAIN": "Domain",
+  "DROP_HERE_TO_UPLOAD": "Drop here to upload",
+  "DRAG_AND_DROP_OR_UPLOAD": "Drag and drop or",
   "PAGE_NOT_FOUND_CODE": "404",
   "PAGE_NOT_FOUND_DESCRIPTION": "The page you're looking for doesn't exist",
   "COLLABORATING": "Collaborating"

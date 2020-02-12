@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File } from '@app/interfaces/file';
@@ -62,7 +62,8 @@ export class FileListComponent implements OnInit, OnDestroy {
    */
   loading: boolean;
 
-  constructor(public utils: UtilService,
+  constructor(private changeDetectorRef: ChangeDetectorRef,
+              public utils: UtilService,
               private mediaService: MediaService,
               private translate: TranslateService,
               private toast: ToastrService,
@@ -86,6 +87,7 @@ export class FileListComponent implements OnInit, OnDestroy {
       this.files = response.results;
       this.pagination.totalItems = response.count;
       this.loading = false;
+      this.changeDetectorRef.detectChanges();
     });
   }
 

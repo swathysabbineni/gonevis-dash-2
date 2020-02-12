@@ -1,8 +1,10 @@
-import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { File as FileMedia } from '@app/interfaces/file';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { environment } from '@environments/environment';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faFileUpload } from '@fortawesome/free-solid-svg-icons/faFileUpload';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 
@@ -14,9 +16,19 @@ import { ToastrService } from 'ngx-toastr';
 export class UploadComponent {
 
   /**
+   * File upload icon
+   */
+  faFileUpload: IconDefinition = faFileUpload;
+
+  /**
    * Upload event (when file upload is finished)
    */
   @Output() upload: EventEmitter<FileMedia> = new EventEmitter<FileMedia>();
+
+  /**
+   * Determines whether or not drag and drop should be triggered full screen instead of a certain position
+   */
+  @Input() dropZone: boolean;
 
   /**
    * File upload accept list
@@ -45,9 +57,20 @@ export class UploadComponent {
 
   /**
    * When user tries to upload a file
+   *
+   * @param droppedFiles Dropped files
    */
-  onFileSelected(): void {
-    const files: File[] = this.fileElement.nativeElement.files;
+  onFileSelected(droppedFiles?: File[]): void {
+    let files: File[] = [];
+    /**
+     * If method was called from drop event, then get dropped files,
+     * otherwise get selected files from input.
+     */
+    if (droppedFiles) {
+      files = droppedFiles;
+    } else {
+      files = this.fileElement.nativeElement.files;
+    }
     if (!files[0]) {
       return;
     }
