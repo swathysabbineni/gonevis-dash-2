@@ -8,8 +8,6 @@ import { Subscription } from 'rxjs';
 export class DragDropDirective implements OnDestroy {
 
   /**
-   * @description
-   *
    * File extension (type) whitelist
    *
    * @see File.type
@@ -17,25 +15,19 @@ export class DragDropDirective implements OnDestroy {
   @Input() accept: string;
 
   /**
-   * @description
-   *
-   * An event emitter that emits list of dropped files,
+   * An event emitter that emits list of dropped files
    * which are filtered by their [file extension whitelist]{@link accept}.
    */
   @Output() afterDrop: EventEmitter<File[]> = new EventEmitter<File[]>();
 
   /**
-   * @description
-   *
-   * Represents a disposable resource, such as the execution of an Observable. A
-   * Subscription has one important method, `unsubscribe`, that takes no argument
+   * Represents a disposable resource, such as the execution of an Observable.
+   * A subscription has one important method, `unsubscribe`, that takes no argument
    * and just disposes the resource held by the subscription.
    */
   private readonly subscription: Subscription = new Subscription();
 
   /**
-   * @description
-   *
    * Drag counter
    */
   private dragCounter = 0;
@@ -116,8 +108,6 @@ export class DragDropDirective implements OnDestroy {
   }
 
   /**
-   * @description
-   *
    * A callback method that performs custom clean-up, invoked immediately
    * after a directive, pipe, or service instance is destroyed.
    */
