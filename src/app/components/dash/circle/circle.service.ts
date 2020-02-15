@@ -25,10 +25,16 @@ export class CircleService {
 
   /**
    * List of circles of current blog
+   *
+   * @param search Search text
    */
-  list(): Observable<CircleMin[]> {
+  list(search: string = ''): Observable<CircleMin[]> {
     return this.http.get<{ circles: CircleMin[] }>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/circles/`,
+      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/circles/`, {
+        params: {
+          search,
+        },
+      },
     ).pipe(map((data: { circles: CircleMin[] }): CircleMin[] => {
       return data.circles;
     }));
