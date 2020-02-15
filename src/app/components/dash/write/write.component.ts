@@ -12,6 +12,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from '@app/app.component';
+import { CircleService } from '@app/components/dash/circle/circle.service';
 import { MediaService } from '@app/components/dash/media/media.service';
 import '@app/components/dash/write/blots/divider.ts';
 import '@app/components/dash/write/blots/embed.ts';
@@ -27,6 +28,7 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { File as FileMedia } from '@app/interfaces/file';
 import { Params } from '@app/interfaces/params';
 import { SoundCloudEmbed } from '@app/interfaces/sound-cloud-embed';
+import { CircleMin } from '@app/interfaces/v1/circle-min';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
@@ -41,6 +43,7 @@ import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUndo } from '@fortawesome/free-solid-svg-icons/faUndo';
@@ -73,6 +76,7 @@ export class WriteComponent implements OnInit, OnDestroy {
   readonly newspaper: IconDefinition = faNewspaper;
   readonly angleDown: IconDefinition = faAngleDown;
   readonly hashtag: IconDefinition = faHashtag;
+  readonly faSpinner: IconDefinition = faSpinner;
   readonly image: IconDefinition = faImage;
   readonly plus: IconDefinition = faPlus;
   readonly undo: IconDefinition = faUndo;
@@ -145,6 +149,11 @@ export class WriteComponent implements OnInit, OnDestroy {
    * Tag list
    */
   tags: Tag[] = [];
+
+  /**
+   * List of blog circles
+   */
+  circles: CircleMin[];
 
   /**
    * Tag query form
@@ -276,6 +285,7 @@ export class WriteComponent implements OnInit, OnDestroy {
               private translateService: TranslateService,
               private mediaService: MediaService,
               private writeService: WriteService,
+              private circleService: CircleService,
               private toast: ToastrService) {
     this.writeService.lazyLoadQuill().subscribe((): void => null);
   }
@@ -287,6 +297,7 @@ export class WriteComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
+      circles: [[]],
       excerpt: [''],
       tags: [[]],
       status: [EntryStatus.Draft],
@@ -305,6 +316,7 @@ export class WriteComponent implements OnInit, OnDestroy {
       this.getTags(value);
     });
     this.getTags();
+    this.getCircles();
     /**
      * Make a copy of entry
      */
@@ -318,6 +330,7 @@ export class WriteComponent implements OnInit, OnDestroy {
         this.form.reset({
           title: '',
           content: '',
+          circles: [],
           excerpt: '',
           tags: [],
           status: EntryStatus.Draft,
@@ -351,6 +364,13 @@ export class WriteComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * @returns AbstractControl
+   */
+  private get circlesControl(): AbstractControl {
+    return this.form.get('circles');
+  }
+
+  /**
    * Update form controls
    *
    * @param data Entry
@@ -359,6 +379,7 @@ export class WriteComponent implements OnInit, OnDestroy {
     this.form.patchValue({
       title: data.title,
       content: data.content,
+      circles: data.circles,
       excerpt: data.excerpt,
       tags: data.tags,
       status: data.status,
@@ -753,6 +774,17 @@ export class WriteComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get circles
+   *
+   * @param search Search text
+   */
+  getCircles(search: string = ''): void {
+    this.circleService.list(search).subscribe((data: CircleMin[]): void => {
+      this.circles = data;
+    });
+  }
+
+  /**
    * Add tag
    *
    * @param tag Tag slugs
@@ -781,6 +813,38 @@ export class WriteComponent implements OnInit, OnDestroy {
   isTagSelected(tagSlug: string): boolean {
     const tags: string[] = this.tagsControl.value;
     return tags.includes(tagSlug);
+  }
+
+  /**
+   * Add circle
+   *
+   * @param id Circle ID
+   */
+  addCircle(id: string): void {
+    const circles: string[] = this.circlesControl.value;
+    console.log(circles, [...circles, ...[id]], id);
+    this.circlesControl.setValue([...circles, ...[id]]);
+  }
+
+  /**
+   * @param tagSlug Tag ID
+   *
+   * @return Determine whether entry has given tag or not
+   */
+  isCircleSelected(tagSlug: string): boolean {
+    const circles: string[] = this.circlesControl.value;
+    return circles.includes(tagSlug);
+  }
+
+  /**
+   * Remove tag from entry
+   *
+   * @param id Circle ID
+   */
+  removeCircle(id: string): void {
+    const newValue: string[] = (this.circlesControl.value as string[])
+      .filter((circleId: string): boolean => circleId !== id);
+    this.circlesControl.setValue(newValue);
   }
 
   /**
