@@ -178,6 +178,33 @@
             </div>
           </div>
         </div>
+        <!-- Circles -->
+        <div class="section">
+          <!-- Toggle -->
+          <a class="btn btn-link collapse-header"
+             (click)="circlesContent.collapse = !circlesContent.isCollapsed"
+             [attr.aria-expanded]="circlesContent.expanded"
+             aria-controls="collapseBasic">
+            <!-- Title -->
+            <div class="mr-auto">
+              <fa-icon [icon]="faSpinner" [fixedWidth]="true"></fa-icon>
+              {{ 'Circles' | translate }}
+            </div>
+            <!-- Caret -->
+            <fa-icon [icon]="angleDown" [fixedWidth]="true"></fa-icon>
+          </a>
+          <!-- Content -->
+          <div class="collapse-content" [collapse]="true" #circlesContent=bs-collapse>
+            <div class="form-group">
+              <div class="custom-control custom-checkbox" *ngFor="let circle of circles">
+                <input type="checkbox" class="custom-control-input"
+                       (click)="isCircleSelected(circle.id) ? removeCircle(circle.id) : addCircle(circle.id)"
+                       [checked]="isCircleSelected(circle.id)" [id]="circle.id">
+                <label class="custom-control-label" [for]="circle.id">{{ circle.name }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- Cover image -->
         <div class="section">
           <!-- Toggle -->
