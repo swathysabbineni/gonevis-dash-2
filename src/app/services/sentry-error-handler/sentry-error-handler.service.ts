@@ -20,7 +20,11 @@ export class SentryErrorHandler implements ErrorHandler {
     });
   }
 
-  handleError(error) {
+  /**
+   * Captures an exception event and sends it to Sentry
+   */
+  handleError(error): void {
     Sentry.captureException(error.originalError || error);
+    throw error;
   }
 }
