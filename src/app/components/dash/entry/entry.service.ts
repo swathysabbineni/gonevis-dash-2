@@ -46,9 +46,8 @@ export class EntryService {
     } = {},
     page: number = 1,
   ): Observable<ApiResponse<Entry>> {
-    return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.v1}website/entry/`, {
+    return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/`, {
       params: Object.assign(filter, {
-        site: BlogService.currentBlog.id,
         limit: (filter.limit || EntryService.PAGE_SIZE).toString(),
         offset: UtilService.getPageOffset(filter.limit || EntryService.PAGE_SIZE, page),
       }),
@@ -61,8 +60,7 @@ export class EntryService {
    * @param payload Entry data
    */
   create(payload: Partial<Entry>): Observable<Entry> {
-    payload.site = payload.site || BlogService.currentBlog.id;
-    return this.http.post<Entry>(`${this.apiService.base.v1}website/entry/`, payload);
+    return this.http.post<Entry>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/`, payload);
   }
 
   /**
@@ -72,7 +70,7 @@ export class EntryService {
    * @param payload Entry data
    */
   update(id: string, payload: { [field: string]: any }): Observable<Entry> {
-    return this.http.patch<Entry>(`${this.apiService.base.v1}website/entry/${id}`, payload);
+    return this.http.patch<Entry>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/${id}/`, payload);
   }
 
   /**
@@ -81,7 +79,7 @@ export class EntryService {
    * @param id Entry ID
    */
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiService.base.v1}website/entry/${id}`);
+    return this.http.delete<void>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/${id}/`);
   }
 
   /**

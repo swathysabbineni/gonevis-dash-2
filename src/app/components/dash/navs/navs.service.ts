@@ -19,7 +19,7 @@ export class NavsService {
    */
   getNavs(): Observable<{ navigation: Navigation[] }> {
     return this.http.get<{ navigation: Navigation[] }>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/navigation/`,
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/navigation/`,
     );
   }
 
@@ -30,7 +30,7 @@ export class NavsService {
    */
   update(navigation: Navigation[]): Observable<{ navigation: Navigation[] }> {
     return this.http.put<{ navigation: Navigation[] }>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/update-navigation/`, {
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/update-navigation/`, {
         navigation,
       },
     );

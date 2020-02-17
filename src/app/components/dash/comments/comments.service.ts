@@ -26,13 +26,15 @@ export class CommentsService {
    * Get blog tags
    */
   getComments(filters: { limit?: number, search?: string } = {}, page: number = 1): Observable<ApiResponse<Comment>> {
-    return this.http.get<ApiResponse<Comment>>(`${this.apiService.base.v1}sushial/comment/`, {
-      params: Object.assign(filters, {
-        site: BlogService.currentBlog.id,
-        limit: (filters.limit || CommentsService.PAGE_SIZE).toString(),
-        offset: UtilService.getPageOffset(CommentsService.PAGE_SIZE, page),
-      }),
-    });
+    return this.http.get<ApiResponse<Comment>>(
+      `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/sushial/comment/`,
+      {
+        params: Object.assign(filters, {
+          limit: (filters.limit || CommentsService.PAGE_SIZE).toString(),
+          offset: UtilService.getPageOffset(CommentsService.PAGE_SIZE, page),
+        }),
+      },
+    );
   }
 
   /**
@@ -42,7 +44,10 @@ export class CommentsService {
    * @param params Payload
    */
   updateComment(comment: string, params: Params): Observable<Comment> {
-    return this.http.patch<Comment>(`${this.apiService.base.v1}sushial/comment/${comment}/`, params);
+    return this.http.patch<Comment>(
+      `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/sushial/comment/${comment}/`,
+      params,
+    );
   }
 
   /**
@@ -51,6 +56,8 @@ export class CommentsService {
    * @param comment Comment ID
    */
   deleteComment(comment: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiService.base.v1}sushial/comment/${comment}`);
+    return this.http.delete<void>(
+      `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/sushial/comment/${comment}`,
+    );
   }
 }
