@@ -69,14 +69,17 @@ export class MediaService {
    * @param search Search text
    */
   getMedia(page: number = 1, search: string = ''): Observable<ApiResponse<FileMedia>> {
-    return this.http.get<ApiResponse<FileMedia>>(`${this.api.base.v1}dolphin/file/`, {
-      params: {
-        site: BlogService.currentBlog.id,
-        search,
-        limit: MediaService.PAGE_SIZE.toString(),
-        offset: UtilService.getPageOffset(MediaService.PAGE_SIZE, page),
+    return this.http.get<ApiResponse<FileMedia>>(
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/dolphin/file/`,
+      {
+        params: {
+          site: BlogService.currentBlog.id,
+          search,
+          limit: MediaService.PAGE_SIZE.toString(),
+          offset: UtilService.getPageOffset(MediaService.PAGE_SIZE, page),
+        },
       },
-    });
+    );
   }
 
   /**
@@ -85,7 +88,7 @@ export class MediaService {
    * @param id File ID
    */
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.api.base.v1}dolphin/file/${id}`);
+    return this.http.delete<void>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/dolphin/file/${id}/`);
   }
 
   /**
@@ -95,7 +98,7 @@ export class MediaService {
    */
   uploadUrl(payload: { file_name: string, file_size: number, mime_type: string }): Observable<UploadUrlResponse> {
     return this.http.post<UploadUrlResponse>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/upload-url/`, payload,
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/upload-url/`, payload,
     );
   }
 
@@ -126,7 +129,7 @@ export class MediaService {
    * @param fileKey File key from the upload URL response
    */
   post(fileKey: string): Observable<FileMedia> {
-    return this.http.post<FileMedia>(`${this.api.base.v1}dolphin/file/`, {
+    return this.http.post<FileMedia>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/dolphin/file/`, {
       site: BlogService.currentBlog.id,
       file_key: fileKey,
     });
@@ -139,7 +142,7 @@ export class MediaService {
    * @param payload New file name and description data
    */
   update(id: string, payload: FileMedia['meta_data']): Observable<FileMedia> {
-    return this.http.put<FileMedia>(`${this.api.base.v1}dolphin/file/${id}/`, {
+    return this.http.put<FileMedia>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/dolphin/file/${id}/`, {
       meta_data: payload,
     }, {
       params: { site: BlogService.currentBlog.id },
