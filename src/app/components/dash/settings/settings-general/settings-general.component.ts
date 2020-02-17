@@ -4,8 +4,8 @@ import { ApiError } from '@app/interfaces/api-error';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Domain } from '@app/interfaces/v1/domain';
 import { BlogService } from '@app/services/blog/blog.service';
+import { Plan } from '@app/shared/locked-feature/shared/enums/plan';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { dom } from '@fortawesome/fontawesome-svg-core';
 import { faStar as farStar } from '@fortawesome/free-regular-svg-icons/faStar';
 import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
@@ -21,6 +21,8 @@ export class SettingsGeneralComponent implements OnInit {
   readonly faDelete: IconDefinition = faTrash;
   readonly faPrimary: IconDefinition = faStar;
   readonly faNotPrimary: IconDefinition = farStar;
+
+  readonly plan = Plan;
 
   /**
    * Blog settings data
