@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File as FileMedia } from '@app/interfaces/file';
@@ -106,7 +106,8 @@ export class MediaService {
    * @param file File to upload
    * @param fields Upload fields
    */
-  uploadToUrl(url: string, file: File, fields: UploadUrlResponse['post_data']['fields']): Observable<void | FileMedia> {
+  uploadToUrl(url: string, file: File, fields: UploadUrlResponse['post_data']['fields']):
+    Observable<HttpEvent<FileMedia>> {
     const payload: FormData = new FormData();
     for (const field in fields) {
       if (fields[field]) {
@@ -117,7 +118,13 @@ export class MediaService {
     if (environment.name === 'local') {
       payload.append('site', BlogService.currentBlog.id);
     }
-    return this.http.post<void | FileMedia>(url, payload);
+    /**
+     * Create an HTTP POST request and pass the form with option to report progress
+     */
+    const req = new HttpRequest('POST', url, payload, {
+      reportProgress: true,
+    });
+    return this.http.request<FileMedia>(req);
   }
 
   /**
