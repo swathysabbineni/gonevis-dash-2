@@ -138,7 +138,7 @@ export class BlogService {
    * @param title Blog's title
    */
   create(url: string, title: string): Observable<BlogCreate> {
-    return this.http.post<BlogCreate>(`${this.api.base.v1}website/site/`, { url, title });
+    return this.http.post<BlogCreate>(`${this.api.base.v1}create-site/`, { url, title });
   }
 
   /**
