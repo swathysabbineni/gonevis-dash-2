@@ -57,7 +57,7 @@ export class CommentsService {
    */
   deleteComment(comment: string): Observable<void> {
     return this.http.delete<void>(
-      `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/sushial/comment/${comment}`,
+      `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/sushial/comment/${comment}/`,
     );
   }
 }

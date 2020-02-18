@@ -337,7 +337,7 @@ export class BlogService {
    */
   getSubscribers(): Observable<ApiResponse<Subscriber>> {
     return this.http.get<ApiResponse<Subscriber>>(
-      `${this.api.base.zero}website/site/${BlogService.currentBlog.id}/subscribers`,
+      `${this.api.base.zero}website/site/${BlogService.currentBlog.id}/subscribers/`,
     );
   }
 
@@ -348,12 +348,13 @@ export class BlogService {
    * @param slug tag slug
    */
   updateTag(slug: string, payload: Params): Observable<Tag> {
-    return this.http.put<Tag>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/tagool/tag/${slug}`, payload).pipe(
-      map((data => {
-          this.toast.info(this.translate.instant('TOAST_UPDATE'), slug);
-          return data;
-        }),
-      ),
+    return this.http.put<Tag>(
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/tagool/tag/${slug}/`,
+      payload,
+    ).pipe(map((data => {
+        this.toast.info(this.translate.instant('TOAST_UPDATE'), slug);
+        return data;
+      })),
     );
   }
 }
