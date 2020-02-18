@@ -138,14 +138,14 @@ export class BlogService {
    * @param title Blog's title
    */
   create(url: string, title: string): Observable<BlogCreate> {
-    return this.http.post<BlogCreate>(`${this.api.base.v1}website/site/`, { url, title });
+    return this.http.post<BlogCreate>(`${this.api.base.v1}create-site/`, { url, title });
   }
 
   /**
    * Get metrics
    */
   getMetrics(): Observable<Metrics> {
-    return this.http.get<Metrics>(`${this.api.base.v1}website/site/${BlogService.currentBlog.id}/metrics`);
+    return this.http.get<Metrics>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/metrics/`);
   }
 
   /**
@@ -153,7 +153,7 @@ export class BlogService {
    */
   getBlogTemplates(): Observable<{ templates: Template[] }> {
     return this.http.get<{ templates: Template[] }>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/templates`,
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/templates/`,
     );
   }
 
@@ -161,7 +161,7 @@ export class BlogService {
    * Get templates
    */
   getTemplates(): Observable<ApiResponse<Template>> {
-    return this.http.get<ApiResponse<Template>>(`${this.api.base.v1}website/templates`);
+    return this.http.get<ApiResponse<Template>>(`${this.api.base.v1}templates/`);
   }
 
   /**
@@ -171,7 +171,7 @@ export class BlogService {
    */
   setTemplate(template: string): Observable<void> {
     return this.http.put<void>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-template/`, {
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/set-template/`, {
         site_template_id: template,
       },
     ).pipe(map((() => {
@@ -184,7 +184,7 @@ export class BlogService {
    */
   getTemplateConfig(): Observable<{ template_config: TemplateConfig }> {
     return this.http.get<{ template_config: TemplateConfig }>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/template-config`,
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/template-config/`,
     );
   }
 
@@ -195,7 +195,7 @@ export class BlogService {
    */
   setTemplateConfig(fields: TemplateConfigFields): Observable<{ template_config: TemplateConfig }> {
     return this.http.put<{ template_config: TemplateConfig }>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-template-config/`, {
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/set-template-config/`, {
         config_fields: fields,
       },
     ).pipe(map((data => {
@@ -208,7 +208,7 @@ export class BlogService {
    * Get blog settings
    */
   getSettings(): Observable<BlogSettings> {
-    return this.http.get<BlogSettings>(`${this.api.base.v1}website/site/${BlogService.currentBlog.id}/settings/`);
+    return this.http.get<BlogSettings>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/settings/`);
   }
 
   /**
@@ -218,7 +218,7 @@ export class BlogService {
    */
   updateSettings(payload: Params): Observable<BlogSettings> {
     return this.http.put<BlogSettings>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/update-settings/`, payload,
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/update-settings/`, payload,
     ).pipe(map((data => {
       const blogs: BlogMin[] = BlogService.blogsSubject.value;
       const blog: BlogMin = blogs.find(item => item.id === BlogService.currentBlog.id);
@@ -243,7 +243,7 @@ export class BlogService {
    */
   updateRemoveBranding(status: boolean): Observable<BlogSettings> {
     return this.http.put<BlogSettings>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/remove-branding/`, {
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/remove-branding/`, {
         remove_branding: status,
       },
     );
@@ -256,7 +256,7 @@ export class BlogService {
    */
   updateFooterText(status: string): Observable<BlogSettings> {
     return this.http.put<BlogSettings>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-custom-footer/`, {
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/set-custom-footer/`, {
         footer_text: status,
       },
     );
@@ -269,7 +269,7 @@ export class BlogService {
    */
   updateGoogleAnalytics(payload: Params): Observable<BlogSettings> {
     return this.http.put<BlogSettings>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/google-analytics/`, payload);
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/google-analytics/`, payload);
   }
 
   /**
@@ -279,7 +279,7 @@ export class BlogService {
    */
   updateGoogleAdsense(payload: Params): Observable<BlogSettings> {
     return this.http.put<BlogSettings>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/google-adsense`, payload);
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/google-adsense`, payload);
   }
 
   /**
@@ -290,7 +290,7 @@ export class BlogService {
    */
   addDomain(domain: string): Observable<void> {
     return this.http.put<void>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-custom-domain/`, { domain },
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/set-custom-domain/`, { domain },
     ).pipe(map((data => {
       this.toast.info(this.translate.instant('TOAST_ADD'), domain);
       return data;
@@ -304,7 +304,7 @@ export class BlogService {
    */
   removeDomain(domain: number): Observable<void> {
     return this.http.put<void>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/remove-custom-domain/`, { domain_id: domain },
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/remove-custom-domain/`, { domain_id: domain },
     ).pipe(map((() => {
       this.toast.info(this.translate.instant('TOAST_DELETE'), this.translate.instant('DOMAIN'));
     })));
@@ -317,7 +317,7 @@ export class BlogService {
    */
   setDomainPrimary(domain: number): Observable<void> {
     return this.http.put<void>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/set-primary-domain/`, { domain_id: domain },
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/set-primary-domain/`, { domain_id: domain },
     ).pipe(map((() => {
       this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('PRIMARY_DOMAIN'));
     })));
@@ -329,7 +329,7 @@ export class BlogService {
    * @param domain Domain slug
    */
   domainCheck(domain: string): Observable<void> {
-    return this.http.post<void>(`${this.api.base.v1}website/domain-check/`, { domain });
+    return this.http.post<void>(`${this.api.base.v1}domain-check/`, { domain });
   }
 
   /**
@@ -337,7 +337,7 @@ export class BlogService {
    */
   getSubscribers(): Observable<ApiResponse<Subscriber>> {
     return this.http.get<ApiResponse<Subscriber>>(
-      `${this.api.base.zero}website/site/${BlogService.currentBlog.id}/subscribers`,
+      `${this.api.base.zero}website/site/${BlogService.currentBlog.id}/subscribers/`,
     );
   }
 
@@ -349,14 +349,12 @@ export class BlogService {
    */
   updateTag(slug: string, payload: Params): Observable<Tag> {
     return this.http.put<Tag>(
-      `${this.api.base.v1}tagool/tag/${slug}`, payload, {
-        params: {
-          site: BlogService.currentBlog.id,
-        },
-      },
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/tagool/tag/${slug}/`,
+      payload,
     ).pipe(map((data => {
-      this.toast.info(this.translate.instant('TOAST_UPDATE'), slug);
-      return data;
-    })));
+        this.toast.info(this.translate.instant('TOAST_UPDATE'), slug);
+        return data;
+      })),
+    );
   }
 }
