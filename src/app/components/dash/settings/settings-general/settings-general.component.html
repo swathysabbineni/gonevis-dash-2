@@ -34,7 +34,10 @@
 <!-- Blog domains -->
 <div class="card dash mb-3">
   <!-- Header -->
-  <div class="card-header" translate>DOMAINS</div>
+  <div class="card-header">
+    <span translate>DOMAINS</span>
+    <app-locked-feature [plan]="plan.Personal"></app-locked-feature>
+  </div>
   <!-- Body -->
   <div class="card-body" *ngIf="settings">
     <!-- Help text -->
