@@ -40,7 +40,7 @@ export class FileModalComponent {
   /**
    * Image element
    */
-  @ViewChild('image', { static: false }) image: ElementRef;
+  @ViewChild('image') image: ElementRef;
 
   /**
    * Media file data

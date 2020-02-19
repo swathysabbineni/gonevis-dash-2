@@ -53,7 +53,7 @@ export class SettingsAppearanceComponent implements OnInit {
   /**
    * Current viewing theme index
    */
-  @ViewChild('themeCarousel', { static: false })
+  @ViewChild('themeCarousel')
   themeCarousel: CarouselComponent;
 
   /**

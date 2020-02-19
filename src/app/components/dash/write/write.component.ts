@@ -120,7 +120,7 @@ export class WriteComponent implements OnInit, OnDestroy {
    */
   readonly entryStatus = EntryStatus;
 
-  @ViewChild('fileListModalTemplate', { static: false }) private fileListModalTemplate: TemplateRef<any>;
+  @ViewChild('fileListModalTemplate') private fileListModalTemplate: TemplateRef<any>;
 
   /**
    * Determines whether user was creating post or not

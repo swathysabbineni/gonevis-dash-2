@@ -14,7 +14,7 @@ export class FileSelectionComponent {
   /**
    * Get tabs parent
    */
-  @ViewChild('tabset', { static: false }) tabset: TabsetComponent;
+  @ViewChild('tabset') tabset: TabsetComponent;
 
   /**
    * On file selected
@@ -29,7 +29,7 @@ export class FileSelectionComponent {
   /**
    * File list child to add files to
    */
-  @ViewChild('fileListComponent', { static: false }) fileListComponent: FileListComponent;
+  @ViewChild('fileListComponent') fileListComponent: FileListComponent;
 
   constructor(public modal: BsModalRef) {
   }

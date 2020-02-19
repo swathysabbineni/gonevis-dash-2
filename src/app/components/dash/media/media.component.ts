@@ -12,7 +12,7 @@ export class MediaComponent {
   /**
    * File list child to add files to
    */
-  @ViewChild(FileListComponent, { static: false }) fileListComponent: FileListComponent;
+  @ViewChild(FileListComponent) fileListComponent: FileListComponent;
 
   /**
    * On upload finish
