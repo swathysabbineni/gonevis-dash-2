@@ -5,6 +5,7 @@ import { MediaService } from '@app/components/dash/media/media.service';
 import { DragDropModule } from '@app/shared/drag-drop/drag-drop.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProgressbarModule } from 'ngx-bootstrap';
 
 import { UploadComponent } from 'src/app/shared/upload/upload.component';
 
@@ -19,6 +20,7 @@ import { UploadComponent } from 'src/app/shared/upload/upload.component';
     TranslateModule.forChild(),
     DragDropModule,
     FontAwesomeModule,
+    ProgressbarModule.forRoot(),
   ],
   providers: [
     MediaService,

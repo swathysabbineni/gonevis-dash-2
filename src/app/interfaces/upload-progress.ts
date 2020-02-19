@@ -1,4 +1,4 @@
-import { File as FileMedia } from '@app/interfaces/file';
+import { File } from '@app/interfaces/file';
 
 /**
  * Represents an upload progress structure.
@@ -13,5 +13,5 @@ export interface UploadProgress {
   /**
    * Returned data from API call
    */
-  data?: FileMedia;
+  data?: File;
 }

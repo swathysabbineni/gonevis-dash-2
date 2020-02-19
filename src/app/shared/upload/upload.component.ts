@@ -1,24 +1,32 @@
-import { Component, ViewChild, Output, EventEmitter, Input } from '@angular/core';
+import { Component, ViewChild, Output, EventEmitter, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { File as FileMedia } from '@app/interfaces/file';
-import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
-import { environment } from '@environments/environment';
+import { UploadProgress } from '@app/interfaces/upload-progress';
+import { UploadService } from '@app/services/upload/upload.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons/faFileUpload';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.scss'],
 })
-export class UploadComponent {
+export class UploadComponent implements OnDestroy {
+
+  /**
+   * Represents a disposable resource, such as the execution of an Observable. A
+   * Subscription has one important method, `unsubscribe`, that takes no argument
+   * and just disposes the resource held by the subscription
+   */
+  private readonly subscription: Subscription = new Subscription();
 
   /**
    * File upload icon
    */
-  faFileUpload: IconDefinition = faFileUpload;
+  readonly faFileUpload: IconDefinition = faFileUpload;
 
   /**
    * Upload event (when file upload is finished)
@@ -40,19 +48,28 @@ export class UploadComponent {
    */
   @ViewChild('fileElement', { static: false }) fileElement;
 
+  progress: { [p: string]: { progress: Observable<UploadProgress> } };
+
+  files: File[] = [];
+
+  inProgressFiles: { [p: string]: UploadProgress } = {};
+
   constructor(private mediaService: MediaService,
               private translate: TranslateService,
-              private toast: ToastrService) {
+              private toast: ToastrService,
+              private uploadService: UploadService,
+              private cd: ChangeDetectorRef) {
   }
 
   /**
-   * FIle upload completed
+   * File upload completed
    *
    * @param file Uploaded file
    */
-  private onFileUpload(file: FileMedia) {
+  private onFileUpload(file: FileMedia): void {
     this.toast.success(this.translate.instant('TOAST_UPLOAD'), file.meta_data.name);
     this.upload.emit(file);
+    this.cd.detectChanges();
   }
 
   /**
@@ -74,28 +91,42 @@ export class UploadComponent {
     if (!files[0]) {
       return;
     }
-    for (const file of files) {
-      this.mediaService.uploadUrl({
-        file_name: file.name,
-        file_size: file.size,
-        mime_type: file.type,
-      }).subscribe((response: UploadUrlResponse): void => {
-        this.mediaService.uploadToUrl(
-          response.post_data.url,
-          file,
-          response.post_data.fields,
-        ).subscribe((data: void | FileMedia): void => {
-          if (environment.name === 'local') {
-            this.onFileUpload(data as FileMedia);
-          } else {
-            this.mediaService.post(
-              response.post_data.fields.key,
-            ).subscribe((fileUploaded: FileMedia): void => {
-              this.onFileUpload(fileUploaded);
-            });
-          }
-        });
-      });
-    }
+    this.files = files;
+    // start the upload and save the progress map
+    this.progress = this.uploadService.upload(files);
+    this.cd.detectChanges();
+    Object.keys(this.progress).forEach((key: string): void => {
+      this.subscription.add(
+        this.progress[key].progress.subscribe((value: UploadProgress): void => {
+          this.inProgressFiles[key] = value;
+          this.cd.detectChanges();
+        }),
+      );
+    });
+
+    // convert the progress map into an array
+    const allProgressObservables: Observable<UploadProgress>[] = Object.keys(this.progress)
+      .map((key: string): Observable<UploadProgress> => this.progress[key].progress);
+
+    // When all progress-observables are completed...
+    forkJoin(allProgressObservables).subscribe((data: UploadProgress[]): void => {
+      data
+        .filter((uploadProgress: UploadProgress): boolean => !!uploadProgress.data)
+        .forEach((uploadProgress: UploadProgress): void => {
+            /**
+             * Disposes the resources held by the subscription
+             */
+            this.subscription.unsubscribe();
+            this.onFileUpload(uploadProgress.data);
+          },
+        );
+    });
+  }
+
+  ngOnDestroy(): void {
+    /**
+     * Disposes the resources held by the subscription
+     */
+    this.subscription.unsubscribe();
   }
 }

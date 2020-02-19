@@ -15,3 +15,30 @@
     {{ 'DROP_HERE_TO_UPLOAD' | translate }}
   </div>
 </div>
+
+<div class="mt-2" *ngFor="let file of files">
+  <!-- File name -->
+  {{ file.name }}
+  <div *ngIf="inProgressFiles[file.name]">
+    <!-- Progress bar -->
+    <progressbar max="100"
+                 [value]="inProgressFiles[file.name].progress === 0 ? 100 : inProgressFiles[file.name].progress"
+                 [striped]="inProgressFiles[file.name].progress === 0"
+                 [type]="inProgressFiles[file.name].data ? 'success' : 'primary'"
+                 [animate]="true">
+      <!-- Not done -->
+      <div *ngIf="!inProgressFiles[file.name].data">
+        <!-- Preparing -->
+        <span *ngIf="inProgressFiles[file.name].progress === 0">Preparing file</span>
+        <!-- In progress -->
+        <span *ngIf="inProgressFiles[file.name].progress !== 0 && inProgressFiles[file.name].progress < 100">
+          {{ inProgressFiles[file.name].progress }}%
+        </span>
+        <span *ngIf="inProgressFiles[file.name].progress == 100">Almost done</span>
+      </div>
+      <!-- Done -->
+      <span *ngIf="inProgressFiles[file.name].data">Done</span>
+<!--      <i>{{ inProgressFiles[file.name].progress }}</i>-->
+    </progressbar>
+  </div>
+</div>
