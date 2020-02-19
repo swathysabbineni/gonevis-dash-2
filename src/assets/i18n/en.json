@@ -172,7 +172,7 @@
   "UPLOAD": "Upload",
   "SELECT_IMAGE": "Select image",
   "FEEL_FREE_TO_JOIN_OUR_DISCORD_SERVER": "Feel free to join our new Discord server!",
-  "REMOVE_GONEVIS_BRANDING": "Remove GoNevis.com branding.",
+  "REMOVE_GONEVIS_BRANDING": "Remove GoNevis.com branding",
   "FOOTER_TEXT": "Footer text",
   "ALLOW_GOOGLE_ANALYTICS": "Allow Google Analytics",
   "GOOGLE_ANALYTICS_CODE": "Google Analytics Code",
@@ -270,6 +270,7 @@
   "START": "Start",
   "SIGN_IN_AGAIN": "Sign in again",
   "SEARCH": "Search",
+  "BRANDING": "Branding",
   "VERIFYING_EMAIL": "Verifying your email...",
   "INVALID_VERIFICATION_LINK": "Oh... Invalid verification link.",
   "QUICK_DRAFT": "Quick Draft",
@@ -283,5 +284,7 @@
   "DRAG_AND_DROP_OR_UPLOAD": "Drag and drop or",
   "PAGE_NOT_FOUND_CODE": "404",
   "PAGE_NOT_FOUND_DESCRIPTION": "The page you're looking for doesn't exist",
+  "PERSONAL_PLAN_FEATURE": "This is a \"Personal\" plan feature",
+  "PROFESSIONAL_PLAN_FEATURE": "This is a \"Professional\" plan feature",
   "COLLABORATING": "Collaborating"
 }

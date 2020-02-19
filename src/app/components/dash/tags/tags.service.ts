@@ -29,9 +29,8 @@ export class TagsService {
    * @param search Search text
    */
   getTags(page: number = 1, search: string = ''): Observable<ApiResponse<Tag>> {
-    return this.http.get<ApiResponse<Tag>>(`${this.apiService.base.v1}tagool/tag/`, {
+    return this.http.get<ApiResponse<Tag>>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/tagool/tag/`, {
       params: {
-        site: BlogService.currentBlog.id,
         search,
         ordering: '-tagged_items_count',
         limit: TagsService.PAGE_SIZE.toString(),
@@ -46,11 +45,7 @@ export class TagsService {
    * @param slug Blog slug
    */
   delete(slug: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiService.base.v1}tagool/tag/${slug}`, {
-      params: {
-        site: BlogService.currentBlog.id,
-      },
-    });
+    return this.http.delete<void>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/tagool/tag/${slug}/`);
   }
 
   /**
@@ -59,7 +54,6 @@ export class TagsService {
    * @param payload Tag payload
    */
   create(payload: Params): Observable<Tag> {
-    payload.site = BlogService.currentBlog.id;
-    return this.http.post<Tag>(`${this.apiService.base.v1}tagool/tag/`, payload);
+    return this.http.post<Tag>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/tagool/tag/`, payload);
   }
 }

@@ -41,15 +41,15 @@ export class BlogService {
   /**
    * Get list of blogs that current user is following (subscribed to)
    */
-  getFollowingBlogs(filters: {
-    limit?: number,
-  } = {}): Observable<ApiResponse<v1Blog>> {
-    return this.http.get<ApiResponse<v1Blog>>(`${this.apiService.base.v1}website/site/`, {
-      params: Object.assign(filters, {
-        show: 'subscribed',
-      }),
-    });
-  }
+  // getFollowingBlogs(filters: {
+  //   limit?: number,
+  // } = {}): Observable<ApiResponse<v1Blog>> {
+  //   return this.http.get<ApiResponse<v1Blog>>(`${this.apiService.base.v1}website/site/`, {
+  //     params: Object.assign(filters, {
+  //       show: 'subscribed',
+  //     }),
+  //   });
+  // }
 
   /**
    * (Un)Follow a blog for the current user

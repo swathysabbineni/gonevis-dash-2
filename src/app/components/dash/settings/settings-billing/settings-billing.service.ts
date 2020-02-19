@@ -23,9 +23,12 @@ export class SettingsBillingService {
      * Setup http params
      */
     const httpParams: HttpParams = new HttpParams().set('limit', '12');
-    return this.http.get<ApiResponse<Transaction>>(`${this.apiService.base.v1}eskenas/transactions/`, {
-      params: httpParams,
-    });
+    return this.http.get<ApiResponse<Transaction>>(
+      `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/eskenas/transactions/`,
+      {
+        params: httpParams,
+      },
+    );
   }
 
   /**
@@ -34,9 +37,10 @@ export class SettingsBillingService {
    * @param planId Plan ID
    */
   cancelSubscription(planId: string): Observable<void> {
-    return this.http.post<void>(`${this.apiService.base.v1}eskenas/subscriptions/${planId}/cancel-subscription/`, {
-        site_id: BlogService.currentBlog.id,
-      },
+    const blogId: string = BlogService.currentBlog.id;
+    return this.http.post<void>(
+      `${this.apiService.base.v1}site/${blogId}/eskenas/subscriptions/${planId}/cancel-subscription/`,
+      null,
     );
   }
 }

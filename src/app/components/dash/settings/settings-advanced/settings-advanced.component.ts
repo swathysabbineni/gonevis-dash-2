@@ -5,6 +5,7 @@ import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { BlogService } from '@app/services/blog/blog.service';
+import { Plan } from '@app/shared/locked-feature/shared/enums/plan';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 
@@ -14,6 +15,8 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./settings-advanced.component.scss'],
 })
 export class SettingsAdvancedComponent implements OnInit {
+
+  readonly plan = Plan;
 
   /**
    * Number of Posts Per Page

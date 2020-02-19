@@ -28,9 +28,7 @@ export class TeamService {
    * Get blog teams
    */
   getTeams(): Observable<Team> {
-    return this.http.get<Team>(`${this.api.base.v1}website/site/${BlogService.currentBlog.id}/team/`, {
-      params: { site: BlogService.currentBlog.id },
-    });
+    return this.http.get<Team>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/team/`);
   }
 
   /**
@@ -40,10 +38,10 @@ export class TeamService {
    */
   remove(id: string): Observable<void> {
     return this.http.put<void>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/remove-team-member/`, {
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/remove-team-member/`, {
         team_member_id: id,
       },
-    ).pipe();
+    );
   }
 
   /**
@@ -53,8 +51,8 @@ export class TeamService {
    */
   removePending(email: string): Observable<void> {
     return this.http.put<void>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/remove-pending-member/`, { email },
-    ).pipe();
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/remove-pending-member/`, { email },
+    );
   }
 
   /**
@@ -65,7 +63,7 @@ export class TeamService {
    */
   invite(email: string, role: TeamRoles): Observable<Team> {
     return this.http.put<Team>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/promote-user/`, { email, role },
-    ).pipe();
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/promote-user/`, { email, role },
+    );
   }
 }

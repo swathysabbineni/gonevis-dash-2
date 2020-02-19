@@ -65,16 +65,17 @@ export class SettingsUpgradeService {
    * Get list of plans to upgrade
    */
   getPlans(): Observable<ApiResponse<Plan>> {
-    return this.http.get<ApiResponse<Plan>>(`${this.apiService.base.v1}eskenas/plans/`);
+    return this.http.get<ApiResponse<Plan>>(
+      `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/eskenas/plans/`,
+    );
   }
 
   /**
    * Get current blog subscription plan
    */
   getSubscription(): Observable<{ subscription: Subscription }> {
-    const blogId: string = BlogService.currentBlog.id;
     return this.http.get<{ subscription: Subscription }>(
-      `${this.apiService.base.v1}website/site/${blogId}/subscription/`,
+      `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/subscription/`,
     );
   }
 }
