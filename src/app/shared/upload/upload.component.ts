@@ -38,7 +38,7 @@ export class UploadComponent {
   /**
    * File input reference
    */
-  @ViewChild('fileElement', { static: false }) fileElement;
+  @ViewChild('fileElement') fileElement;
 
   constructor(private mediaService: MediaService,
               private translate: TranslateService,
