@@ -239,6 +239,7 @@ export class EntryComponent implements OnInit {
       const PAYLOAD: { [property: string]: any } = {};
       PAYLOAD[property] = value;
       this.entryService.update(entry.id, PAYLOAD).subscribe(((data: Entry): void => {
+        // @ts-ignore @fixme Arsalan
         entry[property] = data[property];
         this.toast.info(this.translate.instant('TOAST_UPDATE'), entry.title);
       }), (error: HttpErrorResponse): void => {
