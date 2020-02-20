@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { ApiError } from '@app/interfaces/api-error';
+import { Injectable } from '@angular/core';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
+import { AuthService } from '@app/services/auth/auth.service';
+import { MessageModalComponent } from '@app/shared/message-modal/message-modal.component';
 import { environment } from '@environments/environment';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { CookieService } from 'ngx-cookie-service';
-import { ToastrService, ActiveToast } from 'ngx-toastr';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,8 @@ import { AuthService } from '../auth/auth.service';
 export class AuthInterceptorService implements HttpInterceptor {
 
   constructor(private cookieService: CookieService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private modalService: BsModalService) {
   }
 
   /**
@@ -50,7 +51,13 @@ export class AuthInterceptorService implements HttpInterceptor {
            * User email is not verified
            */
           if (error.error.non_field_errors.includes('Your email is not verified.')) {
-            // @todo
+            this.modalService.show(MessageModalComponent, {
+              initialState: {
+                title: 'EMAIL_NOT_VERIFIED',
+                messages: [...error.error.non_field_errors, 'TEXT_EMAIL_NOT_VERIFIED'],
+              },
+              class: 'modal-sm',
+            });
           }
           break;
         }
@@ -58,7 +65,16 @@ export class AuthInterceptorService implements HttpInterceptor {
           /**
            * User authentication token is invalid
            */
-          // @todo
+          this.authService.signOut(false).then((): void => {
+            this.modalService.show(MessageModalComponent, {
+              initialState: {
+                title: 'INVALID_AUTHENTICATION',
+                messages: ['TEXT_INVALID_AUTHENTICATION'],
+                button: 'OK',
+              },
+              class: 'modal-sm',
+            });
+          });
           break;
         }
         case 403: {
