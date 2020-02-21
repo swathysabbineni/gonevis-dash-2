@@ -16,6 +16,10 @@ $table-border-color: $light;
 $tooltip-arrow-color: $dark;
 $tooltip-bg: $dark;
 
+$modal-footer-border-width: 0;
+$modal-content-border-width: 0;
+$modal-header-border-width: 0;
+
 @import "~bootstrap/scss/bootstrap";
 @import '~ngx-toastr/toastr';
 
@@ -664,10 +668,24 @@ a,
 }
 
 .modal {
+
+  .modal-header {
+    background: $light;
+    box-shadow: $box-shadow-sm;
+  }
+
+  .modal-footer {
+    background: $light;
+   }
+
   .full {
     max-width: initial;
     margin: 0;
     height: 100%;
+
+    .modal-header {
+      background: unset;
+    }
 
     .modal-content {
       border: none;
