@@ -16,29 +16,30 @@
   </div>
 </div>
 
-<div class="mt-2" *ngFor="let file of files">
+<div class="mt-2" *ngFor="let file of selectedFiles | keyvalue:originalOrder">
   <!-- File name -->
-  {{ file.name }}
-  <div *ngIf="inProgressFiles[file.name]">
-    <!-- Progress bar -->
-    <progressbar max="100"
-                 [value]="inProgressFiles[file.name].progress === 0 ? 100 : inProgressFiles[file.name].progress"
-                 [striped]="inProgressFiles[file.name].progress === 0"
-                 [type]="inProgressFiles[file.name].data ? 'success' : 'primary'"
-                 [animate]="true">
-      <!-- Not done -->
-      <div *ngIf="!inProgressFiles[file.name].data">
-        <!-- Preparing -->
-        <span *ngIf="inProgressFiles[file.name].progress === 0">Preparing file</span>
-        <!-- In progress -->
-        <span *ngIf="inProgressFiles[file.name].progress !== 0 && inProgressFiles[file.name].progress < 100">
-          {{ inProgressFiles[file.name].progress }}%
-        </span>
-        <span *ngIf="inProgressFiles[file.name].progress == 100">Almost done</span>
-      </div>
-      <!-- Done -->
-      <span *ngIf="inProgressFiles[file.name].data">Done</span>
-<!--      <i>{{ inProgressFiles[file.name].progress }}</i>-->
-    </progressbar>
-  </div>
+  {{ file.key }} - {{ file.value.extension }} - {{ file.value.readableSize }}
+  <!-- Progress bar -->
+  <progressbar max="100"
+               [value]="file.value.preparing ? 100 : file.value.progress"
+               [striped]="file.value.preparing"
+               [type]="file.value.color"
+               [animate]="true">
+    <!-- Not done -->
+    <div *ngIf="!file.value.done && !file.value.error">
+      <!-- Preparing -->
+      <span *ngIf="file.value.preparing">Preparing file</span>
+      <!-- In progress -->
+      <span *ngIf="!file.value.preparing && file.value.progress !== 100">
+        {{ file.value.progress }}%
+      </span>
+      <span *ngIf="file.value.progress === 100">Almost done</span>
+    </div>
+    <!-- Done -->
+    <span *ngIf="file.value.data">Done</span>
+    <span *ngIf="file.value.error">Error</span>
+  </progressbar>
+  <small class="text-danger d-block" *ngFor="let error of file.value.error | keyvalue">
+    {{ error.value }}
+  </small>
 </div>
