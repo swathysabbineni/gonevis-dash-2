@@ -189,6 +189,8 @@
   "SUBSCRIPTION_DETAILS": "Subscription Detail",
   "TEXT_DISCORD": "Feel free to join our new Discord server!",
   "TEXT_OLD_AUTH_VERSION": "Client authentication version is old, signing out.",
+  "TEXT_EMAIL_NOT_VERIFIED": "Please verify your need to verify your email to do this action.",
+  "TEXT_INVALID_AUTHENTICATION": "Your authentication is invalid or expired, sign in again, please.",
   "TOAST_SIGN_IN": "Signed in, welcome back!",
   "TOAST_SIGN_UP": "Welcome to GoNevis!",
   "TOAST_SIGN_OUT": "You are now signed out",
@@ -286,5 +288,11 @@
   "PAGE_NOT_FOUND_DESCRIPTION": "The page you're looking for doesn't exist",
   "PERSONAL_PLAN_FEATURE": "This is a \"Personal\" plan feature",
   "PROFESSIONAL_PLAN_FEATURE": "This is a \"Professional\" plan feature",
+  "OK": "OK",
+  "CLOSE": "Close",
+  "EMAIL_NOT_VERIFIED": "Email not verified",
+  "INVALID_AUTHENTICATION": "Invalid authentication",
+  "LOCKED_FEATURE": "Locked Feature",
+  "UNAUTHORIZED_ACCESS": "Unauthorized Action",
   "COLLABORATING": "Collaborating"
 }
