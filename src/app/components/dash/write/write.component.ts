@@ -120,7 +120,7 @@ export class WriteComponent implements OnInit, OnDestroy {
    */
   readonly entryStatus = EntryStatus;
 
-  @ViewChild('fileListModalTemplate', { static: false }) private fileListModalTemplate: TemplateRef<any>;
+  @ViewChild('fileListModalTemplate') private fileListModalTemplate: TemplateRef<any>;
 
   /**
    * Determines whether user was creating post or not
@@ -619,7 +619,9 @@ export class WriteComponent implements OnInit, OnDestroy {
       if (!this.wasCreating) {
         this.patchForm(data);
       }
-      (this.editor as any).history.clear();
+      if (this.editor) {
+        (this.editor as any).history.clear();
+      }
       // Initial auto-save
       this.initAutoSave();
     });
