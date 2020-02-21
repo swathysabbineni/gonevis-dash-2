@@ -5,7 +5,6 @@ import { MediaService } from '@app/components/dash/media/media.service';
 import { File as FileMedia } from '@app/interfaces/file';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
-import { UploadService } from '@app/services/upload/upload.service';
 import { UploadingFile } from '@app/shared/upload/uploading-file';
 import { environment } from '@environments/environment';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -61,8 +60,7 @@ export class UploadComponent implements OnDestroy {
   constructor(private mediaService: MediaService,
               private translate: TranslateService,
               private toast: ToastrService,
-              private uploadService: UploadService,
-              private cd: ChangeDetectorRef) {
+              private changeDetectorRef: ChangeDetectorRef) {
   }
 
   /**
@@ -73,7 +71,7 @@ export class UploadComponent implements OnDestroy {
   private onFileUpload(file: FileMedia): void {
     this.toast.success(this.translate.instant('TOAST_UPLOAD'), file.meta_data.name);
     this.upload.emit(file);
-    this.cd.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   /**
@@ -130,7 +128,7 @@ export class UploadComponent implements OnDestroy {
          */
         // this.uploadingList[file.name].preparing = false;
         this.selectedFiles.get(file.name).preparing = false;
-        this.cd.detectChanges();
+        this.changeDetectorRef.detectChanges();
         /**
          * API call
          */
@@ -148,7 +146,7 @@ export class UploadComponent implements OnDestroy {
              * Calculate the progress percentage and update progress subject
              */
             this.selectedFiles.get(file.name).progress = Math.round((100 * event.loaded) / event.total);
-            this.cd.detectChanges();
+            this.changeDetectorRef.detectChanges();
           } else if (event instanceof HttpResponse) {
             /**
              * If environment is local, then get response data from event and mark progress as complete,
@@ -163,7 +161,7 @@ export class UploadComponent implements OnDestroy {
               this.onFileUpload(event.body);
               statusSubject.next(true);
               statusSubject.complete();
-              this.cd.detectChanges();
+              this.changeDetectorRef.detectChanges();
             } else {
               /**
                * API call
@@ -177,14 +175,14 @@ export class UploadComponent implements OnDestroy {
                 this.onFileUpload(fileUploaded);
                 statusSubject.next(true);
                 statusSubject.complete();
-                this.cd.detectChanges();
+                this.changeDetectorRef.detectChanges();
               }, (error: HttpErrorResponseApi): void => { /* Post error handler */
                 this.selectedFiles.get(file.name).updateProperty({
                   error: error.error,
                   color: 'danger',
                 });
                 statusSubject.complete();
-                this.cd.detectChanges();
+                this.changeDetectorRef.detectChanges();
               });
             }
           }
@@ -194,7 +192,7 @@ export class UploadComponent implements OnDestroy {
             color: 'danger',
           });
           statusSubject.complete();
-          this.cd.detectChanges();
+          this.changeDetectorRef.detectChanges();
         });
       }, (error: HttpErrorResponseApi): void => { /* Upload URL error handler */
         this.selectedFiles.get(file.name).updateProperty({
@@ -202,7 +200,7 @@ export class UploadComponent implements OnDestroy {
           color: 'danger',
         });
         statusSubject.complete();
-        this.cd.detectChanges();
+        this.changeDetectorRef.detectChanges();
       });
     }
     forkJoin(observableList).subscribe((data: boolean[]): void => {
