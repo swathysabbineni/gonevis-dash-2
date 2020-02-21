@@ -619,7 +619,9 @@ export class WriteComponent implements OnInit, OnDestroy {
       if (!this.wasCreating) {
         this.patchForm(data);
       }
-      (this.editor as any).history.clear();
+      if (this.editor) {
+        (this.editor as any).history.clear();
+      }
       // Initial auto-save
       this.initAutoSave();
     });
