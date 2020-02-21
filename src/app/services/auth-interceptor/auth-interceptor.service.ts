@@ -82,13 +82,27 @@ export class AuthInterceptorService implements HttpInterceptor {
            * User does not have permission for this action
            */
           if (error.error.detail === 'You do not have permission to perform this action.') {
-            // @todo
+            this.modalService.show(MessageModalComponent, {
+              initialState: {
+                title: 'UNAUTHORIZED_ACCESS',
+                messages: [error.error.detail],
+                button: 'OK',
+              },
+              class: 'modal-sm',
+            });
           }
           /**
            * User blog needs to be upgrade for this action
            */
           if (error.error.detail === 'You need to upgrade your subscription plan to make such action.') {
-            // @todo
+            this.modalService.show(MessageModalComponent, {
+              initialState: {
+                title: 'LOCKED_FEATURE',
+                messages: [error.error.detail],
+                button: 'OK',
+              },
+              class: 'modal-sm',
+            });
           }
           break;
         }
