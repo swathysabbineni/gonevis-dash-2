@@ -292,5 +292,7 @@
   "CLOSE": "Close",
   "EMAIL_NOT_VERIFIED": "Email not verified",
   "INVALID_AUTHENTICATION": "Invalid authentication",
+  "LOCKED_FEATURE": "Locked Feature",
+  "UNAUTHORIZED_ACCESS": "Unauthorized Action",
   "COLLABORATING": "Collaborating"
 }
