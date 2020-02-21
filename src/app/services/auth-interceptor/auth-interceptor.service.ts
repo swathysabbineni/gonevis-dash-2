@@ -50,7 +50,7 @@ export class AuthInterceptorService implements HttpInterceptor {
           /**
            * User email is not verified
            */
-          if (error.error.non_field_errors.includes('Your email is not verified.')) {
+          if (error.error.non_field_errors && error.error.non_field_errors.includes('Your email is not verified.')) {
             this.modalService.show(MessageModalComponent, {
               initialState: {
                 title: 'EMAIL_NOT_VERIFIED',
