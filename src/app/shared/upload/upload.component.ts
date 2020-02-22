@@ -8,6 +8,7 @@ import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { UploadingFile } from '@app/shared/upload/uploading-file';
 import { environment } from '@environments/environment';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons/faCloudUploadAlt';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons/faFileUpload';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
@@ -27,10 +28,7 @@ export class UploadComponent implements OnDestroy {
    */
   private readonly subscription: Subscription = new Subscription();
 
-  /**
-   * File upload icon
-   */
-  readonly faFileUpload: IconDefinition = faFileUpload;
+  readonly faUpload: IconDefinition = faCloudUploadAlt;
 
   /**
    * Upload event (when file upload is finished)
@@ -61,6 +59,7 @@ export class UploadComponent implements OnDestroy {
               private translate: TranslateService,
               private toast: ToastrService,
               private changeDetectorRef: ChangeDetectorRef) {
+    this.dropZone = true;
   }
 
   /**

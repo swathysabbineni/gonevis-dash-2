@@ -1,51 +1,38 @@
 @import "variables";
 
 .drop-zone {
+  color: $unimportant;
+  border: 4px dashed $unimportant;
+  border-radius: $border-radius;
+  background: $light;
+  text-align: center;
   position: relative;
-  height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 4px dashed $secondary;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    display: block;
-  }
-
-  button {
-    margin: 0 map-get($spacers, 2);
-  }
-
-  .after-drag {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  &:not(.drag-started) &::before,
-  &:not(.drag-started) .after-drag,
-  &.drag-started .before-drag {
-    display: none;
+  &, .hide-on-drag, fa-icon {
+    transition: $transition-base;
   }
 
   &.drag-started {
-    &:before {
+    pointer-events: none;
+    border-color: $primary;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       z-index: 1;
+      display: block;
     }
 
-    &.drag-entered {
-      border: 6px dashed $primary;
+    fa-icon {
+      color: $primary;
+    }
 
-      fa-icon {
-        color: $primary;
-      }
+    .hide-on-drag {
+      opacity: 0.25;
     }
   }
 }

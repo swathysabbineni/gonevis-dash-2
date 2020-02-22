@@ -1,19 +1,14 @@
 <!-- Upload -->
 <input type="file" [accept]="accept" class="d-none" #fileElement (change)="onFileSelected()" multiple>
+
 <!-- Button -->
 <button type="button" class="btn btn-primary" (click)="fileElement.click()" translate *ngIf="!dropZone">UPLOAD</button>
+
 <!-- Drop zone -->
-<div class="drop-zone" appDragDrop (afterDrop)="onFileSelected($event)" *ngIf="dropZone">
-  <!-- Before drag starts -->
-  <div class="before-drag">
-    {{ 'DRAG_AND_DROP_OR_UPLOAD' | translate }}
-    <button type="button" class="btn btn-primary" (click)="fileElement.click()" translate>UPLOAD</button>
-  </div>
-  <!-- When dragging -->
-  <div class="after-drag">
-    <fa-icon [icon]="faFileUpload" size="4x" class="mb-3"></fa-icon>
-    {{ 'DROP_HERE_TO_UPLOAD' | translate }}
-  </div>
+<div class="drop-zone p-5" appDragDrop (afterDrop)="onFileSelected($event)" *ngIf="dropZone">
+  <fa-icon [icon]="faUpload" size="5x"></fa-icon>
+  <div class="font-weight-bold mt-4">Drag &amp; Drop Here to Upload <br> <span class="hide-on-drag">Or</span></div>
+  <button class="btn btn-primary btn-sm mt-1 hide-on-drag" (click)="fileElement.click()">Browse Files</button>
 </div>
 
 <div class="mt-2" *ngFor="let file of selectedFiles | keyvalue:originalOrder">
@@ -21,7 +16,7 @@
   {{ file.key }} - {{ file.value.extension }} - {{ file.value.readableSize }}
   <!-- Progress bar -->
   <progressbar max="100"
-               [value]="file.value.preparing ? 100 : file.value.progress"
+               [value]="file.value.preparing ? 0 : file.value.progress"
                [striped]="file.value.preparing"
                [type]="file.value.color"
                [animate]="true">
