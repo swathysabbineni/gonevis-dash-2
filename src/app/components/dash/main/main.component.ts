@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -25,6 +25,7 @@ import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap';
 import { BytesPipe } from 'ngx-pipes';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -32,7 +33,7 @@ import { BytesPipe } from 'ngx-pipes';
   styleUrls: ['./main.component.scss'],
   providers: [BytesPipe],
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
 
   private static readonly POSTS_LIMIT = 6;
   private static readonly COMMENTS_LIMIT = 8;
@@ -43,6 +44,13 @@ export class MainComponent implements OnInit {
   readonly faFiles: IconDefinition = faDatabase;
   readonly eye: IconDefinition = faEye;
   readonly like: IconDefinition = faThumbsUp;
+
+  /**
+   * Represents a disposable resource, such as the execution of an Observable. A
+   * Subscription has one important method, `unsubscribe`, that takes no argument
+   * and just disposes the resource held by the subscription
+   */
+  private readonly subscription: Subscription = new Subscription();
 
   /**
    * Blog settings data
@@ -124,48 +132,50 @@ export class MainComponent implements OnInit {
     /**
      * Watch for current blog changes
      */
-    this.activatedRoute.parent.parent.params.subscribe((): void => {
-      /**
-       * Reset data
-       */
-      this.templateConfig = null;
-      /**
-       * Load blog data
-       */
-      this.blogService.getSettings().subscribe((data: BlogSettings): void => {
-        this.blog = data;
-      });
-      /**
-       * Load entries
-       */
-      this.entryService.getEntries({
-        limit: MainComponent.POSTS_LIMIT,
-      }).subscribe((response: ApiResponse<Entry>): void => {
-        this.entries = response.results;
-      });
-      /**
-       * Load comments
-       */
-      this.commentsService.getComments({
-        limit: MainComponent.COMMENTS_LIMIT,
-      }).subscribe((response: ApiResponse<Comment>): void => {
-        this.comments = response.results;
-      });
-      /**
-       * Load metrics
-       */
-      this.blogService.getMetrics().subscribe((data: Metrics): void => {
-        this.metrics = data;
-      });
-      /**
-       * Load template config (for owner and admins)
-       */
-      if (BlogService.currentBlog.role !== TeamRoles.Editor) {
-        this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
-          this.templateConfig = data.template_config;
+    this.subscription.add(
+      this.activatedRoute.parent.parent.params.subscribe((): void => {
+        /**
+         * Reset data
+         */
+        this.templateConfig = null;
+        /**
+         * Load blog data
+         */
+        this.blogService.getSettings().subscribe((data: BlogSettings): void => {
+          this.blog = data;
         });
-      }
-    });
+        /**
+         * Load entries
+         */
+        this.entryService.getEntries({
+          limit: MainComponent.POSTS_LIMIT,
+        }).subscribe((response: ApiResponse<Entry>): void => {
+          this.entries = response.results;
+        });
+        /**
+         * Load comments
+         */
+        this.commentsService.getComments({
+          limit: MainComponent.COMMENTS_LIMIT,
+        }).subscribe((response: ApiResponse<Comment>): void => {
+          this.comments = response.results;
+        });
+        /**
+         * Load metrics
+         */
+        this.blogService.getMetrics().subscribe((data: Metrics): void => {
+          this.metrics = data;
+        });
+        /**
+         * Load template config (for owner and admins)
+         */
+        if (BlogService.currentBlog.role !== TeamRoles.Editor) {
+          this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
+            this.templateConfig = data.template_config;
+          });
+        }
+      }),
+    );
   }
 
   /**
@@ -184,5 +194,12 @@ export class MainComponent implements OnInit {
       this.quickDraftForm.loading = false;
       this.quickDraftForm.form.reset();
     });
+  }
+
+  ngOnDestroy(): void {
+    /**
+     * Disposes the resources held by the subscription
+     */
+    this.subscription.unsubscribe();
   }
 }

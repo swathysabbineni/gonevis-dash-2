@@ -159,13 +159,4 @@ export class DashComponent implements OnInit {
   feedback(): void {
     this.modalService.show(FeedbackModalComponent);
   }
-
-  /**
-   * Sign out user by a confirm message
-   */
-  signOut(): void {
-    if (confirm(this.translateService.instant('SIGN_OUT_PROMPT'))) {
-      this.authService.signOut();
-    }
-  }
 }

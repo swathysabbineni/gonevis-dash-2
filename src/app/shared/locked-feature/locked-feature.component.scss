@@ -1,0 +1,9 @@
+@import "variables";
+
+.locked-feature {
+  background-color: $light;
+  padding: 0 map_get($spacers, 1);
+  border-radius: $border-radius;
+  font-weight: $font-weight-bolder;
+  font-size: $small-font-size;
+}

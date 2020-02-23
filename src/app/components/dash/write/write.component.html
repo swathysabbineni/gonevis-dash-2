@@ -226,14 +226,14 @@
               <img [src]="coverImage.thumbnail_256x256" class="mw-100 rounded" alt="">
             </div>
             <div class="form-group">
-              <button class="btn btn-light btn-block" (click)="showFileListModal(fileListModalTemplate, false)"
+              <button class="btn btn-light btn-block" (click)="showFileListModal(false)"
                       translate
                       *ngIf="!form.get('cover_image').value">
                 SET_COVER_IMAGE
               </button>
               <div class="btn-group btn-block" role="group" *ngIf="form.get('cover_image').value">
                 <button type="button" class="btn btn-light"
-                        (click)="showFileListModal(fileListModalTemplate, false)"
+                        (click)="showFileListModal(false)"
                         translate>
                   CHANGE_COVER_IMAGE
                 </button>
@@ -342,17 +342,3 @@
     </div>
   </div>
 </form>
-<!-- File list modal -->
-<ng-template #fileListModalTemplate>
-  <div class="modal-header">
-    <h4 class="modal-title pull-left" translate>SELECT_IMAGE</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="fileListModalRef.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <app-file-list [selection]="true" (choose)="onFileSelect($event)">
-    </app-file-list>
-  </div>
-</ng-template>
-

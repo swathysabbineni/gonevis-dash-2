@@ -51,7 +51,7 @@ export class SettingsUpgradeComponent implements OnInit {
   }, {
     name: 'Personal',
     sub: 'Personal plan',
-    color: 'primary',
+    color: 'warning',
     features: [
       'Everything Above',
       '5 GB Storage',

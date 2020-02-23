@@ -65,8 +65,12 @@
   </div>
 </form>
 
-<!-- Remove branding -->
+<!-- Branding -->
 <form class="card dash mb-3" [formGroup]="removeBrandingForm" (ngSubmit)="updateRemoveBranding()">
+  <div class="card-header">
+    <span translate>BRANDING</span>
+    <app-locked-feature [plan]="plan.Personal"></app-locked-feature>
+  </div>
   <div class="card-body">
     <div class="custom-control custom-switch">
       <input class="custom-control-input" type="checkbox" formControlName="remove_branding" id="remove_branding">
@@ -90,6 +94,10 @@
 
 <!-- Google analytics -->
 <form class="card dash mb-3" [formGroup]="googleAnalyticsForm" (ngSubmit)="updateGoogleAnalytics()">
+  <div class="card-header">
+    <span translate>GOOGLE_ANALYTICS</span>
+    <app-locked-feature [plan]="plan.Professional"></app-locked-feature>
+  </div>
   <div class="card-body">
     <div class="custom-control custom-switch">
       <input class="custom-control-input" type="checkbox" formControlName="google_analytics_enabled"
@@ -113,8 +121,12 @@
   </div>
 </form>
 
-<!-- Google adSense -->
+<!-- Google AdSense -->
 <form class="card dash mb-3" [formGroup]="googleAdSenseForm" (ngSubmit)="updateGoogleAdSense()">
+  <div class="card-header">
+    <span translate>GOOGLE_ADSENSE</span>
+    <app-locked-feature [plan]="plan.Professional"></app-locked-feature>
+  </div>
   <div class="card-body">
     <div class="custom-control custom-switch">
       <input class="custom-control-input" type="checkbox" formControlName="google_adsense_enabled"

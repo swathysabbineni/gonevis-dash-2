@@ -27,6 +27,6 @@
 
 <!-- Footer -->
 <div class="modal-footer">
-  <button class="btn btn-link" data-dismiss="modal" translate>CANCEL</button>
+  <button class="btn btn-link" (click)="modal.hide()" translate>CANCEL</button>
   <button class="btn btn-primary" [disabled]="loading || form.invalid" (click)="submit()" translate>SUBMIT</button>
 </div>

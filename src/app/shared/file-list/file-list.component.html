@@ -1,10 +1,10 @@
+<!-- Search bar -->
+<app-search-bar (search)="search = $event; getFiles()"></app-search-bar>
+
 <!-- Loading -->
 <div class="card-body" *ngIf="!files">
   <app-loading></app-loading>
 </div>
-
-<!-- Search bar -->
-<app-search-bar (search)="search = $event; getFiles()"></app-search-bar>
 
 <!-- Files -->
 <div class="files">

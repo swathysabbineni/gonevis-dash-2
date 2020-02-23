@@ -97,7 +97,7 @@ export class TeamComponent implements OnInit {
       });
     } else {
       this.teamService.removePending(idOrEmail).subscribe((): void => {
-        this.toast.info(this.translate.instant('TOAST_REMOVE'), this.form.value.email);
+        this.toast.info(this.translate.instant('INVITATION_REMOVED'));
         this.getTeam();
       });
     }
