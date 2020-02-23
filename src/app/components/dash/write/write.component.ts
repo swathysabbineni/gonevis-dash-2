@@ -247,6 +247,7 @@ export class WriteComponent implements OnInit, OnDestroy {
    */
   private initAutoSave(): void {
     // Auto save every 10 seconds
+    // @ts-ignore @fixme Arsalan
     this.autoSaveInterval = setInterval((): void => {
       // Check if already updating
       if (!this.loading) {
@@ -781,9 +782,9 @@ export class WriteComponent implements OnInit, OnDestroy {
    *
    * @param search Search text
    */
-  getCircles(search: string = ''): void {
-    this.circleService.list(search).subscribe((data: CircleMin[]): void => {
-      this.circles = data;
+  getCircles(search?: string): void {
+    this.circleService.list(search).subscribe((data: ApiResponse<CircleMin>): void => {
+      this.circles = data.results;
     });
   }
 

@@ -50,7 +50,7 @@
           <div class="form-group">
             <label for="member_ids" translate>MEMBERS</label>
             <select id="member_ids" multiple class="form-control" formControlName="member_ids">
-              <option *ngFor="let member of availableCircleMembers" [ngValue]="member.user.id">
+              <option *ngFor="let member of availableCircleMembers" [ngValue]="member.id">
                 {{ member.user.username }}
               </option>
             </select>

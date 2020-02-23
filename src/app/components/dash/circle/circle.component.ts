@@ -63,8 +63,8 @@ export class CircleComponent implements OnInit {
     /**
      * Load the circles
      */
-    this.circleService.list().subscribe((data: CircleMin[]): void => {
-      this.circles = data;
+    this.circleService.list().subscribe((data: ApiResponse<CircleMin>): void => {
+      this.circles = data.results;
       /**
        * Load circle members
        */

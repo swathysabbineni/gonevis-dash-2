@@ -28,16 +28,11 @@ export class CircleService {
    *
    * @param search Search text
    */
-  list(search: string = ''): Observable<CircleMin[]> {
-    return this.http.get<{ circles: CircleMin[] }>(
-      `${this.api.base.v1}website/site/${BlogService.currentBlog.id}/circles/`, {
-        params: {
-          search,
-        },
-      },
-    ).pipe(map((data: { circles: CircleMin[] }): CircleMin[] => {
-      return data.circles;
-    }));
+  list(search: string = ''): Observable<ApiResponse<CircleMin>> {
+    return this.http.get<ApiResponse<CircleMin>>(
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/sushial/circles/`,
+      { params: { search } },
+    );
   }
 
   /**
@@ -47,7 +42,10 @@ export class CircleService {
    */
   create(payload: Partial<Circle>): Observable<Circle> {
     payload.site = BlogService.currentBlog.id;
-    return this.http.post<Circle>(`${this.api.base.v1}sushial/circles/`, payload);
+    return this.http.post<Circle>(
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/sushial/circles/`,
+      payload,
+    );
   }
 
   /**
@@ -57,7 +55,10 @@ export class CircleService {
    * @param payload Circle data
    */
   update(id: string, payload: Partial<Circle>): Observable<Circle> {
-    return this.http.patch<Circle>(`${this.api.base.v1}sushial/circles/${id}/`, payload);
+    return this.http.patch<Circle>(
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/sushial/circles/${id}/`,
+      payload,
+    );
   }
 
   /**
@@ -66,7 +67,7 @@ export class CircleService {
    * @param id Circle ID
    */
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.api.base.v1}sushial/circles/${id}/`);
+    return this.http.delete<void>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/sushial/circles/${id}/`);
   }
 
   /**
@@ -74,9 +75,7 @@ export class CircleService {
    */
   getAvailableMembers(): Observable<ApiResponse<Subscriber>> {
     return this.http.get<ApiResponse<Subscriber>>(
-      `${this.api.base.v1}sushial/followers/`, {
-        params: { site_id: BlogService.currentBlog.id },
-      },
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/sushial/followers/`,
     );
   }
 
@@ -88,7 +87,7 @@ export class CircleService {
    */
   getMembers(id: string, filters: { limit?: number } = {}): Observable<ApiResponse<Subscriber>> {
     return this.http.get<ApiResponse<Subscriber>>(
-      `${this.api.base.v1}sushial/followers/`, {
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/sushial/followers/`, {
         params: Object.assign(filters, {
           circle_id: id,
           limit: (filters.limit || CircleService.PAGE_SIZE).toString(),
@@ -105,9 +104,10 @@ export class CircleService {
    * @param member Member ID
    */
   addMember(id: string, member: string): Observable<Subscriber> {
-    return this.http.post<Subscriber>(`${this.api.base.v1}sushial/circles/${id}/add-member/`, {
-      subscription_id: member,
-    });
+    return this.http.post<Subscriber>(
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/sushial/circles/${id}/add-member/`,
+      { subscription_id: member },
+    );
   }
 
   /**
@@ -117,6 +117,9 @@ export class CircleService {
    * @param member Member ID
    */
   removeMember(id: string, member: string): Observable<any> {
-    return this.http.delete<void>(`${this.api.base.v1}sushial/circles/${id}/`);
+    return this.http.delete<void>(
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/sushial/circles/${id}/remove-member/`,
+      { params: { subscription_id: member } },
+    );
   }
 }
