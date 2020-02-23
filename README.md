@@ -7,7 +7,6 @@ GoNevis dashboard and reader front-end source code.
 
 ![GoNevis](https://gonevis.s3.amazonaws.com/dolphin/d30affc4-4bef-47d8-8a28-34c45b418dff/1582384271008_Dash_Source_Code_Screenshot.png)
 
-
 ## Development
 
 This project is made with Angular.
@@ -28,13 +27,17 @@ This project is made with Angular.
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-### Unit tests
+### Unit Tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-### End-to-end tests
+### End-to-end Tests
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+### Code Quality
+
+Run `npm run lint` to execute linting via [TSLint](https://palantir.github.io/tslint/).
 
 ### Further Help
 
