@@ -63,6 +63,12 @@ export class AuthInterceptorService implements HttpInterceptor {
         }
         case 401: {
           /**
+           * Don't handle this error for reset-password endpoint
+           */
+          if (request.url.endsWith('password-reset/')) {
+            break;
+          }
+          /**
            * User authentication token is invalid
            */
           this.authService.signOut(false).then((): void => {

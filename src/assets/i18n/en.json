@@ -296,5 +296,7 @@
   "INVALID_AUTHENTICATION": "Invalid authentication",
   "LOCKED_FEATURE": "Locked Feature",
   "UNAUTHORIZED_ACCESS": "Unauthorized Action",
+  "INVALID_RESET_PASSWORD_TOKEN": "This reset password link is invalid or expired.",
+  "TRY_AGAIN": "Try Again",
   "COLLABORATING": "Collaborating"
 }

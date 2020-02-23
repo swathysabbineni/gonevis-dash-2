@@ -81,7 +81,7 @@ export class AuthService {
    * @return Parsed JTW token
    * @param token JWT token
    */
-  private static parseJwt(token: string): AuthToken {
+  static parseJwt(token: string): AuthToken {
     const BASE64_URL: string = token.split('.')[1];
     if (typeof BASE64_URL === 'undefined') {
       return;
@@ -99,12 +99,15 @@ export class AuthService {
   /**
    * Update authentication token
    * @param token Authentication token
+   * @returns Whether token was set or not
    */
-  setToken(token: string): void {
+  setToken(token: string): boolean {
     const parsedJwt: AuthToken = AuthService.parseJwt(token);
     if (parsedJwt) {
       this.cookie.set('token', token, new Date(parsedJwt.exp * 1000), '/');
+      return true;
     }
+    return false;
   }
 
   /**
@@ -124,7 +127,9 @@ export class AuthService {
     if (toast) {
       this.toast.info(this.translate.instant('TOAST_SIGN_OUT'));
     }
-    return this.router.navigate(redirect);
+    if (redirect) {
+      return this.router.navigate(redirect);
+    }
   }
 
   /**
