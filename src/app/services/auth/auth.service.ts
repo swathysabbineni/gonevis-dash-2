@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { DashGuardService } from '@app/components/dash/dash-guard.service';
 import { AuthResponse } from '@app/interfaces/auth-response';
 import { AuthToken } from '@app/interfaces/auth-token';
-import { UserAuth } from '@app/interfaces/user-auth';
 import { RegisterWithBlogResponse } from '@app/interfaces/v1/register-with-blog-response';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
@@ -178,17 +176,28 @@ export class AuthService {
   /**
    * Sign user up
    *
-   * @param email User email
-   * @param username User username
-   * @param password User password
+   * @param payload Register payload, include email for registration only and invite_id for collaboration
    */
-  signUp(email: string, username: string, password: string): Observable<void> {
-    return this.http.post(this.api.base.v1 + 'account/register-account-only/', {
-      email, username, password,
-    }).pipe(
+  signUp(payload: {
+    email?: string;
+    username: string;
+    password: string;
+    invite_id?: string;
+  }): Observable<void> {
+    /**
+     * Different endpoints for register and collaboration
+     */
+    let endpoint = 'register-account-only';
+    if (payload.invite_id) {
+      endpoint = 'invitation-register';
+    }
+    /**
+     * Final API call
+     */
+    return this.http.post(`${this.api.base.v1}account/${endpoint}/`, payload).pipe(
       map((): void => {
-        this.toast.info(this.translate.instant('TOAST_SIGN_UP'), username);
-        this.signIn(username, password, false, AuthService.REDIRECT_SIGN_UP).subscribe();
+        this.toast.info(this.translate.instant('TOAST_SIGN_UP'), payload.username);
+        this.signIn(payload.username, payload.password, false, AuthService.REDIRECT_SIGN_UP).subscribe();
       }),
     );
   }
