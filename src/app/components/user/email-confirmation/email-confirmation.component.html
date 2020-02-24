@@ -1,14 +1,19 @@
-<div class="text-center my-5">
-  <div *ngIf="loading">
-    <!-- Loading -->
-    <app-loading></app-loading>
-    <!-- Text -->
-    <h3 class="text-secondary" translate>VERIFYING_EMAIL</h3>
-  </div>
-  <div  *ngIf="!loading && error.token">
-    <!-- Error icon -->
-    <fa-icon [icon]="faExclamationTriangle" size="3x"></fa-icon>
-    <!-- Text -->
-    <h4 class="text-danger mt-3" translate>INVALID_VERIFICATION_LINK</h4>
+<app-page-cover class="d-none d-md-block"></app-page-cover>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      <div class="card shadow-lg mx-auto mb-5 mt-5 mt-md-0">
+        <!-- Body -->
+        <div class="card-body p-lg-5 text-center">
+          <!-- Title -->
+          <h4 class="text-uppercase mb-5" translate>EMAIL_CONFIRMATION</h4>
+          <!-- Loading -->
+          <p *ngIf="loading" translate>VERIFYING_EMAIL</p>
+          <!-- Error -->
+          <p class="text-danger" *ngIf="!loading && error.token" translate>INVALID_VERIFICATION_LINK</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

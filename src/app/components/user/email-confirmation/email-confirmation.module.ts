@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmailConfirmationComponent } from '@app/components/user/email-confirmation/email-confirmation.component';
 import { LoadingModule } from '@app/shared/loading/loading.module';
+import { PageCoverModule } from '@app/shared/page-cover/page-cover.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -15,6 +16,7 @@ import { EmailConfirmationRoutingModule } from './email-confirmation-routing.mod
     LoadingModule,
     TranslateModule.forChild(),
     FontAwesomeModule,
+    PageCoverModule,
   ],
 })
 export class EmailConfirmationModule {

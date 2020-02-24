@@ -33,7 +33,7 @@ export class AuthService {
   /**
    * Sign in redirect path
    */
-  private static readonly REDIRECT_SIGN_IN = ['dash'];
+  static readonly REDIRECT_SIGN_IN = ['dash'];
 
   /**
    * Sign up redirect path
