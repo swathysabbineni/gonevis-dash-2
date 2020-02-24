@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
 
 import { LoadingComponent } from './loading.component';
 
@@ -9,6 +10,7 @@ import { LoadingComponent } from './loading.component';
   ],
   imports: [
     CommonModule,
+    LoadingBarModule,
   ],
   exports: [
     LoadingComponent,
