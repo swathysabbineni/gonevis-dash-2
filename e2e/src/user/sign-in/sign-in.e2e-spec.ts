@@ -1,7 +1,7 @@
-import { browser, logging } from 'protractor';
+import { browser, logging, ExpectedConditions } from 'protractor';
 import { SignInPage } from './sign-in.po';
 
-describe('User SignUp', () => {
+describe('User SignIn', () => {
 
   let page: SignInPage;
 
@@ -16,6 +16,7 @@ describe('User SignUp', () => {
   it('should sign in', () => {
     page.navigateTo();
     page.fillForm();
+    browser.wait(ExpectedConditions.urlContains('/dash/0/main'), 5000);
   });
 
   afterEach(async () => {
