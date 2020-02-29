@@ -1,12 +1,12 @@
 import { browser, logging } from 'protractor';
-import { AppPage } from './app.po';
+import { StartPage } from './start.po';
 
-describe('App', () => {
+describe('User Start', () => {
 
-  let page: AppPage;
+  let page: StartPage;
 
   beforeEach(() => {
-    page = new AppPage();
+    page = new StartPage();
   });
 
   it('should navigate to it', () => {

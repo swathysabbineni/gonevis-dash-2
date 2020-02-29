@@ -1,12 +1,12 @@
 import { browser, logging } from 'protractor';
-import { AppPage } from './app.po';
+import { ForgotPasswordPage } from './forgot-password.po';
 
-describe('App', () => {
+describe('User ForgotPassword', () => {
 
-  let page: AppPage;
+  let page: ForgotPasswordPage;
 
   beforeEach(() => {
-    page = new AppPage();
+    page = new ForgotPasswordPage();
   });
 
   it('should navigate to it', () => {

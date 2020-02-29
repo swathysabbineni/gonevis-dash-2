@@ -1,16 +1,21 @@
 import { browser, logging } from 'protractor';
-import { AppPage } from './app.po';
+import { SignInPage } from './sign-in.po';
 
-describe('App', () => {
+describe('User SignUp', () => {
 
-  let page: AppPage;
+  let page: SignInPage;
 
   beforeEach(() => {
-    page = new AppPage();
+    page = new SignInPage();
   });
 
   it('should navigate to it', () => {
     page.navigateTo();
+  });
+
+  it('should sign in', () => {
+    page.navigateTo();
+    page.fillForm();
   });
 
   afterEach(async () => {
