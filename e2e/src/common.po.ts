@@ -1,6 +1,6 @@
-import { browser, element, by } from 'protractor';
+import { browser, element, by, ElementFinder, ExpectedConditions } from 'protractor';
 
-export class CommonPo {
+export class CommonPage {
 
   static readonly DATA = {
     user: {
@@ -10,10 +10,28 @@ export class CommonPo {
     },
   };
 
+  getUserDropdown(): ElementFinder {
+    return element(by.cssContainingText('span', CommonPage.DATA.user.username));
+  }
+
+  signOut(): void {
+    this.getUserDropdown().isPresent().then((exists: boolean) => {
+      if (exists) {
+        this.getUserDropdown().click();
+        element(by.cssContainingText('button', 'Sign Out')).click();
+      }
+    });
+  }
+
   signIn(): void {
+    this.signOut();
     browser.get('/user/sign-in');
-    element(by.css('[formcontrolname=username]')).sendKeys(CommonPo.DATA.user.username);
-    element(by.css('[formcontrolname=password]')).sendKeys(CommonPo.DATA.user.password);
+    element(by.css('[formcontrolname=username]')).sendKeys(CommonPage.DATA.user.username);
+    element(by.css('[formcontrolname=password]')).sendKeys(CommonPage.DATA.user.password);
     element(by.css('[type=submit]')).click();
+  }
+
+  waitForSignIn() {
+    return browser.wait(ExpectedConditions.visibilityOf(this.getUserDropdown()), 5000);
   }
 }

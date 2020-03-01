@@ -1,7 +1,12 @@
-import { browser } from 'protractor';
+import { browser, element, by } from 'protractor';
 
 export class PasswordPage {
+
   navigateTo() {
-    return browser.get('/user/profile/password');
+    browser.get('/user/setting/password');
+  }
+
+  getHeadingText() {
+    return element(by.css('h4')).getText();
   }
 }

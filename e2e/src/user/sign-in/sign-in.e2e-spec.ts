@@ -1,9 +1,16 @@
+import { CommonPage } from '../../common.po';
 import { browser, logging, ExpectedConditions } from 'protractor';
 import { SignInPage } from './sign-in.po';
 
 describe('User SignIn', () => {
 
   let page: SignInPage;
+  let commonPage: CommonPage;
+
+  beforeAll(() => {
+    commonPage = new CommonPage();
+    commonPage.signOut();
+  });
 
   beforeEach(() => {
     page = new SignInPage();
@@ -17,9 +24,9 @@ describe('User SignIn', () => {
 
   it('should sign in via email', async () => {
     // Wait for username dropdown to show up
-    browser.wait(ExpectedConditions.visibilityOf(page.getUserDropdown()), 5000).then(() => {
+    commonPage.waitForSignIn().then(() => {
       // Sign out and user will be redirected to sign-in page again
-      page.signOut();
+      commonPage.signOut();
       // Login in again but with email instead of username
       page.fillForm(SignInPage.DATA.email, SignInPage.DATA.password);
       // Should redirect to dash
