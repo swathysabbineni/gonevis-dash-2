@@ -38,7 +38,7 @@ jobs:
       - run:
           name: End 2 End
           command: npm run e2e
-  jslint:
+  lint:
     executor: node
     steps:
       - checkout
@@ -85,18 +85,18 @@ workflows:
   build-test-deploy:
     jobs:
       - build
+      - lint:
+          requires:
+            - build
       - e2e:
           requires:
             - build
-#       - jslint:
-#           requires:
-#             - test
       - deploy:
           requires:
             - build
             - e2e
+            - lint
 #             - test
-#             - jslint
           filters:
             branches:
               only:
