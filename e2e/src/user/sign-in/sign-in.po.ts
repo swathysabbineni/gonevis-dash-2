@@ -1,12 +1,9 @@
 import { browser, element, by, ElementFinder } from 'protractor';
+import { CommonPo } from '../../common.po';
 
 export class SignInPage {
 
-  static readonly DATA = {
-    email: 'e2e@gonevis.com',
-    username: 'e2e',
-    password: 'password',
-  };
+  static readonly DATA = CommonPo.DATA.user;
 
   navigateTo(): void {
     browser.get('/user/sign-in');
