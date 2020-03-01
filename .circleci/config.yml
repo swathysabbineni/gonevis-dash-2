@@ -27,7 +27,17 @@ jobs:
           root: *working_directory
           paths:
             - .
+ 
 
+  e2e:
+    executor: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: *working_directory
+      - run:
+          name: End 2 End
+          command: npm run e2e
   jslint:
     executor: node
     steps:
@@ -75,15 +85,16 @@ workflows:
   build-test-deploy:
     jobs:
       - build
-#       - test:
-#           requires:
-#             - build
+      - e2e:
+          requires:
+            - build
 #       - jslint:
 #           requires:
 #             - test
       - deploy:
           requires:
             - build
+            - e2e
 #             - test
 #             - jslint
           filters:

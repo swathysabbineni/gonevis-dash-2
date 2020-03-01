@@ -1,12 +1,12 @@
 import { browser, logging } from 'protractor';
-import { AppPage } from './app.po';
+import { SignUpPage } from './sign-up.po';
 
-describe('App', () => {
+describe('User SignUp', () => {
 
-  let page: AppPage;
+  let page: SignUpPage;
 
   beforeEach(() => {
-    page = new AppPage();
+    page = new SignUpPage();
   });
 
   it('should navigate to it', () => {
