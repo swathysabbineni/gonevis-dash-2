@@ -4,6 +4,7 @@ import { ObjectType } from '@app/enums/object-type';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { Comment } from '@app/interfaces/comment';
 import { ApiService } from '@app/services/api/api.service';
+import { BlogService } from '@app/services/blog/blog.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -42,18 +43,23 @@ export class CommentService {
    * Like or unlike comment for user
    *
    * @param id Comment ID
+   * @param blogId Blog ID
    */
-  like(id: string): Observable<ApiResponseCreated> {
-    return this.http.post<ApiResponseCreated>(`${this.apiService.base.v1}sushial/comment/${id}/vote/`, null);
+  like(id: string, blogId: string): Observable<ApiResponseCreated> {
+    return this.http.post<ApiResponseCreated>(
+      `${this.apiService.base.v1}site/${blogId}/sushial/comment/${id}/vote/`,
+      null,
+    );
   }
 
   /**
    * Remove comment
    *
    * @param id Comment ID
+   * @param blogId Blog ID
    */
-  remove(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiService.base.v1}sushial/comment/${id}/`);
+  remove(id: string, blogId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiService.base.v1}site/${blogId}/sushial/comment/${id}/`);
   }
 
   /**

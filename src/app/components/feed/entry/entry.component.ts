@@ -166,7 +166,7 @@ export class EntryComponent implements OnInit {
    */
   likeComment(comment: Comment): void {
     this.loading = true;
-    this.commentService.like(comment.id).subscribe((data: ApiResponseCreated): void => {
+    this.commentService.like(comment.id, this.entry.site.id).subscribe((data: ApiResponseCreated): void => {
       comment.is_voted = data.created;
       this.loading = false;
     }, (error: HttpErrorResponseApi): void => {
@@ -186,7 +186,7 @@ export class EntryComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.commentService.remove(id).subscribe((): void => {
+    this.commentService.remove(id, this.entry.site.id).subscribe((): void => {
       this.comments.splice(index, 1);
       this.loading = false;
     }, (error: HttpErrorResponseApi) => {
