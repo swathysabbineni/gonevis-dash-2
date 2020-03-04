@@ -23,6 +23,10 @@ const routes: Routes = [{
     loadChildren: () => import('./sign-up/sign-up.module').then(m => m.SignUpModule),
     canLoad: [AnonymousGuardService],
   }, {
+    path: 'start-collaborating/:invite',
+    loadChildren: () => import('./sign-up/sign-up.module').then(m => m.SignUpModule),
+    canLoad: [AnonymousGuardService],
+  }, {
     path: 'forgot-password',
     loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
   }, {

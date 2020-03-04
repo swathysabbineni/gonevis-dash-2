@@ -120,7 +120,7 @@ export class WriteComponent implements OnInit, OnDestroy {
    */
   readonly entryStatus = EntryStatus;
 
-  @ViewChild('fileListModalTemplate', { static: false }) private fileListModalTemplate: TemplateRef<any>;
+  @ViewChild('fileListModalTemplate') private fileListModalTemplate: TemplateRef<any>;
 
   /**
    * Determines whether user was creating post or not
@@ -215,18 +215,23 @@ export class WriteComponent implements OnInit, OnDestroy {
    * @param clipboard Copied text
    */
   private static validatePastedVideo(clipboard: string): boolean {
-    this.pastedVideoEmbed = null;
-    const regex: RegExp = new RegExp('^(http:\/\/|https:\/\/|)(player.|www.)?' +
-      '(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?' +
-      '([A-Za-z0-9._%-]*)(\&\S+)?');
-    clipboard.match(regex);
     let isValid = false;
-    // Check URL regex
-    if (RegExp.$3.indexOf('youtu') > -1) {
-      WriteComponent.pastedVideoEmbed = `https://www.youtube.com/embed/${RegExp.$6}?autoplay=0`;
+    /**
+     * Vimeo regular expression
+     */
+    const vimeoRegExp: RegExp = new RegExp(/(?:vimeo)\.com.*(?:videos|video|channels|)\/([\d]+)/i);
+    /**
+     * YouTube regular expression
+     */
+    const youTubeRegExp: RegExp = new RegExp(
+      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/
+    );
+    this.pastedVideoEmbed = null;
+    if (youTubeRegExp.test(clipboard)) {
+      WriteComponent.pastedVideoEmbed = `https://www.youtube.com/embed/${RegExp.$7}?autoplay=0`;
       isValid = true;
-    } else if (RegExp.$3.indexOf('vimeo') > -1) {
-      WriteComponent.pastedVideoEmbed = `https://player.vimeo.com/video/${RegExp.$6}`;
+    } else if (vimeoRegExp.test(clipboard)) {
+      WriteComponent.pastedVideoEmbed = `https://player.vimeo.com/video/${RegExp.$1}`;
       isValid = true;
     }
 
@@ -619,7 +624,9 @@ export class WriteComponent implements OnInit, OnDestroy {
       if (!this.wasCreating) {
         this.patchForm(data);
       }
-      (this.editor as any).history.clear();
+      if (this.editor) {
+        (this.editor as any).history.clear();
+      }
       // Initial auto-save
       this.initAutoSave();
     });

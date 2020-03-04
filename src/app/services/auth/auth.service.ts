@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { DashGuardService } from '@app/components/dash/dash-guard.service';
 import { AuthResponse } from '@app/interfaces/auth-response';
 import { AuthToken } from '@app/interfaces/auth-token';
-import { UserAuth } from '@app/interfaces/user-auth';
 import { RegisterWithBlogResponse } from '@app/interfaces/v1/register-with-blog-response';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
@@ -33,7 +31,7 @@ export class AuthService {
   /**
    * Sign in redirect path
    */
-  private static readonly REDIRECT_SIGN_IN = ['dash'];
+  static readonly REDIRECT_SIGN_IN = ['dash'];
 
   /**
    * Sign up redirect path
@@ -81,7 +79,7 @@ export class AuthService {
    * @return Parsed JTW token
    * @param token JWT token
    */
-  private static parseJwt(token: string): AuthToken {
+  static parseJwt(token: string): AuthToken {
     const BASE64_URL: string = token.split('.')[1];
     if (typeof BASE64_URL === 'undefined') {
       return;
@@ -99,12 +97,15 @@ export class AuthService {
   /**
    * Update authentication token
    * @param token Authentication token
+   * @returns Whether token was set or not
    */
-  setToken(token: string): void {
+  setToken(token: string): boolean {
     const parsedJwt: AuthToken = AuthService.parseJwt(token);
     if (parsedJwt) {
       this.cookie.set('token', token, new Date(parsedJwt.exp * 1000), '/');
+      return true;
     }
+    return false;
   }
 
   /**
@@ -124,7 +125,9 @@ export class AuthService {
     if (toast) {
       this.toast.info(this.translate.instant('TOAST_SIGN_OUT'));
     }
-    return this.router.navigate(redirect);
+    if (redirect) {
+      return this.router.navigate(redirect);
+    }
   }
 
   /**
@@ -173,17 +176,28 @@ export class AuthService {
   /**
    * Sign user up
    *
-   * @param email User email
-   * @param username User username
-   * @param password User password
+   * @param payload Register payload, include email for registration only and invite_id for collaboration
    */
-  signUp(email: string, username: string, password: string): Observable<void> {
-    return this.http.post(this.api.base.v1 + 'account/register-account-only/', {
-      email, username, password,
-    }).pipe(
+  signUp(payload: {
+    email?: string;
+    username: string;
+    password: string;
+    invite_id?: string;
+  }): Observable<void> {
+    /**
+     * Different endpoints for register and collaboration
+     */
+    let endpoint = 'register-account-only';
+    if (payload.invite_id) {
+      endpoint = 'invitation-register';
+    }
+    /**
+     * Final API call
+     */
+    return this.http.post(`${this.api.base.v1}account/${endpoint}/`, payload).pipe(
       map((): void => {
-        this.toast.info(this.translate.instant('TOAST_SIGN_UP'), username);
-        this.signIn(username, password, false, AuthService.REDIRECT_SIGN_UP).subscribe();
+        this.toast.info(this.translate.instant('TOAST_SIGN_UP'), payload.username);
+        this.signIn(payload.username, payload.password, false, AuthService.REDIRECT_SIGN_UP).subscribe();
       }),
     );
   }

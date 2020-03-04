@@ -5,12 +5,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-interceptor.service';
 import { SentryErrorHandler } from '@app/services/sentry-error-handler/sentry-error-handler.service';
 import { FeedbackModalModule } from '@app/shared/feedback-modal/feedback-modal.module';
+import { MessageModalModule } from '@app/shared/message-modal/message-modal.module';
 import { environment } from '@environments/environment';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
@@ -42,6 +43,7 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
     FeedbackModalModule,
+    MessageModalModule,
     LoadingBarModule,
     LoadingBarHttpClientModule,
     NgxGoogleAnalyticsModule.forRoot(environment.googleAnalytics),

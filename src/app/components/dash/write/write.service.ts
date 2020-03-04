@@ -65,7 +65,7 @@ export class WriteService {
    * @param entry Entry ID
    */
   getEntry(entry: string): Observable<Entry> {
-    return this.http.get<Entry>(`${this.apiService.base.v1}website/entry/${entry}/`);
+    return this.http.get<Entry>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/${entry}/`);
   }
 
   /**
@@ -74,14 +74,17 @@ export class WriteService {
    * @param payload Payload
    */
   updateEntry(payload: Params): Observable<Entry> {
-    return this.http.put<Entry>(`${this.apiService.base.v1}website/entry/${payload.id}/`, payload);
+    return this.http.put<Entry>(
+      `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/${payload.id}/`,
+      payload,
+    );
   }
 
   /**
    * Add entry
    */
   addEntry(entry: Entry): Observable<Entry> {
-    return this.http.post<Entry>(`${this.apiService.base.v1}website/entry/`, entry);
+    return this.http.post<Entry>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/`, entry);
   }
 
   /**
@@ -90,7 +93,7 @@ export class WriteService {
    * @param entryId Entry ID
    */
   deleteEntry(entryId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiService.base.v1}website/entry/${entryId}/`);
+    return this.http.delete<void>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/${entryId}/`);
   }
 
   /**
@@ -104,7 +107,12 @@ export class WriteService {
       .set('limit', '100')
       .set('search', search);
 
-    return this.http.get<ApiResponse<Tag>>(`${this.apiService.base.v1}tagool/tag/`, { params: httpParams });
+    return this.http.get<ApiResponse<Tag>>(
+      `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/tagool/tag/`,
+      {
+        params: httpParams,
+      },
+    );
   }
 
   /**
