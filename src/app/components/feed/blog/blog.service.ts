@@ -22,7 +22,7 @@ export class BlogService {
    * @param id Blog ID
    */
   getBlog(id: string): Observable<Blog> {
-    return this.http.get<Blog>(`${this.apiService.base.zero}website/site/${id}`);
+    return this.http.get<Blog>(`${this.apiService.base.zero}website/site/${id}/`);
   }
 
   /**
