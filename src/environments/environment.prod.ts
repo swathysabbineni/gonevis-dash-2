@@ -10,4 +10,5 @@ export const environment: Environment = {
   paymentPublicId: 'pk_05c99b78fc3af3c7338276d58b74e',
   googleAnalytics: '',
   sentry: 'https://b8e92571fb7741a0a6bcae8d6338fc42@sentry.io/1886804',
+  cookieDomain: '.gonevis.local',
 };
