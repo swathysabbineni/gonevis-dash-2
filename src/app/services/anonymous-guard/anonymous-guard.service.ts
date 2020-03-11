@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, Router, UrlSegment } from '@angular/router';
+import { AuthService } from '@app/services/auth/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 
@@ -34,7 +35,7 @@ export class AnonymousGuardService implements CanLoad {
    */
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
     // If user is not logged-in, then allow user to access current route.
-    if (!this.cookieService.check('token')) {
+    if (!this.cookieService.check(AuthService.STORAGE_TOKEN_KEY)) {
       return true;
     }
 

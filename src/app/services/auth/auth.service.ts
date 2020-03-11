@@ -7,6 +7,7 @@ import { RegisterWithBlogResponse } from '@app/interfaces/v1/register-with-blog-
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UserService } from '@app/services/user/user.service';
+import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
 import { ToastrService } from 'ngx-toastr';
@@ -21,12 +22,17 @@ export class AuthService {
   /**
    * Storage version to use to force user to sign in again (should only be increased)
    */
-  static readonly STORAGE_VERSION = 7;
+  static readonly STORAGE_VERSION = 8;
 
   /**
    * Storage key for storage version
    */
   static readonly STORAGE_VERSION_KEY = 'version';
+
+  /**
+   * Storage key for authentication token
+   */
+  static readonly STORAGE_TOKEN_KEY = 'JWT';
 
   /**
    * Sign in redirect path
@@ -91,7 +97,7 @@ export class AuthService {
    * @return Whether user authenticated or not
    */
   get isAuth(): boolean {
-    return this.cookie.check('token');
+    return this.cookie.check(AuthService.STORAGE_TOKEN_KEY);
   }
 
   /**
@@ -102,7 +108,18 @@ export class AuthService {
   setToken(token: string): boolean {
     const parsedJwt: AuthToken = AuthService.parseJwt(token);
     if (parsedJwt) {
-      this.cookie.set('token', token, new Date(parsedJwt.exp * 1000), '/');
+      let domain: string = environment.cookieDomain;
+      if (environment.development && !domain.includes(location.hostname)) {
+        domain = location.hostname;
+      }
+      this.cookie.set(AuthService.STORAGE_TOKEN_KEY,
+        token,
+        new Date(parsedJwt.exp * 1000),
+        '/',
+        domain,
+        null,
+        'Lax',
+      );
       return true;
     }
     return false;
@@ -112,7 +129,7 @@ export class AuthService {
    * @returns Stored token from localStorage
    */
   getToken(): string | null {
-    return this.cookie.get('token');
+    return this.cookie.get(AuthService.STORAGE_TOKEN_KEY);
   }
 
   /**

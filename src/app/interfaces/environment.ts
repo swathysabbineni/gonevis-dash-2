@@ -8,4 +8,5 @@ export interface Environment {
   paymentPublicId: string;
   googleAnalytics: string;
   sentry: string;
+  cookieDomain: string;
 }
