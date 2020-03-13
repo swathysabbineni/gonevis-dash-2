@@ -19,6 +19,6 @@ export class UserService {
    * @param username User username
    */
   getUser(username: string): Observable<User> {
-    return this.http.get<User>(`${this.apiService.base.zero}website/user/${username}`);
+    return this.http.get<User>(`${this.apiService.base.zero}website/user/${username}/`);
   }
 }
