@@ -31,7 +31,7 @@ export class BlogService {
    * @param user User username
    */
   getBlogs(user?: string): Observable<ApiResponse<Blog>> {
-    return this.http.get<ApiResponse<Blog>>(`${this.apiService.base.zero}website/site`, {
+    return this.http.get<ApiResponse<Blog>>(`${this.apiService.base.zero}website/site/`, {
       params: {
         user__username: user,
       },
