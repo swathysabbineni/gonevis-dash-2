@@ -67,7 +67,8 @@
   <div class="d-flex h-100">
     <div class="editor h-100 overflow-auto"
          (scroll)="scrolled = $event.target['scrollTop'] > 0">
-      <div class="container d-flex flex-column h-100">
+      <!-- Adding the "notranslate" class will prevent chrome from translating the editor and messing things up -->
+      <div class="container d-flex flex-column h-100 notranslate">
         <!-- Title -->
         <textarea id="title"
                   autosize
