@@ -82,6 +82,17 @@ export class AuthService {
   }
 
   /**
+   * @returns Cookie domain based on environment
+   */
+  private static getCookieDomain() {
+    let domain: string = environment.cookieDomain;
+    if (environment.development && !domain.includes(location.hostname)) {
+      domain = location.hostname;
+    }
+    return domain;
+  }
+
+  /**
    * @return Parsed JTW token
    * @param token JWT token
    */
@@ -108,15 +119,11 @@ export class AuthService {
   setToken(token: string): boolean {
     const parsedJwt: AuthToken = AuthService.parseJwt(token);
     if (parsedJwt) {
-      let domain: string = environment.cookieDomain;
-      if (environment.development && !domain.includes(location.hostname)) {
-        domain = location.hostname;
-      }
       this.cookie.set(AuthService.STORAGE_TOKEN_KEY,
         token,
         new Date(parsedJwt.exp * 1000),
         '/',
-        domain,
+        AuthService.getCookieDomain(),
         null,
         'Lax',
       );
@@ -136,7 +143,9 @@ export class AuthService {
    * Un-authenticate user by cleaning localStorage and cookies
    */
   signOut(toast: boolean = true, redirect: string[] = AuthService.REDIRECT_SIGN_OUT): Promise<boolean> {
-    this.cookie.deleteAll('/');
+    this.cookie.deleteAll('/', AuthService.getCookieDomain());
+    // Cookies don't get deleted sometimes so let's expire it
+    this.cookie.set(AuthService.STORAGE_TOKEN_KEY, '', new Date(), '/', AuthService.getCookieDomain(), null, 'Lax');
     UserService.user = null;
     localStorage.clear();
     if (toast) {
