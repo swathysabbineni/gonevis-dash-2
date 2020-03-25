@@ -19,7 +19,6 @@ import '@app/components/dash/write/blots/icons.ts';
 import '@app/components/dash/write/blots/soundcloud.ts';
 import '@app/components/dash/write/blots/video.ts';
 import '@app/components/dash/write/modules/clipboard.ts';
-import '@app/components/dash/write/modules/image-drag-drop.ts';
 import '@app/components/dash/write/themes/bootstrap.ts';
 import { WriteService } from '@app/components/dash/write/write.service';
 import { EntryStatus } from '@app/enums/entry-status.enum';
@@ -181,7 +180,6 @@ export class WriteComponent implements OnInit, OnDestroy {
    * Quill modules
    */
   options: QuillModules = {
-    imageDragDrop: true,
     markdownShortcuts: {},
     toolbar: {
       container: '.toolbar',
@@ -382,36 +380,6 @@ export class WriteComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Upload file and insert image
-   *
-   * @param file File to upload
-   */
-  private uploadFile(file: File): void {
-    const range: RangeStatic = this.editor.getSelection(true);
-    this.mediaService.uploadUrl({
-      file_name: file.name,
-      file_size: file.size,
-      mime_type: file.type,
-    }).subscribe((response: UploadUrlResponse): void => {
-      this.mediaService.uploadToUrl(
-        response.post_data.url,
-        file,
-        response.post_data.fields,
-      ).subscribe((fileMedia: void | FileMedia): void => {
-        if (environment.name === 'local') {
-          this.editor.insertEmbed(range.index, 'image', (fileMedia as FileMedia).file);
-        } else {
-          this.mediaService.post(
-            response.post_data.fields.key,
-          ).subscribe((fileUploaded: FileMedia): void => {
-            this.editor.insertEmbed(range.index, 'image', fileUploaded.file);
-          });
-        }
-      });
-    });
-  }
-
-  /**
    * On editor creation callback
    *
    * @param editor Quill instance
@@ -580,9 +548,6 @@ export class WriteComponent implements OnInit, OnDestroy {
     this.cursorIndex = 0;
 
     const toolbar: any = editor.getModule('toolbar');
-    editor.getModule('imageDragDrop').file().subscribe((data: File): void => {
-      this.uploadFile(data);
-    });
     toolbar.addHandler('image', (): void => {
       const range = editor.getSelection();
 
