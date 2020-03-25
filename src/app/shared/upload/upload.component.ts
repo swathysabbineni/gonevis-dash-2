@@ -50,7 +50,7 @@ export class UploadComponent implements OnDestroy {
   /**
    * File input reference
    */
-  @ViewChild('fileElement', { static: false }) fileElement;
+  @ViewChild('fileElement') fileElement;
 
   /**
    * Selected files whether via drag and drop or via file manager selection

@@ -28,6 +28,14 @@ const routes: Routes = [{
   redirectTo: 'user/start',
   pathMatch: 'full',
 }, {
+  path: 'reset-password/:token',
+  redirectTo: 'user/reset-password/:token',
+  pathMatch: 'full',
+}, {
+  path: 'start-collaborating/:invite',
+  redirectTo: 'user/start-collaborating/:invite',
+  pathMatch: 'full',
+}, {
   path: '',
   redirectTo: 'dash',
   pathMatch: 'full',

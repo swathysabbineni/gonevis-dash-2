@@ -22,7 +22,7 @@ export class BlogService {
    * @param id Blog ID
    */
   getBlog(id: string): Observable<Blog> {
-    return this.http.get<Blog>(`${this.apiService.base.zero}website/site/${id}`);
+    return this.http.get<Blog>(`${this.apiService.base.zero}website/site/${id}/`);
   }
 
   /**
@@ -31,7 +31,7 @@ export class BlogService {
    * @param user User username
    */
   getBlogs(user?: string): Observable<ApiResponse<Blog>> {
-    return this.http.get<ApiResponse<Blog>>(`${this.apiService.base.zero}website/site`, {
+    return this.http.get<ApiResponse<Blog>>(`${this.apiService.base.zero}website/site/`, {
       params: {
         user__username: user,
       },

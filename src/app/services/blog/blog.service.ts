@@ -279,7 +279,7 @@ export class BlogService {
    */
   updateGoogleAdsense(payload: Params): Observable<BlogSettings> {
     return this.http.put<BlogSettings>(
-      `${this.api.base.v1}site/${BlogService.currentBlog.id}/google-adsense`, payload);
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/google-adsense/`, payload);
   }
 
   /**

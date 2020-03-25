@@ -4,16 +4,16 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
-    "inlineSources": true,
-    "sourceRoot": "/",
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es6",
+    "target": "es2015",
+    "inlineSources": true,
+    "sourceRoot": "/",
+    "allowSyntheticDefaultImports": true,
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -33,7 +33,6 @@
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true,
-    "enableIvy": false
+    "strictInjectionParameters": true
   }
 }

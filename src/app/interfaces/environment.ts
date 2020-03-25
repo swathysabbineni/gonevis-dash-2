@@ -1,5 +1,5 @@
 export interface Environment {
-  name: 'production' | 'staging' | 'local';
+  name: 'production' | 'staging' | 'local' | 'e2e';
   development: boolean;
   api: {
     v1: string;
@@ -8,4 +8,5 @@ export interface Environment {
   paymentPublicId: string;
   googleAnalytics: string;
   sentry: string;
+  cookieDomain: string;
 }
