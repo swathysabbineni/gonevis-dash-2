@@ -7,11 +7,14 @@
         <!-- Body -->
         <div class="card-body p-lg-5">
           <!-- Title -->
-          <h4 class="text-center text-uppercase mb-5" translate>JOIN_GONEVIS</h4>
+          <h4 class="text-center text-uppercase mb-5">
+            <span translate *ngIf="view === 'sign-up'">JOIN_GONEVIS</span>
+            <span translate *ngIf="view === 'start-collaborating'">START_COLLABORATING</span>
+          </h4>
           <!-- Form -->
           <form [formGroup]="form" (ngSubmit)="submit()">
-            <!-- Username -->
-            <div class="form-group">
+            <!-- Email -->
+            <div class="form-group" *ngIf="form.get('email')">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text">
@@ -58,6 +61,7 @@
             </div>
             <!-- Error -->
             <p class="text-danger" *ngIf="error.non_field_errors">{{ error.non_field_errors[0] }}</p>
+            <p class="text-danger" *ngIf="error.detail">{{ error.detail }}</p>
             <!-- Submit -->
             <button class="btn btn-success btn-block" type="submit" [disabled]="loading" translate>SIGN_UP</button>
           </form>
