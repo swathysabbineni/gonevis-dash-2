@@ -8,13 +8,7 @@
   text-align: center;
   position: relative;
 
-  &, .hide-on-drag, fa-icon {
-    transition: $transition-base;
-  }
-
   &.drag-started {
-    pointer-events: none;
-    border-color: $primary;
 
     &::before {
       content: '';
@@ -27,12 +21,19 @@
       display: block;
     }
 
-    fa-icon {
+    &.drag-entered {
+      animation: none;
+      background: rgba(41, 128, 185, 0.3);
+      border-color: $primary;
       color: $primary;
-    }
 
-    .hide-on-drag {
-      opacity: 0.25;
+      .hide-on-drag {
+        opacity: 0.25;
+      }
+
+      fa-icon {
+        color: $primary;
+      }
     }
   }
 }
