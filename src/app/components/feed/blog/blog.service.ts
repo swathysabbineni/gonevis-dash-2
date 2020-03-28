@@ -33,7 +33,7 @@ export class BlogService {
   getBlogs(user?: string): Observable<ApiResponse<Blog>> {
     return this.http.get<ApiResponse<Blog>>(`${this.apiService.base.zero}website/site/`, {
       params: {
-        user__username: user,
+        username: user,
       },
     });
   }
