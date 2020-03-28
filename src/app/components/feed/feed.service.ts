@@ -19,7 +19,7 @@ export class FeedService {
    */
   getEntries(params: {
     blog?: string,
-    user?: string,
+    username?: string,
     show?: 'feed' | 'bookmarked' | '',
   } = {}): Observable<ApiResponse<Entry>> {
     return this.http.get<ApiResponse<Entry>>(`${this.api.base.zero}website/entry/`, { params });

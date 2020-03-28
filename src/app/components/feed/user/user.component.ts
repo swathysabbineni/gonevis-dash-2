@@ -106,7 +106,9 @@ export class UserComponent implements OnInit, OnDestroy {
       this.current = current;
     }
     if (this.current === 'entries') {
-      this.feedService.getEntries({ user: this.username }).subscribe((data: ApiResponse<Entry>): void => {
+      this.feedService.getEntries({
+        username: this.username,
+      }).subscribe((data: ApiResponse<Entry>): void => {
         this.next = data.next;
         this.entries = data.results;
         this.loading = false;
