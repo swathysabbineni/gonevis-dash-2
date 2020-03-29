@@ -38,7 +38,7 @@ export class UploadComponent implements OnDestroy {
   /**
    * Determines whether or not drag and drop should be triggered full screen instead of a certain position
    */
-  @Input() dropZone: boolean;
+  @Input() globalDrop: boolean;
 
   /**
    * File upload accept list
@@ -55,11 +55,15 @@ export class UploadComponent implements OnDestroy {
    */
   selectedFiles: Map<string, UploadingFile> = new Map<string, UploadingFile>([]);
 
+  /**
+   * Boolean which indicates whether or not dragging started
+   */
+  dragStarted: boolean;
+
   constructor(private mediaService: MediaService,
               private translate: TranslateService,
               private toast: ToastrService,
               private changeDetectorRef: ChangeDetectorRef) {
-    this.dropZone = true;
   }
 
   /**
