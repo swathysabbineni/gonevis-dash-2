@@ -2,10 +2,17 @@
 <input type="file" [accept]="accept" class="d-none" #fileElement (change)="onFileSelected()" multiple>
 
 <!-- Button -->
-<button type="button" class="btn btn-primary" (click)="fileElement.click()" translate *ngIf="!dropZone">UPLOAD</button>
+<button type="button" class="btn btn-primary" (click)="fileElement.click()" translate
+        *ngIf="globalDrop && !selectedFiles.size && !dragStarted">UPLOAD
+</button>
 
 <!-- Drop zone -->
-<div class="drop-zone p-5" appDragDrop (afterDrop)="onFileSelected($event)" *ngIf="dropZone">
+<div class="drop-zone p-5" appDragDrop
+     [globalDrop]="globalDrop"
+     (afterDrop)="onFileSelected($event)"
+     (dragStarted)="dragStarted = $event"
+     [class.has-files]="selectedFiles.size"
+     [class.is-global]="!globalDrop">
   <fa-icon [icon]="faUpload" size="5x"></fa-icon>
   <div class="font-weight-bold mt-4">Drag &amp; Drop Here to Upload <br> <span class="hide-on-drag">Or</span></div>
   <button class="btn btn-primary btn-sm mt-1 hide-on-drag" (click)="fileElement.click()">Browse Files</button>
