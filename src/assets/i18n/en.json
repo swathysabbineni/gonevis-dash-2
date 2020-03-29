@@ -294,6 +294,7 @@
   "PERSONAL_PLAN_FEATURE": "This is a \"Personal\" plan feature",
   "PROFESSIONAL_PLAN_FEATURE": "This is a \"Professional\" plan feature",
   "OK": "OK",
+  "UNSAVED_CHANGES": "Unsaved changes",
   "CLOSE": "Close",
   "EMAIL_NOT_VERIFIED": "Email not verified",
   "INVALID_AUTHENTICATION": "Invalid authentication",
