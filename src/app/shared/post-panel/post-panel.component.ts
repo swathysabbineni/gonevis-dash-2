@@ -65,13 +65,14 @@ export class PostPanelComponent implements OnInit {
    */
   submit(): void {
     this.form.loading = true;
+    console.log('dada');
     this.entryService.create({
       status: this.form.form.get('status').value,
       content: this.form.form.get('content').value,
       format: EntryFormat.Status,
       site: this.blog.id,
       title: 'Status',
-    }).subscribe((data: Entry): void => {
+    }, this.blog.id).subscribe((data: Entry): void => {
       this.form.loading = false;
       this.form.error = null;
       this.form.form.reset();

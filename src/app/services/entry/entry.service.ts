@@ -5,8 +5,12 @@ import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { Comment } from '@app/interfaces/comment';
 import { Entry } from '@app/interfaces/zero/entry';
 import { ApiService } from '@app/services/api/api.service';
+import { BlogService } from '@app/services/blog/blog.service';
 import { Observable } from 'rxjs';
 
+/**
+ * @todo Move me later to feed related folder
+ */
 @Injectable({
   providedIn: 'root',
 })
