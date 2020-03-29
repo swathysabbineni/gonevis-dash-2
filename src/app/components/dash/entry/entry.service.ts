@@ -20,7 +20,17 @@ export class EntryService {
   /**
    * API page size
    */
-  static readonly PAGE_SIZE: number = 20;
+  static readonly PAGE_SIZE = 20;
+
+  /**
+   * Entry status labels
+   * @see EntryStatus
+   */
+  static readonly STATUS_LABELS: string[] = [
+    'DRAFT',
+    'PUBLISHED',
+    'UNSAVED_CHANGES',
+  ];
 
   constructor(private http: HttpClient,
               private apiService: ApiService,
