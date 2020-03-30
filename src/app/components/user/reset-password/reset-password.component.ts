@@ -16,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ResetPasswordComponent implements OnInit {
 
-  readonly lock: IconDefinition = faLock;
+  readonly faLock: IconDefinition = faLock;
 
   // Reset password token
   token: string;
@@ -27,11 +27,11 @@ export class ResetPasswordComponent implements OnInit {
   // API errors
   error: ApiError = {};
 
+  // Token is not valid
+  invalidToken: boolean;
+
   // API loading indicator
   loading: boolean;
-
-  // Sign in route
-  readonly signInRoute = '/user/sign-in';
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
@@ -46,6 +46,10 @@ export class ResetPasswordComponent implements OnInit {
     this.activatedRoute.params.subscribe((params: Params): void => {
       // Get and set verification token from url query param.
       this.token = params.token;
+      // Validate token
+      if (!AuthService.parseJwt(this.token)) {
+        this.invalidToken = true;
+      }
     });
     // Setup the form
     this.form = this.formBuilder.group({
@@ -55,18 +59,11 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   /**
-   * @return Reset password form controls (fields)
-   */
-  get f(): { [p: string]: AbstractControl } {
-    return this.form.controls;
-  }
-
-  /**
    * Reset password
    */
   submit(): void {
     // If password 1 and password 2 were not equal, then set error
-    if (this.f.password.value !== this.f.password2.value) {
+    if (this.form.get('password').value !== this.form.get('password2').value) {
       this.translateService.get('ERROR_PASSWORD_MISMATCH').subscribe((response: string): void => {
         this.error.non_field_errors = [response];
       });
@@ -76,11 +73,13 @@ export class ResetPasswordComponent implements OnInit {
     this.authService.setToken(this.token);
     this.loading = true;
     // API call
-    this.userService.resetPassword(this.f.password.value).subscribe((): void => {
-      this.authService.signOut();
-      this.router.navigateByUrl(this.signInRoute);
-      this.loading = false;
+    this.userService.resetPassword(this.form.get('password').value).subscribe((): void => {
+      this.authService.signOut(false);
     }, (error: HttpErrorResponseApi): void => {
+      if (error.error.detail) {
+        this.invalidToken = true;
+        this.authService.signOut(false, null);
+      }
       this.error = error.error;
       this.loading = false;
     });

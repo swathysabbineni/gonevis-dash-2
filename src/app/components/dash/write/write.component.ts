@@ -19,7 +19,6 @@ import '@app/components/dash/write/blots/icons.ts';
 import '@app/components/dash/write/blots/soundcloud.ts';
 import '@app/components/dash/write/blots/video.ts';
 import '@app/components/dash/write/modules/clipboard.ts';
-import '@app/components/dash/write/modules/image-drag-drop.ts';
 import '@app/components/dash/write/themes/bootstrap.ts';
 import { WriteService } from '@app/components/dash/write/write.service';
 import { EntryStatus } from '@app/enums/entry-status.enum';
@@ -181,7 +180,6 @@ export class WriteComponent implements OnInit, OnDestroy {
    * Quill modules
    */
   options: QuillModules = {
-    imageDragDrop: true,
     markdownShortcuts: {},
     toolbar: {
       container: '.toolbar',
@@ -215,18 +213,23 @@ export class WriteComponent implements OnInit, OnDestroy {
    * @param clipboard Copied text
    */
   private static validatePastedVideo(clipboard: string): boolean {
-    this.pastedVideoEmbed = null;
-    const regex: RegExp = new RegExp('^(http:\/\/|https:\/\/|)(player.|www.)?' +
-      '(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?' +
-      '([A-Za-z0-9._%-]*)(\&\S+)?');
-    clipboard.match(regex);
     let isValid = false;
-    // Check URL regex
-    if (RegExp.$3.indexOf('youtu') > -1) {
-      WriteComponent.pastedVideoEmbed = `https://www.youtube.com/embed/${RegExp.$6}?autoplay=0`;
+    /**
+     * Vimeo regular expression
+     */
+    const vimeoRegExp: RegExp = new RegExp(/(?:vimeo)\.com.*(?:videos|video|channels|)\/([\d]+)/i);
+    /**
+     * YouTube regular expression
+     */
+    const youTubeRegExp: RegExp = new RegExp(
+      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/
+    );
+    this.pastedVideoEmbed = null;
+    if (youTubeRegExp.test(clipboard)) {
+      WriteComponent.pastedVideoEmbed = `https://www.youtube.com/embed/${RegExp.$7}?autoplay=0`;
       isValid = true;
-    } else if (RegExp.$3.indexOf('vimeo') > -1) {
-      WriteComponent.pastedVideoEmbed = `https://player.vimeo.com/video/${RegExp.$6}`;
+    } else if (vimeoRegExp.test(clipboard)) {
+      WriteComponent.pastedVideoEmbed = `https://player.vimeo.com/video/${RegExp.$1}`;
       isValid = true;
     }
 
@@ -374,36 +377,6 @@ export class WriteComponent implements OnInit, OnDestroy {
     this.coverImage = data.media.cover_image;
     this.oldForm = this.form.value;
     this.updateTitle();
-  }
-
-  /**
-   * Upload file and insert image
-   *
-   * @param file File to upload
-   */
-  private uploadFile(file: File): void {
-    const range: RangeStatic = this.editor.getSelection(true);
-    this.mediaService.uploadUrl({
-      file_name: file.name,
-      file_size: file.size,
-      mime_type: file.type,
-    }).subscribe((response: UploadUrlResponse): void => {
-      this.mediaService.uploadToUrl(
-        response.post_data.url,
-        file,
-        response.post_data.fields,
-      ).subscribe((fileMedia: void | FileMedia): void => {
-        if (environment.name === 'local') {
-          this.editor.insertEmbed(range.index, 'image', (fileMedia as FileMedia).file);
-        } else {
-          this.mediaService.post(
-            response.post_data.fields.key,
-          ).subscribe((fileUploaded: FileMedia): void => {
-            this.editor.insertEmbed(range.index, 'image', fileUploaded.file);
-          });
-        }
-      });
-    });
   }
 
   /**
@@ -575,9 +548,6 @@ export class WriteComponent implements OnInit, OnDestroy {
     this.cursorIndex = 0;
 
     const toolbar: any = editor.getModule('toolbar');
-    editor.getModule('imageDragDrop').file().subscribe((data: File): void => {
-      this.uploadFile(data);
-    });
     toolbar.addHandler('image', (): void => {
       const range = editor.getSelection();
 
