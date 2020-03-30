@@ -61,7 +61,7 @@ export class BlogComponent implements OnInit {
          * Get entries of this blog
          */
         this.feedService.getEntries({
-          blog: params.blogId,
+          site_id: params.blogId,
         }).subscribe((entries: ApiResponse<Entry>): void => {
           this.next = entries.next;
           this.entries = entries.results;
