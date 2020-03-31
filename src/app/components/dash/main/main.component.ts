@@ -4,6 +4,7 @@ import { SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { CommentsService } from '@app/components/dash/comments/comments.service';
 import { EntryService } from '@app/components/dash/entry/entry.service';
+import { EntryStatus } from '@app/enums/entry-status.enum';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ReactiveFormData } from '@app/interfaces/reactive-form-data';
@@ -45,12 +46,19 @@ export class MainComponent implements OnInit, OnDestroy {
   readonly eye: IconDefinition = faEye;
   readonly like: IconDefinition = faThumbsUp;
 
+  readonly entryStatusLabels: string[] = EntryService.STATUS_LABELS;
+
   /**
    * Represents a disposable resource, such as the execution of an Observable. A
    * Subscription has one important method, `unsubscribe`, that takes no argument
    * and just disposes the resource held by the subscription
    */
   private readonly subscription: Subscription = new Subscription();
+
+  /**
+   * Loading status for each data
+   */
+  loadingEntries: boolean;
 
   /**
    * Blog settings data
@@ -63,9 +71,25 @@ export class MainComponent implements OnInit, OnDestroy {
   comments: Comment[];
 
   /**
-   * List of recent blog entries
+   * List of recent blog entries grouped by status
    */
-  entries: Entry[];
+  entryGroups: {
+    status: EntryStatus,
+    entries: Entry[],
+    dateKey: keyof Entry,
+  }[] = [{
+    status: EntryStatus.Draft,
+    entries: [],
+    dateKey: 'created',
+  }, {
+    status: EntryStatus.Published,
+    entries: [],
+    dateKey: 'published',
+  }, {
+    status: EntryStatus.UnsavedChanges,
+    entries: [],
+    dateKey: 'created',
+  }];
 
   /**
    * Metrics (data count, etc)
@@ -116,9 +140,10 @@ export class MainComponent implements OnInit, OnDestroy {
    */
   storageTooltip(): string {
     if (this.metrics) {
-      const USED = this.bytes.transform(this.metrics.metrics.dolphin.used_storage * 1000000, 2);
-      const FREE = this.bytes.transform(this.metrics.metrics.dolphin.available_storage * 1000000, 2);
-      return `${USED} / ${FREE}`;
+      const data = this.metrics.metrics.dolphin;
+      const used = this.bytes.transform(data.used_storage * 1000000, 1);
+      const total = this.bytes.transform((data.used_storage + data.available_storage) * 1000000, 1);
+      return `${used} / ${total}`;
     }
   }
 
@@ -132,50 +157,55 @@ export class MainComponent implements OnInit, OnDestroy {
     /**
      * Watch for current blog changes
      */
-    this.subscription.add(
-      this.activatedRoute.parent.parent.params.subscribe((): void => {
-        /**
-         * Reset data
-         */
-        this.templateConfig = null;
-        /**
-         * Load blog data
-         */
-        this.blogService.getSettings().subscribe((data: BlogSettings): void => {
-          this.blog = data;
-        });
-        /**
-         * Load entries
-         */
-        this.entryService.getEntries({
-          limit: MainComponent.POSTS_LIMIT,
-        }).subscribe((response: ApiResponse<Entry>): void => {
-          this.entries = response.results;
-        });
-        /**
-         * Load comments
-         */
-        this.commentsService.getComments({
-          limit: MainComponent.COMMENTS_LIMIT,
-        }).subscribe((response: ApiResponse<Comment>): void => {
-          this.comments = response.results;
-        });
-        /**
-         * Load metrics
-         */
-        this.blogService.getMetrics().subscribe((data: Metrics): void => {
-          this.metrics = data;
-        });
-        /**
-         * Load template config (for owner and admins)
-         */
-        if (BlogService.currentBlog.role !== TeamRoles.Editor) {
-          this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
-            this.templateConfig = data.template_config;
-          });
+    this.subscription.add(this.activatedRoute.parent.parent.params.subscribe((): void => {
+      /**
+       * Reset data
+       */
+      this.templateConfig = null;
+      this.loadingEntries = true;
+      for (const group of this.entryGroups) {
+        group.entries = [];
+      }
+      /**
+       * Load blog data
+       */
+      this.blogService.getSettings().subscribe((data: BlogSettings): void => {
+        this.blog = data;
+      });
+      /**
+       * Load entries
+       */
+      this.entryService.getEntries({
+        limit: MainComponent.POSTS_LIMIT,
+      }).subscribe((response: ApiResponse<Entry>): void => {
+        for (const entry of response.results) {
+          this.entryGroups[entry.status].entries.push(entry);
         }
-      }),
-    );
+        this.loadingEntries = false;
+      });
+      /**
+       * Load comments
+       */
+      this.commentsService.getComments({
+        limit: MainComponent.COMMENTS_LIMIT,
+      }).subscribe((response: ApiResponse<Comment>): void => {
+        this.comments = response.results;
+      });
+      /**
+       * Load metrics
+       */
+      this.blogService.getMetrics().subscribe((data: Metrics): void => {
+        this.metrics = data;
+      });
+      /**
+       * Load template config (for owner and admins)
+       */
+      if (BlogService.currentBlog.role !== TeamRoles.Editor) {
+        this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
+          this.templateConfig = data.template_config;
+        });
+      }
+    }));
   }
 
   /**
@@ -188,8 +218,8 @@ export class MainComponent implements OnInit, OnDestroy {
   submitQuickDraft(): void {
     this.quickDraftForm.loading = true;
     this.entryService.draft(
-      this.translate.instant('QUICK_DRAFT'),
-      this.quickDraftForm.form.get('content').value,
+        this.translate.instant('QUICK_DRAFT'),
+        this.quickDraftForm.form.get('content').value,
     ).subscribe((): void => {
       this.quickDraftForm.loading = false;
       this.quickDraftForm.form.reset();

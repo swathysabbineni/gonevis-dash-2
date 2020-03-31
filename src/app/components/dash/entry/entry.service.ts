@@ -20,7 +20,17 @@ export class EntryService {
   /**
    * API page size
    */
-  static readonly PAGE_SIZE: number = 20;
+  static readonly PAGE_SIZE = 20;
+
+  /**
+   * Entry status labels
+   * @see EntryStatus
+   */
+  static readonly STATUS_LABELS: string[] = [
+    'DRAFT',
+    'PUBLISHED',
+    'UNSAVED_CHANGES',
+  ];
 
   constructor(private http: HttpClient,
               private apiService: ApiService,
@@ -58,9 +68,10 @@ export class EntryService {
    * Create an entry
    *
    * @param payload Entry data
+   * @param blogId Blog ID
    */
-  create(payload: Partial<Entry>): Observable<Entry> {
-    return this.http.post<Entry>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/`, payload);
+  create(payload: Partial<Entry>, blogId: string = BlogService.currentBlog.id): Observable<Entry> {
+    return this.http.post<Entry>(`${this.apiService.base.v1}site/${blogId}/entry/`, payload);
   }
 
   /**

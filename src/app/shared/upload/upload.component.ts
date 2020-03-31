@@ -8,9 +8,11 @@ import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { UploadingFile } from '@app/shared/upload/uploading-file';
 import { environment } from '@environments/environment';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { faFileUpload } from '@fortawesome/free-solid-svg-icons/faFileUpload';
+import { faFileAlt } from '@fortawesome/free-regular-svg-icons/faFileAlt';
+import { faTimesCircle } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch';
+import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons/faCloudUploadAlt';
 import { TranslateService } from '@ngx-translate/core';
-import { ToastrService } from 'ngx-toastr';
 import { forkJoin, Subscription, BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -27,10 +29,10 @@ export class UploadComponent implements OnDestroy {
    */
   private readonly subscription: Subscription = new Subscription();
 
-  /**
-   * File upload icon
-   */
-  readonly faFileUpload: IconDefinition = faFileUpload;
+  readonly faUpload: IconDefinition = faCloudUploadAlt;
+  readonly faFile: IconDefinition = faFileAlt;
+  readonly faRemove: IconDefinition = faTimesCircle;
+  readonly faUploading: IconDefinition = faCircleNotch;
 
   /**
    * Upload event (when file upload is finished)
@@ -40,26 +42,30 @@ export class UploadComponent implements OnDestroy {
   /**
    * Determines whether or not drag and drop should be triggered full screen instead of a certain position
    */
-  @Input() dropZone: boolean;
+  @Input() globalDrop: boolean;
 
   /**
    * File upload accept list
    */
-  readonly accept = MediaService.acceptList.join(',');
+  readonly accept: string = MediaService.acceptList.join(',');
 
   /**
    * File input reference
    */
-  @ViewChild('fileElement') fileElement;
+  @ViewChild('fileElement') fileElement: { nativeElement: { files: File[]; }; };
 
   /**
    * Selected files whether via drag and drop or via file manager selection
    */
   selectedFiles: Map<string, UploadingFile> = new Map<string, UploadingFile>([]);
 
+  /**
+   * Boolean which indicates whether or not dragging started
+   */
+  dragStarted: boolean;
+
   constructor(private mediaService: MediaService,
               private translate: TranslateService,
-              private toast: ToastrService,
               private changeDetectorRef: ChangeDetectorRef) {
   }
 
@@ -69,7 +75,6 @@ export class UploadComponent implements OnDestroy {
    * @param file Uploaded file
    */
   private onFileUpload(file: FileMedia): void {
-    this.toast.success(this.translate.instant('TOAST_UPLOAD'), file.meta_data.name);
     this.upload.emit(file);
     this.changeDetectorRef.detectChanges();
   }
@@ -204,7 +209,7 @@ export class UploadComponent implements OnDestroy {
       });
     }
     forkJoin(observableList).subscribe((data: boolean[]): void => {
-      console.log(data);
+      console.log('Uploading files is done', data);
     });
   }
 

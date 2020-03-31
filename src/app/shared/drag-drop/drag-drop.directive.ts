@@ -15,10 +15,20 @@ export class DragDropDirective implements OnDestroy {
   @Input() accept: string;
 
   /**
+   * Determines whether or not drag and drop should be triggered full screen instead of a certain position
+   */
+  @Input() globalDrop: boolean;
+
+  /**
    * An event emitter that emits list of dropped files
    * which are filtered by their [file extension whitelist]{@link accept}.
    */
   @Output() afterDrop: EventEmitter<File[]> = new EventEmitter<File[]>();
+
+  /**
+   * An event emitter that emits a boolean which indicates whether or not drag started
+   */
+  @Output() dragStarted: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   /**
    * Represents a disposable resource, such as the execution of an Observable.
@@ -31,6 +41,7 @@ export class DragDropDirective implements OnDestroy {
    * Drag counter
    */
   private dragCounter = 0;
+  private oldDragCounter = 0;
 
   constructor(private elementRef: ElementRef,
               private renderer2: Renderer2) {
@@ -57,6 +68,7 @@ export class DragDropDirective implements OnDestroy {
            */
           if (files.length) {
             this.afterDrop.emit(files);
+            this.dragStarted.emit(false);
           }
         }
       }),
@@ -67,9 +79,10 @@ export class DragDropDirective implements OnDestroy {
     this.subscription.add(
       this.renderer2.listen('document', 'dragover', (event: DragEvent): void => {
         event.preventDefault();
-        if (event.dataTransfer.types.includes('Files') &&
-          !(event.target as HTMLElement).classList.contains('drop-zone')) {
-          event.dataTransfer.dropEffect = 'none';
+        if (event.dataTransfer.types.includes('Files')) {
+          if (!this.globalDrop && !(event.target as HTMLElement).classList.contains('drop-zone')) {
+            event.dataTransfer.dropEffect = 'none';
+          }
         }
       }),
     );
@@ -78,6 +91,9 @@ export class DragDropDirective implements OnDestroy {
      */
     this.subscription.add(
       this.renderer2.listen('document', 'dragenter', (event: DragEvent): void => {
+        if (this.dragCounter === this.oldDragCounter) {
+          this.dragStarted.emit(true);
+        }
         this.dragCounter++;
 
         if (event.dataTransfer.types.includes('Files')) {
@@ -98,8 +114,10 @@ export class DragDropDirective implements OnDestroy {
      */
     this.subscription.add(
       this.renderer2.listen('document', 'dragleave', (): void => {
+        this.oldDragCounter = this.dragCounter;
         this.dragCounter--;
         if (this.dragCounter === 0) {
+          this.dragStarted.emit(false);
           this.renderer2.removeClass(this.elementRef.nativeElement, 'drag-entered');
           this.renderer2.removeClass(this.elementRef.nativeElement, 'drag-started');
         }

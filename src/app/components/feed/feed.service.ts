@@ -18,8 +18,8 @@ export class FeedService {
    * Get entries with filters
    */
   getEntries(params: {
-    blog?: string,
-    user?: string,
+    site_id?: string,
+    username?: string,
     show?: 'feed' | 'bookmarked' | '',
   } = {}): Observable<ApiResponse<Entry>> {
     return this.http.get<ApiResponse<Entry>>(`${this.api.base.zero}website/entry/`, { params });

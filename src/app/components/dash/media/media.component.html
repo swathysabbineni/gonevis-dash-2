@@ -1,8 +1,8 @@
-<div class="container-fluid mt-3">
+<div class="container-white container-fluid pt-3">
 
   <!-- Upload -->
   <div class="mb-3">
-    <app-upload (upload)="onUpload($event)"></app-upload>
+    <app-upload (upload)="onUpload($event)" [globalDrop]="true"></app-upload>
   </div>
 
   <!-- File list -->

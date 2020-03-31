@@ -32,4 +32,4 @@
 <app-pagination (pageChange)="getFiles($event)"></app-pagination>
 
 <!-- No data -->
-<div class="my-3" *ngIf="files && !files.length" translate>NOTHING_HERE_YET</div>
+<p class="text-center my-3" *ngIf="files && !files.length" translate>NOTHING_HERE_YET</p>
