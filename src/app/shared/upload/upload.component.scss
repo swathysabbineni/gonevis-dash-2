@@ -45,3 +45,22 @@
     }
   }
 }
+
+.uploading-files {
+  overflow-y: auto;
+  max-height: 275px;
+
+  progressbar {
+    height: 6px;
+  }
+}
+
+.card.error {
+  background: $danger;
+  color: $light;
+
+  .text-muted, .text-secondary {
+    color: $light !important;
+    opacity: 0.5;
+  }
+}

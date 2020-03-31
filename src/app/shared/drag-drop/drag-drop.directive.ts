@@ -68,6 +68,7 @@ export class DragDropDirective implements OnDestroy {
            */
           if (files.length) {
             this.afterDrop.emit(files);
+            this.dragStarted.emit(false);
           }
         }
       }),
