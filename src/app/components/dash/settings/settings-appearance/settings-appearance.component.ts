@@ -1,17 +1,19 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
-import { File } from '@app/interfaces/file';
+import { File as FileMedia } from '@app/interfaces/file';
 import { Params } from '@app/interfaces/params';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
 import { Template } from '@app/interfaces/v1/template';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogService } from '@app/services/blog/blog.service';
+import { FileSelectionComponent } from '@app/shared/file-selection/file-selection.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
-import { CarouselComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { CarouselComponent } from 'ngx-bootstrap/carousel';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-settings-appearance',
@@ -211,31 +213,26 @@ export class SettingsAppearanceComponent implements OnInit {
   /**
    * Show file selection modal
    */
-  showFileListModal(template: TemplateRef<any>, selectingFor: keyof BlogSettings['media']) {
+  showFileListModal(selectingFor: keyof BlogSettings['media']) {
     this.selectingFor = selectingFor;
-    this.fileListModalRef = this.modalService.show(template, {
-      class: 'modal-lg',
-    });
-  }
-
-  /**
-   * On file selection
-   *
-   * @param file Selected file
-   */
-  onFileSelect(file: File) {
-    this.fileListModalRef.hide();
-    const payload: Params = {};
-    payload[this.selectingFor] = file.id;
-    this.submitSettings(payload);
-  }
-
-  /**
-   * @returns Current selected media ID
-   */
-  getSelectingForSelected(): string | void {
-    if (this.selectingFor && this.settings && this.settings.media[this.selectingFor]) {
-      return this.settings.media[this.selectingFor].id;
+    let selected: string;
+    if (selectingFor && this.settings && this.settings.media[selectingFor]) {
+      selected = this.settings.media[selectingFor].id;
     }
+    this.fileListModalRef = this.modalService.show(FileSelectionComponent, {
+      class: 'modal-lg',
+      initialState: {
+        selected,
+        selection: true,
+      },
+    });
+    /**
+     * On file select/choose
+     */
+    this.fileListModalRef.content.choose.subscribe((file: FileMedia): void => {
+      const payload: Params = {};
+      payload[this.selectingFor] = file.id;
+      this.submitSettings(payload);
+    });
   }
 }

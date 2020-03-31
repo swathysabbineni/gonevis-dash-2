@@ -1,0 +1,11 @@
+::ng-deep {
+  .modal {
+    .nav-link {
+      margin-right: 5px;
+      &.active {
+        background: white !important;
+        border-bottom-color: white !important;
+      }
+    }
+  }
+}

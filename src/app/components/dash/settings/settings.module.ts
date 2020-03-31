@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileListModule } from '@app/shared/file-list/file-list.module';
+import { FileSelectionModule } from '@app/shared/file-selection/file-selection.module';
 import { LockedFeatureModule } from '@app/shared/locked-feature/locked-feature.module';
 import { PermissionAccessModule } from '@app/shared/permission-access/permission-access.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -15,7 +16,6 @@ import { SettingsAppearanceComponent } from './settings-appearance/settings-appe
 import { SettingsGeneralComponent } from './settings-general/settings-general.component';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { SettingsComponent } from './settings.component';
-
 
 @NgModule({
   declarations: [
@@ -37,6 +37,7 @@ import { SettingsComponent } from './settings.component';
     PopoverModule.forRoot(),
     PermissionAccessModule,
     LockedFeatureModule,
+    FileSelectionModule,
   ],
 })
 export class SettingsModule {
