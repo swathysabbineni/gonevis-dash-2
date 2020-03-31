@@ -80,7 +80,7 @@
       </div>
 
       <!-- Pagination -->
-      <app-pagination (pageChange)="getTags($event)"></app-pagination>
+<!--      <app-pagination (pageChange)="getTags($event)"></app-pagination>-->
     </div>
 
     <!-- Create tag -->
@@ -99,8 +99,7 @@
             <div class="media-body d-sm-block">
               <div translate>TAG_IMAGE</div>
               <div class="btn-group btn-group-sm mt-1">
-                <button class="btn btn-sm btn-secondary" type="button" translate
-                        (click)="showFileListModal(fileListModalTemplate)">
+                <button class="btn btn-sm btn-secondary" type="button" (click)="showFileListModal()" translate>
                   SELECT
                 </button>
                 <!-- Remove image-->
@@ -140,19 +139,3 @@
     </div>
   </div>
 </div>
-
-<!-- File list modal -->
-<ng-template #fileListModalTemplate>
-  <div class="modal-header">
-    <h5 class="modal-title pull-left" translate>SELECT_IMAGE</h5>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="fileListModalRef.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <app-file-list [selection]="true"
-                   [selected]="image && image.id"
-                   (choose)="onFileSelect($event)">
-    </app-file-list>
-  </div>
-</ng-template>

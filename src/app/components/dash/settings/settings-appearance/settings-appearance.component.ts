@@ -83,11 +83,6 @@ export class SettingsAppearanceComponent implements OnInit {
    */
   selectingFor: keyof BlogSettings['media'];
 
-  /**
-   * File list modal
-   */
-  fileListModalRef: BsModalRef;
-
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private formBuilder: FormBuilder,
               private blogService: BlogService,
@@ -219,7 +214,7 @@ export class SettingsAppearanceComponent implements OnInit {
     if (selectingFor && this.settings && this.settings.media[selectingFor]) {
       selected = this.settings.media[selectingFor].id;
     }
-    this.fileListModalRef = this.modalService.show(FileSelectionComponent, {
+    const modal = this.modalService.show(FileSelectionComponent, {
       class: 'modal-lg',
       initialState: {
         selected,
@@ -229,7 +224,7 @@ export class SettingsAppearanceComponent implements OnInit {
     /**
      * On file select/choose
      */
-    this.fileListModalRef.content.choose.subscribe((file: FileMedia): void => {
+    modal.content.choose.subscribe((file: FileMedia): void => {
       const payload: Params = {};
       payload[this.selectingFor] = file.id;
       this.submitSettings(payload);
