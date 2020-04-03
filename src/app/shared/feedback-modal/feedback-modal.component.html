@@ -14,6 +14,29 @@
   <!-- Text -->
   <p translate>FEEDBACK_TEXT</p>
 
+  <!-- Subject -->
+  <div class="form-group">
+    <label for="subject" translate>SUBJECT</label>
+    <div class="btn-group d-flex" btnRadioGroup formControlName="subject">
+      <label class="btn btn-light" id="subject"
+             [uncheckable]="true" [btnRadio]="subject.value" *ngFor="let subject of subjects">
+        <fa-icon [icon]="subject.icon" [fixedWidth]="true" class="mr-2 text-{{ subject.color }}"></fa-icon>
+        <span translate>{{ subject.label }}</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Experience -->
+  <div class="form-group">
+    <label for="experience" translate>EXPERIENCE</label>
+    <div class="btn-group d-flex" btnRadioGroup formControlName="experience">
+      <label class="btn btn-light" id="experience" [tooltip]="experience.label | translate"
+             [uncheckable]="true" [btnRadio]="experience.value" *ngFor="let experience of experiences">
+        <fa-icon [icon]="experience.icon" [fixedWidth]="true" size="2x" class="text-{{ experience.color }}"></fa-icon>
+      </label>
+    </div>
+  </div>
+
   <!-- Message -->
   <div class="form-group">
     <label for="message" translate>MESSAGE</label>
