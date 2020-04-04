@@ -10,9 +10,9 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 
-import { SettingsAdvancedComponent } from './settings-advanced/settings-advanced.component';
-import { SettingsAppearanceComponent } from './settings-appearance/settings-appearance.component';
-import { SettingsGeneralComponent } from './settings-general/settings-general.component';
+import { AdvancedComponent } from 'src/app/components/dash/settings/advanced/advanced.component';
+import { AppearanceComponent } from 'src/app/components/dash/settings/appearance/appearance.component';
+import { GeneralComponent } from 'src/app/components/dash/settings/general/general.component';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { SettingsComponent } from './settings.component';
 
@@ -20,9 +20,9 @@ import { SettingsComponent } from './settings.component';
 @NgModule({
   declarations: [
     SettingsComponent,
-    SettingsGeneralComponent,
-    SettingsAppearanceComponent,
-    SettingsAdvancedComponent,
+    GeneralComponent,
+    AppearanceComponent,
+    AdvancedComponent,
   ],
   imports: [
     CommonModule,

@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class SettingsBillingService {
+export class BillingService {
 
   constructor(private http: HttpClient,
               private apiService: ApiService) {

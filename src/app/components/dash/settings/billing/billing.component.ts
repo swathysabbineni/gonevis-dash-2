@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SettingsBillingService } from '@app/components/dash/settings/settings-billing/settings-billing.service';
+import { BillingService } from '@app/components/dash/settings/billing/billing.service';
 import { SettingsUpgradeService } from '@app/components/dash/settings/settings-upgrade/settings-upgrade.service';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -14,10 +14,10 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-settings-billing',
-  templateUrl: './settings-billing.component.html',
-  styleUrls: ['./settings-billing.component.scss'],
+  templateUrl: './billing.component.html',
+  styleUrls: ['./billing.component.scss'],
 })
-export class SettingsBillingComponent implements OnInit {
+export class BillingComponent implements OnInit {
 
   subscription: Subscription;
 
@@ -50,7 +50,7 @@ export class SettingsBillingComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private bsModalService: BsModalService,
               private settingsUpgradeService: SettingsUpgradeService,
-              private settingsBillingService: SettingsBillingService) {
+              private settingsBillingService: BillingService) {
   }
 
   ngOnInit(): void {
