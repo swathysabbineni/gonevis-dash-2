@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavsService } from '@app/components/dash/navs/navs.service';
+import { NavigationService } from '@app/components/dash/navigation/navigation.service';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiError } from '@app/interfaces/api-error';
 import { Navigation } from '@app/interfaces/v1/navigation';
@@ -15,18 +15,19 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-navs',
-  templateUrl: './navs.component.html',
-  styleUrls: ['./navs.component.scss'],
+  templateUrl: './navigation.component.html',
+  styleUrls: ['./navigation.component.scss'],
 })
-export class NavsComponent implements OnInit {
+export class NavigationComponent implements OnInit {
 
-  readonly plus: IconDefinition = faPlus;
-  readonly gripLinesVertical: IconDefinition = faGripLinesVertical;
-  readonly trush: IconDefinition = faTrash;
+  readonly faAdd: IconDefinition = faPlus;
+  readonly faBars: IconDefinition = faGripLinesVertical;
+  readonly faDelete: IconDefinition = faTrash;
+
   /**
    * List of blog navigation
    */
-  navs: Navigation[];
+  navigations: Navigation[];
 
   /**
    * API loading indicator
@@ -44,8 +45,8 @@ export class NavsComponent implements OnInit {
   isEditor: boolean;
 
   constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private navsService: NavsService,
+              private route: ActivatedRoute,
+              private navigationsService: NavigationService,
               private translate: TranslateService,
               private toast: ToastrService) {
   }
@@ -58,13 +59,13 @@ export class NavsComponent implements OnInit {
     /**
      * Get navigation
      */
-    this.navsService.getNavs().subscribe((data: { navigation: Navigation[] }): void => {
-      this.navs = data.navigation;
+    this.navigationsService.getNavigation().subscribe((data: { navigation: Navigation[] }): void => {
+      this.navigations = data.navigation;
       /**
        * Watch router params
        */
       if (history.state.add) {
-        this.navs.push({
+        this.navigations.push({
           label: history.state.add.label,
           url: history.state.add.url,
         });
@@ -80,11 +81,11 @@ export class NavsComponent implements OnInit {
     /**
      * Set navigation sorting number (based on index)
      */
-    for (const nav of this.navs) {
-      nav.sort_number = this.navs.indexOf(nav);
+    for (const nav of this.navigations) {
+      nav.sort_number = this.navigations.indexOf(nav);
     }
-    this.navsService.update(this.navs).subscribe((data: { navigation: Navigation[] }): void => {
-      this.navs = data.navigation;
+    this.navigationsService.update(this.navigations).subscribe((data: { navigation: Navigation[] }): void => {
+      this.navigations = data.navigation;
       this.loading = false;
       this.errors = [];
       this.toast.info(this.translate.instant('TOAST_UPDATE'), this.translate.instant('NAVIGATION'));
@@ -98,7 +99,7 @@ export class NavsComponent implements OnInit {
    * Add new navigation
    */
   add(): void {
-    this.navs.push({
+    this.navigations.push({
       label: this.translate.instant('UNTITLED'),
       url: '/',
     });
@@ -108,6 +109,6 @@ export class NavsComponent implements OnInit {
    * On navigation drop
    */
   drop(event: CdkDragDrop<Navigation[]>): void {
-    moveItemInArray(this.navs, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.navigations, event.previousIndex, event.currentIndex);
   }
 }

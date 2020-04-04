@@ -33,8 +33,8 @@ const routes: Routes = [{
     path: 'media',
     loadChildren: () => import('./media/media.module').then(m => m.MediaModule),
   }, {
-    path: 'navs',
-    loadChildren: () => import('./navs/navs.module').then(m => m.NavsModule),
+    path: 'navigation',
+    loadChildren: () => import('./navigation/navigation.module').then(m => m.NavigationModule),
   }, {
     path: 'team',
     loadChildren: () => import('./team/team.module').then(m => m.TeamModule),

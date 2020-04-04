@@ -217,7 +217,7 @@ export class EntryComponent implements OnInit {
    * @param slug Entry slug
    */
   addToNavs(title: string, slug: string): void {
-    this.router.navigate(['navs'], {
+    this.router.navigate(['navigation'], {
       relativeTo: this.route.parent.parent,
       state: {
         add: {

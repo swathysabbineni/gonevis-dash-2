@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { NavsComponent } from './navs.component';
+import { NavigationComponent } from 'src/app/components/dash/navigation/navigation.component';
 
 const routes: Routes = [{
   path: '',
-  component: NavsComponent,
+  component: NavigationComponent,
   data: {
     title: 'NAVIGATION',
   },
@@ -15,5 +15,5 @@ const routes: Routes = [{
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class NavsRoutingModule {
+export class NavigationRoutingModule {
 }

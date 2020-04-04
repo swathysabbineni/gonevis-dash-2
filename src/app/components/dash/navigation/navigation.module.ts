@@ -7,17 +7,17 @@ import { PermissionAccessModule } from '@app/shared/permission-access/permission
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { NavsRoutingModule } from './navs-routing.module';
-import { NavsComponent } from './navs.component';
+import { NavigationRoutingModule } from './navigation-routing.module';
+import { NavigationComponent } from './navigation.component';
 
 @NgModule({
   declarations: [
-    NavsComponent,
+    NavigationComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
-    NavsRoutingModule,
+    NavigationRoutingModule,
     TranslateModule.forChild(),
     FontAwesomeModule,
     FormsModule,
@@ -26,5 +26,5 @@ import { NavsComponent } from './navs.component';
     PermissionAccessModule,
   ],
 })
-export class NavsModule {
+export class NavigationModule {
 }

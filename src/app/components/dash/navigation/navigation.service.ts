@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class NavsService {
+export class NavigationService {
 
   constructor(private http: HttpClient,
               private api: ApiService) {
@@ -17,7 +17,7 @@ export class NavsService {
   /**
    * Get blog navigation
    */
-  getNavs(): Observable<{ navigation: Navigation[] }> {
+  getNavigation(): Observable<{ navigation: Navigation[] }> {
     return this.http.get<{ navigation: Navigation[] }>(
       `${this.api.base.v1}site/${BlogService.currentBlog.id}/navigation/`,
     );

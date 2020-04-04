@@ -1,10 +1,10 @@
 import { browser, logging } from 'protractor';
 import { CommonPage } from '../../common.po';
-import { NavsPage } from './navs.po';
+import { NavigationPage } from './navigation.po';
 
-describe('Dash Navs', () => {
+describe('Dash Navigation', () => {
 
-  let page: NavsPage;
+  let page: NavigationPage;
   let commonPage: CommonPage;
 
   beforeAll(() => {
@@ -13,7 +13,7 @@ describe('Dash Navs', () => {
   });
 
   beforeEach(() => {
-    page = new NavsPage();
+    page = new NavigationPage();
   });
 
   it('should navigate to it', () => {
