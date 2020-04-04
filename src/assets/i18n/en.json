@@ -305,5 +305,15 @@
   "UNAUTHORIZED_ACCESS": "Unauthorized Action",
   "INVALID_RESET_PASSWORD_TOKEN": "This reset password link is invalid or expired.",
   "TRY_AGAIN": "Try Again",
+  "SUGGESTION": "Suggestion",
+  "BUG_REPORT": "Bug Report",
+  "FEATURE_REQUEST": "Feature Request",
+  "ANGRY": "Angry",
+  "UNHAPPY": "Unhappy",
+  "NATURAL": "Natural",
+  "HAPPY": "Happy",
+  "IN_LOVE": "In Love",
+  "SUBJECT": "Subject",
+  "EXPERIENCE": "Experience",
   "COLLABORATING": "Collaborating"
 }
