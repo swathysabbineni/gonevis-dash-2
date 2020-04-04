@@ -6,7 +6,6 @@ import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File, File as FileMedia } from '@app/interfaces/file';
 import { Pagination } from '@app/interfaces/pagination';
-import { Params } from '@app/interfaces/params';
 import { Tag } from '@app/interfaces/v1/tag';
 import { FileSelectionComponent } from '@app/shared/file-selection/file-selection.component';
 import { TagModalComponent } from '@app/shared/tags-modal/tag-modal.component';
@@ -44,6 +43,7 @@ export class TagsComponent implements OnInit {
     itemsPerPage: TagsService.PAGE_SIZE,
     totalItems: 0,
     currentPage: 1,
+    id: 'pagination',
   };
 
   /**

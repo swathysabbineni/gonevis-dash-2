@@ -55,6 +55,7 @@ export class FileListComponent implements OnInit, OnDestroy {
     itemsPerPage: MediaService.PAGE_SIZE,
     totalItems: 0,
     currentPage: 1,
+    id: 'file-list',
   };
 
   /**

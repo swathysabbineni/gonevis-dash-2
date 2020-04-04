@@ -1,5 +1,6 @@
 <pagination-template #paginationApi="paginationApi"
-                     (pageChange)="pageChange.emit($event)">
+                     (pageChange)="pageChange.emit($event)"
+                     [id]="id">
   <nav class="mt-3" *ngIf="paginationApi.pages.length">
     <!-- Pagination -->
     <ul class="pagination justify-content-center">

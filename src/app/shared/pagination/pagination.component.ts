@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-pagination',
@@ -11,6 +11,8 @@ export class PaginationComponent {
    * On page change event
    */
   @Output() pageChange: EventEmitter<number> = new EventEmitter();
+
+  @Input() id = 'pagination';
 
   constructor() {
   }
