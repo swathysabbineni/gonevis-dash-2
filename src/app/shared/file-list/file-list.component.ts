@@ -1,3 +1,4 @@
+import { DatePipe, KeyValue } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -20,6 +21,7 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-file-list',
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss'],
+  providers: [DatePipe],
 })
 export class FileListComponent implements OnInit, OnDestroy {
 
@@ -47,6 +49,11 @@ export class FileListComponent implements OnInit, OnDestroy {
    * List of blog media files
    */
   files: File[];
+
+  /**
+   * List of blog media files grouped by date
+   */
+  fileGroups: { [date: string]: File[] };
 
   /**
    * API pagination data
@@ -88,6 +95,23 @@ export class FileListComponent implements OnInit, OnDestroy {
       this.pagination.totalItems = response.count;
       this.loading = false;
       this.changeDetectorRef.detectChanges();
+      /**
+       * Group files by date
+       */
+      this.fileGroups = {};
+      for (const file of this.files) {
+        const created = new Date(file.created);
+        const key = new Date(
+          created.getFullYear(),
+          created.getMonth(),
+          created.getDate(),
+          0, 0, 0, 0,
+        ).toString();
+        if (!this.fileGroups.hasOwnProperty(key)) {
+          this.fileGroups[key] = [];
+        }
+        this.fileGroups[key].push(file);
+      }
     });
   }
 
@@ -141,6 +165,10 @@ export class FileListComponent implements OnInit, OnDestroy {
       default:
         return faFile;
     }
+  }
+
+  originalOrder(a: KeyValue<string, File[]>, b: KeyValue<string, File[]>): number {
+    return 0;
   }
 
   ngOnDestroy(): void {

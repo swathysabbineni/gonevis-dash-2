@@ -25,9 +25,10 @@
         margin-top: auto;
         text-align: center;
         width: 100%;
-        background: rgba($dark, 0.5);
+        background: rgba($dark, 0.8);
         color: rgba($light, 0.9);
         transition: $transition-base;
+        opacity: 0;
       }
 
       .option {
@@ -35,10 +36,18 @@
       }
     }
 
+    &.no-preview {
+      .content {
+        .caption {
+          opacity: 0.75;
+        }
+      }
+    }
+
     &:hover {
       .content {
         .caption {
-          background: rgba($dark, 0.75);
+          opacity: 1;
         }
       }
     }

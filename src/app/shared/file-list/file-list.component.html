@@ -7,13 +7,15 @@
 </div>
 
 <!-- Files -->
-<div class="files">
+<div class="files mt-4" *ngFor="let fileGroup of fileGroups | keyvalue:originalOrder">
+  <p class="font-weight-bold mb-2" [title]="fileGroup.key | date">{{ fileGroup.key | date:'EEEE, MMMM d' }}</p>
   <div class="row">
-    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let file of files | paginate: pagination"
+    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let file of fileGroup.value | paginate: pagination"
          [class.col-xl-2]="!selection">
-      <div class="file pointer rounded-sm shadow-sm my-3"
+      <div class="file pointer my-1"
            (click)="onChoose(file)"
            [class.selected]="file.id === selected"
+           [class.no-preview]="!file.is_image"
            [style.background-image]="utils.sanitizeBackgroundImage(file.thumbnail_256x256)">
         <div class="content">
 
