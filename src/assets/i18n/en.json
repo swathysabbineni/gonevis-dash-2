@@ -312,5 +312,8 @@
   "IN_LOVE": "In Love",
   "SUBJECT": "Subject",
   "EXPERIENCE": "Experience",
+  "PUBLISH_DATE": "Publish date",
+  "UPDATE_DATE": "Update date",
+  "CREATE_DATE": "Create date",
   "COLLABORATING": "Collaborating"
 }
