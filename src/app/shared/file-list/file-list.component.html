@@ -1,5 +1,62 @@
-<!-- Search bar -->
-<app-search-bar (search)="search = $event; getFiles()"></app-search-bar>
+<!-- Subheader -->
+<div class="d-flex">
+
+  <!-- Extension filter -->
+  <div class="dropdown mr-2" dropdown>
+    <button class="btn btn-light dropdown-toggle" dropdownToggle>
+      <fa-icon [icon]="faFilter" [fixedWidth]="true" class="text-secondary mr-1"></fa-icon>
+      {{ extensionFilter.label | translate }}
+    </button>
+    <div class="dropdown-menu " *dropdownMenu>
+      <button class="dropdown-item"
+              *ngFor="let filter of extensionFilters"
+              [class.active]="filter === extensionFilter"
+              (click)="extensionFilter = filter; getFiles()">
+        {{ filter.label | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Search bar -->
+  <app-search-bar class="w-100" (search)="search = $event; getFiles()"></app-search-bar>
+
+  <!-- Sort fields -->
+  <div class="dropdown ml-2" dropdown>
+    <button class="btn btn-light dropdown-toggle" dropdownToggle>
+      <fa-icon [fixedWidth]="true" [icon]="faSort" class="text-secondary mr-1"></fa-icon>
+      <span *ngIf="!sortField" translate>SORT_BY</span>
+      <span *ngIf="sortField">{{ sortField.label | translate }}</span>
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+      <!-- Clear sorting -->
+      <button class="dropdown-item" [class.active]="!sortField" (click)="sortField = null; getFiles()">
+        <fa-icon [fixedWidth]="true" [icon]="faClear" [class.text-secondary]="sortField" class="mr-2"></fa-icon>
+        <span translate>CLEAR</span>
+      </button>
+      <div class="dropdown-divider"></div>
+      <!-- Sorting fields -->
+      <button class="dropdown-item"
+              *ngFor="let field of sortFields"
+              [class.active]="field === sortField"
+              (click)="sortField = field; getFiles()">
+        <fa-icon [fixedWidth]="true" [icon]="field.icon"
+                 [class.text-secondary]="field !== sortField" class="mr-2">
+        </fa-icon>
+        <span translate>{{ field.label }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Sort order -->
+  <button class="btn btn-light ml-2" *ngIf="sortField" (click)="toggleOrder()">
+    <fa-icon class="text-secondary" [fixedWidth]="true"
+             [icon]="faAsc" *ngIf="sortOrder === order.ASCENDING">
+    </fa-icon>
+    <fa-icon class="text-secondary" [fixedWidth]="true"
+             [icon]="faDesc" *ngIf="sortOrder === order.DESCENDING">
+    </fa-icon>
+  </button>
+</div>
 
 <!-- Loading -->
 <div class="card-body" *ngIf="!files">

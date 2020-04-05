@@ -1,21 +1,33 @@
 import { DatePipe, KeyValue } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
+import { EntryStatus } from '@app/enums/entry-status.enum';
+import { FileExtension } from '@app/enums/file-extension';
+import { Order } from '@app/enums/order';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File } from '@app/interfaces/file';
+import { Filter } from '@app/interfaces/filter';
 import { Pagination } from '@app/interfaces/pagination';
+import { Sort } from '@app/interfaces/sort';
 import { UtilService } from '@app/services/util/util.service';
 import { FileModalComponent } from '@app/shared/file-modal/file-modal.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faCalendar } from '@fortawesome/free-regular-svg-icons/faCalendar';
+import { faHdd } from '@fortawesome/free-regular-svg-icons/faHdd';
 import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
 import { faFileArchive } from '@fortawesome/free-solid-svg-icons/faFileArchive';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons/faFileExcel';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
 import { faFilePowerpoint } from '@fortawesome/free-solid-svg-icons/faFilePowerpoint';
 import { faFileWord } from '@fortawesome/free-solid-svg-icons/faFileWord';
+import { faSort } from '@fortawesome/free-solid-svg-icons/faSort';
+import { faSortAmountDown } from '@fortawesome/free-solid-svg-icons/faSortAmountDown';
+import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
+import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 
 @Component({
   selector: 'app-file-list',
@@ -24,6 +36,50 @@ import { ToastrService } from 'ngx-toastr';
   providers: [DatePipe],
 })
 export class FileListComponent implements OnInit, OnDestroy {
+
+  readonly faFilter: IconDefinition = faFilter;
+  readonly faSort: IconDefinition = faSort;
+  readonly faClear: IconDefinition = faTimes;
+  readonly faAsc: IconDefinition = faSortAmountUp;
+  readonly faDesc: IconDefinition = faSortAmountDown;
+
+  readonly order = Order;
+
+  /**
+   * List of sorting fields
+   */
+  readonly sortFields: Sort[] = [{
+    value: 'created',
+    label: 'UPLOAD_DATE',
+    icon: faCalendar,
+  }, {
+    value: 'size',
+    label: 'Size',
+    icon: faHdd,
+  }];
+
+  /**
+   * List of sorting fields
+   */
+  readonly extensionFilters: Filter<FileExtension>[] = [{
+    value: '',
+    label: 'ALL_MEDIA',
+  }, {
+    value: FileExtension.Image,
+    label: 'IMAGE',
+  }, {
+    value: FileExtension.Audio,
+    label: 'AUDIO',
+  }, {
+    value: FileExtension.Video,
+    label: 'VIDEO',
+  }, {
+    value: FileExtension.Document,
+    label: 'DOCUMENT',
+  }, {
+    value: FileExtension.Archive,
+    label: 'ARCHIVE',
+  }];
 
   /**
    * Selection mode
@@ -44,6 +100,11 @@ export class FileListComponent implements OnInit, OnDestroy {
    * Current search text
    */
   search: string;
+
+  /**
+   * Current extension filter
+   */
+  extensionFilter: Filter<FileExtension> = this.extensionFilters[0];
 
   /**
    * List of blog media files
@@ -69,8 +130,18 @@ export class FileListComponent implements OnInit, OnDestroy {
    */
   loading: boolean;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef,
-              public utils: UtilService,
+  /**
+   * Current sort field
+   */
+  sortField: Sort;
+
+  /**
+   * Sorting order (ascending or descending)
+   */
+  sortOrder: Order = Order.ASCENDING;
+
+  constructor(public utils: UtilService,
+              private changeDetectorRef: ChangeDetectorRef,
               private mediaService: MediaService,
               private translate: TranslateService,
               private toast: ToastrService,
@@ -90,7 +161,18 @@ export class FileListComponent implements OnInit, OnDestroy {
   getFiles(page: number = 1): void {
     this.pagination.currentPage = page;
     this.loading = true;
-    this.mediaService.getMedia(page, this.search).subscribe((response: ApiResponse<File>): void => {
+    let ordering = '';
+    if (this.sortField) {
+      ordering = this.sortField.value;
+    }
+    if (this.sortOrder === Order.DESCENDING) {
+      ordering = `-${ordering}`;
+    }
+    this.mediaService.getMedia({
+      search: this.search || '',
+      ext: this.extensionFilter.value,
+      ordering,
+    }, page).subscribe((response: ApiResponse<File>): void => {
       this.files = response.results;
       this.pagination.totalItems = response.count;
       this.loading = false;
@@ -165,6 +247,18 @@ export class FileListComponent implements OnInit, OnDestroy {
       default:
         return faFile;
     }
+  }
+
+  /**
+   * Toggle sort order
+   */
+  toggleOrder(): void {
+    if (this.sortOrder === Order.ASCENDING) {
+      this.sortOrder = Order.DESCENDING;
+    } else {
+      this.sortOrder = Order.ASCENDING;
+    }
+    this.getFiles();
   }
 
   originalOrder(a: KeyValue<string, File[]>, b: KeyValue<string, File[]>): number {

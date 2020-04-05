@@ -268,6 +268,13 @@
   "ENABLED": "Enabled",
   "DISABLED": "Disabled",
   "ANY_STATUS": "Any status",
+  "ALL_FILES": "All files",
+  "ALL_MEDIA": "All media",
+  "IMAGE": "Image",
+  "AUDIO": "Audio",
+  "VIDEO": "Video",
+  "DOCUMENT": "Document",
+  "ARCHIVE": "Archive",
   "COMMENTING_DISABLED": "Commenting disabled",
   "NOT_FEATURED": "Not featured",
   "LIKES": "Likes",
@@ -315,5 +322,6 @@
   "PUBLISH_DATE": "Publish date",
   "UPDATE_DATE": "Update date",
   "CREATE_DATE": "Create date",
+  "UPLOAD_DATE": "Upload date",
   "COLLABORATING": "Collaborating"
 }
