@@ -16,7 +16,8 @@ const routes: Routes = [{
     loadChildren: (): any => import('./advanced/advanced.module').then(m => m.AdvancedModule),
   }, {
     path: 'upgrade',
-    loadChildren: (): any => import('src/app/components/dash/settings/upgrades/upgrades.module').then(m => m.UpgradesModule),
+    loadChildren: (): any => import('src/app/components/dash/settings/upgrades/upgrades.module')
+      .then(m => m.UpgradesModule),
   }, {
     path: 'billing',
     loadChildren: () => import('./billing/billing.module').then(m => m.BillingModule),
