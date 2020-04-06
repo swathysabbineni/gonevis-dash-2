@@ -83,3 +83,16 @@
     <p class="mb-0">Of course you can, you may upgrade or downgrade anytime.</p>
   </div>
 </div>
+
+<!-- Validation modal -->
+<ng-template #validationModalTemplate>
+  <!-- Modal header -->
+  <div class="modal-header" translate [translateParams]="{ planName: selectedPlan.name }">UPGRADE_TO_PLAN</div>
+  <!-- Modal body -->
+  <div class="modal-body d-flex align-items-center">
+    <fa-icon [icon]="circleNotch" spin="true" class="mr-3 text-primary"></fa-icon>
+    <p class="mb-0" translate>
+      VALIDATING_PAYMENT
+    </p>
+  </div>
+</ng-template>

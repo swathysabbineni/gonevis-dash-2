@@ -1,10 +1,10 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BillingService } from '@app/components/dash/settings/billing/billing.service';
-import { SettingsUpgradeService } from '@app/components/dash/settings/settings-upgrade/settings-upgrade.service';
+import { UpgradesService } from '@app/components/dash/settings/upgrades/upgrades.service';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { Subscription } from '@app/interfaces/subscription';
+import { PlanSubscription } from '@app/interfaces/planSubscription';
 import { Transaction } from '@app/interfaces/transaction';
 import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -19,7 +19,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 })
 export class BillingComponent implements OnInit {
 
-  subscription: Subscription;
+  subscription: PlanSubscription;
 
   modal: BsModalRef;
 
@@ -49,7 +49,7 @@ export class BillingComponent implements OnInit {
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private bsModalService: BsModalService,
-              private settingsUpgradeService: SettingsUpgradeService,
+              private settingsUpgradeService: UpgradesService,
               private settingsBillingService: BillingService) {
   }
 
@@ -59,7 +59,7 @@ export class BillingComponent implements OnInit {
      * Get current subscription
      */
     this.settingsUpgradeService.getSubscription().subscribe(
-      (subscription: { subscription: Subscription }): void => {
+      (subscription: { subscription: PlanSubscription }): void => {
         this.subscription = subscription.subscription;
         this.loading = false;
       });
