@@ -1,6 +1,10 @@
 <!-- Media -->
 <div class="row justify-content-center">
+
+  <!-- Left side -->
   <div class="col-xl-6">
+
+    <!-- Media -->
     <div class="card dash mb-3">
       <!-- Header -->
       <div class="card-header" translate>MEDIA</div>
@@ -55,38 +59,10 @@
       </div>
     </div>
 
-    <!-- Theme -->
-    <form class="card dash mb-3" [formGroup]="themeForm" (ngSubmit)="submitSettings()">
+    <!-- Customization -->
+    <form class="card dash mb-3" [formGroup]="customizationForm" (ngSubmit)="submitSettings()">
       <!-- Header -->
-      <div class="card-header" translate>THEME</div>
-      <!-- Body -->
-      <div class="card-body" *ngIf="themeCarousel">
-        <!-- Theme name -->
-        {{ getThemeViewing().name | uppercase }}
-        <!-- Theme buttons -->
-        <div class="btn-group float-right">
-          <!-- Preview -->
-          <a class="btn btn-light" [title]="'PREVIEW' | translate" target="_blank"
-             href="{{ settings.absolute_uri }}?preview-template={{ getThemeViewing().name }}">
-            <fa-icon [fixedWidth]="true" [icon]="faEye"></fa-icon>
-          </a>
-          <!-- Select button -->
-          <button class="btn btn-primary" type="button" translate (click)="setTemplate()"
-                  [disabled]="themeLoading || getThemeViewing().name === templateConfig.name">
-            SELECT
-          </button>
-        </div>
-        <!-- Theme author -->
-        <div class="text-secondary" [title]="'AUTHOR' | translate">{{ getThemeViewing().config.author }}</div>
-      </div>
-      <!-- Themes -->
-      <div class="border-top border-bottom">
-        <carousel [interval]="0" *ngIf="templates" [noWrap]="false" #themeCarousel>
-          <slide *ngFor="let template of templates">
-            <img [src]="template.media.thumbnail_512x512" *ngIf="template.media.thumbnail_512x512" width="100%">
-          </slide>
-        </carousel>
-      </div>
+      <div class="card-header" translate>CUSTOMIZATION</div>
       <!-- Body -->
       <div class="card-body">
         <!-- Template primary color -->
@@ -115,7 +91,7 @@
       <!-- Footer -->
       <div class="card-footer text-right">
         <!-- Submit -->
-        <button class="btn btn-primary" [disabled]="themeLoading" translate>SAVE_CHANGES</button>
+        <button class="btn btn-primary" [disabled]="customizationLoading" translate>SAVE_CHANGES</button>
       </div>
     </form>
 
@@ -139,6 +115,63 @@
       <div class="card-footer text-right" (click)="updateTemplateConfig()">
         <!-- Submit -->
         <button class="btn btn-primary" [disabled]="templateConfigLoading" translate>SAVE_CHANGES</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right side -->
+  <div class="col-xl-6">
+
+    <!-- Themes -->
+    <div class="card dash mb-3 themes bg-dark">
+
+      <!-- Header -->
+      <div class="card-header">
+        <span translate>THEMES</span>
+        <span class="card-label" *ngIf="templates">{{ templates.length }}</span>
+      </div>
+
+      <!-- Body -->
+      <div class="card-body p-2" *ngIf="settings && templates && templateConfig">
+        <div class="row no-gutters">
+          <div class="col-xl-6" *ngFor="let template of templates">
+
+            <!-- Template card -->
+            <div class="card dash m-2">
+
+              <!-- Image -->
+              <img class="card-img-top border-dark border-bottom"
+                   [alt]="template.name"
+                   [src]="template.media.thumbnail_512x512"
+                   *ngIf="template.media.thumbnail_512x512">
+
+              <!-- Body -->
+              <div class="card-body d-flex align-items-end">
+                <!-- Info -->
+                <div>
+                  <!-- Name -->
+                  <div class="font-weight-bold">{{ template.name | uppercase }}</div>
+                  <!-- Author -->
+                  <div class="small">{{ template.config.author }}</div>
+                </div>
+                <!-- Buttons -->
+                <div class="ml-auto text-right">
+                  <!-- Preview -->
+                  <a class="btn btn-sm mr-1" [title]="'PREVIEW' | translate" target="_blank"
+                     href="{{ settings.absolute_uri }}?preview-template={{ template.name }}">
+                    <fa-icon [fixedWidth]="true" [icon]="faEye"></fa-icon>
+                  </a>
+                  <!-- Select button -->
+                  <button class="btn btn-sm btn-secondary" (click)="setTemplate(template)"
+                          [disabled]="template.name === templateConfig.name || templatesLoading">
+                    <span translate *ngIf="template.name !== templateConfig.name">SELECT</span>
+                    <span translate *ngIf="template.name === templateConfig.name">SELECTED</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
