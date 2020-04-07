@@ -1,24 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
-import { TagModalComponent } from './tag-modal.component';
+import { BillingRoutingModule } from './billing-routing.module';
+import { BillingComponent } from './billing.component';
 
 @NgModule({
   declarations: [
-    TagModalComponent,
+    BillingComponent,
   ],
   imports: [
     CommonModule,
-    FontAwesomeModule,
-    ReactiveFormsModule,
+    BillingRoutingModule,
     TranslateModule.forChild(),
-  ],
-  entryComponents: [
-    TagModalComponent,
+    ModalModule.forRoot(),
+    FontAwesomeModule,
   ],
 })
-export class TagModalModule {
+export class BillingModule {
 }

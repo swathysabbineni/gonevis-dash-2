@@ -17,7 +17,7 @@
     <!-- Actions -->
     <div class="card-body d-flex flex-row align-items-center bg-light py-2" *ngIf="entries">
 
-      <!-- Select -->
+      <!-- Select: Select input -->
       <div class="checkbox" *ngIf="entries.length">
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="select"
@@ -26,12 +26,12 @@
         </div>
       </div>
 
-      <!-- Selected count -->
+      <!-- Select: Selected count -->
       <div *ngIf="entriesSelected.length" class="text-secondary text-lowercase ml-2">
         {{ entriesSelected.length }} {{ 'SELECTED' | translate }}
       </div>
 
-      <!-- Status filter -->
+      <!-- Filters: Status filter -->
       <div class="dropdown ml-auto" dropdown *ngIf="!entriesSelected.length">
         <button class="btn btn-light dropdown-toggle" dropdownToggle>
           <fa-icon [icon]="filter" [fixedWidth]="true" class="text-secondary mr-1"></fa-icon>
@@ -47,31 +47,34 @@
         </div>
       </div>
 
-      <!-- Sort fields -->
+      <!-- Filters: Sort fields -->
       <div class="dropdown ml-2" dropdown *ngIf="!entriesSelected.length">
         <button class="btn btn-light dropdown-toggle" dropdownToggle>
           <fa-icon [fixedWidth]="true" [icon]="sort" class="text-secondary mr-1"></fa-icon>
           <span *ngIf="!sortField" translate>SORT_BY</span>
-          <span *ngIf="sortField" translate>{{ sortField.label }}</span>
+          <span *ngIf="sortField">{{ sortField.label | translate }}</span>
         </button>
         <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
           <!-- Clear sorting -->
-          <button class="dropdown-item" [class.active]="!sortField" (click)="sortField = null; getEntries()" translate>
-            <fa-icon [fixedWidth]="true" [icon]="times"></fa-icon>
-            CLEAR
+          <button class="dropdown-item" [class.active]="!sortField" (click)="sortField = null; getEntries()">
+            <fa-icon [fixedWidth]="true" [icon]="times" [class.text-secondary]="sortField" class="mr-2"></fa-icon>
+            <span translate>CLEAR</span>
           </button>
+          <div class="dropdown-divider"></div>
           <!-- Sorting fields -->
           <button class="dropdown-item"
                   *ngFor="let field of sortFields"
                   [class.active]="field === sortField"
                   (click)="sortField = field; getEntries()">
-            <fa-icon [fixedWidth]="true" [icon]="field.icon"></fa-icon>
-            {{ field.label | translate }}
+            <fa-icon [fixedWidth]="true" [icon]="field.icon"
+                     [class.text-secondary]="field !== sortField" class="mr-2">
+            </fa-icon>
+            <span translate>{{ field.label }}</span>
           </button>
         </div>
       </div>
 
-      <!-- Sort order -->
+      <!-- Filters: Sort order -->
       <button class="btn btn-light ml-2" *ngIf="!entriesSelected.length && sortField" (click)="toggleOrder()">
         <fa-icon class="text-secondary" [fixedWidth]="true"
                  [icon]="ascending" *ngIf="sortOrder === order.ASCENDING">
@@ -81,7 +84,7 @@
         </fa-icon>
       </button>
 
-      <!-- Commenting -->
+      <!-- Action: Commenting -->
       <div class="dropdown ml-auto" dropdown *ngIf="entriesSelected.length">
         <button class="btn btn-light dropdown-toggle" dropdownToggle translate>COMMENTING</button>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
@@ -90,7 +93,7 @@
         </div>
       </div>
 
-      <!-- Featured -->
+      <!-- Action: Featured -->
       <div class="dropdown ml-2" dropdown *ngIf="entriesSelected.length">
         <button class="btn btn-light dropdown-toggle" dropdownToggle translate>FEATURED</button>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
@@ -99,7 +102,7 @@
         </div>
       </div>
 
-      <!-- Status -->
+      <!-- Action: Status -->
       <div class="dropdown ml-2" dropdown *ngIf="entriesSelected.length">
         <button class="btn btn-light dropdown-toggle" dropdownToggle translate>STATUS</button>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
@@ -145,17 +148,17 @@
         <th class="text-secondary text-right">
           <!-- Likes -->
           <span *ngIf="entry.vote_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="like"></fa-icon>
+            <fa-icon [fixedWidth]="true" [icon]="like"></fa-icon>
             {{ entry.vote_count | number }}
           </span>
           <!-- Comments -->
           <span *ngIf="entry.comment_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="comment"></fa-icon>
+            <fa-icon [fixedWidth]="true" [icon]="comment"></fa-icon>
             {{ entry.comment_count | number }}
           </span>
           <!-- Views -->
           <span *ngIf="entry.view_count" class="mr-3">
-          <fa-icon [fixedWidth]="true" [icon]="eye"></fa-icon>
+            <fa-icon [fixedWidth]="true" [icon]="eye"></fa-icon>
             {{ entry.view_count | number }}
           </span>
         </th>

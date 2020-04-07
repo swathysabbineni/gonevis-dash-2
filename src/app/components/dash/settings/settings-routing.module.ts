@@ -1,32 +1,26 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SettingsComponent } from '@app/components/dash/settings/settings.component';
 
-import { SettingsAdvancedComponent } from './settings-advanced/settings-advanced.component';
-import { SettingsAppearanceComponent } from './settings-appearance/settings-appearance.component';
-import { SettingsGeneralComponent } from './settings-general/settings-general.component';
+import { SettingsComponent } from './settings.component';
 
 const routes: Routes = [{
   path: '',
   component: SettingsComponent,
   children: [{
     path: 'general',
-    component: SettingsGeneralComponent,
-    data: { title: 'GENERAL' },
+    loadChildren: () => import('./general/general.module').then(m => m.GeneralModule),
   }, {
     path: 'appearance',
-    component: SettingsAppearanceComponent,
-    data: { title: 'APPEARANCE' },
+    loadChildren: () => import('./appearance/appearance.module').then(m => m.AppearanceModule),
   }, {
     path: 'advanced',
-    component: SettingsAdvancedComponent,
-    data: { title: 'ADVANCED' },
+    loadChildren: () => import('./advanced/advanced.module').then(m => m.AdvancedModule),
   }, {
     path: 'upgrade',
-    loadChildren: (): any => import('./settings-upgrade/settings-upgrade.module').then(m => m.SettingsUpgradeModule),
+    loadChildren: () => import('./upgrades/upgrades.module').then(m => m.UpgradesModule),
   }, {
     path: 'billing',
-    loadChildren: () => import('./settings-billing/settings-billing.module').then(m => m.SettingsBillingModule),
+    loadChildren: () => import('./billing/billing.module').then(m => m.BillingModule),
   }, {
     path: '**',
     pathMatch: 'full',

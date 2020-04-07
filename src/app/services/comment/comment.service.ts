@@ -23,7 +23,7 @@ export class CommentService {
    * @param commentId Comment ID
    */
   getComment(id: string, commentId: string): Observable<Comment> {
-    return this.http.get<Comment>(`${this.apiService.base.zero}website/entry/${id}/comment/${commentId}/`);
+    return this.http.get<Comment>(`${this.apiService.base.zero}website/entry/${id}/comments/${commentId}/`);
   }
 
   /**
@@ -33,7 +33,7 @@ export class CommentService {
    * @param comment Comment content
    */
   comment(id: string, comment: string): Observable<Comment> {
-    return this.http.post<Comment>(`${this.apiService.base.zero}website/entry/${id}/comment/`, {
+    return this.http.post<Comment>(`${this.apiService.base.zero}website/entry/${id}/comments/`, {
       comment,
       object_id: ObjectType.Entry,
     });

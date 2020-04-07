@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { TeamRoles } from '@app/enums/team-roles';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 
 @Component({

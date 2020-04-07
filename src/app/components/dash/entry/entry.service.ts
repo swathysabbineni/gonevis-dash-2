@@ -33,7 +33,7 @@ export class EntryService {
   ];
 
   constructor(private http: HttpClient,
-              private apiService: ApiService,
+              private api: ApiService,
               private toast: ToastrService,
               private translate: TranslateService) {
   }
@@ -56,7 +56,7 @@ export class EntryService {
     } = {},
     page: number = 1,
   ): Observable<ApiResponse<Entry>> {
-    return this.http.get<ApiResponse<Entry>>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/`, {
+    return this.http.get<ApiResponse<Entry>>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/entry/`, {
       params: Object.assign(filter, {
         limit: (filter.limit || EntryService.PAGE_SIZE).toString(),
         offset: UtilService.getPageOffset(filter.limit || EntryService.PAGE_SIZE, page),
@@ -71,7 +71,7 @@ export class EntryService {
    * @param blogId Blog ID
    */
   create(payload: Partial<Entry>, blogId: string = BlogService.currentBlog.id): Observable<Entry> {
-    return this.http.post<Entry>(`${this.apiService.base.v1}site/${blogId}/entry/`, payload);
+    return this.http.post<Entry>(`${this.api.base.v1}site/${blogId}/entry/`, payload);
   }
 
   /**
@@ -81,7 +81,7 @@ export class EntryService {
    * @param payload Entry data
    */
   update(id: string, payload: { [field: string]: any }): Observable<Entry> {
-    return this.http.patch<Entry>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/${id}/`, payload);
+    return this.http.patch<Entry>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/entry/${id}/`, payload);
   }
 
   /**
@@ -90,7 +90,7 @@ export class EntryService {
    * @param id Entry ID
    */
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/${id}/`);
+    return this.http.delete<void>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/entry/${id}/`);
   }
 
   /**

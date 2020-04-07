@@ -1,24 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { LockedFeatureModule } from '@app/shared/locked-feature/locked-feature.module';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { TagModalComponent } from './tag-modal.component';
+import { AdvancedRoutingModule } from './advanced-routing.module';
+import { AdvancedComponent } from './advanced.component';
 
 @NgModule({
   declarations: [
-    TagModalComponent,
+    AdvancedComponent,
   ],
   imports: [
     CommonModule,
-    FontAwesomeModule,
+    AdvancedRoutingModule,
     ReactiveFormsModule,
+    LockedFeatureModule,
     TranslateModule.forChild(),
   ],
-  entryComponents: [
-    TagModalComponent,
-  ],
 })
-export class TagModalModule {
+export class AdvancedModule {
 }

@@ -1,0 +1,87 @@
+<div class="row justify-content-center">
+  <div class="col-xl-6">
+
+    <!-- No permission -->
+    <div class="card dash" *ngIf="!subscription && !loading && isOwner || !isOwner">
+      <div class="card-body">
+        <div class="card-text text-center" *ngIf="!isOwner" translate>RESTRICTED_PAGE</div>
+        <div class="card-text text-center" *ngIf="!subscription && !loading && isOwner" translate>NO_BILLING</div>
+      </div>
+    </div>
+
+    <!-- Current subscription -->
+    <div *ngIf="subscription && isOwner">
+
+      <!-- Subscription -->
+      <div class="card dash mb-3">
+        <div class="card-header" translate>YOUR_PLAN</div>
+        <div class="card-body">
+          <!-- Date -->
+          <small class="card-subtitle font-weight-normal text-uppercase">{{ subscription.created | date }}</small>
+          <div class="card-title d-flex flex-column flex-sm-row align-items-start align-items-sm-center text-dark mb-0">
+            <!-- Plan name -->
+            <span class="h2 font-weight-bold mr-auto">{{ subscription.plan.name }}</span>
+            <!-- Plan price -->
+            <span class="font-weight-bold">${{ subscription.plan.price }}
+              <small>/ {{ 'MONTHLY' | translate }}</small>
+            </span>
+          </div>
+          <!-- Plan description -->
+          <div class="card-text">{{ subscription.plan.description }}</div>
+        </div>
+        <!-- Cancel button -->
+        <div class="card-footer text-right">
+          <button class="btn btn-sm btn-danger" (click)="showModal(cancelTemplate)" translate>
+            CANCEL
+          </button>
+        </div>
+      </div>
+
+      <!-- Transactions -->
+      <div class="card dash mb-3">
+        <div class="card-header" translate>TRANSACTIONS</div>
+        <div class="card-body p-2">
+          <table class="table table-striped table-borderless m-0">
+            <thead class="small">
+            <tr>
+              <th translate>DATE</th>
+              <th translate>AMOUNT</th>
+            </tr>
+            </thead>
+            <tr *ngFor="let transaction of transactions">
+              <td>{{ transaction.created | date }}</td>
+              <td>${{ transaction.total }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #cancelTemplate>
+  <div class="modal-header">
+    <div class="d-flex align-items-center">
+      <h5 class="mb-0 mr-2" translate>CANCEL_SUBSCRIPTION</h5>
+    </div>
+    <!-- Close -->
+    <button class="ml-auto btn btn-link p-0" (click)="modal.hide()">
+      <fa-icon [fixedWidth]="true" [icon]="times"></fa-icon>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- Text -->
+    <span translate [translateParams]="{planName : subscription.plan.name}" *ngIf="!canceling">
+      CANCEL_SUBSCRIPTION_DESCRIPTION
+    </span>
+    <!-- Reloading icon -->
+    <div class="text-center" *ngIf="canceling">
+      <fa-icon [icon]="circleNotch" class="text-center" size="3x" [fixedWidth]="true" [spin]="true"></fa-icon>
+    </div>
+  </div>
+  <!-- Buttons -->
+  <div class="modal-footer" *ngIf="!canceling">
+    <button class="btn" (click)="cancel()" translate>YES_CANCEL</button>
+    <button class="btn btn-success" (click)="modal.hide()" translate>NO_I_CHANGED_MY_MIND</button>
+  </div>
+</ng-template>
