@@ -1,18 +1,18 @@
 <div class="container mt-3">
-  <div class="row justify-content-center" *ngIf="!isEditor">
-    <div class="col-xl-6 col-lg-8">
 
-      <!-- Tabs -->
+  <!-- Tabs -->
+  <div class="row justify-content-center" *ngIf="!isEditor">
+    <div class="col-xl-6">
       <ul class="nav nav-pills nav-fill mb-3">
         <li class="nav-item" *ngFor="let tab of tabs">
           <a class="nav-link" routerLinkActive="active" [routerLink]="tab">{{ tab.toUpperCase() | translate }}</a>
         </li>
       </ul>
-
-      <!-- Tab content -->
-      <router-outlet></router-outlet>
     </div>
   </div>
+
+  <!-- Tab content -->
+  <router-outlet *ngIf="!isEditor"></router-outlet>
 
   <!-- Permission access error -->
   <app-permission-access *ngIf="isEditor"></app-permission-access>

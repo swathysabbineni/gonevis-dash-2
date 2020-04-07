@@ -1,12 +1,6 @@
-@import "src/assets/styles/variables";
-
-::ng-deep {
-  .carousel {
-    min-height: 512px;
-    background: $light;
-
-    .carousel-control {
-      filter: invert(100%);
-    }
+.card.themes {
+  > .card-body {
+    max-height: 780px;
+    overflow-y: auto;
   }
 }

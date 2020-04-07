@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HighlightTheme } from '@app/enums/highlight-theme';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
@@ -11,7 +11,7 @@ import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
-import { CarouselComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-settings-appearance',
@@ -46,25 +46,24 @@ export class AppearanceComponent implements OnInit {
   settings: BlogSettings;
 
   /**
+   * Templates API loading indicator
+   */
+  templatesLoading: boolean;
+
+  /**
    * Available templates for blogs
    */
   templates: Template[];
 
   /**
-   * Current viewing theme index
+   * Customization theme
    */
-  @ViewChild('themeCarousel')
-  themeCarousel: CarouselComponent;
+  customizationForm: FormGroup;
 
   /**
-   * Theme form
+   * Customization theme API loading indicator
    */
-  themeForm: FormGroup;
-
-  /**
-   * Theme form API loading indicator
-   */
-  themeLoading: boolean;
+  customizationLoading = true;
 
   /**
    * Current blog theme and its config
@@ -74,7 +73,7 @@ export class AppearanceComponent implements OnInit {
   /**
    * Current blog template config API loading indicator
    */
-  templateConfigLoading: boolean;
+  templateConfigLoading = true;
 
   /**
    * What is file selection is being used for
@@ -86,8 +85,8 @@ export class AppearanceComponent implements OnInit {
    */
   fileListModalRef: BsModalRef;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef,
-              private formBuilder: FormBuilder,
+
+  constructor(private formBuilder: FormBuilder,
               private blogService: BlogService,
               private modalService: BsModalService) {
   }
@@ -96,102 +95,72 @@ export class AppearanceComponent implements OnInit {
     /**
      * Setup theme form
      */
-    this.themeForm = this.formBuilder.group({
+    this.customizationForm = this.formBuilder.group({
       highlight_theme: [HighlightTheme.DEFAULT],
       template_primary_color: [TemplatePrimaryColor.DEFAULT],
     });
     /**
      * Get settings
      */
-    this.getSettings();
-    /**
-     * Load template config
-     */
-    this.blogService.getTemplateConfig()
-      .subscribe((data: { template_config: TemplateConfig }): void => {
-        /**
-         * Get templates
-         */
-        this.blogService.getBlogTemplates()
-          .subscribe((response: { templates: Template[] }): void => {
-            this.templates = response.templates;
-            /**
-             * Set current viewing theme
-             */
-            this.changeDetectorRef.detectChanges();
-            this.themeCarousel.activeSlide = this.templates.findIndex(
-              theme => this.templateConfig.name === theme.name,
-            );
-          });
+    this.blogService.getSettings().subscribe((data: BlogSettings): void => {
+      this.customizationLoading = false;
+      this.settings = data;
+      /**
+       * Set up the theme form with default values
+       */
+      this.customizationForm.patchValue({
+        highlight_theme: data.highlight_theme,
+        template_primary_color: data.template_primary_color,
       });
+    });
     /**
-     * Get current theme and config
+     * Get templates
      */
-    this.getTemplateConfig();
+    this.blogService.getBlogTemplates().subscribe((response: { templates: Template[] }): void => {
+      this.templates = response.templates;
+    });
+    /**
+     * Get blog theme and its config
+     */
+    this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
+      this.templateConfigLoading = false;
+      this.templateConfig = data.template_config;
+    });
   }
 
   /**
    * Get blog settings
    */
   getSettings(): void {
-    this.themeLoading = true;
-    this.blogService.getSettings().subscribe((data: BlogSettings): void => {
-      this.themeLoading = false;
-      this.settings = data;
-      /**
-       * Set up the theme form with default values
-       */
-      this.themeForm.patchValue({
-        highlight_theme: data.highlight_theme,
-        template_primary_color: data.template_primary_color,
-      });
-    });
+
   }
 
   /**
    * @returns Current template primary color (used for view)
    */
   getCurrentPrimaryColor(): string {
-    return this.templatePrimaryColors[this.themeForm.controls.template_primary_color.value].color;
-  }
-
-  /**
-   * @returns Current viewing theme
-   */
-  getThemeViewing(): Template {
-    return this.templates[this.themeCarousel.activeSlide];
+    return this.templatePrimaryColors[this.customizationForm.controls.template_primary_color.value].color;
   }
 
   /**
    * Set blog template
    */
-  setTemplate() {
-    this.themeLoading = true;
-    this.blogService.setTemplate(this.getThemeViewing().id).subscribe((): void => {
-      this.themeLoading = false;
-      this.templateConfig = this.getThemeViewing().config;
+  setTemplate(template: Template): void {
+    this.templatesLoading = true;
+    this.blogService.setTemplate(template.id).subscribe((): void => {
+      this.templateConfig = template.config;
+      this.templatesLoading = false;
     });
   }
 
   /**
    * Update theme
    */
-  submitSettings(payload: Params = this.themeForm.value): void {
-    this.themeLoading = true;
+  submitSettings(payload: Params = this.customizationForm.value): void {
+    this.customizationLoading = true;
     this.blogService.updateSettings(payload).subscribe((data: BlogSettings): void => {
-      this.themeLoading = false;
+      this.customizationLoading = false;
       this.settings = data;
-    });
-  }
-
-  /**
-   * Get blog theme and its config
-   */
-  getTemplateConfig(): void {
-    this.templateConfigLoading = true;
-    this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
-      this.templateConfigLoading = false;
-      this.templateConfig = data.template_config;
     });
   }
 
