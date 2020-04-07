@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { BillingRoutingModule } from 'src/app/components/dash/settings/billing/billing-routing.module';
-import { BillingComponent } from 'src/app/components/dash/settings/billing/billing.component';
 
+import { BillingRoutingModule } from './billing-routing.module';
+import { BillingComponent } from './billing.component';
 
 @NgModule({
-  declarations: [BillingComponent],
+  declarations: [
+    BillingComponent,
+  ],
   imports: [
     CommonModule,
     BillingRoutingModule,

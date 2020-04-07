@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AppearanceComponent } from '@app/components/dash/settings/appearance/appearance.component';
 
+import { AppearanceComponent } from './appearance.component';
 
 const routes: Routes = [{
   path: '',

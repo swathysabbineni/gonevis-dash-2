@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { BillingComponent } from '@app/components/dash/settings/billing/billing.component';
 
+import { BillingComponent } from './billing.component';
 
 const routes: Routes = [{
   path: '',

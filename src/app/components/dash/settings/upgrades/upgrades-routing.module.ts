@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { UpgradesComponent } from '@app/components/dash/settings/upgrades/upgrades.component';
 
+import { UpgradesComponent } from './upgrades.component';
 
 const routes: Routes = [{
   path: '',

@@ -1,14 +1,16 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AdvancedRoutingModule } from '@app/components/dash/settings/advanced/advanced-routing.module';
-import { AdvancedComponent } from '@app/components/dash/settings/advanced/advanced.component';
 import { LockedFeatureModule } from '@app/shared/locked-feature/locked-feature.module';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { AdvancedRoutingModule } from './advanced-routing.module';
+import { AdvancedComponent } from './advanced.component';
 
 @NgModule({
-  declarations: [AdvancedComponent],
+  declarations: [
+    AdvancedComponent,
+  ],
   imports: [
     CommonModule,
     AdvancedRoutingModule,
