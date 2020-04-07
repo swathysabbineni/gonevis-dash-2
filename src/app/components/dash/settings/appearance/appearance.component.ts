@@ -15,10 +15,10 @@ import { CarouselComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-settings-appearance',
-  templateUrl: './settings-appearance.component.html',
-  styleUrls: ['./settings-appearance.component.scss'],
+  templateUrl: './appearance.component.html',
+  styleUrls: ['./appearance.component.scss'],
 })
-export class SettingsAppearanceComponent implements OnInit {
+export class AppearanceComponent implements OnInit {
 
   readonly faTrash: IconDefinition = faTrash;
   readonly faEye: IconDefinition = faEye;

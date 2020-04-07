@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SettingsBillingComponent } from '@app/components/dash/settings/settings-billing/settings-billing.component';
+import { GeneralComponent } from '@app/components/dash/settings/general/general.component';
 
 
 const routes: Routes = [{
   path: '',
-  component: SettingsBillingComponent,
+  component: GeneralComponent,
   data: {
-    title: 'BILLING',
+    title: 'GENERAL',
   },
 }];
 
@@ -15,5 +15,5 @@ const routes: Routes = [{
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SettingsBillingRoutingModule {
+export class GeneralRoutingModule {
 }

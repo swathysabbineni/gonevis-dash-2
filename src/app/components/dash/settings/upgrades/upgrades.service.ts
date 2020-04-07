@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { Subscription } from '@app/interfaces/subscription';
+import { PlanSubscription } from '@app/interfaces/planSubscription';
 import { Plan } from '@app/interfaces/v1/plan';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class SettingsUpgradeService {
+export class UpgradesService {
 
   /**
    * CloudPayments
@@ -39,7 +39,7 @@ export class SettingsUpgradeService {
          */
         const scriptElement: HTMLScriptElement = document.createElement('script');
         scriptElement.type = 'text/javascript';
-        scriptElement.src = SettingsUpgradeService.CLOUD_PAYMENTS_SCRIPT;
+        scriptElement.src = UpgradesService.CLOUD_PAYMENTS_SCRIPT;
         /**
          * On load callback
          */
@@ -73,8 +73,8 @@ export class SettingsUpgradeService {
   /**
    * Get current blog subscription plan
    */
-  getSubscription(): Observable<{ subscription: Subscription }> {
-    return this.http.get<{ subscription: Subscription }>(
+  getSubscription(): Observable<{ subscription: PlanSubscription }> {
+    return this.http.get<{ subscription: PlanSubscription }>(
       `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/subscription/`,
     );
   }

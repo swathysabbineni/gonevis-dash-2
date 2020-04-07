@@ -60,5 +60,9 @@
     &.bg-success::after {
       border-top-color: rgba($success, 0.5);
     }
+
+    &.bg-warning::after {
+      border-top-color: rgba($warning, 0.5);
+    }
   }
 }

@@ -11,10 +11,10 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-settings-advanced',
-  templateUrl: './settings-advanced.component.html',
-  styleUrls: ['./settings-advanced.component.scss'],
+  templateUrl: './advanced.component.html',
+  styleUrls: ['./advanced.component.scss'],
 })
-export class SettingsAdvancedComponent implements OnInit {
+export class AdvancedComponent implements OnInit {
 
   readonly plan = Plan;
 

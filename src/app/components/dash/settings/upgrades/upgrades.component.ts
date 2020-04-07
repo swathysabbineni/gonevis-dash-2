@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { Subscription } from '@app/interfaces/subscription';
+import { PlanSubscription } from '@app/interfaces/planSubscription';
 import { UpgradePlan } from '@app/interfaces/upgrade-plan';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { Plan } from '@app/interfaces/v1/plan';
@@ -11,23 +12,31 @@ import { UserService } from '@app/services/user/user.service';
 import { environment } from '@environments/environment';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons/faDollarSign';
-import { BsModalService } from 'ngx-bootstrap';
-
-import { PaymentValidationComponent } from './payment-validation/payment-validation.component';
-import { SettingsUpgradeService } from './settings-upgrade.service';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { Subscription } from 'rxjs';
+import { UpgradesService } from 'src/app/components/dash/settings/upgrades/upgrades.service';
 
 declare var cp: any;
 
 @Component({
   selector: 'app-settings-upgrade',
-  templateUrl: './settings-upgrade.component.html',
-  styleUrls: ['./settings-upgrade.component.scss'],
+  templateUrl: './upgrades.component.html',
+  styleUrls: ['./upgrades.component.scss'],
 })
-export class SettingsUpgradeComponent implements OnInit {
+export class UpgradesComponent implements OnInit, OnDestroy {
+
+  /**
+   * Represents a disposable resource, such as the execution of an Observable.
+   * A subscription has one important method, `unsubscribe`, that takes no argument
+   * and just disposes the resource held by the subscription.
+   */
+  private readonly subscription: Subscription = new Subscription();
 
   readonly dollarSign: IconDefinition = faDollarSign;
   readonly check: IconDefinition = faCheck;
+  readonly circleNotch: IconDefinition = faCircleNotch;
 
   /**
    * Upgrade plans to show in view
@@ -78,6 +87,11 @@ export class SettingsUpgradeComponent implements OnInit {
   }];
 
   /**
+   * Get validation modal template reference
+   */
+  @ViewChild('validationModalTemplate') validationModalRef: TemplateRef<any>;
+
+  /**
    * Authenticated user
    */
   user: UserAuth;
@@ -90,17 +104,34 @@ export class SettingsUpgradeComponent implements OnInit {
   /**
    * Subscription
    */
-  subscription: Subscription;
+  planSubscription: PlanSubscription;
 
   /**
    * Current plan
    */
   currentPlan: Plan;
 
-  constructor(private authService: AuthService,
+  /**
+   * Selected plan to upgrade. It's being used to display the name of the plan in validation modal
+   */
+  selectedPlan: Plan;
+
+  /**
+   * Validation interval. It's being used to check whether or not payment is validated.
+   */
+  validationInterval: any;
+
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private authService: AuthService,
               private bsModalService: BsModalService,
-              private settingsUpgradeService: SettingsUpgradeService) {
-    this.settingsUpgradeService.loadScript();
+              private upgradesService: UpgradesService) {
+    this.upgradesService.loadScript();
+    this.subscription.add(
+      this.bsModalService.onHide.subscribe((): void => {
+        clearInterval(this.validationInterval);
+      }),
+    );
   }
 
   ngOnInit(): void {
@@ -115,10 +146,10 @@ export class SettingsUpgradeComponent implements OnInit {
     /**
      * Get current subscription plan
      */
-    this.settingsUpgradeService.getSubscription().subscribe((response: {
-      subscription: Subscription
+    this.upgradesService.getSubscription().subscribe((response: {
+      subscription: PlanSubscription
     }): void => {
-      this.subscription = response.subscription;
+      this.planSubscription = response.subscription;
       if (response.subscription && response.subscription.active) {
         this.currentPlan = response.subscription.plan;
       }
@@ -126,7 +157,7 @@ export class SettingsUpgradeComponent implements OnInit {
     /**
      * Get plan list and set the plans "plan" property
      */
-    this.settingsUpgradeService.getPlans().subscribe((response: ApiResponse<Plan>): void => {
+    this.upgradesService.getPlans().subscribe((response: ApiResponse<Plan>): void => {
       for (const upgradePlan of this.plans) {
         const plan: Plan = response.results.find(item => item.name === upgradePlan.name);
         if (plan) {
@@ -146,6 +177,7 @@ export class SettingsUpgradeComponent implements OnInit {
     if (this.currentPlan && this.currentPlan.id === plan.id || !this.isOwner) {
       return;
     }
+    this.selectedPlan = plan;
     /**
      * Open payment widget
      */
@@ -186,7 +218,36 @@ export class SettingsUpgradeComponent implements OnInit {
         },
       },
     }, (): void => {
-      this.bsModalService.show(PaymentValidationComponent);
+      /**
+       * Show payment validation modal
+       */
+      const modal: BsModalRef = this.bsModalService.show(this.validationModalRef, {
+        class: 'modal-sm',
+        ignoreBackdropClick: true,
+        keyboard: false,
+      });
+
+      this.validationInterval = setInterval((): void => {
+        this.upgradesService.getSubscription().subscribe((data: { subscription: PlanSubscription }): void => {
+          if (data.subscription && data.subscription.active) {
+            // Cancel interval
+            clearInterval(this.validationInterval);
+            // Close modal
+            modal.hide();
+            // Redirect to main page after 500 milliseconds
+            this.router.navigate(['main'], {
+              relativeTo: this.activatedRoute.root.firstChild.firstChild,
+            });
+          }
+        });
+      }, 2000);
     });
+  }
+
+  ngOnDestroy(): void {
+    /**
+     * Disposes the resources held by the subscription
+     */
+    this.subscription.unsubscribe();
   }
 }

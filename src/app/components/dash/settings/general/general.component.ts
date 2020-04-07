@@ -13,10 +13,10 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings-general',
-  templateUrl: './settings-general.component.html',
-  styleUrls: ['./settings-general.component.scss'],
+  templateUrl: './general.component.html',
+  styleUrls: ['./general.component.scss'],
 })
-export class SettingsGeneralComponent implements OnInit {
+export class GeneralComponent implements OnInit {
 
   readonly faDelete: IconDefinition = faTrash;
   readonly faPrimary: IconDefinition = faStar;
