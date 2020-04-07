@@ -88,8 +88,7 @@ export function iconToSVGElement(icon: IconDefinition, classList?: string): SVGS
   /**
    * Set node viewBox
    */
-  node.viewBox.baseVal.width = icon.icon[0];
-  node.viewBox.baseVal.height = icon.icon[1];
+  node.setAttribute('viewBox', `0 0 ${icon.icon[0]} ${icon.icon[1]}`);
   /**
    * Create Path element
    */
