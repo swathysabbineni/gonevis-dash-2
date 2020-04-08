@@ -47,12 +47,11 @@ import { faUndo } from '@fortawesome/free-solid-svg-icons/faUndo';
 import { TranslateService } from '@ngx-translate/core';
 import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { QuillModules } from 'ngx-quill';
 import { ToastrService } from 'ngx-toastr';
 import { Quill, RangeStatic } from 'quill';
 import Delta from 'quill-delta';
-import Op from 'quill/node_modules/quill-delta/dist/Op';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
@@ -456,8 +455,8 @@ export class WriteComponent implements OnInit, OnDestroy {
      * On clipboard element node pasted
      */
     editor.clipboard.addMatcher(Node.ELEMENT_NODE, (node: HTMLElement, delta: Delta): Delta => {
-      const ops: Op[] = [];
-      delta.ops.forEach((op: Op): void => {
+      const ops: any[] = [];
+      delta.ops.forEach((op: any): void => {
         /**
          * Check attributes whitelist
          */

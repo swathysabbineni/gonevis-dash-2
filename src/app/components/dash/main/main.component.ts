@@ -24,7 +24,7 @@ import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { TranslateService } from '@ngx-translate/core';
-import { BsModalService } from 'ngx-bootstrap';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { BytesPipe } from 'ngx-pipes';
 import { Subscription } from 'rxjs';
 

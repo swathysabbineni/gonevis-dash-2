@@ -10,7 +10,7 @@ import { FileSelectionComponent } from '@app/shared/file-selection/file-selectio
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-tag-modal',
