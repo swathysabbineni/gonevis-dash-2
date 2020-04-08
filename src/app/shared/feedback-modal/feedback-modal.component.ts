@@ -12,7 +12,7 @@ import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons/faLightbulb';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
-import { BsModalRef } from 'ngx-bootstrap';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-feedback-modal',

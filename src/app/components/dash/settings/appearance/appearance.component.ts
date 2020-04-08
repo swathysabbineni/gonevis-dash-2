@@ -12,7 +12,7 @@ import { BlogService } from '@app/services/blog/blog.service';
 import { FileSelectionComponent } from '@app/shared/file-selection/file-selection.component';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-settings-appearance',

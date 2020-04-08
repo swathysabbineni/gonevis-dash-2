@@ -4,7 +4,7 @@ import { FileListModule } from '@app/shared/file-list/file-list.module';
 import { UploadModule } from '@app/shared/upload/upload.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 import { MediaRoutingModule } from './media-routing.module';
 import { MediaComponent } from './media.component';

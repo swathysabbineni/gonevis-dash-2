@@ -14,7 +14,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons/faDollarSign';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { UpgradesService } from 'src/app/components/dash/settings/upgrades/upgrades.service';
 

@@ -6,7 +6,8 @@ import { LoadingModule } from '@app/shared/loading/loading.module';
 import { ShareModule } from '@app/shared/share/share.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
-import { PopoverModule, TooltipModule } from 'ngx-bootstrap';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgStringPipesModule } from 'ngx-pipes';
 

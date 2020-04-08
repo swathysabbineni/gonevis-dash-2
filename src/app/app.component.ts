@@ -7,7 +7,7 @@ import { BlogService } from '@app/services/blog/blog.service';
 import { UserService } from '@app/services/user/user.service';
 import { FeedbackModalComponent } from '@app/shared/feedback-modal/feedback-modal.component';
 import { TranslateService } from '@ngx-translate/core';
-import { BsModalService } from 'ngx-bootstrap';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
