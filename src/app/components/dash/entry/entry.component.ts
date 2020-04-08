@@ -107,6 +107,7 @@ export class EntryComponent implements OnInit {
     itemsPerPage: EntryService.PAGE_SIZE,
     totalItems: 0,
     currentPage: 1,
+    id: 'pagination',
   };
 
   /**

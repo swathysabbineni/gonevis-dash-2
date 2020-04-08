@@ -11,4 +11,8 @@ export interface Pagination {
    * Number of current page
    */
   currentPage: number;
+  /**
+   * Unique ID
+   */
+  id: string;
 }

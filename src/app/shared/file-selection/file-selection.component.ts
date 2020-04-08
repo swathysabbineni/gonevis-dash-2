@@ -45,8 +45,6 @@ export class FileSelectionComponent {
   }
 
   /**
-   * @description
-   *
    * On file selected
    *
    * @param file Selected file

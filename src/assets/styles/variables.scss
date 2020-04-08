@@ -7,9 +7,14 @@ $primary: #2980b9;
 $success: #2ecc71;
 $danger: #e74c3c;
 $secondary: #6f7a8b;
+$unimportant: lighten($secondary, 25);
 
 $body-bg: #edeef0;
 $body-color: #40454D;
+
+$theme-colors: (
+  "unimportant": $unimportant,
+);
 
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";

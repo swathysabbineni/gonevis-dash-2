@@ -2,7 +2,6 @@ import { TextFieldModule } from '@angular/cdk/text-field';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FileListModule } from '@app/shared/file-list/file-list.module';
 import { FileSelectionModule } from '@app/shared/file-selection/file-selection.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
@@ -33,7 +32,6 @@ import { WriteComponent } from './write.component';
     PopoverModule.forRoot(),
     TooltipModule.forRoot(),
     CollapseModule.forRoot(),
-    FileListModule,
     ModalModule.forRoot(),
     TextFieldModule,
     FontAwesomeModule,
