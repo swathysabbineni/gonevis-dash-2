@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ObjectType } from '@app/enums/object-type';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { Comment } from '@app/interfaces/comment';
+import { CommentVoteResponse } from '@app/interfaces/zero/feed/comment-vote-response';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { Observable } from 'rxjs';
@@ -43,11 +44,11 @@ export class CommentService {
    * Like or unlike comment for user
    *
    * @param id Comment ID
-   * @param blogId Blog ID
+   * @param entryId Blog ID
    */
-  like(id: string, blogId: string): Observable<ApiResponseCreated> {
-    return this.http.post<ApiResponseCreated>(
-      `${this.apiService.base.v1}site/${blogId}/sushial/comment/${id}/vote/`,
+  like(id: string, entryId: string): Observable<CommentVoteResponse> {
+    return this.http.post<CommentVoteResponse>(
+      `${this.apiService.base.zero}website/entry/${entryId}/comments/${id}/vote/`,
       null,
     );
   }
