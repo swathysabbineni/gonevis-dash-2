@@ -7,8 +7,13 @@
 <div class="modal-body">
   <tabset #tabset>
     <!-- Images -->
-    <tab heading="Images" class="py-3" id="images">
-      <app-file-list [selection]="true" [selected]="selected" (choose)="onFileSelect($event)" #fileListComponent>
+    <tab heading="Images" class="pt-3" id="images">
+      <app-file-list [selection]="true"
+                     [margin]="false"
+                     [imageOnly]="true"
+                     [selected]="selected"
+                     (choose)="onFileSelect($event)"
+                     #fileListComponent>
       </app-file-list>
     </tab>
     <!-- Upload -->

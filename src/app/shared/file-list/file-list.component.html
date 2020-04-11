@@ -2,7 +2,7 @@
 <div class="d-flex">
 
   <!-- Extension filter -->
-  <div class="dropdown mr-2" dropdown>
+  <div class="dropdown mr-2" dropdown *ngIf="!imageOnly">
     <button class="btn btn-light dropdown-toggle" dropdownToggle>
       <fa-icon [icon]="faFilter" [fixedWidth]="true" class="text-secondary mr-1"></fa-icon>
       {{ extensionFilter.label | translate }}
@@ -88,7 +88,7 @@
 </div>
 
 <!-- Pagination -->
-<app-pagination (pageChange)="getFiles($event)" id="file-list"></app-pagination>
+<app-pagination [margin]="margin" (pageChange)="getFiles($event)" id="file-list"></app-pagination>
 
 <!-- No data -->
 <p class="text-center my-3" *ngIf="files && !files.length" translate>NOTHING_HERE_YET</p>
