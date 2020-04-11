@@ -87,6 +87,16 @@ export class FileListComponent implements OnInit, OnDestroy {
   @Input() selection = false;
 
   /**
+   * Whether or not pagination should have margin
+   */
+  @Input() margin = true;
+
+  /**
+   * Show images only
+   */
+  @Input() imageOnly: boolean;
+
+  /**
    * Selected file ID
    */
   @Input() selected: string;
@@ -150,6 +160,12 @@ export class FileListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    /**
+     * Show only images if {@link imageOnly} was given as `true`
+     */
+    if (this.imageOnly) {
+      this.extensionFilter = this.extensionFilters[1];
+    }
     this.getFiles();
   }
 
@@ -177,7 +193,6 @@ export class FileListComponent implements OnInit, OnDestroy {
       this.files = response.results;
       this.pagination.totalItems = response.count;
       this.loading = false;
-      this.changeDetectorRef.detectChanges();
       /**
        * Group files by date
        */
@@ -195,6 +210,7 @@ export class FileListComponent implements OnInit, OnDestroy {
         }
         this.fileGroups[key].push(file);
       }
+      this.changeDetectorRef.detectChanges();
     });
   }
 

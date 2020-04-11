@@ -14,6 +14,11 @@ export class PaginationComponent {
 
   @Input() id = 'pagination';
 
+  /**
+   * Whether or not pagination should have margin
+   */
+  @Input() margin = true;
+
   constructor() {
   }
 }

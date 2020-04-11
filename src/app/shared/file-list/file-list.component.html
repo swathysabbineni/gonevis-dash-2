@@ -2,7 +2,7 @@
 <div class="d-flex">
 
   <!-- Extension filter -->
-  <div class="dropdown mr-2" dropdown>
+  <div class="dropdown mr-2" dropdown *ngIf="!imageOnly">
     <button class="btn btn-light dropdown-toggle" dropdownToggle>
       <fa-icon [icon]="faFilter" [fixedWidth]="true" class="text-secondary mr-1"></fa-icon>
       {{ extensionFilter.label | translate }}
