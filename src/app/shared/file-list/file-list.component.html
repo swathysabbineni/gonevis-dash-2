@@ -88,7 +88,7 @@
 </div>
 
 <!-- Pagination -->
-<app-pagination (pageChange)="getFiles($event)" id="file-list"></app-pagination>
+<app-pagination [margin]="margin" (pageChange)="getFiles($event)" id="file-list"></app-pagination>
 
 <!-- No data -->
 <p class="text-center my-3" *ngIf="files && !files.length" translate>NOTHING_HERE_YET</p>
