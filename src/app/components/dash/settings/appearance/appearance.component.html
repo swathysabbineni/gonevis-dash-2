@@ -1,0 +1,178 @@
+<!-- Media -->
+<div class="row justify-content-center">
+
+  <!-- Left side -->
+  <div class="col-xl-6">
+
+    <!-- Media -->
+    <div class="card dash mb-3">
+      <!-- Header -->
+      <div class="card-header" translate>MEDIA</div>
+      <!-- Body -->
+      <div class="card-body">
+        <div class="row">
+          <!-- Logo -->
+          <div class="col-sm-6">
+            <div class="media">
+              <!-- Logo image -->
+              <img class="mr-3 rounded" *ngIf="settings && settings.media.logo"
+                   [src]="settings.media.logo.thumbnail_128x128" [width]="64">
+              <div class="media-body">
+                <h5 class="mt-0" translate>BLOG_LOGO</h5>
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-sm btn-secondary" translate
+                          (click)="showFileListModal('logo')">
+                    SELECT
+                  </button>
+                  <!-- Delete logo-->
+                  <button class="btn btn-sm btn-outline-secondary" *ngIf="settings && settings.media.logo"
+                          (click)="submitSettings({ logo: null })">
+                    <fa-icon [icon]="faTrash"></fa-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Cover -->
+          <div class="col-sm-6">
+            <div class="media">
+              <!-- Cover image -->
+              <img class="mr-3 rounded" *ngIf="settings && settings.media.cover_image"
+                   [src]="settings.media.cover_image.thumbnail_128x128" [width]="64">
+              <div class="media-body">
+                <h5 class="mt-0" translate>BLOG_COVER</h5>
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-sm btn-secondary" translate
+                          (click)="showFileListModal('cover_image')">
+                    SELECT
+                  </button>
+                  <!-- Delete cover -->
+                  <button class="btn btn-sm btn-outline-secondary" *ngIf="settings && settings.media.cover_image"
+                          (click)="submitSettings({ cover_image: null })">
+                    <fa-icon [icon]="faTrash"></fa-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customization -->
+    <form class="card dash mb-3" [formGroup]="customizationForm" (ngSubmit)="submitSettings()">
+      <!-- Header -->
+      <div class="card-header" translate>CUSTOMIZATION</div>
+      <!-- Body -->
+      <div class="card-body">
+        <!-- Template primary color -->
+        <div class="form-group">
+          <label for="template_primary_color" translate>TEMPLATE_PRIMARY_COLOR</label>
+          <div class="input-group">
+            <select class="custom-select" formControlName="template_primary_color" id="template_primary_color">
+              <option *ngFor="let color of templatePrimaryColors" [ngValue]="color.id">{{ color.label }}</option>
+            </select>
+            <!-- Selected color -->
+            <div class="input-group-append px-4 rounded-right"
+                 [ngStyle]="{'background-color': getCurrentPrimaryColor()}">
+            </div>
+          </div>
+        </div>
+        <!-- Code Highlight -->
+        <div class="form-group mb-0">
+          <label for="highlight_theme" translate>CODE_HIGHLIGHT</label>
+          <div class="input-group">
+            <select class="custom-select" formControlName="highlight_theme" id="highlight_theme">
+              <option *ngFor="let theme of highlightThemes" [ngValue]="theme.id">{{ theme.label }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="card-footer text-right">
+        <!-- Submit -->
+        <button class="btn btn-primary" [disabled]="customizationLoading" translate>SAVE_CHANGES</button>
+      </div>
+    </form>
+
+    <!-- Template config (theme options) -->
+    <div class="card dash mb-3">
+      <!-- Header -->
+      <div class="card-header" translate>THEME_OPTIONS</div>
+      <!-- Body -->
+      <div class="card-body" *ngIf="templateConfig">
+        <!-- Fields -->
+        <div class="form-group" *ngFor="let field of templateConfig.fields | keyvalue">
+          <!-- Boolean field (switch/checkbox) -->
+          <div *ngIf="field.value.type === 'boolean'" class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" [id]="field.key" [(ngModel)]="field.value.value">
+            <label class="custom-control-label" [for]="field.key">{{ field.value.verbose_name }}</label>
+            <small class="form-text text-muted">{{ field.value.help_text }}</small>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="card-footer text-right" (click)="updateTemplateConfig()">
+        <!-- Submit -->
+        <button class="btn btn-primary" [disabled]="templateConfigLoading" translate>SAVE_CHANGES</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right side -->
+  <div class="col-xl-6">
+
+    <!-- Themes -->
+    <div class="card dash mb-3 themes bg-dark">
+
+      <!-- Header -->
+      <div class="card-header">
+        <span translate>THEMES</span>
+        <span class="card-label" *ngIf="templates">{{ templates.length }}</span>
+      </div>
+
+      <!-- Body -->
+      <div class="card-body p-2" *ngIf="settings && templates && templateConfig">
+        <div class="row no-gutters">
+          <div class="col-xl-6" *ngFor="let template of templates">
+
+            <!-- Template card -->
+            <div class="card dash m-2">
+
+              <!-- Image -->
+              <img class="card-img-top border-dark border-bottom"
+                   [alt]="template.name"
+                   [src]="template.media.thumbnail_512x512"
+                   *ngIf="template.media.thumbnail_512x512">
+
+              <!-- Body -->
+              <div class="card-body d-flex align-items-end">
+                <!-- Info -->
+                <div>
+                  <!-- Name -->
+                  <div class="font-weight-bold">{{ template.name | uppercase }}</div>
+                  <!-- Author -->
+                  <div class="small">{{ template.config.author }}</div>
+                </div>
+                <!-- Buttons -->
+                <div class="ml-auto text-right">
+                  <!-- Preview -->
+                  <a class="btn btn-sm mr-1" [title]="'PREVIEW' | translate" target="_blank"
+                     href="{{ settings.absolute_uri }}?preview-template={{ template.name }}">
+                    <fa-icon [fixedWidth]="true" [icon]="faEye"></fa-icon>
+                  </a>
+                  <!-- Select button -->
+                  <button class="btn btn-sm btn-secondary" (click)="setTemplate(template)"
+                          [disabled]="template.name === templateConfig.name || templatesLoading">
+                    <span translate *ngIf="template.name !== templateConfig.name">SELECT</span>
+                    <span translate *ngIf="template.name === templateConfig.name">SELECTED</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

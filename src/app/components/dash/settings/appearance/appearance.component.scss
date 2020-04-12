@@ -1,0 +1,6 @@
+.card.themes {
+  > .card-body {
+    max-height: 780px;
+    overflow-y: auto;
+  }
+}

@@ -3,7 +3,7 @@ import { FeedbackModalComponent } from '@app/shared/feedback-modal/feedback-moda
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons/faDiscord';
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons/faCheckCircle';
-import { BsModalService } from 'ngx-bootstrap';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-help',

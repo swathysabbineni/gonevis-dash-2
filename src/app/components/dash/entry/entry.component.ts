@@ -9,13 +9,14 @@ import { Pagination } from '@app/interfaces/pagination';
 import { Sort } from '@app/interfaces/sort';
 import { Entry } from '@app/interfaces/v1/entry';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faCalendar } from '@fortawesome/free-regular-svg-icons/faCalendar';
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
 import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 import { faSort } from '@fortawesome/free-solid-svg-icons/faSort';
-import { faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons/faSortAmountDownAlt';
+import { faSortAmountDown } from '@fortawesome/free-solid-svg-icons/faSortAmountDown';
 import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { TranslateService } from '@ngx-translate/core';
@@ -36,8 +37,8 @@ export class EntryComponent implements OnInit {
   readonly eye: IconDefinition = faEye;
   readonly ellipsis: IconDefinition = faEllipsisV;
   readonly times: IconDefinition = faTimes;
-  readonly ascending: IconDefinition = faSortAmountDownAlt;
-  readonly descending: IconDefinition = faSortAmountUp;
+  readonly ascending: IconDefinition = faSortAmountUp;
+  readonly descending: IconDefinition = faSortAmountDown;
 
   /**
    * Exposed for view
@@ -76,6 +77,22 @@ export class EntryComponent implements OnInit {
     value: 'comment_count',
     label: 'COMMENTS',
     icon: this.comment,
+  }, {
+    value: 'view_count',
+    label: 'VIEWS',
+    icon: this.eye,
+  }, {
+    value: 'published',
+    label: 'PUBLISH_DATE',
+    icon: faCalendar,
+  }, {
+    value: 'created',
+    label: 'CREATE_DATE',
+    icon: faCalendar,
+  }, {
+    value: 'updated',
+    label: 'UPDATE_DATE',
+    icon: faCalendar,
   }];
 
   /**
@@ -90,6 +107,7 @@ export class EntryComponent implements OnInit {
     itemsPerPage: EntryService.PAGE_SIZE,
     totalItems: 0,
     currentPage: 1,
+    id: 'pagination',
   };
 
   /**
@@ -217,7 +235,7 @@ export class EntryComponent implements OnInit {
    * @param slug Entry slug
    */
   addToNavs(title: string, slug: string): void {
-    this.router.navigate(['navs'], {
+    this.router.navigate(['navigation'], {
       relativeTo: this.route.parent.parent,
       state: {
         add: {

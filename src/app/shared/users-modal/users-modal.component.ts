@@ -5,7 +5,7 @@ import { Subscriber } from '@app/interfaces/v1/subscriber';
 import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
-import { BsModalRef } from 'ngx-bootstrap';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-users-modal',

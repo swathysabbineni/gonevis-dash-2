@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { FileExtension } from '@app/enums/file-extension';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File as FileMedia } from '@app/interfaces/file';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
@@ -17,7 +18,7 @@ export class MediaService {
   /**
    * API page size
    */
-  static readonly PAGE_SIZE = 24;
+  static readonly PAGE_SIZE = 50;
 
   /**
    * Media upload accept list
@@ -65,25 +66,34 @@ export class MediaService {
   /**
    * Get blog media
    *
+   * @param filter API filters
    * @param page API page
-   * @param search Search text
    */
-  getMedia(page: number = 1, search: string = ''): Observable<ApiResponse<FileMedia>> {
+  getMedia(
+    filter: {
+      search?: string,
+      ordering?: string,
+      ext?: FileExtension | '',
+      limit?: number,
+    } = {},
+    page: number = 1,
+  ): Observable<ApiResponse<FileMedia>> {
+    if (!filter.ext) {
+      delete filter.ext;
+    }
     return this.http.get<ApiResponse<FileMedia>>(
       `${this.api.base.v1}site/${BlogService.currentBlog.id}/dolphin/file/`,
       {
-        params: {
-          site: BlogService.currentBlog.id,
-          search,
-          limit: MediaService.PAGE_SIZE.toString(),
-          offset: UtilService.getPageOffset(MediaService.PAGE_SIZE, page),
-        },
+        params: Object.assign(filter, {
+          limit: (filter.limit || MediaService.PAGE_SIZE).toString(),
+          offset: UtilService.getPageOffset(filter.limit || MediaService.PAGE_SIZE, page),
+        }),
       },
     );
   }
 
   /**
-   * delete a file
+   * Delete a file
    *
    * @param id File ID
    */
@@ -109,7 +119,8 @@ export class MediaService {
    * @param file File to upload
    * @param fields Upload fields
    */
-  uploadToUrl(url: string, file: File, fields: UploadUrlResponse['post_data']['fields']): Observable<void | FileMedia> {
+  uploadToUrl(url: string, file: File, fields: UploadUrlResponse['post_data']['fields']):
+    Observable<HttpEvent<FileMedia>> {
     const payload: FormData = new FormData();
     for (const field in fields) {
       if (fields[field]) {
@@ -120,7 +131,13 @@ export class MediaService {
     if (environment.name === 'local') {
       payload.append('site', BlogService.currentBlog.id);
     }
-    return this.http.post<void | FileMedia>(url, payload);
+    /**
+     * Create an HTTP POST request and pass the form with option to report progress
+     */
+    const req = new HttpRequest('POST', url, payload, {
+      reportProgress: true,
+    });
+    return this.http.request<FileMedia>(req);
   }
 
   /**
@@ -130,7 +147,6 @@ export class MediaService {
    */
   post(fileKey: string): Observable<FileMedia> {
     return this.http.post<FileMedia>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/dolphin/file/`, {
-      site: BlogService.currentBlog.id,
       file_key: fileKey,
     });
   }
@@ -144,8 +160,6 @@ export class MediaService {
   update(id: string, payload: FileMedia['meta_data']): Observable<FileMedia> {
     return this.http.put<FileMedia>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/dolphin/file/${id}/`, {
       meta_data: payload,
-    }, {
-      params: { site: BlogService.currentBlog.id },
     });
   }
 }

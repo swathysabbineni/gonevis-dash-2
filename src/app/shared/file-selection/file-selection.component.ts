@@ -1,7 +1,7 @@
 import { Component, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { File as FileMedia } from '@app/interfaces/file';
 import { FileListComponent } from '@app/shared/file-list/file-list.component';
-import { TabsetComponent, TabDirective } from 'ngx-bootstrap';
+import { TabsetComponent, TabDirective } from 'ngx-bootstrap/tabs';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -45,8 +45,6 @@ export class FileSelectionComponent {
   }
 
   /**
-   * @description
-   *
    * On file selected
    *
    * @param file Selected file

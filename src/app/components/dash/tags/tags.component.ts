@@ -1,18 +1,19 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TagsService } from '@app/components/dash/tags/tags.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { File } from '@app/interfaces/file';
+import { File, File as FileMedia } from '@app/interfaces/file';
 import { Pagination } from '@app/interfaces/pagination';
 import { Tag } from '@app/interfaces/v1/tag';
+import { FileSelectionComponent } from '@app/shared/file-selection/file-selection.component';
 import { TagModalComponent } from '@app/shared/tags-modal/tag-modal.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -42,6 +43,7 @@ export class TagsComponent implements OnInit {
     itemsPerPage: TagsService.PAGE_SIZE,
     totalItems: 0,
     currentPage: 1,
+    id: 'pagination',
   };
 
   /**
@@ -68,11 +70,6 @@ export class TagsComponent implements OnInit {
    * Tag form API errors
    */
   errors: ApiError = {};
-
-  /**
-   * File list modal
-   */
-  fileListModalRef: BsModalRef;
 
   constructor(private tag: TagsService,
               private translate: TranslateService,
@@ -153,7 +150,7 @@ export class TagsComponent implements OnInit {
    * @param slug Entry slug
    */
   addToNavs(name: string, slug: string): void {
-    this.router.navigate(['navs'], {
+    this.router.navigate(['navigation'], {
       relativeTo: this.route.parent.parent,
       state: {
         add: {
@@ -177,22 +174,26 @@ export class TagsComponent implements OnInit {
   /**
    * Show file selection modal
    */
-  showFileListModal(template: TemplateRef<any>) {
-    this.fileListModalRef = this.modalService.show(template, {
+  showFileListModal() {
+    let selected: string;
+    if (this.image) {
+      selected = this.image.id;
+    }
+    const modal = this.modalService.show(FileSelectionComponent, {
       class: 'modal-lg',
+      initialState: {
+        selection: true,
+        selected,
+      },
     });
-  }
-
-  /**
-   * On file selection
-   *
-   * @param file Selected file
-   */
-  onFileSelect(file: File) {
-    this.fileListModalRef.hide();
-    this.form.patchValue({
-      cover_image: file.id,
+    /**
+     * On file select/choose
+     */
+    modal.content.choose.subscribe((file: FileMedia): void => {
+      this.form.patchValue({
+        cover_image: file.id,
+      });
+      this.image = file;
     });
-    this.image = file;
   }
 }

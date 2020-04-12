@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FileListModule } from '@app/shared/file-list/file-list.module';
 import { UploadModule } from '@app/shared/upload/upload.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { TabsModule } from 'ngx-bootstrap';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { FileSelectionComponent } from './file-selection.component';
 
 

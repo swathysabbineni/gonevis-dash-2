@@ -7,7 +7,8 @@ import { EntryListModule } from '@app/shared/entry-list/entry-list.module';
 import { ShareModule } from '@app/shared/share/share.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
-import { PopoverModule, TooltipModule } from 'ngx-bootstrap';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { EntryRoutingModule } from './entry-routing.module';

@@ -10,6 +10,7 @@ import { Comment } from '@app/interfaces/comment';
 import { CommentFormEvent } from '@app/interfaces/comment-form-event';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { Entry } from '@app/interfaces/zero/entry';
+import { CommentVoteResponse } from '@app/interfaces/zero/feed/comment-vote-response';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { ApiService } from '@app/services/api/api.service';
 import { CommentService } from '@app/services/comment/comment.service';
@@ -166,8 +167,8 @@ export class EntryComponent implements OnInit {
    */
   likeComment(comment: Comment): void {
     this.loading = true;
-    this.commentService.like(comment.id, this.entry.site.id).subscribe((data: ApiResponseCreated): void => {
-      comment.is_voted = data.created;
+    this.commentService.like(comment.id, this.entry.id).subscribe((data: CommentVoteResponse): void => {
+      comment.is_voted = data.voted;
       this.loading = false;
     }, (error: HttpErrorResponseApi): void => {
       this.loading = false;

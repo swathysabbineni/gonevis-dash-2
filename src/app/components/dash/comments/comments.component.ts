@@ -41,6 +41,7 @@ export class CommentsComponent implements OnInit {
     itemsPerPage: CommentsService.PAGE_SIZE,
     totalItems: 0,
     currentPage: 1,
+    id: 'pagination',
   };
 
   /**
