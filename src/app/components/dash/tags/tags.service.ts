@@ -16,8 +16,7 @@ export class TagsService {
   /**
    * API page size
    */
-  static readonly PAGE_SIZE = 2;
-  // static readonly PAGE_SIZE = 20;
+  static readonly PAGE_SIZE = 20;
 
   constructor(private http: HttpClient,
               private apiService: ApiService) {
