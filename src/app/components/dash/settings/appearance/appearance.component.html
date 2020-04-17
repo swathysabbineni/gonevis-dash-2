@@ -108,13 +108,13 @@
         <div class="form-group">
           <label for="font_name" translate>FONT_NAME</label>
           <input type="text" class="form-control" name="font name" id="font_name" formControlName="font_name">
-          <span class="text-danger" *ngIf="blogErrors.font_name">{{ blogErrors.font_name[0] }}</span>
+          <span class="text-danger" *ngIf="fontErrors.font_name">{{ fontErrors.font_name[0] }}</span>
         </div>
         <!-- Blog headline (title) -->
         <div class="form-group">
           <label for="font_url" translate>FONT_URL</label>
           <input type="text" class="form-control" name="font url" id="font_url" formControlName="font_url">
-          <span class="text-danger" *ngIf="blogErrors.font_url">{{ blogErrors.font_url[0] }}</span>
+          <span class="text-danger" *ngIf="fontErrors.font_url">{{ fontErrors.font_url[0] }}</span>
         </div>
       </div>
       <!-- Footer -->

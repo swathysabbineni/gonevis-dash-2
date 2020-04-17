@@ -99,7 +99,7 @@ export class AppearanceComponent implements OnInit {
   /**
    * Blog form API errors
    */
-  blogErrors: ApiError = {};
+  fontErrors: ApiError = {};
 
   constructor(private formBuilder: FormBuilder,
               private blogService: BlogService,
@@ -192,9 +192,10 @@ export class AppearanceComponent implements OnInit {
     this.blogService.updateFont(this.fontForm.value).subscribe((data: BlogSettings): void => {
       this.fontLoading = false;
       this.settings = data;
-      this.blogErrors = {};
+      this.fontErrors = {};
     }, (error: HttpErrorResponseApi): void => {
-      this.blogErrors = error.error;
+      this.fontLoading = false;
+      this.fontErrors = error.error;
     });
   }
 
