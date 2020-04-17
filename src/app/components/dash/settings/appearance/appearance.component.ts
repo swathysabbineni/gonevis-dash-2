@@ -191,7 +191,13 @@ export class AppearanceComponent implements OnInit {
     this.fontLoading = true;
     this.blogService.updateFont(this.fontForm.value).subscribe((data: BlogSettings): void => {
       this.fontLoading = false;
-      this.settings = data;
+      /**
+       * Set up the font form with default values
+       */
+      this.fontForm.patchValue({
+        font_name: data.font_name,
+        font_url: data.font_url,
+      });
       this.fontErrors = {};
     }, (error: HttpErrorResponseApi): void => {
       this.fontLoading = false;
