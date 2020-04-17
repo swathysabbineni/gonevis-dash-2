@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FileSelectionModule } from '@app/shared/file-selection/file-selection.module';
+import { LockedFeatureModule } from '@app/shared/locked-feature/locked-feature.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -22,6 +23,7 @@ import { AppearanceComponent } from './appearance.component';
     ModalModule.forRoot(),
     FileSelectionModule,
     FormsModule,
+    LockedFeatureModule,
   ],
 })
 export class AppearanceModule {
