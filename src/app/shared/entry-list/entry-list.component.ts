@@ -63,9 +63,7 @@ export class EntryListComponent {
      * Sanitize entry content
      */
     entries.forEach((entry: Entry): void => {
-      if (this.useContent) {
-        entry.content = this.utilService.sanitizeHtml(entry.content) as string;
-      }
+      entry.content = this.utilService.sanitizeHtml(entry.content) as string;
     });
     this.currentEntries = entries;
   }
