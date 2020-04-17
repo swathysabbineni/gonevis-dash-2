@@ -198,20 +198,34 @@ export class FileListComponent implements OnInit, OnDestroy {
        */
       this.fileGroups = {};
       for (const file of this.files) {
-        const created = new Date(file.created);
-        const key = new Date(
-          created.getFullYear(),
-          created.getMonth(),
-          created.getDate(),
-          0, 0, 0, 0,
-        ).toString();
-        if (!this.fileGroups.hasOwnProperty(key)) {
-          this.fileGroups[key] = [];
-        }
-        this.fileGroups[key].push(file);
+        this.addFileToGroup(file);
       }
       this.changeDetectorRef.detectChanges();
     });
+  }
+
+  /**
+   * Add given file to a group based on its date
+   *
+   * @param file File to add
+   * @param unshift Whether or not unshift the file
+   */
+  addFileToGroup(file: File, unshift?: boolean): void {
+    const created = new Date(file.created);
+    const key = new Date(
+      created.getFullYear(),
+      created.getMonth(),
+      created.getDate(),
+      0, 0, 0, 0,
+    ).toString();
+    if (!this.fileGroups.hasOwnProperty(key)) {
+      this.fileGroups[key] = [];
+    }
+    if (unshift) {
+      this.fileGroups[key].unshift(file);
+    } else {
+      this.fileGroups[key].push(file);
+    }
   }
 
   /**
