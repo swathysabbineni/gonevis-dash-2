@@ -19,7 +19,7 @@ import { GeneralComponent } from './general.component';
     ReactiveFormsModule,
     LockedFeatureModule,
     FontAwesomeModule,
-    PopoverModule,
+    PopoverModule.forRoot(),
     TranslateModule.forChild(),
   ],
 })
