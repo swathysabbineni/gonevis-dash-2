@@ -95,6 +95,39 @@
       </div>
     </form>
 
+    <!-- Customization -->
+    <form class="card dash mb-3" [formGroup]="fontForm" (ngSubmit)="setFont()">
+      <!-- Header -->
+      <div class="card-header" translate>
+        CUSTOM_FONT
+        <app-locked-feature [plan]="plan.Personal"></app-locked-feature>
+      </div>
+      <!-- Body -->
+      <div class="card-body">
+        <!-- Font name -->
+        <div class="form-group">
+          <label for="font_name" translate>FONT_NAME</label>
+          <input type="text" class="form-control" name="font name" id="font_name"
+                 placeholder="Roboto"
+                 formControlName="font_name">
+          <span class="text-danger" *ngIf="fontErrors.font_name">{{ fontErrors.font_name[0] }}</span>
+        </div>
+        <!-- Font URL -->
+        <div class="form-group">
+          <label for="font_url" translate>FONT_URL</label>
+          <input type="text" class="form-control" name="font url" id="font_url"
+                 placeholder="https://fonts.googleapis.com/css2?family=Roboto"
+                 formControlName="font_url">
+          <span class="text-danger" *ngIf="fontErrors.font_url">{{ fontErrors.font_url[0] }}</span>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="card-footer text-right">
+        <!-- Submit -->
+        <button class="btn btn-primary" [disabled]="fontLoading" translate>SAVE_CHANGES</button>
+      </div>
+    </form>
+
     <!-- Template config (theme options) -->
     <div class="card dash mb-3">
       <!-- Header -->

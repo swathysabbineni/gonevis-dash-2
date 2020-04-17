@@ -40,7 +40,7 @@ export class FileSelectionComponent {
    * @param file Uploaded file
    */
   onUpload(file: FileMedia): void {
-    this.fileListComponent.files.unshift(file);
+    this.fileListComponent.addFileToGroup(file, true);
     this.tabset.tabs.find((tabDirective: TabDirective): boolean => tabDirective.id === 'images').active = true;
   }
 

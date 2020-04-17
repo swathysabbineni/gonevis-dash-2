@@ -196,5 +196,8 @@
       }
     }
   },
-  "defaultProject": "gonevis"
+  "defaultProject": "gonevis",
+  "cli": {
+    "analytics": false
+  }
 }

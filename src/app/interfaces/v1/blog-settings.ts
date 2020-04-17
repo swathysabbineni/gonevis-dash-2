@@ -22,6 +22,8 @@ export interface BlogSettings {
   absolute_uri: string;
   remove_branding: boolean;
   footer_text?: string;
+  font_name?: string;
+  font_url?: string;
   google_analytics_code?: string;
   google_analytics_enabled: boolean;
   google_adsense_code?: string;

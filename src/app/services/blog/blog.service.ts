@@ -250,6 +250,17 @@ export class BlogService {
   }
 
   /**
+   * Update font
+   *
+   * @param payload Update font
+   */
+  updateFont(payload: Params): Observable<BlogSettings> {
+    return this.http.put<BlogSettings>(
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/set-font/`, payload
+    );
+  }
+
+  /**
    * Update footer text
    *
    * @param status Blog update data

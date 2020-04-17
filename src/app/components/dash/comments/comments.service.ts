@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CommentStatus } from '@app/enums/comment-status';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Params } from '@app/interfaces/params';
 import { Comment } from '@app/interfaces/v1/comment';
@@ -25,7 +26,15 @@ export class CommentsService {
   /**
    * Get blog tags
    */
-  getComments(filters: { limit?: number, search?: string } = {}, page: number = 1): Observable<ApiResponse<Comment>> {
+  getComments(
+    filters: {
+      limit?: number,
+      search?: string,
+      status?: CommentStatus | '',
+      ordering?: string,
+    } = {},
+    page: number = 1,
+  ): Observable<ApiResponse<Comment>> {
     return this.http.get<ApiResponse<Comment>>(
       `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/sushial/comment/`,
       {

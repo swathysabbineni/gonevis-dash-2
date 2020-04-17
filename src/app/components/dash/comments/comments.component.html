@@ -12,6 +12,60 @@
       </div>
     </div>
 
+    <div class="card-body d-flex flex-row align-items-center bg-light py-2">
+      <!-- Filters: Status filter -->
+      <div class="dropdown ml-auto" dropdown>
+        <button class="btn btn-light dropdown-toggle" dropdownToggle>
+          <fa-icon [icon]="filter" [fixedWidth]="true" class="text-secondary mr-1"></fa-icon>
+          {{ statusFilter.label | translate }}
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+          <button class="dropdown-item"
+                  *ngFor="let filter of statusFilters"
+                  [class.active]="filter === statusFilter"
+                  (click)="statusFilter = filter; getComments()">
+            {{ filter.label | translate }}
+          </button>
+        </div>
+      </div>
+      <!-- Filters: Sort fields -->
+      <div class="dropdown ml-2" dropdown>
+        <button class="btn btn-light dropdown-toggle" dropdownToggle>
+          <fa-icon [fixedWidth]="true" [icon]="sort" class="text-secondary mr-1"></fa-icon>
+          <span *ngIf="!sortField" translate>SORT_BY</span>
+          <span *ngIf="sortField">{{ sortField.label | translate }}</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+          <!-- Clear sorting -->
+          <button class="dropdown-item" [class.active]="!sortField" (click)="sortField = null; getComments()">
+            <fa-icon [fixedWidth]="true" [icon]="times" [class.text-secondary]="sortField" class="mr-2"></fa-icon>
+            <span translate>CLEAR</span>
+          </button>
+          <div class="dropdown-divider"></div>
+          <!-- Sorting fields -->
+          <button class="dropdown-item"
+                  *ngFor="let field of sortFields"
+                  [class.active]="field === sortField"
+                  (click)="sortField = field; getComments()">
+            <fa-icon [fixedWidth]="true" [icon]="field.icon"
+                     [class.text-secondary]="field !== sortField" class="mr-2">
+            </fa-icon>
+            <span translate>{{ field.label }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters: Sort order -->
+      <button class="btn btn-light ml-2" *ngIf="sortField" (click)="toggleOrder()">
+        <fa-icon class="text-secondary" [fixedWidth]="true"
+                 [icon]="ascending" *ngIf="sortOrder === order.ASCENDING">
+        </fa-icon>
+        <fa-icon class="text-secondary" [fixedWidth]="true"
+                 [icon]="descending" *ngIf="sortOrder === order.DESCENDING">
+        </fa-icon>
+      </button>
+    </div>
+
     <!-- Content -->
     <table class="table rounded bg-white m-0">
       <tbody>
