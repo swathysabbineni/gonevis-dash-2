@@ -256,9 +256,7 @@ export class BlogService {
    */
   updateFont(payload: Params): Observable<BlogSettings> {
     return this.http.put<BlogSettings>(
-      `${this.api.base.v1}site/${BlogService.currentBlog.id}/set-font/`, {
-        remove_branding: status,
-      },
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/set-font/`, payload
     );
   }
 
