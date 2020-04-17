@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiError } from '@app/interfaces/api-error';
+import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
+import { Plan } from '@app/shared/locked-feature/shared/enums/plan';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HighlightTheme } from '@app/enums/highlight-theme';
@@ -23,6 +26,8 @@ export class AppearanceComponent implements OnInit {
 
   readonly faTrash: IconDefinition = faTrash;
   readonly faEye: IconDefinition = faEye;
+
+  readonly plan = Plan;
 
   /**
    * @see BlogService.highlightThemes
@@ -67,6 +72,16 @@ export class AppearanceComponent implements OnInit {
   customizationLoading = true;
 
   /**
+   * Font theme
+   */
+  fontForm: FormGroup;
+
+  /**
+   * Customization theme API loading indicator
+   */
+  fontLoading = true;
+
+  /**
    * Current blog theme and its config
    */
   templateConfig: TemplateConfig;
@@ -81,6 +96,10 @@ export class AppearanceComponent implements OnInit {
    */
   selectingFor: keyof BlogSettings['media'];
 
+  /**
+   * Blog form API errors
+   */
+  blogErrors: ApiError = {};
 
   constructor(private formBuilder: FormBuilder,
               private blogService: BlogService,
@@ -96,10 +115,18 @@ export class AppearanceComponent implements OnInit {
       template_primary_color: [TemplatePrimaryColor.DEFAULT],
     });
     /**
+     * Setup font form
+     */
+    this.fontForm = this.formBuilder.group({
+      font_name: null,
+      font_url: null,
+    });
+    /**
      * Get settings
      */
     this.blogService.getSettings().subscribe((data: BlogSettings): void => {
       this.customizationLoading = false;
+      this.fontLoading = false;
       this.settings = data;
       /**
        * Set up the theme form with default values
@@ -107,6 +134,13 @@ export class AppearanceComponent implements OnInit {
       this.customizationForm.patchValue({
         highlight_theme: data.highlight_theme,
         template_primary_color: data.template_primary_color,
+      });
+      /**
+       * Set up the font form with default values
+       */
+      this.fontForm.patchValue({
+        font_name: data.font_name,
+        font_url: data.font_url,
       });
     });
     /**
@@ -150,6 +184,17 @@ export class AppearanceComponent implements OnInit {
     this.blogService.updateSettings(payload).subscribe((data: BlogSettings): void => {
       this.customizationLoading = false;
       this.settings = data;
+    });
+  }
+
+  setFont(): void {
+    this.fontLoading = true;
+    this.blogService.updateFont(this.fontForm.value).subscribe((data: BlogSettings): void => {
+      this.fontLoading = false;
+      this.settings = data;
+      this.blogErrors = {};
+    }, (error: HttpErrorResponseApi): void => {
+      this.blogErrors = error.error;
     });
   }
 
