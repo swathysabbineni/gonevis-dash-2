@@ -24,7 +24,7 @@
             <!-- User picture -->
             <img [src]="user.media.thumbnail_48x48" *ngIf="user.media.picture">
             <!-- User name -->
-            <span>{{ user.username }}</span>
+            <span>{{ user.name.split(' ')[0] || user.username }}</span>
           </div>
           <!-- User dropdown -->
           <ul class="dropdown-menu dropdown-menu-right" *dropdownMenu>
