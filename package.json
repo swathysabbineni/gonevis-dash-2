@@ -11,7 +11,8 @@
     "build-production": "ng build -c production",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "changelog": "node scripts/changelog.js"
   },
   "private": true,
   "dependencies": {
