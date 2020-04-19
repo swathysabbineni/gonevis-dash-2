@@ -1,3 +1,11 @@
+/**
+ * Changelog command.
+ *
+ * Usage: npm run changelog CHANGE_TYPE ISSUE_ID TITLE
+ *
+ * To keep track of all the changes to be used for ChangeLog.md generation.
+ * Should be used eeach time a task has been resolved.
+ */
 const fs = require("fs");
 const slugify = require("./core/slugify");
 
