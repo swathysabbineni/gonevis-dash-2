@@ -11,7 +11,7 @@ export class CommonPage {
   };
 
   getUserDropdown(): ElementFinder {
-    return element(by.cssContainingText('span', CommonPage.DATA.user.username));
+    return element(by.id('user-dropdown'));
   }
 
   signOut(): void {

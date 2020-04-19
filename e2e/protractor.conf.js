@@ -12,9 +12,20 @@ exports.config = {
   specs: [
     './src/**/*.e2e-spec.ts'
   ],
-  capabilities: {
-    browserName: 'chrome'
-  },
+  multiCapabilities: [
+    {
+      browserName: 'chrome',
+      chromeOptions: {
+        args: ['disable-infobars'],
+      },
+    },
+    // {
+    //   browserName: 'firefox',
+    //   'moz:firefoxOptions': {
+    //     args: ['--safe-mode'],
+    //   },
+    // },
+  ],
   directConnect: true,
   baseUrl: 'http://localhost:4201/',
   framework: 'jasmine',
