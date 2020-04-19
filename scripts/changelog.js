@@ -19,9 +19,43 @@ if (!ALLOWED_CHANGE_TYPES.includes(changeType)) {
   return;
 }
 
-const change = {"title": title, "issueID": issueID, "changeType": changeType};
+const change = { "title": title, "issueID": issueID, "changeType": changeType };
 
 const changeLogFileName = `./changelogs/${changeType}-${issueID}-${slugify(title)}.json`;
-fs.writeFileSync(changeLogFileName, JSON.stringify(change));
 
-console.log(`Changelog written to ${changeLogFileName}`);
+if (fs.existsSync(changeLogFileName)) {
+
+  var readline = require('readline');
+  var rl = readline.createInterface(process.stdin, process.stdout);
+
+  rl.setPrompt(`> "${changeLogFileName}" already exists, override ? (yes/no) [default:yes] `);
+  rl.prompt();
+  rl.on('line', function (line) {
+    const answer = line.trim().toLowerCase();
+
+    if (["yes", "y"].includes((answer))) {
+      saveChanges(changeLogFileName, change);
+    } else {
+      console.info(`Not overriding the ${changeLogFileName}`);
+    }
+
+    rl.close();
+  }).on('close', function () {
+    process.exit(0);
+  });
+
+} else {
+  saveChanges(changeLogFileName, change);
+}
+
+
+/**
+ * Save Changes.
+ *
+ * @param {string} changeLogFileName File Path where changelog should be written.
+ * @param {object} change Change object to be saved.
+ */
+function saveChanges(changeLogFileName, change) {
+  fs.writeFileSync(changeLogFileName, JSON.stringify(change));
+  console.info(`Changelog written to ${changeLogFileName}`);
+}
