@@ -85,10 +85,6 @@ export class MainComponent implements OnInit, OnDestroy {
     status: EntryStatus.Published,
     entries: [],
     dateKey: 'published',
-  }, {
-    status: EntryStatus.UnsavedChanges,
-    entries: [],
-    dateKey: 'created',
   }];
 
   /**
