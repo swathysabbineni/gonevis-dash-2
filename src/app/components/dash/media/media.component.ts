@@ -20,6 +20,6 @@ export class MediaComponent {
    * @param file Uploaded file
    */
   onUpload(file: File): void {
-    this.fileListComponent.files.unshift(file);
+    this.fileListComponent.addFileToGroup(file, true);
   }
 }

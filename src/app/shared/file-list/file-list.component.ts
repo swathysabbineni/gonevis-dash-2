@@ -124,7 +124,7 @@ export class FileListComponent implements OnInit, OnDestroy {
   /**
    * List of blog media files grouped by date
    */
-  fileGroups: { [date: string]: File[] };
+  fileGroups: Map<string, File[]> = new Map<string, File[]>();
 
   /**
    * API pagination data
@@ -196,7 +196,6 @@ export class FileListComponent implements OnInit, OnDestroy {
       /**
        * Group files by date
        */
-      this.fileGroups = {};
       for (const file of this.files) {
         this.addFileToGroup(file);
       }
@@ -218,13 +217,13 @@ export class FileListComponent implements OnInit, OnDestroy {
       created.getDate(),
       0, 0, 0, 0,
     ).toString();
-    if (!this.fileGroups.hasOwnProperty(key)) {
-      this.fileGroups[key] = [];
+    if (!this.fileGroups.has(key)) {
+      this.fileGroups.set(key, []);
     }
     if (unshift) {
-      this.fileGroups[key].unshift(file);
+      this.fileGroups.get(key).unshift(file);
     } else {
-      this.fileGroups[key].push(file);
+      this.fileGroups.get(key).push(file);
     }
   }
 
@@ -243,7 +242,17 @@ export class FileListComponent implements OnInit, OnDestroy {
       });
       this.modalService.onHidden.subscribe((): void => {
         if (file.deleted) {
+          console.log(file.deleted);
+          const created = new Date(file.created);
+          const key = new Date(
+            created.getFullYear(),
+            created.getMonth(),
+            created.getDate(),
+            0, 0, 0, 0,
+          ).toString();
           this.files.splice(this.files.indexOf(file), 1);
+          this.fileGroups.get(key).splice(this.fileGroups.get(key).findIndex(a => a.id === file.id), 1);
+          // this.fileGroups.get(key).splice();
         }
       });
     }
@@ -293,6 +302,14 @@ export class FileListComponent implements OnInit, OnDestroy {
   }
 
   originalOrder(a: KeyValue<string, File[]>, b: KeyValue<string, File[]>): number {
+    const aDate: number = new Date(a.key).getTime();
+    const bDate: number = new Date(a.key).getTime();
+    if (aDate < bDate) {
+      return 1;
+    }
+    if (aDate > bDate) {
+      return -1;
+    }
     return 0;
   }
 
