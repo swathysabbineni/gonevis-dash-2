@@ -221,7 +221,7 @@ export class WriteComponent implements OnInit, OnDestroy {
      * YouTube regular expression
      */
     const youTubeRegExp: RegExp = new RegExp(
-      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/
+      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/,
     );
     this.pastedVideoEmbed = null;
     if (youTubeRegExp.test(clipboard)) {
@@ -809,6 +809,22 @@ export class WriteComponent implements OnInit, OnDestroy {
      * Set window title
      */
     this.title.setTitle(`${titleValue}${AppComponent.TITLE_SUFFIX}`);
+  }
+
+  /**
+   * @returns A URL to view an entry on blog
+   */
+  viewOnBlog(): void {
+    let entryUrl: string = this.oldEntry.absolute_uri;
+    /**
+     * If entry's status is set to Draft, then add `?view=preview` query param to the end of
+     * the entry's {@see entryUrl URL}, otherwise if status is set to Published,
+     * then simply redirect user to entry's URL.
+     */
+    if (this.oldEntry.status === EntryStatus.Draft) {
+      entryUrl = `${this.oldEntry.absolute_uri}?view=preview`;
+    }
+    window.open(entryUrl, '_blank');
   }
 
   ngOnDestroy(): void {

@@ -54,10 +54,10 @@
         <span *ngIf="form.get('status').value === entryStatus.Draft" translate>PUBLISH</span>
         <span *ngIf="form.get('status').value === entryStatus.Published" translate>UPDATE</span>
       </button>
-      <a class="btn btn-light ml-2" [href]="oldEntry.absolute_uri" target="_blank" tooltip="View on blog"
+      <button class="btn btn-light ml-2" (click)="viewOnBlog()" tooltip="View on blog"
          placement="bottom" *ngIf="isEditing">
         <fa-icon [icon]="eye" [fixedWidth]="true"></fa-icon>
-      </a>
+      </button>
       <button class="btn btn-light ml-2" (click)="hideSidebar = !hideSidebar">
         <fa-icon [icon]="cog" [fixedWidth]="true"></fa-icon>
       </button>
