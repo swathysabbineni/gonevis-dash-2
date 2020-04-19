@@ -369,7 +369,7 @@ a,
       }
 
       &,
-      > a {
+      > a:not(.btn) {
         color: #6F7A8B;
         font-weight: bold;
         letter-spacing: 0.03em;
