@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
 export class BlogService {
 
   constructor(private http: HttpClient,
-              private apiService: ApiService) {
+              private api: ApiService) {
   }
 
   /**
@@ -22,7 +22,7 @@ export class BlogService {
    * @param id Blog ID
    */
   getBlog(id: string): Observable<Blog> {
-    return this.http.get<Blog>(`${this.apiService.base.zero}website/site/${id}/`);
+    return this.http.get<Blog>(`${this.api.base.zero}website/site/${id}/`);
   }
 
   /**
@@ -31,7 +31,7 @@ export class BlogService {
    * @param user User username
    */
   getBlogs(user?: string): Observable<ApiResponse<Blog>> {
-    return this.http.get<ApiResponse<Blog>>(`${this.apiService.base.zero}website/site/`, {
+    return this.http.get<ApiResponse<Blog>>(`${this.api.base.zero}website/site/`, {
       params: {
         username: user,
       },
@@ -41,15 +41,15 @@ export class BlogService {
   /**
    * Get list of blogs that current user is following (subscribed to)
    */
-  // getFollowingBlogs(filters: {
-  //   limit?: number,
-  // } = {}): Observable<ApiResponse<v1Blog>> {
-  //   return this.http.get<ApiResponse<v1Blog>>(`${this.apiService.base.v1}website/site/`, {
-  //     params: Object.assign(filters, {
-  //       show: 'subscribed',
-  //     }),
-  //   });
-  // }
+  getFollowingBlogs(filters: {
+    limit?: number,
+  } = {}): Observable<ApiResponse<v1Blog>> {
+    return this.http.get<ApiResponse<v1Blog>>(`${this.api.base.zero}website/site/`, {
+      params: Object.assign(filters, {
+        show: 'subscribed',
+      }),
+    });
+  }
 
   /**
    * (Un)Follow a blog for the current user
@@ -57,6 +57,6 @@ export class BlogService {
    * @param id Blog ID
    */
   followBlog(id: string): Observable<ApiResponseFollow> {
-    return this.http.post<ApiResponseFollow>(`${this.apiService.base.zero}website/site/${id}/subscribe/`, {});
+    return this.http.post<ApiResponseFollow>(`${this.api.base.zero}website/site/${id}/subscribe/`, {});
   }
 }
