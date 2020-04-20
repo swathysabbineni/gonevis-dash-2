@@ -9,7 +9,7 @@
       <span *ngIf="!isPages" translate>POSTS</span>
       <span *ngIf="isPages" translate>PAGES</span>
       <!-- Create button -->
-      <a class="btn btn-success" routerLink="../../../write/new" translate>CREATE</a>
+      <a class="btn btn-success" [routerLink]="['../../../write', isPages ? 'page' : 'new']" translate>CREATE</a>
     </div>
 
     <!-- Actions and filters -->
