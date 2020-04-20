@@ -331,5 +331,6 @@
   "UPDATE_DATE": "Update date",
   "CREATE_DATE": "Create date",
   "UPLOAD_DATE": "Upload date",
+  "CREATE": "Create",
   "COLLABORATING": "Collaborating"
 }
