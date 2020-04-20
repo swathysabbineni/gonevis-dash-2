@@ -1,9 +1,6 @@
 # GoNevis Dash
 
-![Build](https://badgen.net/github/status/SavandBros/gonevis-dash-2/master/ci/circleci:%20build)
-![E2E](https://badgen.net/github/status/SavandBros/gonevis-dash-2/master/ci/circleci:%20e2e)
-![Lint](https://badgen.net/github/status/SavandBros/gonevis-dash-2/master/ci/circleci:%20lint)
-![Deploy](https://badgen.net/github/status/SavandBros/gonevis-dash-2/master/ci/circleci:%20deploy)
+[![CircleCI](https://circleci.com/gh/SavandBros/gonevis-dash-2.svg?style=shield)](https://circleci.com/gh/SavandBros/gonevis-dash-2)
 
 GoNevis dashboard and reader front-end source code.
 
