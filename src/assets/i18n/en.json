@@ -117,7 +117,7 @@
   "BILLING": "Billing",
   "FONT_NAME": "Font name",
   "FONT_URL": "Font URL",
-  "CUSTOM_FONT": "Custom Font",
+  "FONT": "Font",
   "HELP_TEXT_DOMAINS": "Supply domain URLs to your DNS provider for the destination of CNAME or ALIAS records.",
   "ENTER_YOUR_CUSTOM_DOMAIN_ADDRESS": "Enter your custom domain address",
   "ADD_DOMAIN": "Add Domain",
