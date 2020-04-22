@@ -25,7 +25,7 @@ import { faSortAmountDown } from '@fortawesome/free-solid-svg-icons/faSortAmount
 import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { TranslateService } from '@ngx-translate/core';
-import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 
@@ -193,11 +193,22 @@ export class FileListComponent implements OnInit, OnDestroy {
       this.files = response.results;
       this.pagination.totalItems = response.count;
       this.loading = false;
-      /**
-       * Group files by date
-       */
-      for (const file of this.files) {
-        this.addFileToGroup(file);
+      this.fileGroups.clear();
+      if (this.sortField) {
+        this.fileGroups.set('sorted', []);
+        /**
+         * Group files by date
+         */
+        for (const file of this.files) {
+          this.fileGroups.get('sorted').push(file);
+        }
+      } else {
+        /**
+         * Group files by date
+         */
+        for (const file of this.files) {
+          this.addFileToGroup(file);
+        }
       }
       this.changeDetectorRef.detectChanges();
     });
@@ -231,30 +242,37 @@ export class FileListComponent implements OnInit, OnDestroy {
    * On file selection
    *
    * @param file Selected file
+   * @param key Group key
    */
-  onChoose(file: File): void {
+  onChoose(file: File, key: string): void {
+    console.log(key);
     if (this.selection) {
       this.choose.emit(file);
     } else {
-      this.modalService.show(FileModalComponent, {
+      let modalRef: BsModalRef = this.modalService.show(FileModalComponent, {
         initialState: { file },
         class: 'full',
       });
-      this.modalService.onHidden.subscribe((): void => {
-        if (file.deleted) {
-          console.log(file.deleted);
-          const created = new Date(file.created);
-          const key = new Date(
-            created.getFullYear(),
-            created.getMonth(),
-            created.getDate(),
-            0, 0, 0, 0,
-          ).toString();
-          this.files.splice(this.files.indexOf(file), 1);
-          this.fileGroups.get(key).splice(this.fileGroups.get(key).findIndex(a => a.id === file.id), 1);
-          // this.fileGroups.get(key).splice();
-        }
+      modalRef.content.onFileDelete.subscribe((id: string): void => {
+        console.log(key);
+        const index: number = this.fileGroups.get(key).findIndex(a => a.id === id);
+        this.fileGroups.get(key).splice(index, 1);
       });
+      // this.modalService.onHidden.subscribe((): void => {
+      //   if (file.deleted) {
+      //     console.log(file.deleted);
+      //     const created = new Date(file.created);
+      //     const key = new Date(
+      //       created.getFullYear(),
+      //       created.getMonth(),
+      //       created.getDate(),
+      //       0, 0, 0, 0,
+      //     ).toString();
+      //     this.files.splice(this.files.indexOf(file), 1);
+      //     this.fileGroups.get(key).splice(this.fileGroups.get(key).findIndex(a => a.id === file.id), 1);
+      //     // this.fileGroups.get(key).splice();
+      //   }
+      // });
     }
   }
 
@@ -301,9 +319,18 @@ export class FileListComponent implements OnInit, OnDestroy {
     this.getFiles();
   }
 
+  onFileAdded(file: File): void {
+    if (this.sortField) {
+      this.fileGroups.get('sorted').unshift(file);
+    } else {
+      this.addFileToGroup(file, true);
+    }
+  }
+
   originalOrder(a: KeyValue<string, File[]>, b: KeyValue<string, File[]>): number {
     const aDate: number = new Date(a.key).getTime();
-    const bDate: number = new Date(a.key).getTime();
+    const bDate: number = new Date(b.key).getTime();
+    console.log(`A: ${a.key} - ${aDate}`, `B: ${b.key} - ${bDate}`);
     if (aDate < bDate) {
       return 1;
     }
