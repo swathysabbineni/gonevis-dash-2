@@ -96,7 +96,7 @@ export class WriteComponent implements OnInit, OnDestroy {
   /**
    * Auto save interval
    */
-  private autoSaveInterval: number;
+  private autoSaveInterval: any;
 
   /**
    * Auto saving indicator
