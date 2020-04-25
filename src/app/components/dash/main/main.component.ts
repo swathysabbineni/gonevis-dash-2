@@ -36,7 +36,7 @@ import { Subscription } from 'rxjs';
 })
 export class MainComponent implements OnInit, OnDestroy {
 
-  private static readonly POSTS_LIMIT = 6;
+  private static readonly POSTS_LIMIT = 10;
   private static readonly COMMENTS_LIMIT = 8;
 
   readonly faPublications: IconDefinition = faThLarge;
@@ -104,9 +104,14 @@ export class MainComponent implements OnInit, OnDestroy {
     error: {},
   };
 
-  constructor(private activatedRoute: ActivatedRoute,
+  /**
+   * Current tab for the panel
+   */
+  tab: 'entries' | 'comments' = 'entries';
+
+  constructor(public utils: UtilService,
+              private activatedRoute: ActivatedRoute,
               private utilService: UtilService,
-              public utils: UtilService,
               private blogService: BlogService,
               private entryService: EntryService,
               private commentsService: CommentsService,
@@ -214,8 +219,8 @@ export class MainComponent implements OnInit, OnDestroy {
   submitQuickDraft(): void {
     this.quickDraftForm.loading = true;
     this.entryService.draft(
-        this.translate.instant('QUICK_DRAFT'),
-        this.quickDraftForm.form.get('content').value,
+      this.translate.instant('QUICK_DRAFT'),
+      this.quickDraftForm.form.get('content').value,
     ).subscribe((): void => {
       this.quickDraftForm.loading = false;
       this.quickDraftForm.form.reset();

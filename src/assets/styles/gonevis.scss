@@ -53,7 +53,7 @@ a,
 
   &.feed {
 
-    .card-header {
+    >.card-header {
       background: darken($card-bg, 1%);
       color: $dark;
 
@@ -70,9 +70,6 @@ a,
         }
       }
 
-      span {
-      }
-
       .nav-link.active {
         cursor: default;
         background: white;
@@ -87,7 +84,7 @@ a,
       height: 256px;
     }
 
-    .card-body {
+    >.card-body {
 
       .card-text,
       .card-title {
@@ -100,9 +97,6 @@ a,
           }
         }
 
-      }
-
-      p {
       }
 
       img {
@@ -316,7 +310,7 @@ a,
       }
     }
 
-    .card-footer {
+    >.card-footer {
 
       .btn-link {
         text-decoration: none;
@@ -351,6 +345,19 @@ a,
 
     &:not(.card-link) {
       cursor: default;
+    }
+
+    &.tabs {
+      > .card-header {
+        > .nav {
+          > .nav-item {
+            > .nav-link.active {
+              background: $body-bg;
+              color: $body-color;
+            }
+          }
+        }
+      }
     }
 
     .card-header {

@@ -4,7 +4,7 @@
     <div class="row">
 
       <!-- Stat: Publication -->
-      <div class="col-lg-3 col-md-6">
+      <div class="col-lg-3 col-lg-6 col-xl-3">
         <a class="card card-link dash stat mb-4" routerLink="../../../posts">
           <div class="card-body icon bg-success">
             <fa-icon [fixedWidth]="true" [icon]="faPublications"></fa-icon>
@@ -20,7 +20,7 @@
       </div>
 
       <!-- Stat: Comments -->
-      <div class="col-lg-3 col-md-6">
+      <div class="col-lg-3 col-lg-6 col-xl-3">
         <a class="card card-link dash stat mb-4" routerLink="../../../comments">
           <div class="card-body icon bg-info">
             <fa-icon [fixedWidth]="true" [icon]="faComments"></fa-icon>
@@ -36,7 +36,7 @@
       </div>
 
       <!-- Stat: Followers -->
-      <div class="col-lg-3 col-md-6">
+      <div class="col-lg-3 col-lg-6 col-xl-3">
         <a class="card card-link dash stat mb-4" (click)="showSubscribers()">
           <div class="card-body icon bg-warning">
             <fa-icon [fixedWidth]="true" [icon]="faFollowers"></fa-icon>
@@ -52,7 +52,7 @@
       </div>
 
       <!-- Stat: Storage -->
-      <div class="col-lg-3 col-md-6">
+      <div class="col-lg-3 col-lg-6 col-xl-3">
         <div class="card dash stat mb-4" [tooltip]="storageTooltip()" placement="bottom">
           <div class="card-body icon bg-danger">
             <fa-icon [fixedWidth]="true" [icon]="faFiles"></fa-icon>
@@ -84,88 +84,94 @@
     <!-- Left -->
     <div class="col-lg-8">
 
-      <!-- Posts -->
-      <div class="card dash mb-4 bg-light">
+      <!-- Posts and comments -->
+      <div class="card dash tabs mb-4 bg-light">
 
         <!-- Header -->
         <div class="card-header">
+          <ul class="nav nav-pills">
 
-          <!-- Title -->
-          <a class="init" routerLink="../../../posts" translate>POSTS</a>
+            <!-- Posts -->
+            <li class="nav-item">
+              <a class="nav-link" [class.active]="tab === 'entries'" (click)="tab = 'entries'">
+                <span translate>POSTS</span>
+                <span class="badge badge-warning ml-1" *ngIf="metrics && metrics.metrics.draft_entry_count">
+                  {{ metrics.metrics.draft_entry_count }}
+                </span>
+              </a>
+            </li>
+
+            <!-- Comments -->
+            <li class="nav-item">
+              <a class="nav-link" [class.active]="tab === 'comments'" (click)="tab = 'comments'">
+                <span translate>COMMENTS</span>
+                <span class="badge badge-warning ml-1" *ngIf="metrics && metrics.metrics.pending_comment_count">
+                  {{ metrics.metrics.pending_comment_count }}
+                </span>
+              </a>
+            </li>
+          </ul>
 
           <!-- Count -->
-          <span class="card-label" *ngIf="metrics">{{ metrics.metrics.published_entry_count | number}}</span>
+          <span class="card-label" *ngIf="metrics">
+            <span *ngIf="tab === 'entries'">{{ metrics.metrics.published_entry_count | number }}</span>
+            <span *ngIf="tab === 'comments'">{{ metrics.metrics.active_comment_count | number }}</span>
+          </span>
         </div>
 
-        <!-- Body: Data -->
-        <div class="card-body" *ngFor="let group of entryGroups" [hidden]="!group.entries.length">
+        <!-- Body: Data (entries) -->
+        <div class="card-body" *ngIf="tab === 'entries'">
 
-          <!-- Group -->
-          <p class="font-weight-bold" translate>{{ entryStatusLabels[group.status] }}</p>
+          <!-- Groups -->
+          <div *ngFor="let group of entryGroups; let first = first"
+               [hidden]="!group.entries.length"
+               [class.mt-4]="!first">
 
-          <!-- Posts -->
-          <div class="card dash" *ngFor="let entry of group.entries; let last = last" [class.mb-2]="!last">
-            <div class="card-body">
+            <!-- Group -->
+            <p class="font-weight-bold" translate>{{ entryStatusLabels[group.status] }}</p>
 
-              <!-- Title -->
-              <p class="m-1"><a [routerLink]="['../../../write', entry.id]">{{ entry.title }}</a></p>
+            <!-- Posts -->
+            <div class="card dash" *ngFor="let entry of group.entries; let last = last" [class.mb-2]="!last">
+              <div class="card-body">
 
-              <!-- Info -->
-              <div class="ml-1">
+                <!-- Title -->
+                <p class="m-1"><a [routerLink]="['../../../write', entry.id]">{{ entry.title }}</a></p>
 
-                <!-- Likes -->
-                <div class="badge badge-light font-weight-normal text-secondary mr-2">
-                  <fa-icon [fixedWidth]="true" [icon]="like"></fa-icon>
-                  <span class="ml-1">{{ entry.vote_count | number }}</span>
-                </div>
+                <!-- Info -->
+                <div class="ml-1">
 
-                <!-- Comments -->
-                <div class="badge badge-light font-weight-normal text-secondary mr-2">
-                  <fa-icon [fixedWidth]="true" [icon]="faComments"></fa-icon>
-                  <span class="ml-1">{{ entry.comment_count | number }}</span>
-                </div>
+                  <!-- Likes -->
+                  <div class="badge badge-light font-weight-normal text-secondary mr-2">
+                    <fa-icon [fixedWidth]="true" [icon]="like"></fa-icon>
+                    <span class="ml-1">{{ entry.vote_count | number }}</span>
+                  </div>
 
-                <!-- Votes -->
-                <div class="badge badge-light font-weight-normal text-secondary">
-                  <fa-icon [fixedWidth]="true" [icon]="eye"></fa-icon>
-                  <span class="ml-1">{{ entry.view_count | number }}</span>
-                </div>
+                  <!-- Comments -->
+                  <div class="badge badge-light font-weight-normal text-secondary mr-2">
+                    <fa-icon [fixedWidth]="true" [icon]="faComments"></fa-icon>
+                    <span class="ml-1">{{ entry.comment_count | number }}</span>
+                  </div>
 
-                <!-- Date -->
-                <div class="float-right small text-secondary" [tooltip]="entry[group.dateKey] | date:'hh:mm aa'">
-                  <span translate *ngIf="group.dateKey === 'created'">CREATED_ON</span>
-                  <span translate *ngIf="group.dateKey === 'published'">PUBLISHED_ON</span>
-                  {{ entry[group.dateKey] | date }}
+                  <!-- Votes -->
+                  <div class="badge badge-light font-weight-normal text-secondary">
+                    <fa-icon [fixedWidth]="true" [icon]="eye"></fa-icon>
+                    <span class="ml-1">{{ entry.view_count | number }}</span>
+                  </div>
+
+                  <!-- Date -->
+                  <div class="float-right small text-secondary" [tooltip]="entry[group.dateKey] | date:'hh:mm aa'">
+                    <span translate *ngIf="group.dateKey === 'created'">CREATED_ON</span>
+                    <span translate *ngIf="group.dateKey === 'published'">PUBLISHED_ON</span>
+                    {{ entry[group.dateKey] | date }}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Body: No data -->
-        <div class="card-body" translate *ngIf="
-             !loadingEntries &&
-             !entryGroups[0].entries.length &&
-             !entryGroups[1].entries.length">
-          NOTHING_HERE_YET
-        </div>
-
-        <!-- Body: Loading -->
-        <div class="card-body" *ngIf="loadingEntries">
-          <app-loading></app-loading>
-        </div>
-      </div>
-
-      <!-- Comments -->
-      <div class="card dash mb-4" *ngIf="comments">
-        <!-- Header -->
-        <div class="card-header">
-          <a class="init" routerLink="../../../comments" translate>COMMENTS</a>
-          <span class="card-label" *ngIf="metrics">
-            {{ metrics.metrics.comment_count | number }}
-          </span>
-        </div>
-        <div class="list-group-flush pb-1">
+        <!-- Body: Data (comments) -->
+        <div class="list-group-flush pb-1" *ngIf="tab === 'comments'">
           <a class="list-group-item list-group-item-action" *ngFor="let comment of comments"
              [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]"
              [queryParams]="{ comment: comment.id }">
@@ -180,6 +186,20 @@
           <div class="card-body" *ngIf="comments && !comments.length">
             <div class="card-text" translate>NOTHING_HERE_YET</div>
           </div>
+        </div>
+
+        <!-- Body: No data -->
+        <div class="card-body" translate *ngIf="
+             tab === 'entries' &&
+             !loadingEntries &&
+             !entryGroups[0].entries.length &&
+             !entryGroups[1].entries.length">
+          NOTHING_HERE_YET
+        </div>
+
+        <!-- Body: Loading -->
+        <div class="card-body" *ngIf="tab === 'entries' && loadingEntries">
+          <app-loading></app-loading>
         </div>
       </div>
     </div>
