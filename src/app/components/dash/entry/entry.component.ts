@@ -66,6 +66,12 @@ export class EntryComponent implements OnInit {
   }, {
     value: EntryStatus.Draft,
     label: 'DRAFT',
+  }, {
+    value: EntryStatus.Private,
+    label: 'Private',
+  }, {
+    value: EntryStatus.Trash,
+    label: 'Trash',
   }];
 
   /**
