@@ -29,13 +29,14 @@ This project is made with Angular.
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-### Recording Changelogs
+### Recording Changelog
 
 To keep track of changes (_ChangeLog.md_), each time a task has been done use the `changelog` command:
 
 ```bash
-$ npm run changelog
+> npm run changelog
 # Usage: npm run changelog CHANGE_TYPE ISSUE_ID TITLE
+# Example: npm run changelog fix 1234 "An issue title"
 ```
 
 ### Unit Tests
@@ -67,7 +68,7 @@ All the pull requests (from Master branch) should pass the code checks, includin
 * Build Status
 * Reviewers Approval
 
-Branch **master**, should contains the latest development work and should be on staging.
+Branch **master**, should contain the latest development work and should be on staging.
 
 All the pull requests (from developers) should pass the code checks, including and not limited to:
 
@@ -80,7 +81,7 @@ All the pull requests (from developers) should pass the code checks, including a
 
 Deployment happens automatically via the CI.
 
-Latest code on **master** branch will be deployed to the staging, while branch **production** will be deployed to production server.
+The Latest code on **master** branch will be deployed to the staging, while the branch **production** will be deployed to production server.
 
 #### Release
 
