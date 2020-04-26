@@ -245,34 +245,23 @@ export class FileListComponent implements OnInit, OnDestroy {
    * @param key Group key
    */
   onChoose(file: File, key: string): void {
-    console.log(key);
     if (this.selection) {
       this.choose.emit(file);
     } else {
-      let modalRef: BsModalRef = this.modalService.show(FileModalComponent, {
+      const modalRef: BsModalRef = this.modalService.show(FileModalComponent, {
         initialState: { file },
         class: 'full',
       });
       modalRef.content.onFileDelete.subscribe((id: string): void => {
-        console.log(key);
         const index: number = this.fileGroups.get(key).findIndex(a => a.id === id);
         this.fileGroups.get(key).splice(index, 1);
+        /**
+         * Remove group as well if it was last item
+         */
+        if (!this.fileGroups.get(key).length) {
+          this.fileGroups.delete(key);
+        }
       });
-      // this.modalService.onHidden.subscribe((): void => {
-      //   if (file.deleted) {
-      //     console.log(file.deleted);
-      //     const created = new Date(file.created);
-      //     const key = new Date(
-      //       created.getFullYear(),
-      //       created.getMonth(),
-      //       created.getDate(),
-      //       0, 0, 0, 0,
-      //     ).toString();
-      //     this.files.splice(this.files.indexOf(file), 1);
-      //     this.fileGroups.get(key).splice(this.fileGroups.get(key).findIndex(a => a.id === file.id), 1);
-      //     // this.fileGroups.get(key).splice();
-      //   }
-      // });
     }
   }
 
@@ -327,10 +316,15 @@ export class FileListComponent implements OnInit, OnDestroy {
     }
   }
 
-  originalOrder(a: KeyValue<string, File[]>, b: KeyValue<string, File[]>): number {
+  /**
+   * Order {@link fileGroups file groups} by date
+   *
+   * @param a Group
+   * @param b Group
+   */
+  orderByDate(a: KeyValue<string, File[]>, b: KeyValue<string, File[]>): number {
     const aDate: number = new Date(a.key).getTime();
     const bDate: number = new Date(b.key).getTime();
-    console.log(`A: ${a.key} - ${aDate}`, `B: ${b.key} - ${bDate}`);
     if (aDate < bDate) {
       return 1;
     }

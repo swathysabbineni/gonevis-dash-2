@@ -64,7 +64,7 @@
 </div>
 
 <!-- Files -->
-<div class="files mt-4" *ngFor="let fileGroup of fileGroups | keyvalue:originalOrder">
+<div class="files mt-4" *ngFor="let fileGroup of fileGroups | keyvalue:orderByDate">
   <p class="font-weight-bold mb-2" [title]="fileGroup.key | date"
      *ngIf="!sortField">{{ fileGroup.key | date:'EEEE, MMMM d' }}</p>
   <div class="row">
