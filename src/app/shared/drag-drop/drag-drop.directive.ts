@@ -92,7 +92,9 @@ export class DragDropDirective implements OnDestroy {
     this.subscription.add(
       this.renderer2.listen('document', 'dragenter', (event: DragEvent): void => {
         if (this.dragCounter === this.oldDragCounter) {
-          this.dragStarted.emit(true);
+          if (event.dataTransfer.types.includes('Files')) {
+            this.dragStarted.emit(true);
+          }
         }
         this.dragCounter++;
 
