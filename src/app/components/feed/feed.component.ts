@@ -42,8 +42,8 @@ export class FeedComponent implements OnInit {
     /**
      * Get following blogs
      */
-    // this.blogService.getFollowingBlogs({ limit: 10 }).subscribe((data: ApiResponse<Blog>): void => {
-    //   this.blogs = data.results;
-    // });
+    this.blogService.getFollowingBlogs({ limit: 10 }).subscribe((data: ApiResponse<Blog>): void => {
+      this.blogs = data.results;
+    });
   }
 }

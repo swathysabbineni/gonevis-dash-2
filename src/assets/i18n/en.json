@@ -117,7 +117,7 @@
   "BILLING": "Billing",
   "FONT_NAME": "Font name",
   "FONT_URL": "Font URL",
-  "CUSTOM_FONT": "Custom Font",
+  "FONT": "Font",
   "HELP_TEXT_DOMAINS": "Supply domain URLs to your DNS provider for the destination of CNAME or ALIAS records.",
   "ENTER_YOUR_CUSTOM_DOMAIN_ADDRESS": "Enter your custom domain address",
   "ADD_DOMAIN": "Add Domain",
@@ -228,7 +228,7 @@
   "ALMOST_DONE": "You're almost done",
   "FEEDBACK": "Feedback",
   "FEEDBACK_TEXT": "We would like your feedback to improve our service.",
-  "FEEDBACK_RECEIVED": "We received your feedback.",
+  "FEEDBACK_RECEIVED": "Thank you, we have received your feedback.",
   "MESSAGE": "Message",
   "THANK_YOU": "Thank you",
   "NEXT": "Next",
@@ -331,5 +331,6 @@
   "UPDATE_DATE": "Update date",
   "CREATE_DATE": "Create date",
   "UPLOAD_DATE": "Upload date",
+  "CREATE": "Create",
   "COLLABORATING": "Collaborating"
 }

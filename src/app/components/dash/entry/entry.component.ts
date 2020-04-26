@@ -15,6 +15,7 @@ import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faSort } from '@fortawesome/free-solid-svg-icons/faSort';
 import { faSortAmountDown } from '@fortawesome/free-solid-svg-icons/faSortAmountDown';
 import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp';
@@ -39,6 +40,7 @@ export class EntryComponent implements OnInit {
   readonly times: IconDefinition = faTimes;
   readonly ascending: IconDefinition = faSortAmountUp;
   readonly descending: IconDefinition = faSortAmountDown;
+  readonly create: IconDefinition = faPlus;
 
   /**
    * Exposed for view

@@ -96,7 +96,7 @@ export class WriteComponent implements OnInit, OnDestroy {
   /**
    * Auto save interval
    */
-  private autoSaveInterval: number;
+  private autoSaveInterval: any;
 
   /**
    * Auto saving indicator
@@ -221,7 +221,7 @@ export class WriteComponent implements OnInit, OnDestroy {
      * YouTube regular expression
      */
     const youTubeRegExp: RegExp = new RegExp(
-      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/
+      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/,
     );
     this.pastedVideoEmbed = null;
     if (youTubeRegExp.test(clipboard)) {
@@ -317,7 +317,7 @@ export class WriteComponent implements OnInit, OnDestroy {
      * Subscribe to current state's params changes
      */
     this.activatedRoute.params.subscribe((params: Params): void => {
-      if (params.id === 'new') {
+      if (params.id === 'new' || params.id === 'page') {
         this.form.reset({
           title: '',
           content: '',
@@ -327,7 +327,7 @@ export class WriteComponent implements OnInit, OnDestroy {
           slug: '',
           comment_enabled: true,
           featured: false,
-          is_page: false,
+          is_page: params.id === 'page',
           start_publication: null,
           cover_image: null,
           meta_description: '',
@@ -336,7 +336,7 @@ export class WriteComponent implements OnInit, OnDestroy {
         this.isEditing = false;
         this.initAutoSave();
       }
-      if (params.id && params.id !== 'new') {
+      if (params.id && (params.id !== 'new' && params.id !== 'page')) {
         clearInterval(this.autoSaveInterval);
         this.getEntry(params.id.toString());
       }
@@ -809,6 +809,22 @@ export class WriteComponent implements OnInit, OnDestroy {
      * Set window title
      */
     this.title.setTitle(`${titleValue}${AppComponent.TITLE_SUFFIX}`);
+  }
+
+  /**
+   * @returns A URL to view an entry on blog
+   */
+  viewOnBlog(): void {
+    let entryUrl: string = this.oldEntry.absolute_uri;
+    /**
+     * If entry's status is set to Draft, then add `?view=preview` query param to the end of
+     * the entry's {@see entryUrl URL}, otherwise if status is set to Published,
+     * then simply redirect user to entry's URL.
+     */
+    if (this.oldEntry.status === EntryStatus.Draft) {
+      entryUrl = `${this.oldEntry.absolute_uri}?view=preview`;
+    }
+    window.open(entryUrl, '_blank');
   }
 
   ngOnDestroy(): void {

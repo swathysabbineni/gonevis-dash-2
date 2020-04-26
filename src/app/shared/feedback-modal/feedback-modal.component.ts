@@ -12,7 +12,9 @@ import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons/faLightbulb';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-feedback-modal',
@@ -60,7 +62,9 @@ export class FeedbackModalComponent implements OnInit {
 
   constructor(public modal: BsModalRef,
               private formBuilder: FormBuilder,
-              private feedbackService: FeedbackService) {
+              private feedbackService: FeedbackService,
+              private toastr: ToastrService,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -84,6 +88,7 @@ export class FeedbackModalComponent implements OnInit {
       `Subject: ${data.subject}\nExperience: ${data.experience}\n\n${data.message}`,
     ).subscribe((): void => {
       this.modal.hide();
+      this.toastr.success(this.translate.instant('FEEDBACK_RECEIVED'));
     }, error => {
       this.error = error.error;
       this.loading = false;
