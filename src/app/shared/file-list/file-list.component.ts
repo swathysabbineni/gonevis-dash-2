@@ -308,7 +308,15 @@ export class FileListComponent implements OnInit, OnDestroy {
     this.getFiles();
   }
 
+  /**
+   * Handle file being added to groups
+   *
+   * @param file File
+   */
   onFileAdded(file: File): void {
+    /**
+     * If sorting was active then add the file to 'sorted' group, otherwise call {@link addFileToGroup} method.
+     */
     if (this.sortField) {
       this.fileGroups.get('sorted').unshift(file);
     } else {

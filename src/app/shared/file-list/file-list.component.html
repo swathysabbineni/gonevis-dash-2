@@ -66,7 +66,7 @@
 <!-- Files -->
 <div class="files mt-4" *ngFor="let fileGroup of fileGroups | keyvalue:orderByDate">
   <p class="font-weight-bold mb-2" [title]="fileGroup.key | date"
-     *ngIf="!sortField">{{ fileGroup.key | date:'EEEE, MMMM d' }}</p>
+     *ngIf="fileGroup.key !== 'sorted'">{{ fileGroup.key | date:'EEEE, MMMM d' }}</p>
   <div class="row">
     <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let file of fileGroup.value | paginate: pagination"
          [class.col-xl-2]="!selection">
