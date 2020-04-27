@@ -25,7 +25,7 @@ import { faSortAmountDown } from '@fortawesome/free-solid-svg-icons/faSortAmount
 import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { TranslateService } from '@ngx-translate/core';
-import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 
@@ -124,7 +124,7 @@ export class FileListComponent implements OnInit, OnDestroy {
   /**
    * List of blog media files grouped by date
    */
-  fileGroups: { [date: string]: File[] };
+  fileGroups: Map<string, File[]> = new Map<string, File[]>();
 
   /**
    * API pagination data
@@ -193,12 +193,22 @@ export class FileListComponent implements OnInit, OnDestroy {
       this.files = response.results;
       this.pagination.totalItems = response.count;
       this.loading = false;
-      /**
-       * Group files by date
-       */
-      this.fileGroups = {};
-      for (const file of this.files) {
-        this.addFileToGroup(file);
+      this.fileGroups.clear();
+      if (this.sortField) {
+        this.fileGroups.set('sorted', []);
+        /**
+         * Group files by date
+         */
+        for (const file of this.files) {
+          this.fileGroups.get('sorted').push(file);
+        }
+      } else {
+        /**
+         * Group files by date
+         */
+        for (const file of this.files) {
+          this.addFileToGroup(file);
+        }
       }
       this.changeDetectorRef.detectChanges();
     });
@@ -218,13 +228,13 @@ export class FileListComponent implements OnInit, OnDestroy {
       created.getDate(),
       0, 0, 0, 0,
     ).toString();
-    if (!this.fileGroups.hasOwnProperty(key)) {
-      this.fileGroups[key] = [];
+    if (!this.fileGroups.has(key)) {
+      this.fileGroups.set(key, []);
     }
     if (unshift) {
-      this.fileGroups[key].unshift(file);
+      this.fileGroups.get(key).unshift(file);
     } else {
-      this.fileGroups[key].push(file);
+      this.fileGroups.get(key).push(file);
     }
   }
 
@@ -232,18 +242,24 @@ export class FileListComponent implements OnInit, OnDestroy {
    * On file selection
    *
    * @param file Selected file
+   * @param key Group key
    */
-  onChoose(file: File): void {
+  onChoose(file: File, key: string): void {
     if (this.selection) {
       this.choose.emit(file);
     } else {
-      this.modalService.show(FileModalComponent, {
+      const modalRef: BsModalRef = this.modalService.show(FileModalComponent, {
         initialState: { file },
         class: 'full',
       });
-      this.modalService.onHidden.subscribe((): void => {
-        if (file.deleted) {
-          this.files.splice(this.files.indexOf(file), 1);
+      modalRef.content.onFileDelete.subscribe((id: string): void => {
+        const index: number = this.fileGroups.get(key).findIndex(a => a.id === id);
+        this.fileGroups.get(key).splice(index, 1);
+        /**
+         * Remove group as well if it was last item
+         */
+        if (!this.fileGroups.get(key).length) {
+          this.fileGroups.delete(key);
         }
       });
     }
@@ -292,7 +308,37 @@ export class FileListComponent implements OnInit, OnDestroy {
     this.getFiles();
   }
 
-  originalOrder(a: KeyValue<string, File[]>, b: KeyValue<string, File[]>): number {
+  /**
+   * Handle file being added to groups
+   *
+   * @param file File
+   */
+  onFileAdded(file: File): void {
+    /**
+     * If sorting was active then add the file to 'sorted' group, otherwise call {@link addFileToGroup} method.
+     */
+    if (this.sortField) {
+      this.fileGroups.get('sorted').unshift(file);
+    } else {
+      this.addFileToGroup(file, true);
+    }
+  }
+
+  /**
+   * Order {@link fileGroups file groups} by date
+   *
+   * @param a Group
+   * @param b Group
+   */
+  orderByDate(a: KeyValue<string, File[]>, b: KeyValue<string, File[]>): number {
+    const aDate: number = new Date(a.key).getTime();
+    const bDate: number = new Date(b.key).getTime();
+    if (aDate < bDate) {
+      return 1;
+    }
+    if (aDate > bDate) {
+      return -1;
+    }
     return 0;
   }
 
