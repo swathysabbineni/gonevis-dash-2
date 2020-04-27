@@ -1,12 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HighlightTheme } from '@app/enums/highlight-theme';
+import { MetricStatItem } from '@app/enums/metric-stat-item';
+import { MetricStatResolution } from '@app/enums/metric-stat-resolution';
 import { TemplatePrimaryColor } from '@app/enums/template-primary-color';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { BlogCreate } from '@app/interfaces/blog-create';
 import { Params } from '@app/interfaces/params';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { BlogSettings } from '@app/interfaces/v1/blog-settings';
+import { MetricStat } from '@app/interfaces/v1/metric-stat';
 import { Metrics } from '@app/interfaces/v1/metrics';
 import { Subscriber } from '@app/interfaces/v1/subscriber';
 import { Tag } from '@app/interfaces/v1/tag';
@@ -71,19 +74,13 @@ export class BlogService {
   ];
 
   /**
-   * @description
-   *
    * Blogs subject which emits list of blogs data information value whenever it is subscribed to.
-   *
    * @see BehaviorSubject
    */
   private static blogsSubject: BehaviorSubject<BlogMin[]> = new BehaviorSubject<BlogMin[]>([]);
 
   /**
-   * @description
-   *
    * An observable snapshot data of {@link blogsSubject} value
-   *
    * @see Observable
    */
   static blogsObservable: Observable<BlogMin[]> = BlogService.blogsSubject.asObservable();
@@ -256,7 +253,7 @@ export class BlogService {
    */
   updateFont(payload: Params): Observable<BlogSettings> {
     return this.http.put<BlogSettings>(
-      `${this.api.base.v1}site/${BlogService.currentBlog.id}/set-font/`, payload
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/set-font/`, payload,
     );
   }
 
@@ -366,6 +363,41 @@ export class BlogService {
         this.toast.info(this.translate.instant('TOAST_UPDATE'), slug);
         return data;
       })),
+    );
+  }
+
+  /**
+   * Get blog metric stats for views, comments and votes by any resolution
+   *
+   * @param item Item to get stats for (views, comments or likes)
+   * @param filters API filters (by resolution, limit, etc)
+   */
+  getMetricStat(item: MetricStatItem, filters: {
+    resolution: MetricStatResolution,
+    limit?: number,
+    entry?: string,
+    date_min?: Date,
+    date_max?: Date,
+  }): Observable<ApiResponse<MetricStat>> {
+    const params = new HttpParams({
+      fromObject: {
+        resolution: filters.resolution,
+      },
+    });
+    if (filters.entry) {
+      params.append('entry', filters.entry);
+    }
+    if (filters.limit) {
+      params.append('limit', filters.limit.toString());
+    }
+    if (filters.date_min) {
+      params.append('date_min', filters.date_min.toString());
+    }
+    if (filters.date_max) {
+      params.append('date_max', filters.date_max.toString());
+    }
+    return this.http.get<ApiResponse<MetricStat>>(
+      `${this.api.base.v1}site/${BlogService.currentBlog.id}/metric/${item}-stats/`, { params },
     );
   }
 }

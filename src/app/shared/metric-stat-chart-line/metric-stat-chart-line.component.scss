@@ -1,0 +1,17 @@
+@import "variables";
+
+.chart-wrapper {
+  display: grid;
+
+  ::ng-deep {
+
+    path {
+      stroke-width: 3px !important;
+    }
+
+    .tick > text {
+      opacity: 0.5;
+    }
+  }
+}
+

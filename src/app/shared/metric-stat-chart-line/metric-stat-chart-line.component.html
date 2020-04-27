@@ -1,0 +1,26 @@
+<div class="chart-wrapper" [style.minHeight]="stats && stats.length ? height : 0 + 'px'">
+
+  <!-- Chart -->
+  <ngx-charts-line-chart *ngIf="stats && stats.length"
+                         [results]="results"
+                         [scheme]="schema"
+                         [roundDomains]="false"
+                         [legend]="false"
+                         [gradient]="true"
+                         [autoScale]="true"
+                         [showGridLines]="false"
+                         [animations]="true"
+                         [showXAxisLabel]="true"
+                         [showYAxisLabel]="true"
+                         [xAxis]="true"
+                         [yAxis]="true"
+                         [yAxisTickFormatting]="xAxisTickFormatting">
+  </ngx-charts-line-chart>
+
+  <!-- Loading -->
+  <app-loading *ngIf="!stats"></app-loading>
+
+  <!-- No data -->
+  <div class="pb-3 pl-3" *ngIf="stats && !stats.length" translate>NOTHING_HERE_YET</div>
+</div>
+

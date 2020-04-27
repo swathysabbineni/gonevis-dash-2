@@ -332,5 +332,14 @@
   "CREATE_DATE": "Create date",
   "UPLOAD_DATE": "Upload date",
   "CREATE": "Create",
+  "STATISTICS": "Statistics",
+  "VIEWS_STATISTICS": "Views Statistics",
+  "COMMENTS_STATISTICS": "Comments Statistics",
+  "LIKES_STATISTICS": "Likes Statistics",
+  "CHART_RESOLUTION": "Chart Resolution",
+  "DAY": "Day",
+  "WEEK": "Week",
+  "MONTH": "Month",
+  "YEAR": "Year",
   "COLLABORATING": "Collaborating"
 }

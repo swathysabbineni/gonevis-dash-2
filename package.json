@@ -35,6 +35,7 @@
     "@ngx-translate/core": "^12.1.2",
     "@ngx-translate/http-loader": "^4.0.0",
     "@sentry/browser": "^5.15.4",
+    "@swimlane/ngx-charts": "^14.0.0",
     "@types/quill": "^2.0.3",
     "@w11k/ngx-componentdestroyed": "^4.1.5",
     "bootstrap": "^4.4.1",

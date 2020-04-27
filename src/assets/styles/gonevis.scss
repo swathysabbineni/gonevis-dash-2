@@ -20,6 +20,10 @@ $modal-footer-border-width: 0;
 $modal-content-border-width: 0;
 $modal-header-border-width: 0;
 
+$dropdown-link-active-bg: $dark;
+$dropdown-border-radius: $border-radius-sm;
+$dropdown-item-padding-y: map_get($spacers, 2);
+
 @import "~bootstrap/scss/bootstrap";
 @import '~ngx-toastr/toastr';
 
@@ -43,17 +47,15 @@ a,
   word-break: break-word;
 }
 
-.dropdown {
-  .dropdown-item {
-    outline: none !important;
-  }
+.dropdown-item {
+  outline: none !important;
 }
 
 .card {
 
   &.feed {
 
-    >.card-header {
+    > .card-header {
       background: darken($card-bg, 1%);
       color: $dark;
 
@@ -84,7 +86,7 @@ a,
       height: 256px;
     }
 
-    >.card-body {
+    > .card-body {
 
       .card-text,
       .card-title {
@@ -310,7 +312,7 @@ a,
       }
     }
 
-    >.card-footer {
+    > .card-footer {
 
       .btn-link {
         text-decoration: none;

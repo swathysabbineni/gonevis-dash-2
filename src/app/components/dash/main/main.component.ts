@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { CommentsService } from '@app/components/dash/comments/comments.service';
 import { EntryService } from '@app/components/dash/entry/entry.service';
 import { EntryStatus } from '@app/enums/entry-status.enum';
+import { MetricStatItem } from '@app/enums/metric-stat-item';
+import { MetricStatResolution } from '@app/enums/metric-stat-resolution';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ReactiveFormData } from '@app/interfaces/reactive-form-data';
@@ -47,6 +49,7 @@ export class MainComponent implements OnInit, OnDestroy {
   readonly like: IconDefinition = faThumbsUp;
 
   readonly entryStatusLabels: string[] = EntryService.STATUS_LABELS;
+  readonly metricStatItem = MetricStatItem;
 
   /**
    * Represents a disposable resource, such as the execution of an Observable. A
@@ -54,6 +57,25 @@ export class MainComponent implements OnInit, OnDestroy {
    * and just disposes the resource held by the subscription
    */
   private readonly subscription: Subscription = new Subscription();
+
+  /**
+   * List of resolutions for statistics panel filter
+   */
+  readonly statisticsResolutions: MetricStatResolution[] = [
+    MetricStatResolution.DAY,
+    MetricStatResolution.WEEK,
+    MetricStatResolution.MONTH,
+    MetricStatResolution.YEAR,
+  ];
+
+  /**
+   * List of items for statistics panel filter
+   */
+  readonly statisticsItems: { value: MetricStatItem, label: string }[] = [
+    { value: MetricStatItem.VIEWS, label: 'VIEWS_STATISTICS' },
+    { value: MetricStatItem.LIKES, label: 'LIKES_STATISTICS' },
+    { value: MetricStatItem.COMMENTS, label: 'COMMENTS_STATISTICS' },
+  ];
 
   /**
    * Loading status for each data
@@ -108,6 +130,16 @@ export class MainComponent implements OnInit, OnDestroy {
    * Current tab for the panel
    */
   tab: 'entries' | 'comments' = 'entries';
+
+  /**
+   * Selected resolution for statistics panel filter
+   */
+  statisticsResolution = this.statisticsResolutions[0];
+
+  /**
+   * Selected item for statistics panel filter
+   */
+  statisticsItem: { value: MetricStatItem, label: string } = this.statisticsItems[0];
 
   constructor(public utils: UtilService,
               private activatedRoute: ActivatedRoute,
