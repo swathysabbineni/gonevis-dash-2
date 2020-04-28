@@ -15,6 +15,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-file-modal',
@@ -77,6 +78,8 @@ export class FileModalComponent {
    */
   showEdit: boolean;
 
+  onFileDelete: Subject<string> = new Subject<string>();
+
   constructor(public modal: BsModalRef,
               private translate: TranslateService,
               private mediaService: MediaService,
@@ -114,6 +117,7 @@ export class FileModalComponent {
     this.file.deleted = true;
     this.modal.hide();
     this.mediaService.delete(this.file.id).subscribe((): void => {
+      this.onFileDelete.next(this.file.id);
       this.toast.info(this.translate.instant('TOAST_DELETE'), this.file.meta_data.name);
     });
   }

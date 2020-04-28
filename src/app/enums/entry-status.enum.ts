@@ -1,5 +1,6 @@
 export enum EntryStatus {
   Draft,
   Published,
-  UnsavedChanges
+  Private,
+  Trash,
 }

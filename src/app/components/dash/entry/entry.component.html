@@ -8,13 +8,11 @@
       <!-- Title -->
       <span *ngIf="!isPages" translate>POSTS</span>
       <span *ngIf="isPages" translate>PAGES</span>
-      <!-- Search bar -->
-      <div class="search-bar">
-        <app-search-bar (search)="search = $event; getEntries()"></app-search-bar>
-      </div>
+      <!-- Create button -->
+      <a class="btn btn-success" [routerLink]="['../../../write', isPages ? 'page' : 'new']" translate>CREATE</a>
     </div>
 
-    <!-- Actions -->
+    <!-- Actions and filters -->
     <div class="card-body d-flex flex-row align-items-center bg-light py-2" *ngIf="entries">
 
       <!-- Select: Select input -->
@@ -112,8 +110,17 @@
           <button class="dropdown-item" translate (click)="updateEntries('status', entryStatus.Draft)">
             DRAFT
           </button>
+          <button class="dropdown-item" translate (click)="updateEntries('status', entryStatus.Private)">
+            PRIVATE
+          </button>
+          <button class="dropdown-item" translate (click)="updateEntries('status', entryStatus.Trash)">
+            TRASH
+          </button>
         </div>
       </div>
+
+      <!-- Filter: Search -->
+      <app-search-bar class="ml-2" (search)="search = $event; getEntries()"></app-search-bar>
     </div>
 
     <!-- Content -->

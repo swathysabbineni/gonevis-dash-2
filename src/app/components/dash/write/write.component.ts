@@ -96,7 +96,7 @@ export class WriteComponent implements OnInit, OnDestroy {
   /**
    * Auto save interval
    */
-  private autoSaveInterval: number;
+  private autoSaveInterval: any;
 
   /**
    * Auto saving indicator
@@ -317,7 +317,7 @@ export class WriteComponent implements OnInit, OnDestroy {
      * Subscribe to current state's params changes
      */
     this.activatedRoute.params.subscribe((params: Params): void => {
-      if (params.id === 'new') {
+      if (params.id === 'new' || params.id === 'page') {
         this.form.reset({
           title: '',
           content: '',
@@ -327,7 +327,7 @@ export class WriteComponent implements OnInit, OnDestroy {
           slug: '',
           comment_enabled: true,
           featured: false,
-          is_page: false,
+          is_page: params.id === 'page',
           start_publication: null,
           cover_image: null,
           meta_description: '',
@@ -336,7 +336,7 @@ export class WriteComponent implements OnInit, OnDestroy {
         this.isEditing = false;
         this.initAutoSave();
       }
-      if (params.id && params.id !== 'new') {
+      if (params.id && (params.id !== 'new' && params.id !== 'page')) {
         clearInterval(this.autoSaveInterval);
         this.getEntry(params.id.toString());
       }

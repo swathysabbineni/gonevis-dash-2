@@ -15,6 +15,7 @@ import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faSort } from '@fortawesome/free-solid-svg-icons/faSort';
 import { faSortAmountDown } from '@fortawesome/free-solid-svg-icons/faSortAmountDown';
 import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp';
@@ -39,6 +40,7 @@ export class EntryComponent implements OnInit {
   readonly times: IconDefinition = faTimes;
   readonly ascending: IconDefinition = faSortAmountUp;
   readonly descending: IconDefinition = faSortAmountDown;
+  readonly create: IconDefinition = faPlus;
 
   /**
    * Exposed for view
@@ -64,6 +66,12 @@ export class EntryComponent implements OnInit {
   }, {
     value: EntryStatus.Draft,
     label: 'DRAFT',
+  }, {
+    value: EntryStatus.Private,
+    label: 'Private',
+  }, {
+    value: EntryStatus.Trash,
+    label: 'Trash',
   }];
 
   /**
@@ -254,9 +262,11 @@ export class EntryComponent implements OnInit {
    */
   updateEntries(property: keyof Entry, value: any): void {
     for (const entry of this.entriesSelected) {
-      const PAYLOAD: { [property: string]: any } = {};
-      PAYLOAD[property] = value;
-      this.entryService.update(entry.id, PAYLOAD).subscribe(((data: Entry): void => {
+      const payload: { [property: string]: any } = {
+        is_direct_save: true ,
+      };
+      payload[property] = value;
+      this.entryService.update(entry.id, payload).subscribe(((data: Entry): void => {
         entry[property as string] = data[property];
         this.toast.info(this.translate.instant('TOAST_UPDATE'), entry.title);
       }), (error: HttpErrorResponse): void => {

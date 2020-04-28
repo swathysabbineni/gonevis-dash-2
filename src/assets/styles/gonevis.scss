@@ -20,6 +20,10 @@ $modal-footer-border-width: 0;
 $modal-content-border-width: 0;
 $modal-header-border-width: 0;
 
+$dropdown-link-active-bg: $dark;
+$dropdown-border-radius: $border-radius-sm;
+$dropdown-item-padding-y: map_get($spacers, 2);
+
 @import "~bootstrap/scss/bootstrap";
 @import '~ngx-toastr/toastr';
 
@@ -43,17 +47,15 @@ a,
   word-break: break-word;
 }
 
-.dropdown {
-  .dropdown-item {
-    outline: none !important;
-  }
+.dropdown-item {
+  outline: none !important;
 }
 
 .card {
 
   &.feed {
 
-    .card-header {
+    > .card-header {
       background: darken($card-bg, 1%);
       color: $dark;
 
@@ -70,9 +72,6 @@ a,
         }
       }
 
-      span {
-      }
-
       .nav-link.active {
         cursor: default;
         background: white;
@@ -87,7 +86,7 @@ a,
       height: 256px;
     }
 
-    .card-body {
+    > .card-body {
 
       .card-text,
       .card-title {
@@ -100,9 +99,6 @@ a,
           }
         }
 
-      }
-
-      p {
       }
 
       img {
@@ -316,7 +312,7 @@ a,
       }
     }
 
-    .card-footer {
+    > .card-footer {
 
       .btn-link {
         text-decoration: none;
@@ -353,6 +349,19 @@ a,
       cursor: default;
     }
 
+    &.tabs {
+      > .card-header {
+        > .nav {
+          > .nav-item {
+            > .nav-link.active {
+              background: $body-bg;
+              color: $body-color;
+            }
+          }
+        }
+      }
+    }
+
     .card-header {
       background-color: white;
       padding-top: 18px;
@@ -369,7 +378,7 @@ a,
       }
 
       &,
-      > a {
+      > a:not(.btn) {
         color: #6F7A8B;
         font-weight: bold;
         letter-spacing: 0.03em;
