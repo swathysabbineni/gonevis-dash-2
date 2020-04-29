@@ -69,18 +69,27 @@ export class AuthInterceptorService implements HttpInterceptor {
             break;
           }
           /**
-           * User authentication token is invalid
+           * Check if modal has already been opened
            */
-          this.authService.signOut(false).then((): void => {
-            this.modalService.show(MessageModalComponent, {
-              initialState: {
-                title: 'INVALID_AUTHENTICATION',
-                messages: ['TEXT_INVALID_AUTHENTICATION'],
-                button: 'OK',
-              },
-              class: 'modal-sm',
+          if (!AuthService.preventInvalidAuthenticationModal) {
+            /**
+             * Prevent invalid authentication modal from opening again. (unless user logs-in)
+             */
+            AuthService.preventInvalidAuthenticationModal = true;
+            /**
+             * User authentication token is invalid
+             */
+            this.authService.signOut(false).then((): void => {
+              this.modalService.show(MessageModalComponent, {
+                initialState: {
+                  title: 'INVALID_AUTHENTICATION',
+                  messages: ['TEXT_INVALID_AUTHENTICATION'],
+                  button: 'OK',
+                },
+                class: 'modal-sm',
+              });
             });
-          });
+          }
           break;
         }
         case 403: {
