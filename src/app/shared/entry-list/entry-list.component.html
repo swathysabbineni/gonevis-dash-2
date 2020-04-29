@@ -1,6 +1,6 @@
 <!-- Posts -->
 <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
-     infiniteScrollContainer=".main-scroller"
+     infiniteScrollContainer=".feed-scroller"
      fromRoot="false"
      (scrolled)="loadMore(next)" appEmbed>
   <div class="card feed shadow-sm my-3" *ngFor="let entry of entries">
