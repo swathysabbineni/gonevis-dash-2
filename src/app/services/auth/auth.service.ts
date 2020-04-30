@@ -5,6 +5,7 @@ import { AuthResponse } from '@app/interfaces/auth-response';
 import { AuthToken } from '@app/interfaces/auth-token';
 import { RegisterWithBlogResponse } from '@app/interfaces/v1/register-with-blog-response';
 import { ApiService } from '@app/services/api/api.service';
+import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-interceptor.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UserService } from '@app/services/user/user.service';
 import { environment } from '@environments/environment';
@@ -53,6 +54,11 @@ export class AuthService {
    * No blogs redirect path
    */
   private static readonly NO_BLOGS_PATH = ['/user/start'];
+
+  /**
+   * It's being used to prevent multiple invalid authentication modal from displaying after another.
+   */
+  static preventInvalidAuthenticationModal: boolean;
 
   constructor(private http: HttpClient,
               private toast: ToastrService,
@@ -193,6 +199,7 @@ export class AuthService {
         } else {
           this.router.navigate(AuthService.NO_BLOGS_PATH);
         }
+        AuthService.preventInvalidAuthenticationModal = false;
         // Return raw user data
         return data.user.username;
       }),
