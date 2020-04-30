@@ -30,7 +30,9 @@ describe('AuthInterceptorService', () => {
 
   it('should prevent multiple invalid authentication modals from opening', () => {
     component.get();
-    const request: TestRequest = httpMock.expectOne((req: HttpRequest<void>): boolean => req.url.includes('simple-url'));
+    const request: TestRequest = httpMock.expectOne(
+      (req: HttpRequest<void>): boolean => req.url.includes('simple-url'),
+    );
     request.flush({ detail: 'Authentication credentials were not provided.' }, {
       status: 401,
       statusText: 'Unauthorized',
