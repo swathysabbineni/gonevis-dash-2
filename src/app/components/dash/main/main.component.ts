@@ -49,7 +49,6 @@ export class MainComponent implements OnInit, OnDestroy {
   readonly like: IconDefinition = faThumbsUp;
 
   readonly entryStatusLabels: string[] = EntryService.STATUS_LABELS;
-  readonly metricStatItem = MetricStatItem;
 
   /**
    * Represents a disposable resource, such as the execution of an Observable. A
@@ -107,6 +106,14 @@ export class MainComponent implements OnInit, OnDestroy {
     status: EntryStatus.Published,
     entries: [],
     dateKey: 'published',
+  }, {
+    status: EntryStatus.Private,
+    entries: [],
+    dateKey: 'created',
+  }, {
+    status: EntryStatus.Trash,
+    entries: [],
+    dateKey: 'created',
   }];
 
   /**

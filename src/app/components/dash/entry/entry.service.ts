@@ -29,7 +29,8 @@ export class EntryService {
   static readonly STATUS_LABELS: string[] = [
     'DRAFT',
     'PUBLISHED',
-    'UNSAVED_CHANGES',
+    'PRIVATE',
+    'TRASH',
   ];
 
   constructor(private http: HttpClient,
