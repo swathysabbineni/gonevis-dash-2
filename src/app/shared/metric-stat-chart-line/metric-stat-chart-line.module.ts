@@ -16,7 +16,7 @@ import { MetricStatChartLineComponent } from './metric-stat-chart-line.component
   imports: [
     CommonModule,
     LineChartModule,
-    TranslateModule,
+    TranslateModule.forChild(),
     LoadingModule,
   ],
 })

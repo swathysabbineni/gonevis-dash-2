@@ -30,6 +30,9 @@ const routes: Routes = [{
     path: 'tags',
     loadChildren: () => import('./tags/tags.module').then(m => m.TagsModule),
   }, {
+    path: 'statistics',
+    loadChildren: () => import('./statistics/statistics.module').then(m => m.StatisticsModule),
+  }, {
     path: 'media',
     loadChildren: () => import('./media/media.module').then(m => m.MediaModule),
   }, {

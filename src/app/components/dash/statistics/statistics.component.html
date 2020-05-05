@@ -1,0 +1,40 @@
+<div class="container-fluid py-3">
+  <div class="card dash tabs">
+
+    <!-- Header -->
+    <div class="card-header">
+
+      <!-- Label -->
+      <div class="btn-group mr-auto" dropdown>
+        <a dropdownToggle class="dropdown-toggle text-capitalize">
+          {{ statisticsItem.label | translate }} <span class="caret"></span>
+        </a>
+        <div *dropdownMenu class="dropdown-menu">
+          <button class="dropdown-item text-capitalize"
+                  *ngFor="let item of statisticsItems"
+                  (click)="statisticsItem = item"
+                  [class.active]="statisticsItem === item">
+            {{ item.label | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Resolutions -->
+      <div class="nav nav-pills" [title]="'CHART_RESOLUTION' | translate">
+        <li class="nav-item" *ngFor="let resolution of statisticsResolutions">
+          <a class="nav-link" (click)="statisticsResolution = resolution"
+             [class.active]="statisticsResolution === resolution">
+            <span class="text-capitalize">{{ resolution | uppercase | translate }}</span>
+          </a>
+        </li>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="card-body pl-0 pb-0">
+      <app-metric-stat-chart-line [item]="statisticsItem.value"
+                                  [resolution]="statisticsResolution">
+      </app-metric-stat-chart-line>
+    </div>
+  </div>
+</div>
