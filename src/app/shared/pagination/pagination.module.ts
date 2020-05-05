@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxPaginationModule, PaginatePipe } from 'ngx-pagination';
 import { PaginationComponent } from './pagination.component';
@@ -10,7 +10,7 @@ import { PaginationComponent } from './pagination.component';
   imports: [
     CommonModule,
     NgxPaginationModule,
-    TranslateModule,
+    TranslateModule.forChild(),
   ],
   exports: [PaginationComponent, PaginatePipe],
 })
