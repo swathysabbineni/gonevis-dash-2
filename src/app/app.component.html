@@ -1,47 +1,107 @@
 <!-- Main wrapper -->
 <div class="d-flex flex-column h-100">
   <!-- Navbar -->
-  <nav class="navbar navbar-expand navbar-dark sticky-top bg-primary" *ngIf="!inDash">
-    <div class="container">
+  <nav class="navbar navbar-expand navbar-dark sticky-top"
+       [class.bg-dark]="blogService.currentBlog"
+       [class.bg-primary]="!blogService.currentBlog">
+    <!-- Container -->
+    <div [class.container]="!blogService.currentBlog" [class.container-fluid]="blogService.currentBlog">
       <!-- Brand -->
-      <a class="navbar-brand" routerLink="/" translate>
+      <a class="navbar-brand" *ngIf="!blogService.currentBlog" routerLink="/" translate>
         <img src="../assets/img/logo.png" alt="GoNevis">
       </a>
+      <!-- Nav -->
+      <ul class="navbar-nav" *ngIf="user && user.sites">
+        <!-- Blog dropdown -->
+        <li class="nav-item dropdown dashboard" dropdown>
+          <!-- Current blog -->
+          <a class="nav-link dropdown-toggle" dropdownToggle>
+            <img *ngIf="blogService.currentBlog && blogService.currentBlog.media.logo"
+                 [src]="blogService.currentBlog.media.logo.thumbnail_48x48"
+                 [alt]="blogService.currentBlog.title"
+                 class="rounded">
+            <span *ngIf="blogService.currentBlog && !blogService.currentBlog.media.logo"
+                  [title]="'NO_BLOG_LOGO' | translate"
+                  class="rounded img-placeholder"></span>
+            <span *ngIf="blogService.currentBlog">{{ blogService.currentBlog.title }}</span>
+            <span *ngIf="!blogService.currentBlog" translate>DASHBOARD</span>
+          </a>
+          <!-- Dropdown menu -->
+          <ul class="dropdown-menu" *dropdownMenu>
+            <!-- Blogs -->
+            <li *ngFor="let blog of blogs; let index = index">
+              <a class="dropdown-item dropdown-item-img" [routerLink]="['/dash', index]"
+                 [class.active]="blogService.currentBlog && blogService.currentBlog.id === blog.id">
+                <img *ngIf="blog.media.logo" [src]="blog.media.logo.thumbnail_48x48" [alt]="blog.title"
+                     class="rounded shadow-sm">
+                <span *ngIf="!blog.media.logo" [title]="'NO_BLOG_LOGO' | translate"
+                      class="rounded shadow-sm img-placeholder"></span>
+                <span>{{ blog.title }}</span>
+              </a>
+            </li>
+            <!-- Separator -->
+            <li class="dropdown-divider" *ngIf="blogs && blogs.length"></li>
+            <!-- New blog -->
+            <li>
+              <a class="dropdown-item" routerLink="/user/start" routerLinkActive="active" translate>
+                START_NEW_BLOG
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
       <!-- Right Navs -->
       <ul class="navbar-nav ml-auto" *ngIf="isAuth && user">
-        <!-- Dashboard -->
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="navigateToDash"
-             *ngIf="user.sites.length"
-             translate>DASHBOARD</a>
+        <!-- Feed -->
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="/feed/">
+            <fa-icon class="mr-1" [fixedWidth]="true" [icon]="faFeed"></fa-icon>
+            <span translate>FEED</span>
+          </a>
         </li>
         <!-- Feedback -->
         <li class="nav-item" (click)="feedback()">
-          <a class="nav-link" translate>FEEDBACK</a>
+          <a class="nav-link">
+            <fa-icon class="mr-1" [fixedWidth]="true" [icon]="faFeedback"></fa-icon>
+            <span translate>FEEDBACK</span>
+          </a>
         </li>
         <!-- User dropdown -->
         <li class="nav-item dropdown" dropdown>
           <!-- Dropdown label -->
-          <div class="nav-link dropdown-toggle" id="user-dropdown" dropdownToggle>
+          <a class="nav-link dropdown-toggle" id="user-dropdown" dropdownToggle>
             <!-- User picture -->
-            <img [src]="user.media.thumbnail_48x48" *ngIf="user.media.picture">
+            <img class="rounded-circle" *ngIf="user.media.picture" [src]="user.media.thumbnail_48x48">
+            <span class="rounded-circle img-placeholder" *ngIf="!user.media.picture"></span>
             <!-- User name -->
             <span>{{ user.name.split(' ')[0] || user.username }}</span>
-          </div>
+          </a>
           <!-- User dropdown -->
           <ul class="dropdown-menu dropdown-menu-right" *dropdownMenu>
             <!-- Profile -->
             <li>
-              <a [routerLink]="['/feed/user', user.username]" routerLinkActive="active" class="dropdown-item" translate>
-                PROFILE
+              <a [routerLink]="['/feed/user', user.username]" routerLinkActive="active" class="dropdown-item">
+                <fa-icon [fixedWidth]="true" [icon]="faProfile"></fa-icon>
+                <span translate>PROFILE</span>
               </a>
             </li>
             <!-- Settings -->
-            <li><a routerLink="/user/setting" routerLinkActive="active" class="dropdown-item" translate>SETTING</a></li>
+            <li>
+              <a routerLink="/user/setting" routerLinkActive="active" class="dropdown-item">
+                <fa-icon [fixedWidth]="true" [icon]="faSettings"></fa-icon>
+                <span translate>SETTING</span>
+              </a>
+            </li>
             <!-- Separator -->
             <li class="dropdown-divider"></li>
             <!-- Sign out -->
-            <li><button class="dropdown-item" (click)="signOut()" translate>SIGN_OUT</button></li>
+            <li>
+              <button class="dropdown-item" (click)="signOut()">
+                <fa-icon [fixedWidth]="true" [icon]="faSignOut"></fa-icon>
+                <span translate>SIGN_OUT</span>
+              </button>
+            </li>
           </ul>
         </li>
       </ul>

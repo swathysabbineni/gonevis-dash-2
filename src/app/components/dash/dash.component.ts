@@ -1,12 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
-import { UserAuth } from '@app/interfaces/user-auth';
-import { BlogMin } from '@app/interfaces/zero/user/blog-min';
-import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
-import { UserService } from '@app/services/user/user.service';
-import { FeedbackModalComponent } from '@app/shared/feedback-modal/feedback-modal.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faImage } from '@fortawesome/free-regular-svg-icons/faImage';
 import { faNewspaper } from '@fortawesome/free-regular-svg-icons/faNewspaper';
@@ -20,32 +15,18 @@ import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
-import { TranslateService } from '@ngx-translate/core';
-import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-dash',
   templateUrl: './dash.component.html',
   styleUrls: ['./dash.component.scss'],
 })
-export class DashComponent implements OnInit {
-
-  readonly blogService = BlogService;
+export class DashComponent {
 
   /**
    * Angle double left icon
    */
   readonly faAngleDoubleLeft: IconDefinition = faAngleDoubleLeft;
-
-  /**
-   * List of blogs
-   */
-  blogs: BlogMin[] = [];
-
-  /**
-   * Authenticated user data
-   */
-  user: UserAuth;
 
   /**
    * Determines whether sidebar is closed or not
@@ -102,10 +83,7 @@ export class DashComponent implements OnInit {
   }];
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private modalService: BsModalService,
-              private translateService: TranslateService,
-              public authService: AuthService) {
+              private router: Router) {
     /**
      * Get blog index from param (and watch for changes)
      */
@@ -125,33 +103,11 @@ export class DashComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    /**
-     * Get authenticated user data (and watch for changes)
-     */
-    UserService.userObservable.subscribe((user: UserAuth): void => {
-      this.user = user;
-    });
-    /**
-     * Get blog list's data (and watch for changes)
-     */
-    BlogService.blogsObservable.subscribe((blogs: BlogMin[]): void => {
-      this.blogs = blogs;
-    });
-  }
-
   /**
    * Toggle sidebar and update local storage value
    */
   toggleSidebar(): void {
     localStorage.setItem('sidebar', String(!this.openSidebar));
     this.openSidebar = !this.openSidebar;
-  }
-
-  /**
-   * Open feedback modal
-   */
-  feedback(): void {
-    this.modalService.show(FeedbackModalComponent);
   }
 }
