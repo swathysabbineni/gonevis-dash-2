@@ -1,59 +1,103 @@
 @import "variables";
 
 .navbar {
+  padding: 0;
+  font-size: $font-size-sm;
+
+  > div {
+    height: $navbar-height !important;
+    padding: $navbar-padding-x $navbar-padding-y;
+  }
 
   .navbar-brand {
-
     padding: 0;
 
     img {
-      width: 40px;
-      position: relative;
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      border-radius: 4px;
-      padding: 6px;
-      margin-top: -6px;
-
-      &:hover {
-        border-color: rgba(255, 255, 255, 0.75);
-      }
-
-      &:active {
-        border-color: rgba(255, 255, 255, 0.5);
-      }
+      width: 32px;
+      margin-top: -4px;
     }
   }
 
-  .nav-item {
+  .navbar-nav {
+    align-items: center;
 
-    &.dropdown {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      border-radius: $border-radius;
+    .img-placeholder {
+      margin-right: map_get($spacers, 2);
+      width: 32px;
+      height: 32px;
+      background: $secondary;
+    }
+
+    .nav-item {
+      > a {
+        padding: 15px 10px !important;
+        height: $navbar-height - 15px;
+        display: flex;
+        align-items: center;
+        color: $white;
+        font-weight: bold;
+        border-radius: $border-radius;
+        margin-right: 5px;
+
+        > img {
+          margin-right: map_get($spacers, 1);
+        }
+      }
 
       &:hover,
       &:focus {
-        background: rgba(0, 0, 0, 0.05);
+        > a {
+          background: rgba($white, 0.1);
+        }
       }
 
-      &.show {
-        background: rgba(0, 0, 0, 0.2);
+      &.open, &.active {
+        > a {
+          box-shadow: $box-shadow-sm;
+          color: $dark;
+          background: $white;
+        }
       }
 
-      img {
-        width: 32px;
-        height: 32px;
-        border-radius: 100%;
-        margin: -12px 6px -8px -2px;
-      }
+      &.dropdown {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        border-radius: $border-radius;
 
-      span {
-        text-transform: capitalize;
-      }
+        &.dashboard {
 
-      .dropdown-menu {
-        text-transform: capitalize;
+          > .dropdown-toggle {
+            > img {
+              margin-right: map_get($spacers, 2);
+            }
+          }
+
+          > .dropdown-menu {
+            max-height: 300px;
+            overflow: auto;
+          }
+        }
+
+        img {
+          width: 32px;
+          height: 32px;
+        }
+
+        span {
+          text-transform: capitalize;
+        }
+
+        > .dropdown-menu {
+          text-transform: capitalize;
+
+          fa-icon {
+            margin-right: map_get($spacers, 2);
+            margin-left: - map_get($spacers, 2);
+            text-align: right;
+            opacity: 0.5;
+          }
+        }
       }
     }
   }

@@ -16,5 +16,7 @@ $theme-colors: (
   "unimportant": $unimportant,
 );
 
+$navbar-height: 55px;
+
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";

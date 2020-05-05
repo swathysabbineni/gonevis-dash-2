@@ -2,10 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { UserAuth } from '@app/interfaces/user-auth';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UserService } from '@app/services/user/user.service';
 import { FeedbackModalComponent } from '@app/shared/feedback-modal/feedback-modal.component';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
+import { faRssSquare } from '@fortawesome/free-solid-svg-icons/faRssSquare';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
+import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
@@ -28,15 +36,24 @@ export class AppComponent implements OnInit {
    */
   static readonly TITLE_SUFFIX = ` - ${AppComponent.TITLE}`;
 
+  readonly blogService = BlogService;
+
+  readonly faFeed: IconDefinition = faRssSquare;
+  readonly faDashboard: IconDefinition = faTachometerAlt;
+  readonly faFeedback: IconDefinition = faQuestionCircle;
+  readonly faProfile: IconDefinition = faUserCircle;
+  readonly faSettings: IconDefinition = faCog;
+  readonly faSignOut: IconDefinition = faSignOutAlt;
+
   /**
    * Authenticated user data
    */
   user: UserAuth;
 
   /**
-   * Is user in any dash page
+   * List of blogs
    */
-  inDash: boolean;
+  blogs: BlogMin[] = [];
 
   constructor(public authService: AuthService,
               private modalService: BsModalService,
@@ -58,6 +75,12 @@ export class AppComponent implements OnInit {
       this.user = user;
     });
     /**
+     * Get blog list's data (and watch for changes)
+     */
+    BlogService.blogsObservable.subscribe((blogs: BlogMin[]): void => {
+      this.blogs = blogs;
+    });
+    /**
      * Watch for page changes then update window title with translation
      */
     this.router.events.pipe(
@@ -72,12 +95,6 @@ export class AppComponent implements OnInit {
       filter((activatedRoute: ActivatedRoute): boolean => activatedRoute.outlet === 'primary'),
       mergeMap((activatedRoute: ActivatedRoute): Observable<Data> => activatedRoute.data),
     ).subscribe((event: Data): void => {
-      /**
-       * Is user in any dash page
-       */
-      if (this.route.root.firstChild) {
-        this.inDash = this.route.root.firstChild.snapshot.routeConfig.path === 'dash';
-      }
       if (event.title) {
         this.title.setTitle(`${this.translate.instant(event.title)}${AppComponent.TITLE_SUFFIX}`);
       } else {

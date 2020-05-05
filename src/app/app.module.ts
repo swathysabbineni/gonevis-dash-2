@@ -7,6 +7,7 @@ import { SentryErrorHandler } from '@app/services/sentry-error-handler/sentry-er
 import { FeedbackModalModule } from '@app/shared/feedback-modal/feedback-modal.module';
 import { MessageModalModule } from '@app/shared/message-modal/message-modal.module';
 import { environment } from '@environments/environment';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -59,6 +60,7 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
         deps: [HttpClient],
       },
     }),
+    FontAwesomeModule,
   ],
   providers: [
     CookieService,
