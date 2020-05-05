@@ -1,0 +1,23 @@
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { MetricStatChartLineModule } from '@app/shared/metric-stat-chart-line/metric-stat-chart-line.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { BsDropdownModule } from 'ngx-bootstrap';
+
+import { StatisticsRoutingModule } from './statistics-routing.module';
+import { StatisticsComponent } from './statistics.component';
+
+@NgModule({
+  declarations: [
+    StatisticsComponent,
+  ],
+  imports: [
+    CommonModule,
+    StatisticsRoutingModule,
+    TranslateModule.forChild(),
+    BsDropdownModule,
+    MetricStatChartLineModule,
+  ],
+})
+export class StatisticsModule {
+}

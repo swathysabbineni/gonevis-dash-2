@@ -7,6 +7,7 @@ import { faImage } from '@fortawesome/free-regular-svg-icons/faImage';
 import { faNewspaper } from '@fortawesome/free-regular-svg-icons/faNewspaper';
 import { faAngleDoubleLeft } from '@fortawesome/free-solid-svg-icons/faAngleDoubleLeft';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
+import { faChartLine } from '@fortawesome/free-solid-svg-icons/faChartLine';
 import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
 import { faComment } from '@fortawesome/free-solid-svg-icons/faComment';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
@@ -64,6 +65,10 @@ export class DashComponent {
     path: 'media',
     label: 'MEDIA',
     icon: faImage,
+  }, {
+    path: 'statistics',
+    label: 'STATISTICS',
+    icon: faChartLine,
   }, {
     path: 'navigation',
     label: 'NAVIGATION',
