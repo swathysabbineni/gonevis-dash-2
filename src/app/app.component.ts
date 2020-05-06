@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { UserAuth } from '@app/interfaces/user-auth';
@@ -16,7 +16,7 @@ import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerA
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { Observable } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -36,14 +36,24 @@ export class AppComponent implements OnInit {
    */
   static readonly TITLE_SUFFIX = ` - ${AppComponent.TITLE}`;
 
+  /**
+   * Used for status of search bar
+   */
+  static SEARCH_STATUS: BehaviorSubject<boolean>;
+
   readonly blogService = BlogService;
 
   readonly faFeed: IconDefinition = faRssSquare;
-  readonly faDashboard: IconDefinition = faTachometerAlt;
   readonly faFeedback: IconDefinition = faQuestionCircle;
   readonly faProfile: IconDefinition = faUserCircle;
   readonly faSettings: IconDefinition = faCog;
   readonly faSignOut: IconDefinition = faSignOutAlt;
+
+  /**
+   * Status of search bar
+   * @see SEARCH_STATUS
+   */
+  searchStatus: boolean;
 
   /**
    * Authenticated user data
@@ -60,14 +70,24 @@ export class AppComponent implements OnInit {
               private translate: TranslateService,
               private router: Router,
               private route: ActivatedRoute,
-              private title: Title) {
+              private title: Title,
+              private cd: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
+    AppComponent.SEARCH_STATUS = new BehaviorSubject<boolean>(false);
+    this.cd.detectChanges();
     /**
      * Set the default language
      */
     this.translate.setDefaultLang('en');
+    /**
+     * Watch search status changes
+     * @see SEARCH_STATUS
+     */
+    AppComponent.SEARCH_STATUS.subscribe((status: boolean): void => {
+      this.searchStatus = status;
+    });
     /**
      * Get authenticated user data (and watch for changes)
      */
