@@ -15,6 +15,7 @@ import {
   NINE,
 } from '@angular/cdk/keycodes';
 import { TemplatePortal, CdkPortalOutlet, CdkPortal } from '@angular/cdk/portal';
+import { DOCUMENT } from '@angular/common';
 import {
   Component,
   OnInit,
@@ -26,7 +27,7 @@ import {
   ViewChild,
   ChangeDetectorRef,
   AfterViewInit,
-  ViewContainerRef,
+  ViewContainerRef, Inject,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -670,7 +671,25 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
               private translateService: TranslateService,
               private mediaService: MediaService,
               private writeService: WriteService,
-              private toast: ToastrService) {
+              private toast: ToastrService,
+              @Inject(DOCUMENT) private document: Document) {
+    /**
+     * Dynamically inject editor-style.scss file if not injected
+     */
+    if (!document.getElementById('editor-styles')) {
+      /**
+       * Get head element. We will use it to append our editor-styles.scss file as a stylesheet.
+       */
+      const head: HTMLHeadElement = this.document.getElementsByTagName('head')[0];
+      /**
+       * Create a link element so we can inject our editor-styles.scss
+       */
+      const linkElement: HTMLLinkElement = this.document.createElement('link');
+      linkElement.id = 'editor-styles';
+      linkElement.rel = 'stylesheet';
+      linkElement.href = 'editor-styles.css';
+      head.appendChild(linkElement);
+    }
   }
 
   ngOnInit(): void {

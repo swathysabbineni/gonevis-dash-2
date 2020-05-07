@@ -23,12 +23,17 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "extractCss": true,
             "assets": [
               "src/assets"
             ],
             "styles": [
               "src/assets/styles/gonevis.scss",
-              "src/assets/styles/editor.scss",
+              {
+                "input": "src/assets/styles/editor.scss",
+                "bundleName": "editor-styles",
+                "inject": false
+              }
             ],
             "scripts": [],
             "stylePreprocessorOptions": {
