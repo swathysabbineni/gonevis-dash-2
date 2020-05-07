@@ -16,7 +16,7 @@ import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerA
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -36,6 +36,11 @@ export class AppComponent implements OnInit {
    */
   static readonly TITLE_SUFFIX = ` - ${AppComponent.TITLE}`;
 
+  /**
+   * Used for hiding navbar
+   */
+  static readonly NAVBAR_STATUS: Subject<boolean> = new Subject<boolean>();
+
   readonly blogService = BlogService;
 
   readonly faFeed: IconDefinition = faRssSquare;
@@ -44,6 +49,11 @@ export class AppComponent implements OnInit {
   readonly faProfile: IconDefinition = faUserCircle;
   readonly faSettings: IconDefinition = faCog;
   readonly faSignOut: IconDefinition = faSignOutAlt;
+
+  /**
+   * Determines whether or not current page is the editor or not
+   */
+  isWritePage: boolean;
 
   /**
    * Authenticated user data
@@ -100,6 +110,12 @@ export class AppComponent implements OnInit {
       } else {
         this.title.setTitle(AppComponent.TITLE);
       }
+    });
+    /**
+     * Listen to navbar status changes and hide it
+     */
+    AppComponent.NAVBAR_STATUS.subscribe((hide: boolean): void => {
+      this.isWritePage = hide;
     });
   }
 

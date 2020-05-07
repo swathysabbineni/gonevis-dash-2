@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { AppComponent } from '@app/app.component';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -28,6 +29,11 @@ export class DashComponent {
    * Angle double left icon
    */
   readonly faAngleDoubleLeft: IconDefinition = faAngleDoubleLeft;
+
+  /**
+   * Determines whether or not current page is the editor or not
+   */
+  isWritePage: boolean;
 
   /**
    * Determines whether sidebar is closed or not
@@ -114,5 +120,15 @@ export class DashComponent {
   toggleSidebar(): void {
     localStorage.setItem('sidebar', String(!this.openSidebar));
     this.openSidebar = !this.openSidebar;
+  }
+  /**
+   * On router outlet change
+   */
+  onRouterOutletChange(event: any): void {
+    this.isWritePage = !!(event.activatedRoute && event.activatedRoute.snapshot.data.editor);
+    /**
+     * Notify navbar status to hide it
+     */
+    AppComponent.NAVBAR_STATUS.next(this.isWritePage);
   }
 }

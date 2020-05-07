@@ -1,6 +1,5 @@
-import { DOCUMENT } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Params } from '@app/interfaces/params';
 import { SoundCloudEmbed } from '@app/interfaces/sound-cloud-embed';
@@ -8,55 +7,15 @@ import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WriteService {
 
-  /**
-   * Loaded libraries
-   */
-  private loadedLibraries: { [url: string]: ReplaySubject<any> } = {};
-
-  constructor(@Inject(DOCUMENT) private readonly document: Document,
-              private http: HttpClient,
+  constructor(private http: HttpClient,
               private apiService: ApiService) {
-  }
-
-  /**
-   * Load Quill styles
-   *
-   * @param url URL to load
-   */
-  private loadStyle(url: string): Observable<any> {
-    if (this.loadedLibraries[url]) {
-      return this.loadedLibraries[url].asObservable();
-    }
-
-    this.loadedLibraries[url] = new ReplaySubject();
-
-    const style = this.document.createElement('link');
-    style.type = 'text/css';
-    style.href = url;
-    style.rel = 'stylesheet';
-    style.onload = () => {
-      this.loadedLibraries[url].next();
-      this.loadedLibraries[url].complete();
-    };
-
-    const head = document.getElementsByTagName('head')[0];
-    head.appendChild(style);
-
-    return this.loadedLibraries[url].asObservable();
-  }
-
-  /**
-   * Lazy load Quill styles
-   */
-  lazyLoadQuill(): Observable<any> {
-    return this.loadStyle('assets/quill/quill.snow.min.css');
   }
 
   /**
@@ -74,7 +33,7 @@ export class WriteService {
    * @param payload Payload
    */
   updateEntry(payload: Params): Observable<Entry> {
-    return this.http.put<Entry>(
+    return this.http.patch<Entry>(
       `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/${payload.id}/`,
       payload,
     );
