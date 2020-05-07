@@ -29,7 +29,6 @@
             "styles": [
               "src/assets/styles/gonevis.scss",
               "src/assets/styles/editor.scss",
-              "./node_modules/highlight.js/styles/atom-one-dark.css"
             ],
             "scripts": [],
             "stylePreprocessorOptions": {

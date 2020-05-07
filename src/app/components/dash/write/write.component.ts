@@ -348,7 +348,6 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       maxStack: 2000,
     },
     markdownShortcuts: {},
-    syntax: true,
     keyboard: {
       /**
        * Indent code block - TAB (not with Shift key)
