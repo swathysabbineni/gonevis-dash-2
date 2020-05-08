@@ -37,7 +37,9 @@ jobs:
           at: *working_directory
       - run:
           name: End 2 End
-          command: npm run e2e
+          command: |
+            ngcc --properties es2015 browser module main --async false
+            npm run e2e
   lint:
     executor: node
     steps:
