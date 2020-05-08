@@ -28,7 +28,6 @@ jobs:
           paths:
             - .
 
-
   e2e:
     executor: node
     steps:
@@ -38,7 +37,7 @@ jobs:
       - run:
           name: End 2 End
           command: |
-            ngcc --properties es2015 browser module main --async false
+            ./node_modules/.bin/ngcc --properties es2015 browser module main --async false
             npm run e2e
   lint:
     executor: node
