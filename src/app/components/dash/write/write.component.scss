@@ -1,6 +1,5 @@
 @import "variables";
 @import "~bootstrap/scss/mixins/breakpoints";
-@import "~ngx-bootstrap/datepicker/bs-datepicker.css";
 
 .editor-page {
   font-family: Roboto, serif;
@@ -262,16 +261,16 @@
   }
 }
 
-//@keyframes transformIn {
-//  0% {
-//    transform: translateY(10px);
-//    opacity: 0;
-//  }
-//  100% {
-//    transform: translateY(0);
-//    opacity: 1;
-//  }
-//}
+@keyframes transformIn {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
 @keyframes scaleIn {
   0% {
