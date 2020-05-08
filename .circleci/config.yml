@@ -6,7 +6,7 @@ aliases:
 executors:
   node:
     docker:
-      - image: circleci/node:13.12-browsers
+      - image: circleci/node:13.14-browsers
     working_directory:  *working_directory
 
 jobs:
