@@ -50,12 +50,12 @@
           </ul>
         </li>
       </ul>
-
       <!-- Right Navs -->
-      <ul class="navbar-nav ml-auto" *ngIf="isAuth && user">
+      <ul class="navbar-nav ml-auto" *ngIf="user">
         <!-- Search -->
         <div class="form-inline" *ngIf="searchStatus">
-          <input class="form-control" type="search" placeholder="Search">
+          <input class="form-control" type="search" placeholder="Search"
+                 [(ngModel)]="searchQuery" (ngModelChange)="onSearch($event)">
         </div>
         <!-- Feed -->
         <li class="nav-item" routerLinkActive="active">
@@ -110,7 +110,7 @@
         </li>
       </ul>
       <!-- Navs when not authenticated (right) -->
-      <ul class="navbar-nav ml-auto" *ngIf="!isAuth">
+      <ul class="navbar-nav ml-auto" *ngIf="!user">
         <!-- Sign in -->
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="/user/sign-in" translate>SIGN_IN</a>

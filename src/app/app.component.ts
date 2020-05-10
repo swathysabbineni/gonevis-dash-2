@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { UserAuth } from '@app/interfaces/user-auth';
@@ -12,11 +12,10 @@ import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
 import { faRssSquare } from '@fortawesome/free-solid-svg-icons/faRssSquare';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
-import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -39,7 +38,12 @@ export class AppComponent implements OnInit {
   /**
    * Used for status of search bar
    */
-  static SEARCH_STATUS: BehaviorSubject<boolean>;
+  static SEARCH_STATUS = new EventEmitter<boolean>();
+
+  /**
+   * Used for query of search
+   */
+  static SEARCH_QUERY = new EventEmitter<string>();
 
   readonly blogService = BlogService;
 
@@ -56,6 +60,11 @@ export class AppComponent implements OnInit {
   searchStatus: boolean;
 
   /**
+   * Query of search
+   */
+  searchQuery: string;
+
+  /**
    * Authenticated user data
    */
   user: UserAuth;
@@ -64,19 +73,17 @@ export class AppComponent implements OnInit {
    * List of blogs
    */
   blogs: BlogMin[] = [];
+  x;
 
   constructor(public authService: AuthService,
               private modalService: BsModalService,
               private translate: TranslateService,
               private router: Router,
               private route: ActivatedRoute,
-              private title: Title,
-              private cd: ChangeDetectorRef) {
+              private title: Title) {
   }
 
   ngOnInit(): void {
-    AppComponent.SEARCH_STATUS = new BehaviorSubject<boolean>(false);
-    this.cd.detectChanges();
     /**
      * Set the default language
      */
@@ -86,7 +93,9 @@ export class AppComponent implements OnInit {
      * @see SEARCH_STATUS
      */
     AppComponent.SEARCH_STATUS.subscribe((status: boolean): void => {
-      this.searchStatus = status;
+      setTimeout(() => {
+        this.searchStatus = status;
+      });
     });
     /**
      * Get authenticated user data (and watch for changes)
@@ -124,24 +133,6 @@ export class AppComponent implements OnInit {
   }
 
   /**
-   * Check if user is authenticated
-   */
-  get isAuth(): boolean {
-    return this.authService.isAuth;
-  }
-
-  /**
-   * Redirect to 'dash' route if user has blogs, otherwise redirect to 'start' route
-   */
-  get navigateToDash(): any[] {
-    if (UserService.hasBlogs) {
-      return ['dash', BlogService.currentBlog ? BlogService.currentBlogIndex : 0];
-    } else {
-      return ['start'];
-    }
-  }
-
-  /**
    * Sign out user by a confirm message
    */
   signOut(): void {
@@ -153,5 +144,12 @@ export class AppComponent implements OnInit {
    */
   feedback(): void {
     this.modalService.show(FeedbackModalComponent);
+  }
+
+  /**
+   * On search change
+   */
+  onSearch(value: string): void {
+    AppComponent.SEARCH_QUERY.emit(value);
   }
 }

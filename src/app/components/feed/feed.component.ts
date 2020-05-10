@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppComponent } from '@app/app.component';
 import { BlogService } from '@app/components/feed/blog/blog.service';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -36,16 +36,14 @@ export class FeedComponent implements OnInit, OnDestroy {
    */
   blogs: Blog[];
 
-  constructor(private blogService: BlogService,
-              private cd: ChangeDetectorRef) {
+  constructor(private blogService: BlogService) {
   }
 
   ngOnInit(): void {
     /**
      * Enable search bar
      */
-    AppComponent.SEARCH_STATUS.next(true);
-    this.cd.detectChanges();
+    AppComponent.SEARCH_STATUS.emit(true);
     /**
      * Get following blogs
      */
@@ -54,10 +52,10 @@ export class FeedComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     /**
      * Disable search bar
      */
-    AppComponent.SEARCH_STATUS.next(false);
+    AppComponent.SEARCH_STATUS.emit(false);
   }
 }

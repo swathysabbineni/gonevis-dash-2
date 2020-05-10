@@ -21,6 +21,7 @@ export class FeedService {
     site_id?: string,
     username?: string,
     show?: 'feed' | 'bookmarked' | '',
+    search?: string,
   } = {}): Observable<ApiResponse<Entry>> {
     return this.http.get<ApiResponse<Entry>>(`${this.api.base.zero}website/entry/`, { params });
   }
