@@ -107,7 +107,7 @@
 }
 
 .next-btn {
-  color: mat-color($gonevis-primary, default);
+  color: $primary;
   font-weight: 500;
   padding: 0 8px;
   display: inline-flex;
@@ -162,7 +162,7 @@
   &:not(:disabled) {
     &::after,
     &::before {
-      background: mat-color($gonevis-primary, default);
+      background: $primary;
     }
 
     &:hover::before {
@@ -222,7 +222,7 @@
   }
 
   &.next-primary:not(:disabled) {
-    background-color: mat-color($gonevis-primary, default);
+    background-color: $primary;
   }
 
   &.next-danger:not(:disabled) {
