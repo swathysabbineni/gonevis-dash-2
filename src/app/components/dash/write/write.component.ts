@@ -1066,7 +1066,11 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     editor.clipboard.addMatcher(Node.TEXT_NODE, (node: Text, delta: DeltaStatic): DeltaStatic => {
       const extractedUrl: string = WriteComponent.extractVideoUrl(node.data);
       if (extractedUrl !== null) {
-        delta.insert({ video: extractedUrl });
+        delta.ops = [{
+          insert: {
+            video: extractedUrl
+          }
+        }];
       }
 
       // If pasted string starts with Gist, Twitter or Instagram then URL then start converting it to embed.
@@ -1076,7 +1080,11 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
           if (node.data.startsWith('https://pastebin.com/')) {
             node.data = node.data.replace('pastebin.com/', 'pastebin.com/embed_js/');
           }
-          delta.insert({ embed: node.data });
+          delta.ops = [{
+            insert: {
+              embed: node.data
+            }
+          }];
         }
       });
       /**
