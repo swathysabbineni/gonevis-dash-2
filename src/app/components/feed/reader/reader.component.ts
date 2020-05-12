@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data } from '@angular/router';
+import { AppComponent } from '@app/app.component';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { Entry } from '@app/interfaces/zero/entry';
@@ -26,12 +27,28 @@ export class ReaderComponent implements OnInit {
    */
   next: string;
 
-  constructor(private activatedRoute: ActivatedRoute,
-              private feedService: FeedService) {
+  constructor(private route: ActivatedRoute,
+              private feed: FeedService) {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: Data): void => {
+    /**
+     * Watch search query
+     */
+    AppComponent.SEARCH_QUERY.subscribe((search: string): void => {
+      this.getEntries(search);
+    });
+    /**
+     * Load entries
+     */
+    this.getEntries();
+  }
+
+  /**
+   * Load entries
+   */
+  getEntries(search: string = ''): void {
+    this.route.data.subscribe((data: Data): void => {
       const onLoadEntries = (entries: ApiResponse<Entry>): void => {
         this.next = entries.next;
         this.entries = entries.results;
@@ -44,7 +61,7 @@ export class ReaderComponent implements OnInit {
       } else if (data.route === 'bookmarks') {
         show = 'bookmarked';
       }
-      this.feedService.getEntries({ show }).subscribe(onLoadEntries);
+      this.feed.getEntries({ show, search }).subscribe(onLoadEntries);
     });
   }
 }

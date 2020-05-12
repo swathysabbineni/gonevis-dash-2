@@ -28,7 +28,9 @@
       background: $secondary;
     }
 
+
     .nav-item {
+
       > a {
         padding: 15px 10px !important;
         height: $navbar-height - 15px;
@@ -98,6 +100,50 @@
             opacity: 0.5;
           }
         }
+      }
+    }
+  }
+
+  .form-inline > .form-control {
+    margin: 0 map_get($spacers, 3);
+    border-radius: 1000px;
+    padding: $input-padding-y map_get($spacers, 3);
+    border: none;
+    font-weight: $font-weight-bold;
+    font-size: $small-font-size * 1.1;
+    background: rgba(0, 0, 0, 0.25);
+    width: 150px;
+    transition: $transition-base;
+    color: $white;
+
+    &::-webkit-input-placeholder {
+      color: white;
+    }
+
+    &::-moz-placeholder {
+      color: white;
+    }
+
+    &::-ms-input-placeholder {
+      color: white;
+    }
+
+    &:focus {
+      background: $white;
+      box-shadow: $box-shadow-sm;
+      width: 250px;
+      color: $dark;
+
+      &::-webkit-input-placeholder {
+        color: $dark;
+      }
+
+      &::-moz-placeholder {
+        color: $dark;
+      }
+
+      &::-ms-input-placeholder {
+        color: $dark;
       }
     }
   }

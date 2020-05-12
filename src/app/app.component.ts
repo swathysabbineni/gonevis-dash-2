@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { UserAuth } from '@app/interfaces/user-auth';
@@ -12,11 +13,10 @@ import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
 import { faRssSquare } from '@fortawesome/free-solid-svg-icons/faRssSquare';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
-import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -39,21 +39,36 @@ export class AppComponent implements OnInit {
   /**
    * Used for hiding navbar
    */
-  static readonly NAVBAR_STATUS: Subject<boolean> = new Subject<boolean>();
+  static readonly HEADER_STATUS = new EventEmitter<boolean>();
+
+  /**
+   * Used for status of search bar
+   */
+  static readonly SEARCH_STATUS = new EventEmitter<boolean>();
+
+  /**
+   * Used for query of search
+   */
+  static readonly SEARCH_QUERY = new EventEmitter<string>();
 
   readonly blogService = BlogService;
 
   readonly faFeed: IconDefinition = faRssSquare;
-  readonly faDashboard: IconDefinition = faTachometerAlt;
   readonly faFeedback: IconDefinition = faQuestionCircle;
   readonly faProfile: IconDefinition = faUserCircle;
   readonly faSettings: IconDefinition = faCog;
   readonly faSignOut: IconDefinition = faSignOutAlt;
 
   /**
-   * Determines whether or not current page is the editor or not
+   * Status of header (show or hide)
    */
-  isWritePage: boolean;
+  headerStatus = true;
+
+  /**
+   * Status of search bar
+   * @see SEARCH_STATUS
+   */
+  searchStatus: boolean;
 
   /**
    * Authenticated user data
@@ -65,12 +80,18 @@ export class AppComponent implements OnInit {
    */
   blogs: BlogMin[] = [];
 
+  /**
+   * Search form
+   */
+  formSearch: FormGroup;
+
   constructor(public authService: AuthService,
               private modalService: BsModalService,
               private translate: TranslateService,
               private router: Router,
               private route: ActivatedRoute,
-              private title: Title) {
+              private title: Title,
+              private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -78,6 +99,33 @@ export class AppComponent implements OnInit {
      * Set the default language
      */
     this.translate.setDefaultLang('en');
+    /**
+     * Watch header status changes
+     * @see HEADER_STATUS
+     */
+    AppComponent.HEADER_STATUS.subscribe((hide: boolean): void => {
+      setTimeout((): void => {
+        this.headerStatus = hide;
+      });
+    });
+    /**
+     * Watch search status changes
+     * @see SEARCH_STATUS
+     */
+    AppComponent.SEARCH_STATUS.subscribe((status: boolean): void => {
+      setTimeout((): void => {
+        this.searchStatus = status;
+      });
+    });
+    /**
+     * Watch search query changes
+     * @see SEARCH_QUERY
+     */
+    AppComponent.SEARCH_QUERY.subscribe((search: string): void => {
+      setTimeout((): void => {
+        this.formSearch.get('search').setValue(search);
+      });
+    });
     /**
      * Get authenticated user data (and watch for changes)
      */
@@ -112,29 +160,9 @@ export class AppComponent implements OnInit {
       }
     });
     /**
-     * Listen to navbar status changes and hide it
+     * Setup search form
      */
-    AppComponent.NAVBAR_STATUS.subscribe((hide: boolean): void => {
-      this.isWritePage = hide;
-    });
-  }
-
-  /**
-   * Check if user is authenticated
-   */
-  get isAuth(): boolean {
-    return this.authService.isAuth;
-  }
-
-  /**
-   * Redirect to 'dash' route if user has blogs, otherwise redirect to 'start' route
-   */
-  get navigateToDash(): any[] {
-    if (UserService.hasBlogs) {
-      return ['dash', BlogService.currentBlog ? BlogService.currentBlogIndex : 0];
-    } else {
-      return ['start'];
-    }
+    this.formSearch = this.formBuilder.group({ search: [''] });
   }
 
   /**
@@ -149,5 +177,12 @@ export class AppComponent implements OnInit {
    */
   feedback(): void {
     this.modalService.show(FeedbackModalComponent);
+  }
+
+  /**
+   * On search
+   */
+  onSearch(): void {
+    AppComponent.SEARCH_QUERY.emit(this.formSearch.value.search);
   }
 }

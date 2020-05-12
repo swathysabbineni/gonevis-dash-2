@@ -27,7 +27,8 @@ import {
   ViewChild,
   ChangeDetectorRef,
   AfterViewInit,
-  ViewContainerRef, Inject,
+  ViewContainerRef,
+  Inject,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -694,6 +695,10 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     /**
+     * Hide header
+     */
+    AppComponent.HEADER_STATUS.emit(false);
+    /**
      * Add keydown listener to Ctrl+S to save
      */
     this.keydownListener = this.renderer2.listen(document, 'keydown.control.s', (event: KeyboardEvent): void => {
@@ -784,6 +789,13 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
         this.updateTitle();
       });
     });
+  }
+
+  ngOnDestroy() {
+    /**
+     * Show header back
+     */
+    AppComponent.HEADER_STATUS.emit(true);
   }
 
   ngAfterViewInit(): void {
@@ -1795,10 +1807,6 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       entryUrl = `${this.oldEntry.absolute_uri}?view=preview`;
     }
     window.open(entryUrl, '_blank');
-  }
-
-  ngOnDestroy(): void {
-    clearInterval(this.autoSaveInterval);
   }
 
   /**
