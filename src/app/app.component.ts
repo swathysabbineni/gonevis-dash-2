@@ -15,7 +15,7 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -36,19 +36,19 @@ export class AppComponent implements OnInit {
   static readonly TITLE_SUFFIX = ` - ${AppComponent.TITLE}`;
 
   /**
+   * Used for hiding navbar
+   */
+  static readonly HEADER_STATUS = new EventEmitter<boolean>();
+
+  /**
    * Used for status of search bar
    */
-  static SEARCH_STATUS = new EventEmitter<boolean>();
+  static readonly SEARCH_STATUS = new EventEmitter<boolean>();
 
   /**
    * Used for query of search
    */
-  static SEARCH_QUERY = new EventEmitter<string>();
-
-  /**
-   * Used for hiding navbar
-   */
-  static readonly NAVBAR_STATUS: Subject<boolean> = new Subject<boolean>();
+  static readonly SEARCH_QUERY = new EventEmitter<string>();
 
   readonly blogService = BlogService;
 
@@ -57,6 +57,11 @@ export class AppComponent implements OnInit {
   readonly faProfile: IconDefinition = faUserCircle;
   readonly faSettings: IconDefinition = faCog;
   readonly faSignOut: IconDefinition = faSignOutAlt;
+
+  /**
+   * Status of header (show or hide)
+   */
+  headerStatus = true;
 
   /**
    * Status of search bar
@@ -68,11 +73,6 @@ export class AppComponent implements OnInit {
    * Query of search
    */
   searchQuery: string;
-
-  /**
-   * Determines whether or not current page is the editor or not
-   */
-  isWritePage: boolean;
 
   /**
    * Authenticated user data
@@ -97,6 +97,15 @@ export class AppComponent implements OnInit {
      * Set the default language
      */
     this.translate.setDefaultLang('en');
+    /**
+     * Watch header status changes
+     * @see HEADER_STATUS
+     */
+    AppComponent.HEADER_STATUS.subscribe((hide: boolean): void => {
+      setTimeout(() => {
+        this.headerStatus = hide;
+      });
+    });
     /**
      * Watch search status changes
      * @see SEARCH_STATUS
@@ -138,12 +147,6 @@ export class AppComponent implements OnInit {
       } else {
         this.title.setTitle(AppComponent.TITLE);
       }
-    });
-    /**
-     * Listen to navbar status changes and hide it
-     */
-    AppComponent.NAVBAR_STATUS.subscribe((hide: boolean): void => {
-      this.isWritePage = hide;
     });
   }
 

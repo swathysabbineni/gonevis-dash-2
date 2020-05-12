@@ -2,7 +2,7 @@
 <div class="d-flex flex-column h-100">
   <!-- Navbar -->
   <nav class="navbar navbar-expand navbar-dark sticky-top"
-       [class.d-none]="isWritePage"
+       [class.d-none]="!headerStatus"
        [class.bg-dark]="blogService.currentBlog"
        [class.bg-primary]="!blogService.currentBlog">
     <!-- Container -->
