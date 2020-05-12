@@ -70,6 +70,7 @@
   "COMMENTED_ON": "commented on",
   "INVITED_BY": "Invited by",
   "CONFORM_REMOVE_TEAM": "Are you sure you want to remove this team member?",
+  "CONFORM_REMOVE_TEAM_SELF": "Are you sure you want to leave?",
   "CONFORM_DELETE_TAG": "Are you sure you want to delete this tag?",
   "CONFORM_DELETE_FILE": "Are you sure you want to delete this file?",
   "CONFORM_DELETE_ENTRY": "Are you sure you want to delete this post?",
@@ -213,6 +214,7 @@
   "TOAST_UPLOAD": "uploaded successfully",
   "TOAST_ADD": "added successfully",
   "TOAST_INVITE": "Invitation sent successfully",
+  "TOAST_REMOVED_SELF": "You're no longer part of the blog.",
   "SETTINGS": "Settings",
   "PURCHASE": "Purchase",
   "CANCEL_SUBSCRIPTION": "Cancel Subscription",
@@ -396,5 +398,6 @@
   "SAVED": "Saved",
   "SAVING": "Saving...",
   "NO_BLOG_LOGO": "No blog logo",
+  "LEAVE": "Leave",
   "COLLABORATING": "Collaborating"
 }

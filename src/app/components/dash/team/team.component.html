@@ -40,7 +40,13 @@
                 <!-- Remove -->
                 <button class="btn btn-light text-secondary" [title]="'REMOVE' | translate"
                         (click)="remove(member.user.id)">
-                  <fa-icon [fixedWidth]="true" [icon]="trash"></fa-icon>
+                  <!-- Leave - Logged-in user -->
+                  <ng-template [ngIf]="member.user.id === user.id"
+                               [ngIfElse]="trashIcon">{{'LEAVE' | translate}}</ng-template>
+                  <!-- Trash icon - Member -->
+                  <ng-template #trashIcon>
+                    <fa-icon [fixedWidth]="true" [icon]="trash"></fa-icon>
+                  </ng-template>
                 </button>
               </div>
             </th>
@@ -86,7 +92,9 @@
         </table>
 
         <!-- Loading -->
-        <div class="card-body" *ngIf="!team"><app-loading></app-loading></div>
+        <div class="card-body" *ngIf="!team">
+          <app-loading></app-loading>
+        </div>
       </div>
     </div>
 
