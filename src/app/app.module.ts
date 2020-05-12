@@ -1,6 +1,6 @@
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule, ErrorHandler } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-interceptor.service';
@@ -63,6 +63,7 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     }),
     FontAwesomeModule,
     FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [
     CookieService,

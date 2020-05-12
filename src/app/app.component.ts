@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { UserAuth } from '@app/interfaces/user-auth';
@@ -70,11 +71,6 @@ export class AppComponent implements OnInit {
   searchStatus: boolean;
 
   /**
-   * Query of search
-   */
-  searchQuery: string;
-
-  /**
    * Authenticated user data
    */
   user: UserAuth;
@@ -84,12 +80,18 @@ export class AppComponent implements OnInit {
    */
   blogs: BlogMin[] = [];
 
+  /**
+   * Search form
+   */
+  formSearch: FormGroup;
+
   constructor(public authService: AuthService,
               private modalService: BsModalService,
               private translate: TranslateService,
               private router: Router,
               private route: ActivatedRoute,
-              private title: Title) {
+              private title: Title,
+              private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -102,7 +104,7 @@ export class AppComponent implements OnInit {
      * @see HEADER_STATUS
      */
     AppComponent.HEADER_STATUS.subscribe((hide: boolean): void => {
-      setTimeout(() => {
+      setTimeout((): void => {
         this.headerStatus = hide;
       });
     });
@@ -111,8 +113,17 @@ export class AppComponent implements OnInit {
      * @see SEARCH_STATUS
      */
     AppComponent.SEARCH_STATUS.subscribe((status: boolean): void => {
-      setTimeout(() => {
+      setTimeout((): void => {
         this.searchStatus = status;
+      });
+    });
+    /**
+     * Watch search status changes
+     * @see SEARCH_STATUS
+     */
+    AppComponent.SEARCH_QUERY.subscribe((search: string): void => {
+      setTimeout((): void => {
+        this.formSearch.get('search').setValue(search);
       });
     });
     /**
@@ -148,6 +159,10 @@ export class AppComponent implements OnInit {
         this.title.setTitle(AppComponent.TITLE);
       }
     });
+    /**
+     * Setup search form
+     */
+    this.formSearch = this.formBuilder.group({ search: [''] });
   }
 
   /**
@@ -165,9 +180,9 @@ export class AppComponent implements OnInit {
   }
 
   /**
-   * On search change
+   * On search
    */
-  onSearch(value: string): void {
-    AppComponent.SEARCH_QUERY.emit(value);
+  onSearch(): void {
+    AppComponent.SEARCH_QUERY.emit(this.formSearch.value.search);
   }
 }

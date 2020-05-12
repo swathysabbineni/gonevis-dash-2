@@ -58,4 +58,14 @@ export class FeedComponent implements OnInit, OnDestroy {
      */
     AppComponent.SEARCH_STATUS.emit(false);
   }
+
+  /**
+   * On route activate
+   */
+  onActivate() {
+    /**
+     * Clear search query
+     */
+    AppComponent.SEARCH_QUERY.emit(null);
+  }
 }
