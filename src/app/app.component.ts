@@ -118,8 +118,8 @@ export class AppComponent implements OnInit {
       });
     });
     /**
-     * Watch search status changes
-     * @see SEARCH_STATUS
+     * Watch search query changes
+     * @see SEARCH_QUERY
      */
     AppComponent.SEARCH_QUERY.subscribe((search: string): void => {
       setTimeout((): void => {
