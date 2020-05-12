@@ -1,20 +1,21 @@
 import { CustomIcon } from '@app/interfaces/custom-icon';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faAlignCenter } from '@fortawesome/free-solid-svg-icons/faAlignCenter';
 import { faAlignJustify } from '@fortawesome/free-solid-svg-icons/faAlignJustify';
 import { faAlignLeft } from '@fortawesome/free-solid-svg-icons/faAlignLeft';
 import { faAlignRight } from '@fortawesome/free-solid-svg-icons/faAlignRight';
-import { faBan } from '@fortawesome/free-solid-svg-icons/faBan';
 import { faBold } from '@fortawesome/free-solid-svg-icons/faBold';
 import { faCode } from '@fortawesome/free-solid-svg-icons/faCode';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons/faExternalLinkAlt';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
 import { faItalic } from '@fortawesome/free-solid-svg-icons/faItalic';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
+import { faListOl } from '@fortawesome/free-solid-svg-icons/faListOl';
 import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { faParagraph } from '@fortawesome/free-solid-svg-icons/faParagraph';
 import { faQuoteRight } from '@fortawesome/free-solid-svg-icons/faQuoteRight';
+import { faRemoveFormat } from '@fortawesome/free-solid-svg-icons/faRemoveFormat';
 import { faStrikethrough } from '@fortawesome/free-solid-svg-icons/faStrikethrough';
 import { faUnderline } from '@fortawesome/free-solid-svg-icons/faUnderline';
 import Quill, { StringMap } from 'quill';
@@ -56,10 +57,10 @@ const customIcons: CustomIcon[] = [{
   new: faImage,
 }, {
   default: 'video',
-  new: faYoutube,
+  new: faExternalLinkAlt,
 }, {
   default: 'clean',
-  new: faBan,
+  new: faRemoveFormat,
 }];
 
 /**
@@ -120,6 +121,7 @@ customIcons.forEach((icon: CustomIcon): void => {
   Icons[icon.default] = iconToSVGElement(icon.new).outerHTML;
 });
 
+Icons.list.ordered = iconToSVGElement(faListOl).outerHTML;
 Icons.list.bullet = iconToSVGElement(faListUl).outerHTML;
 Icons.direction[''] = iconToSVGElement(faParagraph).outerHTML;
 Icons.direction.rtl = iconToSVGElement(faParagraph, 'fa-flip-horizontal').outerHTML;

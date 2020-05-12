@@ -84,3 +84,10 @@
     }
   }
 }
+
+.in-editor {
+  .navbar,
+  .sidebar {
+    display: none;
+  }
+}

@@ -20,3 +20,45 @@ $navbar-height: 55px;
 
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
+@import '~@angular/material/theming';
+
+$mat-material-blue: (
+  50 : #ece1fd,
+  100 : #cfb3fa,
+  200 : #b081f7,
+  300 : #904ef3,
+  400 : #7828f1,
+  500 : #6002ee,
+  600 : #5802ec,
+  700 : #4e01e9,
+  800 : #4401e7,
+  900 : #3301e2,
+  A100 : #ffffff,
+  A200 : #ddd6ff,
+  A400 : #b2a3ff,
+  A700 : #9d8aff,
+  contrast: (
+    50 : $dark-primary-text,
+    100 : $dark-primary-text,
+    200 : $dark-primary-text,
+    300 : $light-primary-text,
+    400 : $light-primary-text,
+    500 : $light-primary-text,
+    600 : $light-primary-text,
+    700 : $light-primary-text,
+    800 : $light-primary-text,
+    900 : $light-primary-text,
+    A100 : $dark-primary-text,
+    A200 : $dark-primary-text,
+    A400 : $dark-primary-text,
+    A700 : $dark-primary-text,
+  )
+);
+
+$gonevis-primary: mat-palette($mat-material-blue);
+$gonevis-accent: mat-palette($mat-pink, A200, A100, A400);
+$gonevis-warn: mat-palette($mat-red);
+$gonevis-theme: mat-light-theme($gonevis-primary, $gonevis-accent, $gonevis-warn);
+$foreground: map-get($gonevis-theme, foreground);
+$background: map-get($gonevis-theme, background);
+$config: mat-typography-config();

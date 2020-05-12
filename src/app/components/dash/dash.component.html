@@ -1,7 +1,7 @@
 <!-- Main wrapper -->
 <div class="d-flex flex-column h-100">
   <div class="wrapper">
-    <div class="sidebar" [class.is-closed]="!openSidebar">
+    <div class="sidebar" [class.is-closed]="!openSidebar" [class.d-none]="isWritePage">
       <ul class="overflow-auto">
         <li *ngFor="let link of links">
           <a [routerLink]="[link.path]" routerLinkActive="active">
@@ -18,7 +18,7 @@
     </div>
     <div class="content">
       <div class="h-100 overflow-auto">
-        <router-outlet></router-outlet>
+        <router-outlet (activate)="onRouterOutletChange($event)"></router-outlet>
       </div>
     </div>
   </div>

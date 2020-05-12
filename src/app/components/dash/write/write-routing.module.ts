@@ -6,6 +6,9 @@ import { WriteComponent } from './write.component';
 const routes: Routes = [{
   path: ':id',
   component: WriteComponent,
+  data: {
+    editor: true,
+  },
 }, {
   path: '',
   redirectTo: 'new',

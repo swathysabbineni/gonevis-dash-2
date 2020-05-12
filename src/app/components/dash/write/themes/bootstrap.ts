@@ -206,7 +206,7 @@ export default class BootstrapTheme extends SnowTheme {
    */
   options: QuillOptionsStatic;
 
-  tooltip: BootstrapTooltip;
+  tooltip: null;
 
   constructor(quill: Quill, options: QuillOptionsStatic) {
     super(quill, options);
@@ -227,21 +227,6 @@ export default class BootstrapTheme extends SnowTheme {
      */
     this.buildButtons([].slice.call(toolbar.container.querySelectorAll('button')), Icons);
     this.buildPickers([].slice.call(toolbar.container.querySelectorAll('select')), Icons);
-    /**
-     * Setup tooltip
-     */
-    this.tooltip = new BootstrapTooltip(this.quill, this.options.bounds);
-    /**
-     * Check if toolbar contains link format
-     */
-    if (toolbar.container.querySelector('.ql-link')) {
-      /**
-       * Add key shortcut binding 'K' to link
-       */
-      this.quill.keyboard.addBinding({ key: 'K', shortKey: true }, (range: RangeStatic, context: any): void => {
-        toolbar.handlers.link.call(toolbar, !context.format.link);
-      });
-    }
   }
 }
 
