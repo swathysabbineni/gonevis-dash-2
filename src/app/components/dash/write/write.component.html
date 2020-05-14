@@ -586,36 +586,39 @@
                   <!-- Header - insert link -->
                   <div class="link-header" *ngIf="data.isInserting && !data.isEmbed" translate>INSERT_LINK</div>
                   <!-- Body -->
-                  <div class="link-body">
-                    <!-- Link text -->
-                    <div [hidden]="data.multiLine || data.isEmbed">
-                      <mat-form-field appearance="outline">
-                        <!-- Label -->
-                        <mat-label translate>DISPLAY_TEXT</mat-label>
-                        <!-- Input -->
-                        <input #linkTextInput matInput [value]="data.text" type="text">
-                      </mat-form-field>
+                  <div class="link-body d-flex align-items-end">
+                    <div class="flex-column w-100">
+                      <!-- Link text -->
+                      <div [hidden]="data.multiLine || data.isEmbed">
+                        <mat-form-field class="w-100" appearance="outline">
+                          <!-- Label -->
+                          <mat-label translate>DISPLAY_TEXT</mat-label>
+                          <!-- Input -->
+                          <input #linkTextInput matInput [value]="data.text" type="text">
+                        </mat-form-field>
+                      </div>
+                      <small class="d-block mb-3" *ngIf="data.isEmbed">
+                        {{ 'INSERT_EMBED_TIP' | translate }}
+                        <kbd>CTRL</kbd><span class="mx-1">+</span><kbd>V</kbd>
+                      </small>
+                      <!-- Link URL -->
+                      <div>
+                        <mat-form-field class="w-100 no-spacing" appearance="outline">
+                          <!-- Label -->
+                          <mat-label translate>LINK</mat-label>
+                          <!-- Input -->
+                          <input #linkUrlInput matInput [value]="data.link" type="text">
+                        </mat-form-field>
+                      </div>
                     </div>
-                    <small class="d-block mb-3" *ngIf="data.isEmbed">
-                      {{ 'INSERT_EMBED_TIP' | translate }}
-                      <kbd>CTRL</kbd><span class="mx-1">+</span><kbd>V</kbd>
-                    </small>
-                    <!-- Link URL -->
-                    <div>
-                      <mat-form-field class="w-100" appearance="outline">
-                        <!-- Label -->
-                        <mat-label translate>LINK</mat-label>
-                        <!-- Input -->
-                        <input #linkUrlInput matInput [value]="data.link" type="text">
-                      </mat-form-field>
-                    </div>
+                    <button class="next-btn next-primary ml-3" type="submit">Apply</button>
                   </div>
-                  <div class="link-footer text-right">
-                    <button class="next-btn fancy mr-2" type="button"
-                            (click)="cancelLink()">Cancel
-                    </button>
-                    <button class="next-btn next-primary fancy" type="submit">Apply</button>
-                  </div>
+<!--                  <div class="link-footer text-right">-->
+<!--&lt;!&ndash;                    <button class="next-btn fancy mr-2" type="button"&ndash;&gt;-->
+<!--&lt;!&ndash;                            (click)="cancelLink()">Cancel&ndash;&gt;-->
+<!--&lt;!&ndash;                    </button>&ndash;&gt;-->
+<!--                    <button class="next-btn next-primary fancy" type="submit">Apply</button>-->
+<!--                  </div>-->
                 </form>
               </ng-template>
             </div>

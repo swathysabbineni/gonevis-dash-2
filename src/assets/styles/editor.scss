@@ -16,6 +16,11 @@
 @include mat-input-theme($gonevis-theme);
 @include mat-datepicker-theme($gonevis-theme);
 
+.mat-form-field.no-spacing .mat-form-field-wrapper {
+  margin: 0;
+  padding: 0;
+}
+
 .editor-page {
   .tooltip {
 
@@ -743,7 +748,7 @@ iframe,
 .ql-container.ql-snow {
 
   .ql-editor {
-    color: #616161;
+    color: #424242;
     padding: 0 105px 65px;
     font-family: 'Roboto', serif;
     font-weight: 500;

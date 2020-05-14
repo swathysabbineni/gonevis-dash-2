@@ -429,7 +429,7 @@
   }
 
   .link-body {
-    padding: 0 24px;
+    padding: 0 24px 24px;
   }
 
   .link-footer {
@@ -453,6 +453,10 @@
         }
       }
     }
+  }
+
+  .link-edit .link-body {
+    width: 450px;
   }
 }
 
