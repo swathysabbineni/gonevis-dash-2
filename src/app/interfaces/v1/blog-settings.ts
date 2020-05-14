@@ -29,4 +29,10 @@ export interface BlogSettings {
   google_adsense_code?: string;
   google_adsense_enabled: boolean;
   show_views_count: boolean;
+  webmaster_tools: {
+    yandex?: string;
+    google?: string;
+    baidu?: string;
+    bing?: string;
+  };
 }

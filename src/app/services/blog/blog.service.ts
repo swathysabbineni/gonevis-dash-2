@@ -213,7 +213,7 @@ export class BlogService {
    *
    * @param payload Blog update data
    */
-  updateSettings(payload: Params): Observable<BlogSettings> {
+  updateSettings(payload: Partial<BlogSettings>): Observable<BlogSettings> {
     return this.http.put<BlogSettings>(
       `${this.api.base.v1}site/${BlogService.currentBlog.id}/update-settings/`, payload,
     ).pipe(map((data => {

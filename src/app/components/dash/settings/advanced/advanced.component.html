@@ -2,7 +2,7 @@
   <div class="col-xl-6">
 
     <!-- Advanced -->
-    <form class="card dash mb-3" [formGroup]="advancedForm" (ngSubmit)="submit()">
+    <form class="card dash mb-3" [formGroup]="settingsForm" (ngSubmit)="submit(this.settingsForm.value)">
       <!-- Header -->
       <div class="card-header" translate>ADVANCED</div>
       <!-- Body -->
@@ -13,8 +13,8 @@
           <input class="form-control" formControlName="meta_description" type="text" id="meta_description">
           <small class="form-text text-muted" translate>META_DESCRIPTION_ABOUT</small>
           <!-- API error -->
-          <span class="text-danger" *ngIf="advancedForm.hasError('invalid', 'meta_description')">
-            <span class="d-block" *ngFor="let error of advancedFormError['meta_description']">{{ error }}</span>
+          <span class="text-danger" *ngIf="settingsForm.hasError('invalid', 'meta_description')">
+            <span class="d-block" *ngFor="let error of settingsErrors['meta_description']">{{ error }}</span>
           </span>
         </div>
         <!-- Number of posts per page -->
@@ -26,8 +26,8 @@
             </option>
           </select>
           <!-- API error -->
-          <span class="text-danger" *ngIf="advancedForm.hasError('invalid', 'paginate_by')">
-            <span class="d-block" *ngFor="let error of advancedFormError['paginate_by']">{{ error }}</span>
+          <span class="text-danger" *ngIf="settingsForm.hasError('invalid', 'paginate_by')">
+            <span class="d-block" *ngFor="let error of settingsErrors['paginate_by']">{{ error }}</span>
           </span>
         </div>
         <!-- Commenting -->
@@ -66,7 +66,7 @@
       <!-- Footer -->
       <div class="card-footer text-right">
         <!-- Submit -->
-        <button class="btn btn-primary" [disabled]="advancedLoading" translate>SAVE_CHANGES</button>
+        <button class="btn btn-primary" [disabled]="loadingSettings" translate>SAVE_CHANGES</button>
       </div>
     </form>
 
@@ -93,7 +93,7 @@
       <!-- Footer -->
       <div class="card-footer text-right">
         <!-- Submit -->
-        <button class="btn btn-primary" [disabled]="advancedLoading" translate>SAVE_CHANGES</button>
+        <button class="btn btn-primary" [disabled]="loadingSettings" translate>SAVE_CHANGES</button>
       </div>
     </form>
 
@@ -122,7 +122,7 @@
       <!-- Footer -->
       <div class="card-footer text-right">
         <!-- Submit -->
-        <button class="btn btn-primary" [disabled]="advancedLoading" translate>SAVE_CHANGES</button>
+        <button class="btn btn-primary" [disabled]="loadingSettings" translate>SAVE_CHANGES</button>
       </div>
     </form>
 
@@ -151,7 +151,30 @@
       <!-- Footer -->
       <div class="card-footer text-right">
         <!-- Submit -->
-        <button class="btn btn-primary" [disabled]="advancedLoading" translate>SAVE_CHANGES</button>
+        <button class="btn btn-primary" [disabled]="loadingSettings" translate>SAVE_CHANGES</button>
+      </div>
+    </form>
+
+    <!-- Webmaster tools -->
+    <form class="card dash mb-3" *ngIf="webmasterForm" [formGroup]="webmasterForm"
+          (ngSubmit)="submit({ webmaster_tools: this.webmasterForm.value })">
+      <!-- Header -->
+      <div class="card-header" translate>WEBMASTER_TOOLS</div>
+      <!-- Body -->
+      <div class="card-body">
+        <!-- Inputs -->
+        <div class="form-group" *ngFor="let data of webmasterForm.controls | keyvalue">
+          <label [for]="data.key">{{ data.key.toUpperCase() | translate }}</label>
+          <input class="form-control" [formControlName]="data.key" type="text" [id]="data.key">
+          <span class="text-danger" *ngIf="settingsErrors.webmaster_tools && settingsErrors.webmaster_tools[data.key]">
+            {{ settingsErrors.webmaster_tools[data.key][0] }}
+          </span>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="card-footer text-right">
+        <!-- Submit -->
+        <button class="btn btn-primary" [disabled]="loadingSettings" translate>SAVE_CHANGES</button>
       </div>
     </form>
   </div>

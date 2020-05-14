@@ -371,7 +371,6 @@
   "REMOVE_FORMATTING": "Remove formatting",
   "INSERT_EMBED": "Insert Embed",
   "INSERT_EMBED_TIP": "Tip: You can also past the embed link into the editor",
-  "SAVE": "Save",
   "HEADER": "Header",
   "CODE_BLOCK": "Code block",
   "DIVIDER": "Divider",
@@ -398,6 +397,11 @@
   "SAVED": "Saved",
   "SAVING": "Saving...",
   "NO_BLOG_LOGO": "No blog logo",
+  "GOOGLE": "Google",
+  "BAIDU": "Baidu",
+  "YANDEX": "Yandex",
+  "BING": "Bing",
+  "WEBMASTER_TOOLS": "Webmaster Tools",
   "LEAVE": "Leave",
   "COLLABORATING": "Collaborating"
 }
