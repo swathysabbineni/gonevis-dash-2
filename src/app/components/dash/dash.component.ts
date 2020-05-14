@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { AppComponent } from '@app/app.component';
+import { DashUiStatus } from '@app/enums/dash-ui-status';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { BlogService } from '@app/services/blog/blog.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -22,17 +24,19 @@ import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
   templateUrl: './dash.component.html',
   styleUrls: ['./dash.component.scss'],
 })
-export class DashComponent {
+export class DashComponent implements OnInit {
 
   /**
    * Angle double left icon
    */
   readonly faAngleDoubleLeft: IconDefinition = faAngleDoubleLeft;
 
+  readonly dashUiStatus = DashUiStatus;
+
   /**
-   * Determines whether or not current page is the editor or not
+   * Status of header/sidebar (show or hide)
    */
-  isWritePage: boolean;
+  uiStatus: DashUiStatus = DashUiStatus.ALL;
 
   /**
    * Determines whether sidebar is closed or not
@@ -111,6 +115,18 @@ export class DashComponent {
     } else {
       this.openSidebar = JSON.parse(localStorage.getItem('sidebar'));
     }
+  }
+
+  ngOnInit(): void {
+    /**
+     * Watch ui status changes
+     * @see UI_STATUS
+     */
+    AppComponent.UI_STATUS.subscribe((status: DashUiStatus): void => {
+      setTimeout((): void => {
+        this.uiStatus = status;
+      });
+    });
   }
 
   /**

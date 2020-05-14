@@ -2,7 +2,7 @@
 <div class="d-flex flex-column h-100">
   <!-- Navbar -->
   <nav class="navbar navbar-expand navbar-dark sticky-top"
-       [class.d-none]="!headerStatus"
+       [class.d-none]="uiStatus === dashUiStatus.HEADER || uiStatus === dashUiStatus.NONE"
        [class.bg-dark]="blogService.currentBlog"
        [class.bg-primary]="!blogService.currentBlog">
     <!-- Container -->

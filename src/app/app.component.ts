@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { DashUiStatus } from '@app/enums/dash-ui-status';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { AuthService } from '@app/services/auth/auth.service';
@@ -39,7 +40,7 @@ export class AppComponent implements OnInit {
   /**
    * Used for hiding navbar
    */
-  static readonly HEADER_STATUS = new EventEmitter<boolean>();
+  static readonly UI_STATUS = new EventEmitter<DashUiStatus>();
 
   /**
    * Used for status of search bar
@@ -59,10 +60,12 @@ export class AppComponent implements OnInit {
   readonly faSettings: IconDefinition = faCog;
   readonly faSignOut: IconDefinition = faSignOutAlt;
 
+  readonly dashUiStatus = DashUiStatus;
+
   /**
-   * Status of header (show or hide)
+   * Status of header/sidebar (show or hide)
    */
-  headerStatus = true;
+  uiStatus: DashUiStatus = DashUiStatus.ALL;
 
   /**
    * Status of search bar
@@ -100,12 +103,12 @@ export class AppComponent implements OnInit {
      */
     this.translate.setDefaultLang('en');
     /**
-     * Watch header status changes
-     * @see HEADER_STATUS
+     * Watch ui status changes
+     * @see UI_STATUS
      */
-    AppComponent.HEADER_STATUS.subscribe((hide: boolean): void => {
+    AppComponent.UI_STATUS.subscribe((status: DashUiStatus): void => {
       setTimeout((): void => {
-        this.headerStatus = hide;
+        this.uiStatus = status;
       });
     });
     /**

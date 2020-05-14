@@ -1,7 +1,8 @@
 <!-- Main wrapper -->
 <div class="d-flex flex-column h-100">
   <div class="wrapper">
-    <div class="sidebar" [class.is-closed]="!openSidebar" [class.d-none]="isWritePage">
+    <div class="sidebar" [class.is-closed]="!openSidebar"
+         [class.d-none]="uiStatus === dashUiStatus.SIDEBAR || uiStatus === dashUiStatus.NONE">
       <ul class="overflow-auto">
         <li *ngFor="let link of links">
           <a [routerLink]="[link.path]" routerLinkActive="active">

@@ -45,6 +45,7 @@ import '@app/components/dash/write/modules/clipboard.ts';
 import '@app/components/dash/write/themes/bootstrap.ts';
 import { WriteService } from '@app/components/dash/write/write.service';
 import { EntryStatus } from '@app/enums/entry-status.enum';
+import { DashUiStatus } from '@app/enums/dash-ui-status';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File as FileMedia } from '@app/interfaces/file';
 import { Params } from '@app/interfaces/params';
@@ -697,7 +698,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * Hide header
      */
-    AppComponent.HEADER_STATUS.emit(false);
+    AppComponent.UI_STATUS.emit(DashUiStatus.NONE);
     /**
      * Add keydown listener to Ctrl+S to save
      */
@@ -795,7 +796,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * Show header back
      */
-    AppComponent.HEADER_STATUS.emit(true);
+    AppComponent.UI_STATUS.emit(DashUiStatus.ALL);
   }
 
   ngAfterViewInit(): void {
