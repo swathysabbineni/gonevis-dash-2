@@ -58,10 +58,6 @@ export class KeyManagerComponent implements AfterContentInit {
     }
   }
 
-
-  constructor() {
-  }
-
   ngAfterContentInit(): void {
     /**
      * Instantiate FocusKeyManager and enable wrapping and configures the key manager to move the selection horizontally

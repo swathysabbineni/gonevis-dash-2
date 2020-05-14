@@ -25,7 +25,4 @@ export class SettingsComponent {
    * Determines whether or not the user's role in current blog is editor
    */
   isEditor: boolean = BlogService.currentBlog.role === TeamRoles.Editor;
-
-  constructor() {
-  }
 }

@@ -38,9 +38,6 @@ export class StatisticsComponent implements OnInit {
    */
   statisticsItem: { value: MetricStatItem, label: string } = this.statisticsItems[0];
 
-  constructor() {
-  }
-
   ngOnInit(): void {
   }
 }

@@ -10,9 +10,6 @@ export class NavPillsComponent implements OnInit {
 
   @Input() navPills: NavPill[];
 
-  constructor() {
-  }
-
   ngOnInit() {
   }
 

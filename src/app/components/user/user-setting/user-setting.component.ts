@@ -22,7 +22,4 @@ export class UserSettingComponent {
     route: 'password',
     icon: faLock,
   }];
-
-  constructor() {
-  }
 }

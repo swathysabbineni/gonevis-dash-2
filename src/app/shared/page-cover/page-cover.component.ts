@@ -7,9 +7,6 @@ import { Component } from '@angular/core';
 })
 export class PageCoverComponent {
 
-  constructor() {
-  }
-
   /**
    * Background color class of the cover
    */

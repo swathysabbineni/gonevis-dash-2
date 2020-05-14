@@ -12,7 +12,4 @@ export class PermissionAccessComponent {
    * Danger icon
    */
   faExclamationTriangle: IconDefinition = faExclamationTriangle;
-
-  constructor() {
-  }
 }
