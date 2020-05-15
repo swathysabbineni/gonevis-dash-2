@@ -54,9 +54,10 @@ export class FeedComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     /**
-     * Disable search bar
+     * Disable search bar and query
      */
     AppComponent.SEARCH_STATUS.emit(false);
+    AppComponent.SEARCH_QUERY.emit('');
   }
 
   /**

@@ -159,9 +159,11 @@ export class DashComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     /**
-     * Disable search bar
+     * Disable search bar and suggestions
      */
     AppComponent.SEARCH_STATUS.emit(false);
+    AppComponent.SEARCH_SUGGESTIONS.emit([]);
+    AppComponent.SEARCH_QUERY.emit('');
   }
 
   /**
