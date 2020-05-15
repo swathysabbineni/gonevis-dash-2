@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AppComponent } from '@app/app.component';
+import { SearchSuggestions } from '@app/consts/search-suggestions';
 import { DashUiStatus } from '@app/enums/dash-ui-status';
 import { SidebarLink } from '@app/interfaces/sidebar-link';
 import { BlogService } from '@app/services/blog/blog.service';
@@ -24,7 +25,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
   templateUrl: './dash.component.html',
   styleUrls: ['./dash.component.scss'],
 })
-export class DashComponent implements OnInit {
+export class DashComponent implements OnInit, OnDestroy {
 
   /**
    * Angle double left icon
@@ -117,7 +118,34 @@ export class DashComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    /**
+     * Enable search bar
+     */
+    AppComponent.SEARCH_STATUS.emit(true);
+    /**
+     * Watch search query changes and keep suggesting
+     */
+    AppComponent.SEARCH_QUERY_UPDATE.subscribe((search: string): void => {
+      const suggestions = [];
+      if (search.length) {
+        for (const suggestion of SearchSuggestions) {
+          if ((suggestion.keywords.join() + suggestion.label).toLowerCase().includes(search.toLowerCase())) {
+            suggestions.push(suggestion.label);
+          }
+        }
+      }
+      AppComponent.SEARCH_SUGGESTIONS.emit(suggestions);
+    });
+    /**
+     * Watch search suggestion clicks
+     */
+    AppComponent.SEARCH_SUGGESTION_CLICK.subscribe((suggestion: string): void => {
+      AppComponent.SEARCH_QUERY.emit('');
+      this.router.navigate([SearchSuggestions.find(item => item.label === suggestion).path], {
+        relativeTo: this.route,
+      });
+    });
     /**
      * Watch ui status changes
      * @see UI_STATUS
@@ -127,6 +155,13 @@ export class DashComponent implements OnInit {
         this.uiStatus = status;
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    /**
+     * Disable search bar
+     */
+    AppComponent.SEARCH_STATUS.emit(false);
   }
 
   /**

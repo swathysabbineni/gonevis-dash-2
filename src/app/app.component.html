@@ -52,8 +52,14 @@
         </li>
       </ul>
       <!-- Search -->
-      <form class="form-inline ml-auto" *ngIf="searchStatus" [formGroup]="formSearch" (ngSubmit)="onSearch()">
-        <input class="form-control" type="search" placeholder="Search" formControlName="search">
+      <form class="form-inline ml-auto" *ngIf="searchStatus" [formGroup]="formSearch" (ngSubmit)="onSearch()"
+            dropdown container="#search-form" id="search-form">
+        <input class="form-control" type="search" placeholder="Search" formControlName="search" dropdownToggle required>
+        <ul class="dropdown-menu" *dropdownMenu [class.d-none]="!searchSuggestions || !searchSuggestions.length">
+          <li *ngFor="let suggestion of searchSuggestions" >
+            <a class="dropdown-item" (click)="onSearchSuggestionClick(suggestion)">{{ suggestion }}</a>
+          </li>
+        </ul>
       </form>
       <!-- Right Navs -->
       <ul class="navbar-nav" *ngIf="user" [class.ml-auto]="!searchStatus">

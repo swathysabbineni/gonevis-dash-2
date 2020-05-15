@@ -52,6 +52,21 @@ export class AppComponent implements OnInit {
    */
   static readonly SEARCH_QUERY = new EventEmitter<string>();
 
+  /**
+   * Used for query of search for every update
+   */
+  static readonly SEARCH_QUERY_UPDATE = new EventEmitter<string>();
+
+  /**
+   * Used for suggestions of search
+   */
+  static readonly SEARCH_SUGGESTIONS = new EventEmitter<string[]>();
+
+  /**
+   * Used for click event on search suggestion
+   */
+  static readonly SEARCH_SUGGESTION_CLICK = new EventEmitter<string>();
+
   readonly blogService = BlogService;
 
   readonly faFeed: IconDefinition = faRssSquare;
@@ -72,6 +87,12 @@ export class AppComponent implements OnInit {
    * @see SEARCH_STATUS
    */
   searchStatus: boolean;
+
+  /**
+   * Search suggestions to show to user
+   * @see SEARCH_SUGGESTIONS
+   */
+  searchSuggestions: string[];
 
   /**
    * Authenticated user data
@@ -130,6 +151,15 @@ export class AppComponent implements OnInit {
       });
     });
     /**
+     * Watch search suggestions changes
+     * @see SEARCH_SUGGESTIONS
+     */
+    AppComponent.SEARCH_SUGGESTIONS.subscribe((suggestions: string[]): void => {
+      setTimeout((): void => {
+        this.searchSuggestions = suggestions;
+      });
+    });
+    /**
      * Get authenticated user data (and watch for changes)
      */
     UserService.userObservable.subscribe((user: UserAuth): void => {
@@ -166,6 +196,12 @@ export class AppComponent implements OnInit {
      * Setup search form
      */
     this.formSearch = this.formBuilder.group({ search: [''] });
+    /**
+     * Emmit search query changes
+     */
+    this.formSearch.get('search').valueChanges.subscribe((data: string): void => {
+      AppComponent.SEARCH_QUERY_UPDATE.emit(data);
+    });
   }
 
   /**
@@ -187,5 +223,12 @@ export class AppComponent implements OnInit {
    */
   onSearch(): void {
     AppComponent.SEARCH_QUERY.emit(this.formSearch.value.search);
+  }
+
+  /**
+   * On click on search suggestion
+   */
+  onSearchSuggestionClick(suggestion: string): void {
+    AppComponent.SEARCH_SUGGESTION_CLICK.emit(suggestion);
   }
 }
