@@ -105,17 +105,17 @@
   }
 
   .form-inline {
-    width: 250px;
+    $font-size: $small-font-size * 1.1;
+    width: 350px;
 
     > .form-control {
       margin: 0 map_get($spacers, 3) 0 auto;
-      border-radius: 1000px;
       padding: $input-padding-y map_get($spacers, 3);
       border: none;
       font-weight: $font-weight-bold;
-      font-size: $small-font-size * 1.1;
+      font-size: $font-size;
       background: rgba(0, 0, 0, 0.25);
-      width: 150px;
+      width: 250px;
       transition: $transition-base;
       color: $white;
 
@@ -135,7 +135,7 @@
       &:valid {
         background: $white;
         box-shadow: $box-shadow-sm;
-        width: 250px;
+        width: 350px;
         color: $dark;
 
         &::-webkit-input-placeholder {
@@ -149,6 +149,15 @@
         &::-ms-input-placeholder {
           color: $dark;
         }
+      }
+    }
+
+    ::ng-deep .dropdown-item {
+      font-size: $font-size;
+      padding: $input-padding-y map_get($spacers, 3);
+
+      &:active {
+        color: $white;
       }
     }
   }
