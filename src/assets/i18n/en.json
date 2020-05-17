@@ -16,6 +16,7 @@
   "SETTING": "Setting",
   "FORGOT_PASSWORD": "Forgot password?",
   "FORGOT_PASSWORD_TITLE": "Forgot password",
+  "FORGOT_PASSWORD_SUCCESS": "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.",
   "GET_RESET_PASSWORD_LINK": "Get Reset Password Link",
   "ERROR_PASSWORD_MISMATCH": "Passwords don't match.",
   "ERROR_PASSWORD_SAME": "Please, choose a new password.",

@@ -4,6 +4,7 @@ import { ApiError } from '@app/interfaces/api-error';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { UserService } from '@app/services/user/user.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons/faCheckCircle';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -13,7 +14,8 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 })
 export class ForgotPasswordComponent implements OnInit {
 
-  readonly envelope: IconDefinition = faEnvelope;
+  readonly faEmail: IconDefinition = faEnvelope;
+  readonly faSuccess: IconDefinition = faCheckCircle;
 
   // Forgot password form
   form: FormGroup;
@@ -23,6 +25,9 @@ export class ForgotPasswordComponent implements OnInit {
 
   // API loading indicator
   loading: boolean;
+
+  // API success status
+  success: boolean;
 
   constructor(private formBuilder: FormBuilder,
               private userService: UserService) {
@@ -47,6 +52,7 @@ export class ForgotPasswordComponent implements OnInit {
     // API call
     this.userService.forgotPassword(this.form.controls.email.value).subscribe((): void => {
       this.loading = false;
+      this.success = true;
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
       this.loading = false;
