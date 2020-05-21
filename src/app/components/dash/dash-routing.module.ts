@@ -16,6 +16,9 @@ const routes: Routes = [{
     path: 'write',
     loadChildren: () => import('./write/write.module').then(m => m.WriteModule),
   }, {
+    path: 'builder',
+    loadChildren: () => import('./builder/builder.module').then(m => m.BuilderModule),
+  }, {
     path: 'posts',
     loadChildren: () => import('./entry/entry.module').then(m => m.EntryModule),
     data: { title: 'POSTS' },
