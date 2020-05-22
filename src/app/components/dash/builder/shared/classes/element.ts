@@ -1,23 +1,47 @@
+/**
+ * HTML element class
+ */
 export class Element {
 
-  constructor(init?: Partial<Element>) {
+  constructor(init: Partial<Element>) {
     Object.assign(this, init);
   }
 
+  /**
+   * HTML tag
+   */
   tag: string;
+
+  /**
+   * HTML inner text
+   */
   text: string;
+
+  /**
+   * HTML attributes
+   */
   attributes: { [name: string]: string | string[] | number };
+
+  /**
+   * HTML inner HTML elements
+   */
   children: Element[];
 
+  /**
+   * @returns Rendered output of all elements
+   * @param elements List of elements to render
+   */
   static render(elements: Element[]): string {
     let output = '';
     for (const element of elements) {
       output += element.render();
     }
-    console.log(JSON.stringify(elements));
     return output;
   }
 
+  /**
+   * Render the element as HTML
+   */
   render(): string {
     /**
      * Render attributes
