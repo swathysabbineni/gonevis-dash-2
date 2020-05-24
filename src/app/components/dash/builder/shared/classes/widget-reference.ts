@@ -10,13 +10,20 @@ import { WidgetID } from '@builder/shared/enums/widget-id';
  * call {@see resetWidget} to update the referenced class.
  *
  * For a widget reference to be created, you only need
- * the {@see id}, {@see config} and {@see children}.
+ * the {@see id}, {@see values} and {@see children}.
  */
 export class WidgetReference {
 
   constructor(init?: Partial<WidgetReference>) {
     Object.assign(this, init);
     this.resetWidget();
+    if (this.widget.configs) {
+      for (const config of this.widget.configs) {
+        if (!this.values[config.id]) {
+          this.values[config.id] = config.default;
+        }
+      }
+    }
   }
 
   /**
@@ -32,29 +39,31 @@ export class WidgetReference {
   /**
    * Widget reference config values to override
    */
-  config?: Record<string, any> = {};
+  values: Record<string, any> = {};
 
   /**
    * List of widget reference children
    */
-  children?: WidgetReference[];
+  children: WidgetReference[] = [];
 
   /**
-   * Generate the widget with children as widgets
-   * and values to override the configs then save
-   * the generated class to {@see widget}
+   * Generate the {@see widget} with children as
+   * widgets and values to override the configs.
    */
   resetWidget(): void {
-    const children: Widget[] = [];
-    if (this.children) {
-      for (const child of this.children) {
-        children.push(child.widget);
-      }
-    }
     this.widget = new widgets[this.id]({
-      values: this.config,
-      children,
+      values: this.values,
+      children: this.children.map(((value: WidgetReference): Widget => value.widget)),
     });
+  }
+
+  /**
+   * Add a child
+   * @param child Child widget to add
+   */
+  addChild(child: WidgetReference): void {
+    this.children.push(child);
+    this.resetWidget();
   }
 
   /**

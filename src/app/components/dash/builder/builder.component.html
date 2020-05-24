@@ -33,12 +33,12 @@
             <input class="form-control form-control-sm"
                    [type]="config.type" [id]="config.id"
                    *ngIf="config.type === widgetConfigType.TEXT || config.type === widgetConfigType.NUMBER"
-                   [(ngModel)]="selectedWidgetReference.config[config.id]"
+                   [(ngModel)]="selectedWidgetReference.values[config.id]"
                    (ngModelChange)="updatePreview()">
             <select class="form-control form-control-sm"
                     [id]="config.id"
                     *ngIf="config.type === widgetConfigType.LIST"
-                    [(ngModel)]="selectedWidgetReference.config[config.id]"
+                    [(ngModel)]="selectedWidgetReference.values[config.id]"
                     (ngModelChange)="updatePreview()">
               <option *ngFor="let option of config.options" [ngValue]="option">{{ option }}</option>
             </select>

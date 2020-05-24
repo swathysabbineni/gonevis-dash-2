@@ -35,40 +35,7 @@ export class BuilderComponent implements OnInit, OnDestroy {
    */
   widgetReferences: WidgetReference[] = [
     new WidgetReference({
-      id: WidgetID.CONTAINER,
-      children: [
-        new WidgetReference({
-          id: WidgetID.CARD,
-          children: [
-            new WidgetReference({
-              id: WidgetID.BUTTON,
-              config: {
-                label: 'Button',
-                type: 'primary',
-              },
-            }),
-            new WidgetReference({ id: WidgetID.SPACE }),
-            new WidgetReference({
-              id: WidgetID.HEADING,
-              config: {
-                text: 'Hello World',
-              },
-            }),
-            new WidgetReference({
-              id: WidgetID.CARD,
-              children: [
-                new WidgetReference({
-                  id: WidgetID.BUTTON,
-                  config: {
-                    label: 'Button',
-                    type: 'primary',
-                  },
-                }),
-              ],
-            }),
-          ],
-        }),
-      ],
+      id: WidgetID.BUTTON,
     }),
   ];
 
@@ -95,10 +62,6 @@ export class BuilderComponent implements OnInit, OnDestroy {
      * Update the preview initially
      */
     this.updatePreview();
-    // debug
-    this.selectWidgetReference(this.widgetReferences[0]);
-    this.selectWidgetReference(this.selectedWidgetReference.children[0]);
-    this.selectWidgetReference(this.selectedWidgetReference.children[0]);
   }
 
   ngOnDestroy(): void {
@@ -115,14 +78,20 @@ export class BuilderComponent implements OnInit, OnDestroy {
     /**
      * Collect the widgets from the widget references
      */
-    const output: Widget[] = [];
-    for (const reference of this.widgetReferences) {
-      output.push(reference.widget);
-    }
+    const getWidgets = (references: WidgetReference[]): Widget[] => {
+      const output: Widget[] = [];
+      for (const reference of references) {
+        output.push(new this.widgets[reference.id]({
+          values: reference.values,
+          children: getWidgets(reference.children || []),
+        }));
+      }
+      return output;
+    };
     /**
      * Render and sanitize them to {@see preview}
      */
-    this.preview = this.sanitizer.bypassSecurityTrustHtml(Widget.render(output));
+    this.preview = this.sanitizer.bypassSecurityTrustHtml(Widget.render(getWidgets(this.widgetReferences)));
   }
 
   /**
@@ -151,10 +120,11 @@ export class BuilderComponent implements OnInit, OnDestroy {
     const widgetReference = new WidgetReference({ id });
     if (!this.selectedWidgetReference) {
       this.widgetReferences.push(widgetReference);
-    } else if (this.selectedWidgetReference.children) {
-      this.selectedWidgetReference.children.push(widgetReference);
+    } else if (this.selectedWidgetReference.widget.canHaveChildren) {
+      this.selectedWidgetReference.addChild(widgetReference);
     }
     this.updatePreview();
+    this.sidebarView = 'structure';
   }
 
   /**

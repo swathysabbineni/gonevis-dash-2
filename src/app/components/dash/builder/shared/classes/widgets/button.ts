@@ -18,7 +18,7 @@ export class Button extends Widget {
           id: 'label',
           label: 'Label',
           type: WidgetConfigType.TEXT,
-          default: init.name,
+          default: 'Button',
         },
         {
           id: 'type',

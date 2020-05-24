@@ -14,11 +14,13 @@ export class Heading extends Widget {
           label: 'Type',
           type: WidgetConfigType.LIST,
           options: ['1', '2', '3', '4', '5', '6'],
+          default: '1',
         },
         {
           id: 'text',
           label: 'Text',
           type: WidgetConfigType.TEXT,
+          default: 'Heading Text',
         },
       ],
     });
