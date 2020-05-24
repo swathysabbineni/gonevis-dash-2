@@ -1,3 +1,4 @@
+import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AppComponent } from '@app/app.component';
@@ -11,7 +12,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
-import { faCube } from '@fortawesome/free-solid-svg-icons/faCube';
+import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons/faGripLinesVertical';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
@@ -23,7 +24,6 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 })
 export class BuilderComponent implements OnInit, OnDestroy {
 
-  readonly faWidget: IconDefinition = faCube;
   readonly faBack: IconDefinition = faArrowLeft;
   readonly faAdd: IconDefinition = faPlus;
   readonly faPath: IconDefinition = faChevronRight;
@@ -40,6 +40,12 @@ export class BuilderComponent implements OnInit, OnDestroy {
    * List of selected widgets for the page
    */
   widgetReferences: WidgetReference[] = [
+    new WidgetReference({
+      id: WidgetID.BUTTON,
+    }),
+    new WidgetReference({
+      id: WidgetID.HEADING,
+    }),
     new WidgetReference({
       id: WidgetID.BUTTON,
     }),
@@ -148,6 +154,11 @@ export class BuilderComponent implements OnInit, OnDestroy {
     } else {
       this.widgetReferences.splice(this.widgetReferences.indexOf(widget), 1);
     }
+    this.updatePreview();
+  }
+
+  drop(event: CdkDragDrop<WidgetReference>): void {
+    moveItemInArray(this.widgetReferences, event.previousIndex, event.currentIndex);
     this.updatePreview();
   }
 }

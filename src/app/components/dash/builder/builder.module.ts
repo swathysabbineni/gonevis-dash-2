@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +18,7 @@ import { BuilderComponent } from './builder.component';
     FontAwesomeModule,
     FormsModule,
     BsDropdownModule,
+    DragDropModule,
   ],
 })
 export class BuilderModule {

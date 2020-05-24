@@ -47,32 +47,34 @@
       </div>
 
       <!-- Structure widgets -->
-      <div *ngFor="let widget of selectedWidgetReference ? selectedWidgetReference.children : widgetReferences"
-           class="card m-2 mt-2 shadow-sm small text-secondary">
-        <div class="card-body p-3 d-flex">
-          <fa-icon [fixedWidth]="true" [icon]="faWidget" class="pointer" size="lg"
-                   (click)="selectWidgetReference(widget)"></fa-icon>
-          <div class="font-weight-bold ml-2 text-dark pointer" (click)="selectWidgetReference(widget)">
-            {{ widget.widget.name }}
-          </div>
-          <div class="ml-auto" dropdown placement="bottom left">
-            <a dropdownToggle>
-              <fa-icon [fixedWidth]="true" [icon]="faDropdown"></fa-icon>
-            </a>
-            <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
-              <button class="dropdown-item" (click)="selectWidgetReference(widget)">
-                <fa-icon [fixedWidth]="true" [icon]="faModify"></fa-icon>
-                <span>Modify</span>
-              </button>
-              <button class="dropdown-item" (click)="sidebarView = 'widgets'; selectWidgetReference(widget)"
-                      *ngIf="widget.widget.canHaveChildren">
-                <fa-icon [fixedWidth]="true" [icon]="faAdd"></fa-icon>
-                <span>Insert</span>
-              </button>
-              <button class="dropdown-item" (click)="deleteWidgetReference(widget)">
-                <fa-icon [fixedWidth]="true" [icon]="faTrash"></fa-icon>
-                <span>Delete</span>
-              </button>
+      <div class="structure" cdkDropList (cdkDropListDropped)="drop($event)">
+        <div *ngFor="let widget of selectedWidgetReference ? selectedWidgetReference.children : widgetReferences"
+             cdkDrag cdkDragLockAxis="y" class="card m-2 mt-2 shadow-sm small text-secondary">
+          <div class="card-body p-3 d-flex move">
+            <fa-icon [fixedWidth]="true" [icon]="widget.widget.icon" class="pointer" size="lg"
+                     (click)="selectWidgetReference(widget)"></fa-icon>
+            <div class="font-weight-bold ml-2 text-dark pointer" (click)="selectWidgetReference(widget)">
+              {{ widget.widget.name }}
+            </div>
+            <div class="ml-auto" dropdown placement="bottom left">
+              <a dropdownToggle>
+                <fa-icon [fixedWidth]="true" [icon]="faDropdown"></fa-icon>
+              </a>
+              <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+                <button class="dropdown-item" (click)="selectWidgetReference(widget)">
+                  <fa-icon [fixedWidth]="true" [icon]="faModify"></fa-icon>
+                  <span>Modify</span>
+                </button>
+                <button class="dropdown-item" (click)="sidebarView = 'widgets'; selectWidgetReference(widget)"
+                        *ngIf="widget.widget.canHaveChildren">
+                  <fa-icon [fixedWidth]="true" [icon]="faAdd"></fa-icon>
+                  <span>Insert</span>
+                </button>
+                <button class="dropdown-item" (click)="deleteWidgetReference(widget)">
+                  <fa-icon [fixedWidth]="true" [icon]="faTrash"></fa-icon>
+                  <span>Delete</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
