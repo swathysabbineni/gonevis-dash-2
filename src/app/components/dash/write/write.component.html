@@ -16,7 +16,7 @@
           <div class="mb-4">
             <h5 translate>STATUS</h5>
             <p class="mat-hint" translate>VISIBILITY</p>
-            <select class="custom-select custom-select-lg" formControlName="status" id="status">
+            <select class="custom-select" formControlName="status" id="status">
               <!-- Draft -->
               <option [ngValue]="entryStatus.Draft" [title]="'SET_DRAFT' | translate" translate>DRAFT</option>
               <!-- Published -->
@@ -29,18 +29,11 @@
           <div class="mb-4">
             <h5 translate>START_PUBLICATION</h5>
             <p class="mat-hint" translate>START_PUBLICATION_DESCRIPTION</p>
-            <mat-form-field class="w-100" appearance="outline" (click)="picker.open()">
-              <!-- Label -->
-              <mat-label translate>START_PUBLICATION</mat-label>
-              <!-- Input -->
-              <input matInput
-                     type="text"
-                     name="start_publication"
-                     formControlName="start_publication"
-                     [matDatepicker]="picker" readonly>
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+            <input class="form-control"
+                   [placeholder]="'START_PUBLICATION' | translate"
+                   type="datetime-local"
+                   name="start_publication"
+                   formControlName="start_publication">
           </div>
           <!-- Revert changes -->
           <div class="form-group">
@@ -67,23 +60,20 @@
             </mat-chip>
           </mat-chip-list>
           <div class="form-group">
-            <mat-form-field class="w-100" appearance="outline">
-              <!-- Label -->
-              <mat-label translate>SEARCH_TAGS</mat-label>
-              <!-- Input -->
-              <input matInput
-                     type="text"
-                     [formControl]="tagQueryControl"
-                     [matAutocomplete]="auto">
-              <!-- Auto complete -->
-              <mat-autocomplete #auto="matAutocomplete"
-                                autoActiveFirstOption
-                                (optionSelected)="addTag($event.option.value);">
-                <mat-option *ngFor="let tag of tags" [value]="tag.slug">
-                  {{tag.name}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
+            <!-- Input -->
+            <input class="form-control"
+                   type="text"
+                   [placeholder]="'SEARCH_TAGS' | translate"
+                   [formControl]="tagQueryControl"
+                   [matAutocomplete]="auto">
+            <!-- Auto complete -->
+            <mat-autocomplete #auto="matAutocomplete"
+                              autoActiveFirstOption
+                              (optionSelected)="addTag($event.option.value);">
+              <mat-option *ngFor="let tag of tags" [value]="tag.slug">
+                {{tag.name}}
+              </mat-option>
+            </mat-autocomplete>
           </div>
         </div>
         <mat-divider></mat-divider>
@@ -122,44 +112,34 @@
           <div class="mb-4">
             <h5 translate>EXCERPT</h5>
             <p class="mat-hint" translate>EXCERPT_DESCRIPTION</p>
-            <mat-form-field class="w-100" appearance="outline">
-              <!-- Label -->
-              <mat-label translate>EXCERPT</mat-label>
-              <!-- Input -->
-              <textarea matInput
-                        type="text"
-                        name="excerpt"
-                        formControlName="excerpt"
-                        rows="5"></textarea>
-            </mat-form-field>
+            <!-- Input -->
+            <textarea class="form-control"
+                      [placeholder]="'EXCERPT' | translate"
+                      type="text"
+                      name="excerpt"
+                      formControlName="excerpt"
+                      rows="5"></textarea>
           </div>
           <!-- Slug -->
           <div class="mb-4">
             <h5 translate>SLUG</h5>
             <p class="mat-hint" translate>SLUG_DESCRIPTION</p>
-            <mat-form-field class="w-100" appearance="outline">
-              <!-- Label -->
-              <mat-label translate>SLUG_PLACEHOLDER</mat-label>
-              <!-- Input -->
-              <input matInput type="text" name="slug" formControlName="slug">
-            </mat-form-field>
+            <input class="form-control"
+                   [placeholder]="'SLUG_PLACEHOLDER' | translate"
+                   type="text" name="slug" formControlName="slug">
           </div>
           <!-- Meta description -->
           <div class="mb-4">
             <h5 translate>META_DESCRIPTION</h5>
             <p class="mat-hint" translate>META_DESCRIPTION_INFO</p>
-            <mat-form-field class="w-100" appearance="outline">
-              <!-- Label -->
-              <mat-label translate>META_DESCRIPTION_PLACEHOLDER</mat-label>
-              <!-- Input -->
-              <input matInput #metaDescriptionInput
-                     type="text"
-                     maxlength="200"
-                     name="meta_description"
-                     formControlName="meta_description">
-              <!-- Letter count -->
-              <mat-hint align="end">{{ metaDescriptionInput.value?.length || 0 }}/200</mat-hint>
-            </mat-form-field>
+            <input class="form-control" #metaDescriptionInput
+                   [placeholder]="'META_DESCRIPTION_PLACEHOLDER' | translate"
+                   type="text"
+                   maxlength="200"
+                   name="meta_description"
+                   formControlName="meta_description">
+            <!-- Letter count -->
+            <p class="mat-hint text-right">{{ metaDescriptionInput.value?.length || 0 }}/200</p>
           </div>
           <!-- Enable commenting -->
           <div class="form-group custom-control custom-checkbox">
@@ -192,7 +172,7 @@
           <mat-divider></mat-divider>
           <h5 translate>TRASH</h5>
           <!-- Button -->
-          <button class="next-btn next-danger" type="button"
+          <button class="btn btn-danger" type="button"
                   [disabled]="loading"
                   (click)="moveToTrash()" translate>
             MOVE_TO_TRASH
@@ -279,14 +259,14 @@
               </ul>
             </div>
           </div>
-          <mat-divider vertical class="mx-3 align-self-center"></mat-divider>
+          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
             <button class="ql-bold fancy" [tooltip]="boldTooltip" placement="bottom"></button>
             <button class="ql-italic fancy" [tooltip]="italicTooltip" placement="bottom"></button>
             <button class="ql-underline fancy" [tooltip]="underlineTooltip" placement="bottom"></button>
             <button class="ql-strike fancy" [tooltip]="strikeTooltip" placement="bottom"></button>
           </div>
-          <mat-divider vertical class="mx-3 align-self-center"></mat-divider>
+          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
             <button class="fancy"
                     [tooltip]="linkTooltip"
@@ -299,7 +279,7 @@
             <button class="ql-code-block fancy" [tooltip]="'CODE_BLOCK' | translate" placement="bottom"></button>
             <button class="ql-divider fancy" [tooltip]="'DIVIDER' | translate" placement="bottom"></button>
           </div>
-          <mat-divider vertical class="mx-3 align-self-center"></mat-divider>
+          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
             <button class="ql-list fancy" [tooltip]="listNumberedTooltip" placement="bottom"
                     value="ordered"></button>
@@ -309,8 +289,8 @@
             <div class="dropdown custom-header alignment" dropdown>
               <!-- Current blog -->
               <button class="fancy" dropdownToggle [tooltip]="'ALIGN_AND_INDENT' | translate" placement="bottom">
-                <fa-icon [icon]="faAlignLeft" *ngIf="selectionFormats.align === '' ||
-          !selectionFormats.align"></fa-icon>
+                <fa-icon [icon]="faAlignLeft"
+                         *ngIf="selectionFormats.align === '' || !selectionFormats.align"></fa-icon>
                 <fa-icon [icon]="faAlignRight" *ngIf="selectionFormats.align === 'right'"></fa-icon>
                 <fa-icon [icon]="faAlignCenter" *ngIf="selectionFormats.align === 'center'"></fa-icon>
                 <fa-icon [icon]="faAlignJustify" *ngIf="selectionFormats.align === 'justify'"></fa-icon>
@@ -319,10 +299,10 @@
               <!-- Dropdown menu -->
               <ul class="dropdown-menu with-icon" *dropdownMenu>
                 <li>
-                  <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === '' ||
-          !selectionFormats.align"
+                  <button class="dropdown-item fancy"
+                          [class.activated]="selectionFormats.align === '' || !selectionFormats.align"
                           (click)="format('align', '')">
-                    <fa-icon [icon]="faAlignLeft"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faAlignLeft"></fa-icon>
                     <span class="label" translate>LEFT</span>
                     <span class="shortcut">Ctrl+Shift+L</span>
                   </button>
@@ -330,7 +310,7 @@
                 <li>
                   <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'center'"
                           (click)="format('align', 'center')">
-                    <fa-icon [icon]="faAlignCenter"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faAlignCenter"></fa-icon>
                     <span class="label" translate>CENTER</span>
                     <span class="shortcut">Ctrl+Shift+E</span>
                   </button>
@@ -338,7 +318,7 @@
                 <li>
                   <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'right'"
                           (click)="format('align', 'right')">
-                    <fa-icon [icon]="faAlignRight"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faAlignRight"></fa-icon>
                     <span class="label" translate>RIGHT</span>
                     <span class="shortcut">Ctrl+Shift+R</span>
                   </button>
@@ -346,7 +326,7 @@
                 <li>
                   <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'justify'"
                           (click)="format('align', 'justify')">
-                    <fa-icon [icon]="faAlignJustify"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faAlignJustify"></fa-icon>
                     <span class="label" translate>JUSTIFIED</span>
                     <span class="shortcut">Ctrl+Shift+J</span>
                   </button>
@@ -354,7 +334,7 @@
                 <li class="editor-dropdown-divider"></li>
                 <li>
                   <button class="dropdown-item fancy" (click)="format('indent', '+1')">
-                    <fa-icon [icon]="faIndent"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faIndent"></fa-icon>
                     <span class="label" translate>INCREASE_INDENT</span>
                     <span class="shortcut">Ctrl+]</span>
                   </button>
@@ -362,20 +342,22 @@
                 <li>
                   <button class="dropdown-item fancy"
                           (click)="format('indent', '-1')">
-                    <fa-icon [icon]="faOutdent"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faOutdent"></fa-icon>
                     <span class="label" translate>DECREASE_INDENT</span>
                     <span class="shortcut">Ctrl+[</span>
                   </button>
                 </li>
               </ul>
             </div>
+            <!-- Direction -->
+            <button class="ql-direction fancy" value="rtl" [tooltip]="'DIRECTION' | translate" placement="bottom"></button>
           </div>
-          <mat-divider vertical class="mx-3 align-self-center"></mat-divider>
+          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
             <button class="ql-image fancy" [tooltip]="'INSERT_IMAGE' | translate" placement="bottom"></button>
             <button class="ql-video fancy" [tooltip]="embedTooltip" placement="bottom" #qlVideo></button>
           </div>
-          <mat-divider vertical class="mx-3 align-self-center"></mat-divider>
+          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
             <button class="ql-clean fancy" [tooltip]="removeFormattingTooltip" placement="bottom"></button>
           </div>
@@ -387,21 +369,21 @@
             {{ (loading ? 'SAVING' : 'SAVED') | translate }}
           </span>
           <!-- Publish/create -->
-          <button class="next-btn next-primary ml-2"
+          <button class="btn btn-primary ml-2"
+                  [ngClass]="{'btn-primary': isEditing, 'btn-success': !isEditing}"
                   [disabled]="loading"
                   [tooltip]="publishTooltip"
-                  (click)="save()"
-                  translate>
-            {{ isEditing ? 'PUBLISH' : 'CREATE' }}
+                  (click)="save()">
+            {{ (isEditing ? 'PUBLISH' : 'CREATE') | translate }}
           </button>
           <!-- Close -->
-          <button class="next-btn ml-2" (click)="goBack()" translate>CLOSE</button>
+          <button class="btn btn-light ml-2" (click)="goBack()" translate>CLOSE</button>
           <!-- Divider -->
-          <mat-divider vertical class="mx-3"></mat-divider>
+          <mat-divider vertical class="mx-2"></mat-divider>
           <!-- View on blog -->
           <button class="next-btn next-icon mr-2"
                   [tooltip]="'VIEW_ON_BLOG' | translate"
-                  (click)="viewOnBlog()">
+                  (click)="viewOnBlog()" *ngIf="isEditing">
             <fa-icon [icon]="faEye" [fixedWidth]="true"></fa-icon>
           </button>
           <!-- Toggle side nav -->
@@ -421,13 +403,14 @@
               <!-- Button to open compose options -->
               <button (click)="showComposeOptions = !showComposeOptions"
                       [tooltip]="composeTooltip"
-                      container=".editor"
+                      container=".editor-page"
                       placement="bottom">
                 <fa-icon [icon]="plus"></fa-icon>
               </button>
               <!-- App key manager -->
               <app-key-manager (blackListKeydown)="onBlackListKeydown($event)"
-                               *ngIf="showComposeOptions" @scaleIn cdkTrapFocus #keyManagerComponent>
+                               [class.invisible]="!showComposeOptions"
+                               [@scaleIn]="showComposeOptions ? 'true' : 'false'" cdkTrapFocus #keyManagerComponent>
                 <!-- Remove format -->
                 <button appFocusableOption (click)="format('header', false)">
                   <fa-icon [icon]="faFont"></fa-icon>
@@ -589,36 +572,44 @@
                   <div class="link-body d-flex align-items-end">
                     <div class="flex-column w-100">
                       <!-- Link text -->
-                      <div [hidden]="data.multiLine || data.isEmbed">
-                        <mat-form-field class="w-100" appearance="outline">
-                          <!-- Label -->
-                          <mat-label translate>DISPLAY_TEXT</mat-label>
-                          <!-- Input -->
-                          <input #linkTextInput matInput [value]="data.text" type="text">
-                        </mat-form-field>
+                      <div class="input-group mb-3" [hidden]="data.multiLine || data.isEmbed">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <!-- Icon -->
+                            <fa-icon [icon]="faFont" [fixedWidth]="true"></fa-icon>
+                          </span>
+                        </div>
+                        <!-- Input -->
+                        <input #linkTextInput
+                               [placeholder]="'DISPLAY_TEXT' | translate"
+                               [value]="data.text"
+                               class="form-control"
+                               type="text">
                       </div>
+                      <!-- Embed tip -->
                       <small class="d-block mb-3" *ngIf="data.isEmbed">
                         {{ 'INSERT_EMBED_TIP' | translate }}
                         <kbd>CTRL</kbd><span class="mx-1">+</span><kbd>V</kbd>
                       </small>
                       <!-- Link URL -->
-                      <div>
-                        <mat-form-field class="w-100 no-spacing" appearance="outline">
-                          <!-- Label -->
-                          <mat-label translate>LINK</mat-label>
-                          <!-- Input -->
-                          <input #linkUrlInput matInput [value]="data.link" type="text">
-                        </mat-form-field>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <!-- Input -->
+                            <fa-icon [icon]="faLink" [fixedWidth]="true"></fa-icon>
+                          </span>
+                        </div>
+                        <!-- Input -->
+                        <input #linkUrlInput
+                               [placeholder]="'LINK' | translate"
+                               class="form-control"
+                               [value]="data.link"
+                               type="text">
                       </div>
                     </div>
-                    <button class="next-btn next-primary ml-3" type="submit">Apply</button>
+                    <!-- Apply button -->
+                    <button class="btn btn-primary ml-3" type="submit">Apply</button>
                   </div>
-<!--                  <div class="link-footer text-right">-->
-<!--&lt;!&ndash;                    <button class="next-btn fancy mr-2" type="button"&ndash;&gt;-->
-<!--&lt;!&ndash;                            (click)="cancelLink()">Cancel&ndash;&gt;-->
-<!--&lt;!&ndash;                    </button>&ndash;&gt;-->
-<!--                    <button class="next-btn next-primary fancy" type="submit">Apply</button>-->
-<!--                  </div>-->
                 </form>
               </ng-template>
             </div>

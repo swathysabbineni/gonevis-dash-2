@@ -64,7 +64,7 @@ export class KeyManagerComponent implements AfterContentInit {
      */
     this.focusKeyManager = new FocusKeyManager(this.items)
       .withWrap()
-      .withHorizontalOrientation('ltr');
+      .withHorizontalOrientation('rtl');
     /**
      * Strip arrow keys if condition was given
      */
@@ -80,5 +80,15 @@ export class KeyManagerComponent implements AfterContentInit {
    */
   setActiveItem(index: number): void {
     this.focusKeyManager.setActiveItem(index);
+  }
+
+  /**
+   * Configures the key manager to move the selection horizontally.
+   * Passing in `null` will disable horizontal movement.
+   *
+   * @param direction Direction in which the selection can be moved.
+   */
+  withHorizontalOrientation(direction: 'ltr' | 'rtl' | null): void {
+    this.focusKeyManager.withHorizontalOrientation(direction);
   }
 }

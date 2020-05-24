@@ -5,21 +5,12 @@
 
 @include mat-core($config);
 @include mat-core-theme($gonevis-theme);
-@include mat-form-field-theme($gonevis-theme);
-@include mat-button-theme($gonevis-theme);
 @include mat-sidenav-theme($gonevis-theme);
 @include mat-divider-theme($gonevis-theme);
 @include mat-chips-theme($gonevis-theme);
 @include mat-autocomplete-theme($gonevis-theme);
 @include mat-option-theme($gonevis-theme);
 @include mat-toolbar-theme($gonevis-theme);
-@include mat-input-theme($gonevis-theme);
-@include mat-datepicker-theme($gonevis-theme);
-
-.mat-form-field.no-spacing .mat-form-field-wrapper {
-  margin: 0;
-  padding: 0;
-}
 
 .editor-page {
   .tooltip {
@@ -612,31 +603,9 @@
   text-decoration: none;
 }
 
-.ql-snow .ql-tooltip.ql-flip {
-  transform: translateY(-10px);
-}
-
 .ql-snow .ql-formats {
   display: inline-block;
   vertical-align: middle;
-}
-
-.ql-snow .ql-editor blockquote {
-  border-left: 4px solid #ccc;
-  margin-bottom: 5px;
-  margin-top: 5px;
-  padding-left: 16px;
-}
-
-.ql-snow .ql-editor code,
-.ql-snow .ql-editor pre {
-  background-color: #f0f0f0;
-  border-radius: 3px;
-}
-
-.ql-snow .ql-editor code {
-  font-size: 85%;
-  padding: 2px 4px;
 }
 
 .ql-snow .ql-editor pre.ql-syntax {
@@ -657,82 +626,6 @@
   max-width: 100%;
 }
 
-.ql-snow .ql-tooltip {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  box-shadow: 0px 0px 5px #ddd;
-  color: #444;
-  padding: 5px 12px;
-  white-space: nowrap;
-}
-
-.ql-snow .ql-tooltip::before {
-  content: "Visit URL:";
-  line-height: 26px;
-  margin-right: 8px;
-}
-
-.ql-snow .ql-tooltip input[type=text] {
-  display: none;
-  border: 1px solid #ccc;
-  font-size: 13px;
-  height: 26px;
-  margin: 0px;
-  padding: 3px 5px;
-  width: 170px;
-}
-
-.ql-snow .ql-tooltip a.ql-preview {
-  display: inline-block;
-  max-width: 200px;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  vertical-align: top;
-}
-
-.ql-snow .ql-tooltip a.ql-action::after {
-  border-right: 1px solid #ccc;
-  content: 'Edit';
-  margin-left: 16px;
-  padding-right: 8px;
-}
-
-.ql-snow .ql-tooltip a.ql-remove::before {
-  content: 'Remove';
-  margin-left: 8px;
-}
-
-.ql-snow .ql-tooltip a {
-  line-height: 26px;
-}
-
-.ql-snow .ql-tooltip.ql-editing a.ql-preview,
-.ql-snow .ql-tooltip.ql-editing a.ql-remove {
-  display: none;
-}
-
-.ql-snow .ql-tooltip.ql-editing input[type=text] {
-  display: inline-block;
-}
-
-.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
-  border-right: 0px;
-  content: 'Save';
-  padding-right: 0px;
-}
-
-.ql-snow .ql-tooltip[data-mode=link]::before {
-  content: "Enter link:";
-}
-
-.ql-snow .ql-tooltip[data-mode=formula]::before {
-  content: "Enter formula:";
-}
-
-.ql-snow .ql-tooltip[data-mode=video]::before {
-  content: "Enter video:";
-}
-
 soundcloud,
 .embed-responsive,
 [data-embed-url] {
@@ -745,13 +638,34 @@ iframe,
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+
+.ql-toolbar {
+  .ql-direction {
+    &:not(.ql-active) {
+      svg:first-child {
+        display: none;
+      }
+      svg:last-child {
+        display: inline;
+      }
+    }
+    &.ql-active {
+      svg:first-child {
+        display: inline;
+      }
+      svg:last-child {
+        display: none;
+      }
+    }
+  }
+}
+
 .ql-container.ql-snow {
 
   .ql-editor {
     color: #424242;
     padding: 0 105px 65px;
     font-family: 'Roboto', serif;
-    font-weight: 500;
 
     &::before {
       left: unset;
@@ -792,6 +706,10 @@ iframe,
       line-height: 1.2;
       color: #212121;
       font-weight: normal;
+
+      &[class*=ql-indent-] {
+        padding: 0;
+      }
     }
 
     p {
@@ -839,13 +757,26 @@ iframe,
     }
 
     blockquote {
-      border-left: 3px solid #212121;
-      margin-left: -23px;
       margin-bottom: 16px;
       line-height: 1.5;
 
-      &:not([class*=ql-indent-]) {
-        padding-left: 20px;
+      &:not(.ql-direction-rtl) {
+        border-left: 3px solid #212121;
+        margin-left: -23px;
+
+        &:not([class*=ql-indent-]) {
+          padding-left: 20px;
+        }
+      }
+
+      &.ql-direction-rtl {
+        border-right: 3px solid #212121;
+        margin-right: -23px;
+
+        &:not([class*=ql-indent-]) {
+          padding-right: 20px;
+          padding-left: unset;
+        }
       }
     }
 

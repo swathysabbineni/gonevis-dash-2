@@ -52,7 +52,6 @@ import { WriteComponent } from './write.component';
     TextFieldModule,
     FontAwesomeModule,
     AutosizeModule,
-    BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
     FileSelectionModule,
     A11yModule,
@@ -63,10 +62,6 @@ import { WriteComponent } from './write.component';
     MatChipsModule,
     MatAutocompleteModule,
     MatToolbarModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
   ],
 })
 export class WriteModule {

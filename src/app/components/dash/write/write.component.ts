@@ -121,7 +121,7 @@ enum HeaderKey {
   styleUrls: ['./write.component.scss'],
   animations: [
     trigger('scaleIn', [
-      transition(':enter', [
+      transition('false => true', [
         query('button', [
           style({ transform: 'scale(0)' }),
           stagger(75, [
@@ -931,7 +931,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       comment_enabled: data.comment_enabled,
       featured: data.featured,
       is_page: data.is_page,
-      start_publication: data.start_publication,
+      start_publication: new Date(data.start_publication).toISOString().slice(0, -1),
       cover_image: data.media.cover_image ? data.media.cover_image.id : null,
       meta_description: data.meta_description,
     });
@@ -991,6 +991,11 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     editor.root.addEventListener('drop', (event: DragEvent): void => {
       event.preventDefault();
+    }, false);
+    editor.root.addEventListener('mousedown', (event: DragEvent): void => {
+      setTimeout(() => {
+        this.displayCaret(editor);
+      });
     }, false);
 
     // Editor instance
@@ -1081,8 +1086,8 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       if (extractedUrl !== null) {
         delta.ops = [{
           insert: {
-            video: extractedUrl
-          }
+            video: extractedUrl,
+          },
         }];
       }
 
@@ -1095,8 +1100,8 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
           }
           delta.ops = [{
             insert: {
-              embed: node.data
-            }
+              embed: node.data,
+            },
           }];
         }
       });
@@ -1156,6 +1161,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     if (event.event !== 'selection-change') {
+      this.displayComposeOptions(event.editor, event.editor.getSelection(true));
       // this.displaySelectionBubble(event.editor);
       return;
     }
@@ -1170,6 +1176,10 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       // this.hideSelectionBubble();
       return;
     }
+    /**
+     * Update current selection's format
+     */
+    this.selectionFormats = event.editor.getFormat(event.range);
     if (event.range.length === 0) {
       // this.hideSelectionBubble();
       /**
@@ -1178,37 +1188,29 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       const [block, blockOffset]: [BlockBlot, number] = (event.editor.scroll as any)
         .descendant(Block, event.range.index);
       /**
-       * Move compose container next to current focused element if element was an empty 'P'.
+       * @todo Fix this method later by top offset of current selection.
+       * Handle space for scrolling
        */
-      if (block != null && block.domNode.tagName === 'P' && block.domNode.firstChild instanceof HTMLBRElement) {
+      if ((event.editor as any).scrollingContainer && block && block.domNode.tagName !== 'PRE') {
         /**
-         * Handle space for scrolling
+         * Get editor scrolling container's bounding rect
          */
-        if ((event.editor as any).scrollingContainer) {
-          /**
-           * Get editor scrolling container's bounding rect
-           */
-          const boundingClientRect: DOMRect = (event.editor as any).scrollingContainer.getBoundingClientRect();
-          /**
-           * Get current block's bounding rect
-           */
-          const blockRect = block.domNode.getBoundingClientRect();
-          if (blockRect.top < boundingClientRect.top + 100) {
-            (event.editor as any).scrollingContainer.scrollTop -= ((blockRect.top - 15) - boundingClientRect.top) + 30;
-          } else if (blockRect.bottom > boundingClientRect.bottom) {
-            (event.editor as any).scrollingContainer.scrollTop +=
-              ((blockRect.bottom - 15) - boundingClientRect.bottom) + 30;
-          }
+        const boundingClientRect: DOMRect = (event.editor as any).scrollingContainer.getBoundingClientRect();
+        /**
+         * Get current block's bounding rect
+         */
+        const blockRect = block.domNode.getBoundingClientRect();
+        /**
+         * Update scroll top position
+         */
+        if (blockRect.top < boundingClientRect.top) {
+          (event.editor as any).scrollingContainer.scrollTop -= 40;
         }
-        this.showComposeContainer = true;
-        /**
-         * Relocate compose component
-         */
-        this.renderer2.setStyle(this.sideBarControls.nativeElement, 'top', `${block.domNode.offsetTop - (36 / 6)}px`);
-      } else {
-        this.showComposeContainer = false;
-        // this.hideSelectionBubble();
+        if (blockRect.bottom > boundingClientRect.bottom) {
+          (event.editor as any).scrollingContainer.scrollTop += 40;
+        }
       }
+      this.displayComposeOptions(event.editor, event.range);
       /**
        * Get inline blot based on current range's index.
        */
@@ -1245,6 +1247,54 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       });
       this.hideLinkBubble();
       // this.displaySelectionBubble(event.editor);
+    }
+  }
+
+  /**
+   * Display plus button next to an empty P element.
+   *
+   * @param editor Editor which is required to get bounds.
+   * @param range Selection range required to get the position of the current P element.
+   */
+  displayComposeOptions(editor: Quill, range: RangeStatic): void {
+    /**
+     * In case if range was undefined then break the code.
+     */
+    if (!range) {
+      return;
+    }
+    /**
+     * Get current block
+     */
+    const [block, blockOffset]: [BlockBlot, number] = (editor.scroll as any)
+      .descendant(Block, range.index);
+    /**
+     * Move compose container next to current focused element if element was an empty 'P'.
+     */
+    if (block != null && block.domNode.tagName === 'P' && block.domNode.firstChild instanceof HTMLBRElement) {
+      this.showComposeContainer = true;
+      /**
+       * Relocate compose component
+       */
+      const rangeBounds: BoundsStatic = editor.getBounds(range.index, range.length);
+      this.renderer2.setStyle(this.sideBarControls.nativeElement, 'top', `${block.domNode.offsetTop - (36 / 6)}px`);
+      if (this.selectionFormats.align === 'right') {
+        /**
+         * Direction RTL in which the selection for compose buttons can be moved
+         */
+        this.keyManagerComponent.withHorizontalOrientation('rtl');
+        this.renderer2.addClass(this.sideBarControls.nativeElement, 'ltr');
+      } else {
+        /**
+         * Direction LTR in which the selection for compose buttons can be moved
+         */
+        this.keyManagerComponent.withHorizontalOrientation('ltr');
+        this.renderer2.removeClass(this.sideBarControls.nativeElement, 'ltr');
+      }
+      this.renderer2.setStyle(this.sideBarControls.nativeElement, 'left', `${rangeBounds.left}px`);
+    } else {
+      this.showComposeContainer = false;
+      // this.hideSelectionBubble();
     }
   }
 
@@ -1424,6 +1474,19 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
     /**
+     * Update current selection's format
+     */
+    this.selectionFormats = editor.getFormat(range);
+    if (this.selectionFormats.direction === 'rtl') {
+      editor.root.style.caretColor = 'black';
+      if (this.showCaret) {
+        this.hideCaret();
+      }
+      return;
+    } else {
+      editor.root.style.caretColor = 'transparent';
+    }
+    /**
      * Get bounds based on given range index and length
      *
      * @see BoundsStatic
@@ -1456,10 +1519,6 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     this.renderer2.setStyle(this.caret.nativeElement, 'opacity', `1`);
     this.showCaret = true;
-    /**
-     * Update current selection's format
-     */
-    this.selectionFormats = editor.getFormat(range);
   }
 
   /**
@@ -1540,6 +1599,12 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     payload.site = BlogService.currentBlog.id;
     if (status !== undefined) {
       payload.status = status;
+    }
+    /**
+     * Prevent backend from raising error on empty string.
+     */
+    if (payload.start_publication === '') {
+      payload.start_publication = null;
     }
     /**
      * Check status before updating

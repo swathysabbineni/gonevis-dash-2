@@ -180,55 +180,6 @@
     }
   }
 
-  &.next-primary,
-  &.next-danger {
-    padding: 0 16px;
-    color: #ffffff;
-    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 1px 5px 0 rgba(0, 0, 0, .12);
-
-    &:not(:disabled) {
-      &::after,
-      &::before {
-        background: #ffffff;
-      }
-
-      &:hover {
-        box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
-        0 4px 5px 0 rgba(0, 0, 0, 0.14),
-        0 1px 10px 0 rgba(0, 0, 0, .12);
-      }
-
-      &:active {
-        box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-        0 8px 10px 1px rgba(0, 0, 0, 0.14),
-        0 3px 14px 2px rgba(0, 0, 0, .12);
-      }
-
-      &:hover::before {
-        opacity: .16;
-      }
-
-      &:focus::before {
-        opacity: .20;
-      }
-
-      &:active::after {
-        opacity: .20;
-      }
-    }
-  }
-
-  &.next-primary:not(:disabled) {
-    background-color: $primary;
-  }
-
-  &.next-danger:not(:disabled) {
-    background-color: mat-color($gonevis-warn, default);
-  }
-
   &.next-icon {
     width: 40px;
     height: 40px;
@@ -241,10 +192,6 @@
       background: #000000;
     }
   }
-}
-
-.next-small {
-  font-size: 13px;
 }
 
 /** Others */
@@ -348,22 +295,16 @@
 
 .compose {
   position: absolute;
-  left: calc(105px - 46px);
   z-index: 1;
   height: 36px;
   align-items: center;
   justify-content: center;
   display: none;
+  transform: translateX(-40px);
 
   &.show {
     display: flex;
-
-    & > button {
-      animation: bounceIn .35s 1;
-      animation-fill-mode: forwards;
-    }
   }
-
 
   & > button {
     margin-right: .5rem;
@@ -381,18 +322,36 @@
     outline: none;
 
     &:hover {
-      color: $blue;
+      color: mat-color($gonevis-primary, default);
     }
   }
 
   app-key-manager {
     display: flex;
     background: #ffffff;
+    position: absolute;
+    left: 100%;
 
     button:focus {
-      color: $blue;
+      color: mat-color($gonevis-primary, default);
       animation: bounceIn .35s 1;
       animation-fill-mode: forwards;
+    }
+  }
+
+  &.ltr {
+    transform: unset;
+
+
+    & > button {
+      margin-right: 0;
+      margin-left: .5rem;
+    }
+
+    app-key-manager {
+      left: unset;
+      right: 100%;
+      flex-direction: row-reverse;
     }
   }
 }
@@ -462,7 +421,7 @@
 
 .header {
   transition: $transition-base;
-  z-index: 1;
+  z-index: 2;
 
   &.scrolled {
     box-shadow: 2px 4px 10px rgba(0, 0, 0, .2);
@@ -579,6 +538,7 @@
     justify-content: center;
     width: 125px;
     padding: 0 16px;
+    min-width: max-content;
   }
 
   .dropdown-menu {
@@ -613,6 +573,7 @@
         font-size: 14px;
         letter-spacing: .2px;
         line-height: 20px;
+        align-items: center;
 
         &.activated {
           color: rgba(mat-color($gonevis-primary, default), 0.87);
