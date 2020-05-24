@@ -259,14 +259,14 @@
               </ul>
             </div>
           </div>
-          <mat-divider vertical class="mx-3 align-self-center"></mat-divider>
+          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
             <button class="ql-bold fancy" [tooltip]="boldTooltip" placement="bottom"></button>
             <button class="ql-italic fancy" [tooltip]="italicTooltip" placement="bottom"></button>
             <button class="ql-underline fancy" [tooltip]="underlineTooltip" placement="bottom"></button>
             <button class="ql-strike fancy" [tooltip]="strikeTooltip" placement="bottom"></button>
           </div>
-          <mat-divider vertical class="mx-3 align-self-center"></mat-divider>
+          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
             <button class="fancy"
                     [tooltip]="linkTooltip"
@@ -279,7 +279,7 @@
             <button class="ql-code-block fancy" [tooltip]="'CODE_BLOCK' | translate" placement="bottom"></button>
             <button class="ql-divider fancy" [tooltip]="'DIVIDER' | translate" placement="bottom"></button>
           </div>
-          <mat-divider vertical class="mx-3 align-self-center"></mat-divider>
+          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
             <button class="ql-list fancy" [tooltip]="listNumberedTooltip" placement="bottom"
                     value="ordered"></button>
@@ -302,7 +302,7 @@
                   <button class="dropdown-item fancy"
                           [class.activated]="selectionFormats.align === '' || !selectionFormats.align"
                           (click)="format('align', '')">
-                    <fa-icon [icon]="faAlignLeft"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faAlignLeft"></fa-icon>
                     <span class="label" translate>LEFT</span>
                     <span class="shortcut">Ctrl+Shift+L</span>
                   </button>
@@ -310,7 +310,7 @@
                 <li>
                   <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'center'"
                           (click)="format('align', 'center')">
-                    <fa-icon [icon]="faAlignCenter"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faAlignCenter"></fa-icon>
                     <span class="label" translate>CENTER</span>
                     <span class="shortcut">Ctrl+Shift+E</span>
                   </button>
@@ -318,7 +318,7 @@
                 <li>
                   <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'right'"
                           (click)="format('align', 'right')">
-                    <fa-icon [icon]="faAlignRight"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faAlignRight"></fa-icon>
                     <span class="label" translate>RIGHT</span>
                     <span class="shortcut">Ctrl+Shift+R</span>
                   </button>
@@ -326,7 +326,7 @@
                 <li>
                   <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'justify'"
                           (click)="format('align', 'justify')">
-                    <fa-icon [icon]="faAlignJustify"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faAlignJustify"></fa-icon>
                     <span class="label" translate>JUSTIFIED</span>
                     <span class="shortcut">Ctrl+Shift+J</span>
                   </button>
@@ -334,7 +334,7 @@
                 <li class="editor-dropdown-divider"></li>
                 <li>
                   <button class="dropdown-item fancy" (click)="format('indent', '+1')">
-                    <fa-icon [icon]="faIndent"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faIndent"></fa-icon>
                     <span class="label" translate>INCREASE_INDENT</span>
                     <span class="shortcut">Ctrl+]</span>
                   </button>
@@ -342,7 +342,7 @@
                 <li>
                   <button class="dropdown-item fancy"
                           (click)="format('indent', '-1')">
-                    <fa-icon [icon]="faOutdent"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="faOutdent"></fa-icon>
                     <span class="label" translate>DECREASE_INDENT</span>
                     <span class="shortcut">Ctrl+[</span>
                   </button>
@@ -352,12 +352,12 @@
             <!-- Direction -->
             <button class="ql-direction fancy" value="rtl" [tooltip]="'DIRECTION' | translate" placement="bottom"></button>
           </div>
-          <mat-divider vertical class="mx-3 align-self-center"></mat-divider>
+          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
             <button class="ql-image fancy" [tooltip]="'INSERT_IMAGE' | translate" placement="bottom"></button>
             <button class="ql-video fancy" [tooltip]="embedTooltip" placement="bottom" #qlVideo></button>
           </div>
-          <mat-divider vertical class="mx-3 align-self-center"></mat-divider>
+          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
             <button class="ql-clean fancy" [tooltip]="removeFormattingTooltip" placement="bottom"></button>
           </div>
@@ -379,7 +379,7 @@
           <!-- Close -->
           <button class="btn btn-light ml-2" (click)="goBack()" translate>CLOSE</button>
           <!-- Divider -->
-          <mat-divider vertical class="mx-3"></mat-divider>
+          <mat-divider vertical class="mx-2"></mat-divider>
           <!-- View on blog -->
           <button class="next-btn next-icon mr-2"
                   [tooltip]="'VIEW_ON_BLOG' | translate"

@@ -931,7 +931,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       comment_enabled: data.comment_enabled,
       featured: data.featured,
       is_page: data.is_page,
-      start_publication: data.start_publication,
+      start_publication: new Date(data.start_publication).toISOString().slice(0, -1),
       cover_image: data.media.cover_image ? data.media.cover_image.id : null,
       meta_description: data.meta_description,
     });
@@ -1599,6 +1599,12 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     payload.site = BlogService.currentBlog.id;
     if (status !== undefined) {
       payload.status = status;
+    }
+    /**
+     * Prevent backend from raising error on empty string.
+     */
+    if (payload.start_publication === '') {
+      payload.start_publication = null;
     }
     /**
      * Check status before updating

@@ -573,6 +573,7 @@
         font-size: 14px;
         letter-spacing: .2px;
         line-height: 20px;
+        align-items: center;
 
         &.activated {
           color: rgba(mat-color($gonevis-primary, default), 0.87);
