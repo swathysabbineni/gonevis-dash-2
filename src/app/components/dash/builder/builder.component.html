@@ -40,7 +40,7 @@
                     *ngIf="config.type === widgetConfigType.LIST"
                     [(ngModel)]="selectedWidgetReference.values[config.id]"
                     (ngModelChange)="updatePreview()">
-              <option *ngFor="let option of config.options" [ngValue]="option">{{ option }}</option>
+              <option *ngFor="let option of config.options" [ngValue]="option.value">{{ option.label }}</option>
             </select>
           </div>
         </div>

@@ -27,7 +27,7 @@ export class Button extends Widget {
           label: 'Type',
           type: WidgetConfigType.LIST,
           options: colors,
-          default: colors[0],
+          default: colors[0].value,
         },
         {
           id: 'link',
@@ -42,6 +42,7 @@ export class Button extends Widget {
       ],
     });
     Object.assign(this, init);
+    console.log(this);
   }
 
   /**
@@ -49,7 +50,7 @@ export class Button extends Widget {
    */
   render(): string {
     this.text = this.values.label;
-    this.attributes.href = this.values.link;
+    this.attributes.href = this.values.link || '#';
     (this.attributes.class as string[])[1] = `btn-${this.values.type}`;
     if (this.values.openInNewTab) {
       this.attributes.target = '_blank';
