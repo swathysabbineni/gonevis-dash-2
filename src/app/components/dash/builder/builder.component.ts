@@ -9,8 +9,10 @@ import { WidgetConfigType } from '@builder/shared/enums/widget-config-type';
 import { WidgetID } from '@builder/shared/enums/widget-id';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { faCube } from '@fortawesome/free-solid-svg-icons/faCube';
+import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 
@@ -25,7 +27,9 @@ export class BuilderComponent implements OnInit, OnDestroy {
   readonly faBack: IconDefinition = faArrowLeft;
   readonly faAdd: IconDefinition = faPlus;
   readonly faPath: IconDefinition = faChevronRight;
+  readonly faDropdown: IconDefinition = faChevronDown;
   readonly faTrash: IconDefinition = faTrash;
+  readonly faModify: IconDefinition = faPen;
 
   readonly widgets = widgets;
   readonly widgetConfigType = WidgetConfigType;

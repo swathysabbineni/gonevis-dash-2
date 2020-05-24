@@ -25,3 +25,17 @@ $sidebar-width: 250px;
     background: white;
   }
 }
+
+.dropdown-menu {
+  border: none;
+  box-shadow: $box-shadow-sm;
+  margin-top: -10px;
+  margin-right: 10px;
+
+  > .dropdown-item {
+    > fa-icon {
+      color: $secondary;
+      margin-right: map_get($spacers, 2);
+    }
+  }
+}
