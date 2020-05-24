@@ -97,11 +97,11 @@
 
       <!-- Widgets -->
       <div class="row no-gutters">
-        <div class="col-sm-6" *ngFor="let data of   widgets | keyvalue">
-          <div class="card m-2 mt-2 shadow-sm text-center small text-secondary pointer" (click)="addWidget(data.key)">
+        <div class="col-sm-6" *ngFor="let widget of widgetList">
+          <div class="card m-2 mt-2 shadow-sm text-center small text-secondary pointer" (click)="addWidget(widget.id)">
             <div class="card-body p-3">
-              <fa-icon [fixedWidth]="true" [icon]="faWidget" size="lg"></fa-icon>
-              <div class="font-weight-bold mt-2 text-dark">{{ data.value.name }}</div>
+              <fa-icon [icon]="widget.icon" size="lg"></fa-icon>
+              <div class="font-weight-bold mt-2 text-dark">{{ widget.name }}</div>
             </div>
           </div>
         </div>

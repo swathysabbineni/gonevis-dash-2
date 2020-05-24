@@ -2,6 +2,7 @@ import { Widget } from '@builder/shared/classes/widget';
 import { colors } from '@builder/shared/consts/colors';
 import { WidgetConfigType } from '@builder/shared/enums/widget-config-type';
 import { WidgetID } from '@builder/shared/enums/widget-id';
+import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 
 export class Button extends Widget {
 
@@ -9,6 +10,7 @@ export class Button extends Widget {
     super({
       id: WidgetID.BUTTON,
       name: 'Button',
+      icon: faLink,
       tag: 'a',
       attributes: {
         class: ['btn'],

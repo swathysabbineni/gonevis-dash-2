@@ -34,6 +34,8 @@ export class BuilderComponent implements OnInit, OnDestroy {
   readonly widgets = widgets;
   readonly widgetConfigType = WidgetConfigType;
 
+  widgetList: Widget[] = [];
+
   /**
    * List of selected widgets for the page
    */
@@ -66,6 +68,12 @@ export class BuilderComponent implements OnInit, OnDestroy {
      * Update the preview initially
      */
     this.updatePreview();
+    /**
+     * Generate a list from widgets dict
+     */
+    for (const widget of Object.values(widgets)) {
+      this.widgetList.push(new widget({}));
+    }
   }
 
   ngOnDestroy(): void {

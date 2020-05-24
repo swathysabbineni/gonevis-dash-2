@@ -1,6 +1,8 @@
 import { Widget } from '@builder/shared/classes/widget';
 import { WidgetConfigType } from '@builder/shared/enums/widget-config-type';
 import { WidgetID } from '@builder/shared/enums/widget-id';
+import { faCompress } from '@fortawesome/free-solid-svg-icons/faCompress';
+import { faHeading } from '@fortawesome/free-solid-svg-icons/faHeading';
 
 export class Heading extends Widget {
 
@@ -8,6 +10,7 @@ export class Heading extends Widget {
     super({
       id: WidgetID.HEADING,
       name: 'Heading',
+      icon: faHeading,
       configs: [
         {
           id: 'type',

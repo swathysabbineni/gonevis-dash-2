@@ -1,6 +1,7 @@
 import { Element } from '@builder/shared/classes/element';
 import { WidgetID } from '@builder/shared/enums/widget-id';
 import { WidgetConfig } from '@builder/shared/interfaces/widget-config';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 /**
  * Widgets are used to build HTML components and have user
@@ -20,14 +21,19 @@ export class Widget extends Element {
   }
 
   /**
-   * Unique widget ID
+   * Widget ID
    */
   id: WidgetID;
 
   /**
-   * Widget name
+   * Widget name for UI
    */
   name: string;
+
+  /**
+   * Widget icon for UI
+   */
+  icon: IconDefinition;
 
   /**
    * Configurations for the widget
