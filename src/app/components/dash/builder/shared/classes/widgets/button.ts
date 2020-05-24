@@ -42,7 +42,6 @@ export class Button extends Widget {
       ],
     });
     Object.assign(this, init);
-    console.log(this);
   }
 
   /**

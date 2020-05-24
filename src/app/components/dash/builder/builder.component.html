@@ -27,7 +27,7 @@
       <!-- Configs -->
       <div class="card m-2 mt-2 shadow-sm small text-secondary"
            *ngIf="selectedWidgetReference && selectedWidgetReference.widget.configs">
-        <div class="card-body p-3">
+        <div class="card-body card-body px-3 pt-3 pb-0">
           <div class="form-group" *ngFor="let config of selectedWidgetReference.widget.configs">
             <label [for]="config.id" *ngIf="config.type !== widgetConfigType.CHECKBOX">{{ config.label }}</label>
             <input class="form-control form-control-sm"
@@ -86,7 +86,7 @@
 
       <!-- Header -->
       <div class="bg-white font-weight-bold px-2 py-3 shadow-sm d-flex align-items-center">
-        <button class="btn btn-link btn-sm float-left" title="Add Widget" (click)="sidebarView = 'structure'">
+        <button class="btn btn-link btn-sm float-left py-0" title="Add Widget" (click)="sidebarView = 'structure'">
           <fa-icon [fixedWidth]="true" [icon]="faBack"></fa-icon>
         </button>
         <span>Widgets</span>
