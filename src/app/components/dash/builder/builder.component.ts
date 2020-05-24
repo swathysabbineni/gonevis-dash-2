@@ -1,21 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AppComponent } from '@app/app.component';
-import { Heading } from '@app/components/dash/builder/shared/classes/heading';
 import { DashUiStatus } from '@app/enums/dash-ui-status';
+import { Widget } from '@builder/shared/classes/widget';
+import { WidgetReference } from '@builder/shared/classes/widget-reference';
+import { widgets } from '@builder/shared/consts/widgets';
+import { WidgetConfigType } from '@builder/shared/enums/widget-config-type';
+import { WidgetID } from '@builder/shared/enums/widget-id';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { faCube } from '@fortawesome/free-solid-svg-icons/faCube';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
-
-import { Button } from './shared/classes/button';
-import { Card } from './shared/classes/card';
-import { Container } from './shared/classes/container';
-import { Space } from './shared/classes/space';
-import { Widget } from './shared/classes/widget';
-import { WidgetID } from './shared/enums/widget-id';
-import { WidgetReference } from './shared/interfaces/widget-reference';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 
 @Component({
   selector: 'app-builder',
@@ -24,144 +21,55 @@ import { WidgetReference } from './shared/interfaces/widget-reference';
 })
 export class BuilderComponent implements OnInit, OnDestroy {
 
-  /**
-   * List of available widgets to choose from and build the page
-   */
-  static readonly WIDGETS: Record<WidgetID, typeof Widget> = {
-    [WidgetID.BUTTON]: Button,
-    [WidgetID.CARD]: Card,
-    [WidgetID.CONTAINER]: Container,
-    [WidgetID.SPACE]: Space,
-    [WidgetID.HEADING]: Heading,
-  };
-
   readonly faWidget: IconDefinition = faCube;
   readonly faBack: IconDefinition = faArrowLeft;
   readonly faAdd: IconDefinition = faPlus;
   readonly faPath: IconDefinition = faChevronRight;
+  readonly faTrash: IconDefinition = faTrash;
 
-  readonly widgets = BuilderComponent.WIDGETS;
+  readonly widgets = widgets;
+  readonly widgetConfigType = WidgetConfigType;
 
   /**
    * List of selected widgets for the page
    */
   widgetReferences: WidgetReference[] = [
-    {
-      widget: WidgetID.CONTAINER,
+    new WidgetReference({
+      id: WidgetID.CONTAINER,
       children: [
-        {
-          widget: WidgetID.HEADING,
-          config: {
-            text: 'Hello World!',
-          },
-        },
-        {
-          widget: WidgetID.BUTTON,
-          config: {
-            label: 'Go Main',
-            type: 'primary',
-            link: '/',
-            openInNewTab: 'yes',
-          },
-        },
-        {
-          widget: WidgetID.BUTTON,
-          config: {
-            label: 'Go Main',
-            type: 'primary',
-            link: '/',
-            openInNewTab: 'yes',
-          },
-        },
-        {
-          widget: WidgetID.SPACE,
-        },
-        {
-          widget: WidgetID.CARD,
+        new WidgetReference({
+          id: WidgetID.CARD,
           children: [
-            {
-              widget: WidgetID.HEADING,
+            new WidgetReference({
+              id: WidgetID.BUTTON,
               config: {
-                text: 'Another Button Goes Here',
-                type: '2',
+                label: 'Button',
+                type: 'primary',
               },
-            },
-            {
-              widget: WidgetID.BUTTON,
+            }),
+            new WidgetReference({ id: WidgetID.SPACE }),
+            new WidgetReference({
+              id: WidgetID.HEADING,
               config: {
-                label: 'This is an info button',
-                type: 'info',
-                link: '/',
+                text: 'Hello World',
               },
-            },
-            {
-              widget: WidgetID.SPACE,
-            },
-            {
-              widget: WidgetID.HEADING,
-              config: {
-                text: 'Let\'s Another Card',
-                type: '2',
-              },
-            },
-            {
-              widget: WidgetID.CARD,
+            }),
+            new WidgetReference({
+              id: WidgetID.CARD,
               children: [
-                {
-                  widget: WidgetID.HEADING,
+                new WidgetReference({
+                  id: WidgetID.BUTTON,
                   config: {
-                    text: 'Some Buttons',
-                    type: '3',
+                    label: 'Button',
+                    type: 'primary',
                   },
-                },
-                {
-                  widget: WidgetID.BUTTON,
-                  config: {
-                    label: 'Sample Button',
-                    type: 'dark',
-                    link: '/',
-                  },
-                },
-                {
-                  widget: WidgetID.BUTTON,
-                  config: {
-                    label: 'Sample Button',
-                    type: 'link',
-                    link: '/',
-                  },
-                },
-                {
-                  widget: WidgetID.BUTTON,
-                  config: {
-                    label: 'Sample Button',
-                    type: 'link',
-                    link: '/',
-                  },
-                },
-                {
-                  widget: WidgetID.SPACE,
-                },
-                {
-                  widget: WidgetID.HEADING,
-                  config: {
-                    text: 'Last Button',
-                    type: '3',
-                  },
-                },
-                {
-                  widget: WidgetID.BUTTON,
-                  config: {
-                    label: 'Sample Button',
-                    type: 'danger',
-                    link: '/',
-                  },
-                },
+                }),
               ],
-            },
+            }),
           ],
-        },
+        }),
       ],
-    },
+    }),
   ];
 
   /**
@@ -187,6 +95,10 @@ export class BuilderComponent implements OnInit, OnDestroy {
      * Update the preview initially
      */
     this.updatePreview();
+    // debug
+    this.selectWidgetReference(this.widgetReferences[0]);
+    this.selectWidgetReference(this.selectedWidgetReference.children[0]);
+    this.selectWidgetReference(this.selectedWidgetReference.children[0]);
   }
 
   ngOnDestroy(): void {
@@ -201,49 +113,58 @@ export class BuilderComponent implements OnInit, OnDestroy {
    */
   updatePreview(): void {
     /**
-     * Collect the widgets from the widget refrences
+     * Collect the widgets from the widget references
      */
-    const getWidgets = (references: WidgetReference[]): Widget[] => {
-      const widgets: Widget[] = [];
-      for (const reference of references) {
-        widgets.push(new this.widgets[reference.widget]({
-          values: reference.config,
-          children: getWidgets(reference.children || []),
-        }));
-      }
-      return widgets;
-    };
+    const output: Widget[] = [];
+    for (const reference of this.widgetReferences) {
+      output.push(reference.widget);
+    }
     /**
      * Render and sanitize them to {@see preview}
      */
-    this.preview = this.sanitizer.bypassSecurityTrustHtml(Widget.render(getWidgets(this.widgetReferences)));
+    this.preview = this.sanitizer.bypassSecurityTrustHtml(Widget.render(output));
   }
 
+  /**
+   * Select a widget reference and update the path
+   * @param widget Widget reference to select (null to clear selection)
+   */
   selectWidgetReference(widget?: WidgetReference): void {
-    if (widget) {
-      if (widget.children) {
-        const index = this.selectedWidgetReferenceParents.indexOf(widget);
-        if (index !== -1) {
-          this.selectedWidgetReferenceParents.splice(index, this.selectedWidgetReferenceParents.length);
-        }
-        this.selectedWidgetReference = widget;
-        this.selectedWidgetReferenceParents.push(this.selectedWidgetReference);
-      }
-    } else {
+    if (!widget) {
       this.selectedWidgetReference = null;
       this.selectedWidgetReferenceParents = [];
+    } else {
+      const index = this.selectedWidgetReferenceParents.indexOf(widget);
+      if (index !== -1) {
+        this.selectedWidgetReferenceParents.splice(index, this.selectedWidgetReferenceParents.length);
+      }
+      this.selectedWidgetReference = widget;
+      this.selectedWidgetReferenceParents.push(this.selectedWidgetReference);
     }
   }
 
+  /**
+   * Add a widget reference from a structure widget ID as a selected widget reference child
+   * @param id Widget ID
+   */
   addWidget(id: WidgetID): void {
-    const widgetReference: WidgetReference = {
-      widget: id,
-      config: {},
-    };
+    const widgetReference = new WidgetReference({ id });
     if (!this.selectedWidgetReference) {
       this.widgetReferences.push(widgetReference);
     } else if (this.selectedWidgetReference.children) {
       this.selectedWidgetReference.children.push(widgetReference);
+    }
+    this.updatePreview();
+  }
+
+  /**
+   * Delete a referenced widget
+   */
+  deleteWidgetReference(widget: WidgetReference) {
+    if (this.selectedWidgetReference) {
+      this.selectedWidgetReference.removeChild(widget);
+    } else {
+      this.widgetReferences.splice(this.widgetReferences.indexOf(widget), 1);
     }
     this.updatePreview();
   }

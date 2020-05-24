@@ -1,6 +1,6 @@
 export enum WidgetConfigType {
-  TEXT,
-  NUMBER,
-  CHECKBOX,
-  LIST,
+  TEXT = 'text',
+  NUMBER = 'number',
+  CHECKBOX = 'checkbox',
+  LIST = 'list',
 }

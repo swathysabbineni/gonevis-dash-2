@@ -9,7 +9,8 @@
       <!-- Header -->
       <div class="bg-white font-weight-bold px-2 py-3 d-flex align-items-center">
         <span>Structure</span>
-        <button class="btn btn-link btn-sm ml-auto" title="Add Widget" (click)="sidebarView = 'widgets'">
+        <button class="btn btn-link btn-sm ml-auto py-0" title="Add Widget" (click)="sidebarView = 'widgets'"
+                *ngIf="!selectedWidgetReference || selectedWidgetReference.widget.canHaveChildren">
           <fa-icon [fixedWidth]="true" [icon]="faAdd"></fa-icon>
         </button>
       </div>
@@ -19,16 +20,43 @@
         <a (click)="selectWidgetReference()">Root</a>
         <span *ngFor="let widget of selectedWidgetReferenceParents">
           <fa-icon [fixedWidth]="true" [icon]="faPath" class="text-black-50"></fa-icon>
-          <a (click)="selectWidgetReference(widget)">{{ widgets[widget.widget].name }}</a>
+          <a (click)="selectWidgetReference(widget)">{{ widget.widget.name }}</a>
         </span>
+      </div>
+
+      <!-- Configs -->
+      <div class="card m-2 mt-2 shadow-sm small text-secondary"
+           *ngIf="selectedWidgetReference && selectedWidgetReference.widget.configs">
+        <div class="card-body p-3">
+          <div class="form-group" *ngFor="let config of selectedWidgetReference.widget.configs">
+            <label [for]="config.id" *ngIf="config.type !== widgetConfigType.CHECKBOX">{{ config.label }}</label>
+            <input class="form-control form-control-sm"
+                   [type]="config.type" [id]="config.id"
+                   *ngIf="config.type === widgetConfigType.TEXT || config.type === widgetConfigType.NUMBER"
+                   [(ngModel)]="selectedWidgetReference.config[config.id]"
+                   (ngModelChange)="updatePreview()">
+            <select class="form-control form-control-sm"
+                    [id]="config.id"
+                    *ngIf="config.type === widgetConfigType.LIST"
+                    [(ngModel)]="selectedWidgetReference.config[config.id]"
+                    (ngModelChange)="updatePreview()">
+              <option *ngFor="let option of config.options" [ngValue]="option">{{ option }}</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <!-- Structure widgets -->
       <div *ngFor="let widget of selectedWidgetReference ? selectedWidgetReference.children : widgetReferences"
            class="card m-2 mt-2 shadow-sm small text-secondary pointer">
-        <div class="card-body p-3 d-flex" (click)="selectWidgetReference(widget)">
-          <fa-icon [fixedWidth]="true" [icon]="faWidget" size="lg"></fa-icon>
-          <div class="font-weight-bold ml-2 text-dark">{{ widgets[widget.widget].name }}</div>
+        <div class="card-body p-3 d-flex">
+          <fa-icon [fixedWidth]="true" [icon]="faWidget" size="lg" (click)="selectWidgetReference(widget)"></fa-icon>
+          <div class="font-weight-bold ml-2 text-dark" (click)="selectWidgetReference(widget)">
+            {{ widget.widget.name }}
+          </div>
+          <a class="ml-auto" (click)="deleteWidgetReference(widget)">
+            <fa-icon [fixedWidth]="true" [icon]="faTrash"></fa-icon>
+          </a>
         </div>
       </div>
     </div>
@@ -51,7 +79,7 @@
 
       <!-- Widgets -->
       <div class="row no-gutters">
-        <div class="col-sm-6" *ngFor="let data of widgets | keyvalue">
+        <div class="col-sm-6" *ngFor="let data of   widgets | keyvalue">
           <div class="card m-2 mt-2 shadow-sm text-center small text-secondary pointer" (click)="addWidget(data.key)">
             <div class="card-body p-3">
               <fa-icon [fixedWidth]="true" [icon]="faWidget" size="lg"></fa-icon>

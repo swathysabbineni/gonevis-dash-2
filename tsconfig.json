@@ -26,6 +26,9 @@
       "@app/*": [
         "src/app/*"
       ],
+      "@builder/*": [
+        "src/app/components/dash/builder/*"
+      ],
       "@environments/*": [
         "src/environments/*"
       ]

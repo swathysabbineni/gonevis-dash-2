@@ -1,7 +1,17 @@
-import { WidgetID } from '@app/components/dash/builder/shared/enums/widget-id';
-import { WidgetConfig } from '@app/components/dash/builder/shared/interfaces/widget-config';
-import { Element } from './element';
+import { Element } from '@builder/shared/classes/element';
+import { WidgetID } from '@builder/shared/enums/widget-id';
+import { WidgetConfig } from '@builder/shared/interfaces/widget-config';
 
+/**
+ * Widgets are used to build HTML components and have user
+ * select them and configure them to build the page with.
+ *
+ * Each widget should have a unique ID and name when extending
+ * this main widget class.
+ *
+ * See the `./widgets/` for all the widgets that user can
+ * select and build the page with.
+ */
 export class Widget extends Element {
 
   constructor(init: Partial<Widget>) {
@@ -27,7 +37,7 @@ export class Widget extends Element {
   /**
    * Values for the widget configurations
    */
-  values: Record<string, string>;
+  values: Record<string, string> = {};
 
   /**
    * Does this widget support having children
@@ -40,7 +50,7 @@ export class Widget extends Element {
   resetValues(): void {
     if (this.configs) {
       for (const config of this.configs) {
-        config[config.id] = config.default;
+        this.values[config.id] = config.default;
       }
     }
   }

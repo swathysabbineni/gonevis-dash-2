@@ -1,4 +1,4 @@
-export const colors = [
+export const colors: string[] = [
   'primary',
   'secondary',
   'success',

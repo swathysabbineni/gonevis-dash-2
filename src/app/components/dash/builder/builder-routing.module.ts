@@ -7,6 +7,7 @@ const routes: Routes = [{ path: '', component: BuilderComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class BuilderRoutingModule { }
+export class BuilderRoutingModule {
+}

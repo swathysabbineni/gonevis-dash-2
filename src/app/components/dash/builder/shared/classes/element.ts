@@ -1,5 +1,9 @@
 /**
- * HTML element class
+ * HTML element class to be rendered and used for the page builder.
+ *
+ * @see Widget
+ * @see WidgetReference
+ * @see BuilderComponent
  */
 export class Element {
 

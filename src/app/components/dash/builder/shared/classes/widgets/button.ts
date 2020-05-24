@@ -1,12 +1,11 @@
-import { colors } from '@app/components/dash/builder/shared/consts/colors';
-import { WidgetConfigType } from '@app/components/dash/builder/shared/enums/widget-config-type';
-import { WidgetID } from '@app/components/dash/builder/shared/enums/widget-id';
-
-import { Widget } from './widget';
+import { Widget } from '@builder/shared/classes/widget';
+import { colors } from '@builder/shared/consts/colors';
+import { WidgetConfigType } from '@builder/shared/enums/widget-config-type';
+import { WidgetID } from '@builder/shared/enums/widget-id';
 
 export class Button extends Widget {
 
-  constructor(init: Partial<Widget>) {
+  constructor(init: Widget) {
     super({
       id: WidgetID.BUTTON,
       name: 'Button',
@@ -49,7 +48,7 @@ export class Button extends Widget {
   render(): string {
     this.text = this.values.label;
     this.attributes.href = this.values.link;
-    (this.attributes.class as string[]).push('btn-' + this.values.type);
+    (this.attributes.class as string[])[1] = `btn-${this.values.type}`;
     if (this.values.openInNewTab) {
       this.attributes.target = '_blank';
     }

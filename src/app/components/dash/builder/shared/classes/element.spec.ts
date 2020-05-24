@@ -2,10 +2,6 @@ import { Element } from './element';
 
 fdescribe('Element', () => {
 
-  it('should create an instance', () => {
-    expect(new Element()).toBeTruthy();
-  });
-
   it('should render elements', () => {
     expect(Element.render([
       new Element({ tag: 'span' }),

@@ -1,5 +1,5 @@
-import { WidgetID } from '@app/components/dash/builder/shared/enums/widget-id';
-import { Widget } from './widget';
+import { Widget } from '@builder/shared/classes/widget';
+import { WidgetID } from '@builder/shared/enums/widget-id';
 
 export class Card extends Widget {
 

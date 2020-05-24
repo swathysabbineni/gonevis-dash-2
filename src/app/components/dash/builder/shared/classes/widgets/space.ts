@@ -1,9 +1,9 @@
-import { WidgetID } from '@app/components/dash/builder/shared/enums/widget-id';
-import { Widget } from './widget';
+import { Widget } from '@builder/shared/classes/widget';
+import { WidgetID } from '@builder/shared/enums/widget-id';
 
 export class Space extends Widget {
 
-  constructor(init: Partial<Widget>) {
+  constructor(init: Widget) {
     super({
       id: WidgetID.SPACE,
       name: 'Space',

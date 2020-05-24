@@ -1,4 +1,4 @@
-import { WidgetConfigType } from '@app/components/dash/builder/shared/enums/widget-config-type';
+import { WidgetConfigType } from '@builder/shared/enums/widget-config-type';
 
 export interface WidgetConfig {
   id: string;
