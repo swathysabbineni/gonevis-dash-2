@@ -8,7 +8,7 @@ import { Entry } from '@app/interfaces/zero/entry';
 })
 export class ShareComponent {
 
-  @ViewChild('shareInput', { static: true }) shareInput: ElementRef;
+  @ViewChild('shareInput') shareInput: ElementRef;
 
   /**
    * Entry to share URL for
@@ -25,7 +25,7 @@ export class ShareComponent {
    */
   get url(): string {
     if (this.entry) {
-      return `${location.origin}/feed/entry/${this.entry.id}`;
+      return this.entry.absolute_uri;
     }
     return this.link;
   }
