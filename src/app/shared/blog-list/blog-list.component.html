@@ -38,8 +38,8 @@
       <!-- Follow -->
       <button class="btn btn-sm"
               (click)="follow(blog)"
-              [class.btn-default]="blog.is_following"
-              [class.btn-primary]="!blog.is_following">
+              [class.btn-primary]="blog.is_following"
+              [class.btn-secondary]="!blog.is_following">
         <span translate *ngIf="!blog.is_following">FOLLOW</span>
         <span translate *ngIf="blog.is_following">FOLLOWING</span>
       </button>
