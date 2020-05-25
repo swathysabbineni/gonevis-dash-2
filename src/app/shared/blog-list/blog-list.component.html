@@ -24,6 +24,9 @@
     <div class="card-body cover" *ngIf="blog.cover_image"
          [style.background-image]="utils.sanitizeBackgroundImage(blog.cover_image.file)"></div>
 
+    <!-- Cover image (placeholder) -->
+    <div class="card-body cover cover-placeholder" *ngIf="!blog.cover_image"></div>
+
     <!-- Description -->
     <div class="card-body" *ngIf="blog.description">
       <p class="card-text">{{ blog.description }}</p>
