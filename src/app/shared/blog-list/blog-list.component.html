@@ -24,6 +24,9 @@
     <div class="card-body cover" *ngIf="blog.cover_image"
          [style.background-image]="utils.sanitizeBackgroundImage(blog.cover_image.file)"></div>
 
+    <!-- Cover image (placeholder) -->
+    <div class="card-body cover cover-placeholder" *ngIf="!blog.cover_image"></div>
+
     <!-- Description -->
     <div class="card-body" *ngIf="blog.description">
       <p class="card-text">{{ blog.description }}</p>
@@ -31,14 +34,21 @@
 
     <!-- Footer -->
     <div class="card-footer text-left" *ngIf="user.id !== blog.user.id">
+
       <!-- Follow -->
       <button class="btn btn-sm"
               (click)="follow(blog)"
-              [class.btn-default]="blog.is_following"
-              [class.btn-primary]="!blog.is_following">
+              [class.btn-primary]="blog.is_following"
+              [class.btn-secondary]="!blog.is_following">
         <span translate *ngIf="!blog.is_following">FOLLOW</span>
         <span translate *ngIf="blog.is_following">FOLLOWING</span>
       </button>
+
+      <!-- Link -->
+      <a class="btn btn-link float-right" target="_blank"
+         [href]="blog.absolute_uri" [title]="'OPEN_IN_BLOG' | translate">
+        <fa-icon [fixedWidth]="true" [icon]="faLink"></fa-icon>
+      </a>
     </div>
   </div>
 </div>
