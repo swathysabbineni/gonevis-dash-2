@@ -44,8 +44,8 @@ import { KeyManagerComponent } from '@app/components/dash/write/core/key-manager
 import '@app/components/dash/write/modules/clipboard.ts';
 import '@app/components/dash/write/themes/bootstrap.ts';
 import { WriteService } from '@app/components/dash/write/write.service';
-import { EntryStatus } from '@app/enums/entry-status.enum';
 import { DashUiStatus } from '@app/enums/dash-ui-status';
+import { EntryStatus } from '@app/enums/entry-status.enum';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { File as FileMedia } from '@app/interfaces/file';
 import { Params } from '@app/interfaces/params';
@@ -336,11 +336,6 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
    * Determines whether page scrolled or not.
    */
   scrolled: boolean;
-
-  /**
-   * It's being used for attaching minimum date for start publication date
-   */
-  minDate: Date = new Date();
 
   /**
    * Quill modules
@@ -797,6 +792,14 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
      * Show header back
      */
     AppComponent.UI_STATUS.emit(DashUiStatus.ALL);
+    /**
+     * Un-listen function for disposing of keydown listener.
+     */
+    this.keydownListener();
+    /**
+     * Clear auto save interval from running after page destroy.
+     */
+    clearInterval(this.autoSaveInterval);
   }
 
   ngAfterViewInit(): void {
@@ -2166,7 +2169,6 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
             if (indent) {
               block.insertAt(start + offset, CodeBlock.TAB);
               offset += CodeBlock.TAB.length;
-              console.log(offset);
               /**
                * If the line is at the start of the selection
                */
