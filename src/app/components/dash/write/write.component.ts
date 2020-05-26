@@ -800,6 +800,13 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
      * Clear auto save interval from running after page destroy.
      */
     clearInterval(this.autoSaveInterval);
+    /**
+     * Auto save entry after the user leaves page by navigation.
+     */
+    if (!this.loading && !equal(this.form.value, this.oldForm)) {
+      this.autoSave = true;
+      this.save();
+    }
   }
 
   ngAfterViewInit(): void {
