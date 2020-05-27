@@ -175,8 +175,15 @@ export class BuilderComponent implements OnInit, OnDestroy {
     this.updatePreview();
   }
 
+  /**
+   * On widget reference drag-dropped
+   */
   drop(event: CdkDragDrop<WidgetReference>): void {
-    moveItemInArray(this.widgetReferences, event.previousIndex, event.currentIndex);
+    let list: WidgetReference[] = this.widgetReferences;
+    if (this.selectedWidgetReference) {
+      list = this.selectedWidgetReference.children;
+    }
+    moveItemInArray(list, event.previousIndex, event.currentIndex);
     this.updatePreview();
   }
 }
