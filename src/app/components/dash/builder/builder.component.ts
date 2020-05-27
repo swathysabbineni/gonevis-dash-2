@@ -9,13 +9,13 @@ import { widgets } from '@builder/shared/consts/widgets';
 import { WidgetConfigType } from '@builder/shared/enums/widget-config-type';
 import { WidgetID } from '@builder/shared/enums/widget-id';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import { faClone } from '@fortawesome/free-regular-svg-icons/faClone';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
-import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons/faGripLinesVertical';
-import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
+import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
-import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 
 @Component({
   selector: 'app-builder',
@@ -28,8 +28,9 @@ export class BuilderComponent implements OnInit, OnDestroy {
   readonly faAdd: IconDefinition = faPlus;
   readonly faPath: IconDefinition = faChevronRight;
   readonly faDropdown: IconDefinition = faChevronDown;
-  readonly faTrash: IconDefinition = faTrash;
-  readonly faModify: IconDefinition = faPen;
+  readonly faTrash: IconDefinition = faTrashAlt;
+  readonly faModify: IconDefinition = faCog;
+  readonly faDuplicate: IconDefinition = faClone;
 
   readonly widgets = widgets;
   readonly widgetConfigType = WidgetConfigType;
@@ -143,6 +144,23 @@ export class BuilderComponent implements OnInit, OnDestroy {
     }
     this.updatePreview();
     this.sidebarView = 'structure';
+  }
+
+  /**
+   * Duplicate/clone a widget
+   */
+  duplicateWidgetReference(widget: WidgetReference, index: number) {
+    widget = new WidgetReference({
+      id: JSON.parse(JSON.stringify(widget.id)),
+      values: JSON.parse(JSON.stringify(widget.values)),
+      children: JSON.parse(JSON.stringify(widget.children)),
+    });
+    if (this.selectedWidgetReference) {
+      this.selectedWidgetReference.addChild(widget, index);
+    } else {
+      this.widgetReferences.splice(index, 0, widget);
+    }
+    this.updatePreview();
   }
 
   /**

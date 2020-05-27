@@ -48,7 +48,7 @@
 
       <!-- Structure widgets -->
       <div class="structure" cdkDropList (cdkDropListDropped)="drop($event)">
-        <div *ngFor="let widget of selectedWidgetReference ? selectedWidgetReference.children : widgetReferences"
+        <div *ngFor="let widget of selectedWidgetReference ? selectedWidgetReference.children : widgetReferences; let i = index"
              cdkDrag cdkDragLockAxis="y" class="card m-2 mt-2 shadow-sm small text-secondary">
           <div class="card-body p-3 d-flex move">
             <fa-icon [fixedWidth]="true" [icon]="widget.widget.icon" class="pointer" size="lg"
@@ -69,6 +69,10 @@
                         *ngIf="widget.widget.canHaveChildren">
                   <fa-icon [fixedWidth]="true" [icon]="faAdd"></fa-icon>
                   <span>Insert</span>
+                </button>
+                <button class="dropdown-item" (click)="duplicateWidgetReference(widget, i)">
+                  <fa-icon [fixedWidth]="true" [icon]="faDuplicate"></fa-icon>
+                  <span>Duplicate</span>
                 </button>
                 <button class="dropdown-item" (click)="deleteWidgetReference(widget)">
                   <fa-icon [fixedWidth]="true" [icon]="faTrash"></fa-icon>

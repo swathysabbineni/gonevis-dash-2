@@ -60,9 +60,10 @@ export class WidgetReference {
   /**
    * Add a child
    * @param child Child widget to add
+   * @param index Where to put this child
    */
-  addChild(child: WidgetReference): void {
-    this.children.push(child);
+  addChild(child: WidgetReference, index: number = this.children.length): void {
+    this.children.splice(index, 0, child);
     this.resetWidget();
   }
 
