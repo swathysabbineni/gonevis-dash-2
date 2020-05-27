@@ -11,6 +11,6 @@ export interface User {
   date_joined: string;
   updated: string;
   subscribed_sites_count: number;
-  collaborating_sites_count: number;
+  absolute_uri?: string;
 }
 

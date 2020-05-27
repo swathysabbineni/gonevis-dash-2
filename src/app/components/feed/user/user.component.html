@@ -13,8 +13,7 @@
       <b>{{ user.display_name }}</b>
       <span>
         {{ user.subscribed_sites_count }} {{ 'FOLLOWING' | translate }} &bull;
-        {{ user.collaborating_sites_count }} {{ 'COLLABORATING' | translate }} &bull;
-        @{{ user.username }}
+        <a [href]="user.absolute_uri" target="_blank">@{{ user.username }}</a>
       </span>
     </div>
   </div>

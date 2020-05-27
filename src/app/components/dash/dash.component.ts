@@ -19,6 +19,7 @@ import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dash',
@@ -26,6 +27,13 @@ import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
   styleUrls: ['./dash.component.scss'],
 })
 export class DashComponent implements OnInit, OnDestroy {
+
+  /**
+   * Represents a disposable resource, such as the execution of an Observable.
+   * A subscription has one important method, `unsubscribe`, that takes no argument
+   * and just disposes the resource held by the subscription.
+   */
+  private readonly subscription: Subscription = new Subscription();
 
   /**
    * Angle double left icon
@@ -126,7 +134,7 @@ export class DashComponent implements OnInit, OnDestroy {
     /**
      * Watch search query changes and keep suggesting
      */
-    AppComponent.SEARCH_QUERY_UPDATE.subscribe((search: string): void => {
+    this.subscription.add(AppComponent.SEARCH_QUERY_UPDATE.subscribe((search: string): void => {
       const suggestions = [];
       if (search.length) {
         for (const suggestion of SearchSuggestions) {
@@ -136,25 +144,25 @@ export class DashComponent implements OnInit, OnDestroy {
         }
       }
       AppComponent.SEARCH_SUGGESTIONS.emit(suggestions);
-    });
+    }));
     /**
      * Watch search suggestion clicks
      */
-    AppComponent.SEARCH_SUGGESTION_CLICK.subscribe((suggestion: string): void => {
+    this.subscription.add(AppComponent.SEARCH_SUGGESTION_CLICK.subscribe((suggestion: string): void => {
       AppComponent.SEARCH_QUERY.emit('');
       this.router.navigate([SearchSuggestions.find(item => item.label === suggestion).path], {
         relativeTo: this.route,
       });
-    });
+    }));
     /**
      * Watch ui status changes
      * @see UI_STATUS
      */
-    AppComponent.UI_STATUS.subscribe((status: DashUiStatus): void => {
+    this.subscription.add(AppComponent.UI_STATUS.subscribe((status: DashUiStatus): void => {
       setTimeout((): void => {
         this.uiStatus = status;
       });
-    });
+    }));
   }
 
   ngOnDestroy(): void {
@@ -164,6 +172,7 @@ export class DashComponent implements OnInit, OnDestroy {
     AppComponent.SEARCH_STATUS.emit(false);
     AppComponent.SEARCH_SUGGESTIONS.emit([]);
     AppComponent.SEARCH_QUERY.emit('');
+    this.subscription.unsubscribe();
   }
 
   /**

@@ -98,6 +98,10 @@ a,
       background-size: cover;
       background-position: center;
       height: 256px;
+
+      &.cover-placeholder {
+        height: 96px;
+      }
     }
 
     > .card-body {

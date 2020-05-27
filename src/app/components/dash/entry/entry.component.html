@@ -1,5 +1,13 @@
 <div class="container mt-3">
 
+  <!-- Status tabs -->
+  <div class="nav nav-pills my-3">
+    <a class="nav-link" (click)="statusFilter = filter; getEntries()"
+       *ngFor="let filter of statusFilters" [class.active]="filter === statusFilter">
+      {{ filter.label | translate }}
+    </a>
+  </div>
+
   <!-- Entries -->
   <div class="card dash">
 
@@ -29,24 +37,8 @@
         {{ entriesSelected.length }} {{ 'SELECTED' | translate }}
       </div>
 
-      <!-- Filters: Status filter -->
-      <div class="dropdown ml-auto" dropdown *ngIf="!entriesSelected.length">
-        <button class="btn btn-light dropdown-toggle" dropdownToggle>
-          <fa-icon [icon]="filter" [fixedWidth]="true" class="text-secondary mr-1"></fa-icon>
-          {{ statusFilter.label | translate }}
-        </button>
-        <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
-          <button class="dropdown-item"
-                  *ngFor="let filter of statusFilters"
-                  [class.active]="filter === statusFilter"
-                  (click)="statusFilter = filter; getEntries()">
-            {{ filter.label | translate }}
-          </button>
-        </div>
-      </div>
-
       <!-- Filters: Sort fields -->
-      <div class="dropdown ml-2" dropdown *ngIf="!entriesSelected.length">
+      <div class="dropdown ml-auto" dropdown *ngIf="!entriesSelected.length">
         <button class="btn btn-light dropdown-toggle" dropdownToggle>
           <fa-icon [fixedWidth]="true" [icon]="sort" class="text-secondary mr-1"></fa-icon>
           <span *ngIf="!sortField" translate>SORT_BY</span>

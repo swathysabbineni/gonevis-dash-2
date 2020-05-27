@@ -9,6 +9,8 @@ import { ApiService } from '@app/services/api/api.service';
 import { EntryService } from '@app/services/entry/entry.service';
 import { UserService } from '@app/services/user/user.service';
 import { UtilService } from '@app/services/util/util.service';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons/faExternalLinkAlt';
 
 @Component({
   selector: 'app-blog-list',
@@ -16,6 +18,8 @@ import { UtilService } from '@app/services/util/util.service';
   styleUrls: ['./blog-list.component.scss'],
 })
 export class BlogListComponent implements OnInit {
+
+  readonly faLink: IconDefinition = faExternalLinkAlt;
 
   /**
    * API loading indicator
@@ -31,7 +35,6 @@ export class BlogListComponent implements OnInit {
    * List of blogs
    */
   @Input() blogs: Blog[];
-
   /**
    * Next page endpoint
    */

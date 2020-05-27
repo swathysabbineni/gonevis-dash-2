@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EntryFormat } from '@app/enums/entry-format.enum';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { Entry } from '@app/interfaces/zero/entry';
@@ -12,9 +11,10 @@ import { faBookmark } from '@fortawesome/free-regular-svg-icons/faBookmark';
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
 import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
-import { faShareSquare } from '@fortawesome/free-regular-svg-icons/faShareSquare';
 import { faHeart as faHeartFill } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faBookmarkFill } from '@fortawesome/free-solid-svg-icons/faBookmark';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons/faExternalLinkAlt';
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 
 @Component({
@@ -25,15 +25,14 @@ import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 export class EntryListComponent {
 
   readonly faBookmark: IconDefinition = faBookmark;
-  readonly comment: IconDefinition = faComment;
-  readonly eye: IconDefinition = faEye;
-  readonly heart: IconDefinition = faHeart;
-  readonly shareSquare: IconDefinition = faShareSquare;
-  readonly heartFill: IconDefinition = faHeartFill;
-  readonly bookmarkFill: IconDefinition = faBookmarkFill;
-  readonly star: IconDefinition = faStar;
-
-  readonly entryFormat = EntryFormat;
+  readonly faBookmarked: IconDefinition = faBookmarkFill;
+  readonly faLike: IconDefinition = faHeart;
+  readonly faLiked: IconDefinition = faHeartFill;
+  readonly faComments: IconDefinition = faComment;
+  readonly faViews: IconDefinition = faEye;
+  readonly faShare: IconDefinition = faShareAlt;
+  readonly faFeatured: IconDefinition = faStar;
+  readonly faLink: IconDefinition = faExternalLinkAlt;
 
   /**
    * Current entry list

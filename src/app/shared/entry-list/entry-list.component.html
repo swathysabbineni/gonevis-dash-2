@@ -21,7 +21,7 @@
       <!-- Featured -->
       <div class="d-flex flex-column ml-auto justify-content-center text-warning"
            [tooltip]="'FEATURED' | translate" placement="left" delay="250" *ngIf="entry.featured">
-        <fa-icon [icon]="star"></fa-icon>
+        <fa-icon [icon]="faFeatured"></fa-icon>
       </div>
     </div>
 
@@ -47,27 +47,27 @@
 
       <!-- Like -->
       <button class="btn btn-link" (click)="like(entry)">
-        <fa-icon [fixedWidth]="true" [icon]="heart" *ngIf="!entry.is_voted"></fa-icon>
-        <fa-icon [fixedWidth]="true" [icon]="heartFill" *ngIf="entry.is_voted" class="text-danger"></fa-icon>
+        <fa-icon [fixedWidth]="true" [icon]="faLike" *ngIf="!entry.is_voted"></fa-icon>
+        <fa-icon [fixedWidth]="true" [icon]="faLiked" *ngIf="entry.is_voted" class="text-danger"></fa-icon>
         <span *ngIf="entry.vote_count">{{ entry.vote_count }}</span>
       </button>
 
       <!-- Views -->
       <button class="btn btn-link" *ngIf="entry.view_count">
-        <fa-icon [fixedWidth]="true" [icon]="eye"></fa-icon>
+        <fa-icon [fixedWidth]="true" [icon]="faViews"></fa-icon>
         <span>{{ entry.view_count }}</span>
       </button>
 
       <!-- Comments -->
       <a class="btn btn-link" [routerLink]="['/feed/entry', entry.id]">
-        <fa-icon [fixedWidth]="true" [icon]="comment"></fa-icon>
+        <fa-icon [fixedWidth]="true" [icon]="faComments"></fa-icon>
         <span *ngIf="entry.active_comment_count">{{ entry.active_comment_count }}</span>
       </a>
 
       <!-- Bookmark -->
       <button class="btn btn-link float-right" (click)="bookmark(entry)">
         <fa-icon [fixedWidth]="true" [icon]="faBookmark" *ngIf="!entry.is_bookmarked"></fa-icon>
-        <fa-icon [fixedWidth]="true" [icon]="bookmarkFill" *ngIf="entry.is_bookmarked"></fa-icon>
+        <fa-icon [fixedWidth]="true" [icon]="faBookmarked" *ngIf="entry.is_bookmarked"></fa-icon>
       </button>
 
       <!-- Share -->
@@ -76,8 +76,14 @@
       </ng-template>
       <button class="btn btn-link float-right" [popover]="shareTemplate"
               popoverTitle="Share" placement="left" [outsideClick]="true">
-        <fa-icon [fixedWidth]="true" [icon]="shareSquare"></fa-icon>
+        <fa-icon [fixedWidth]="true" [icon]="faShare"></fa-icon>
       </button>
+
+      <!-- Link -->
+      <a class="btn btn-link float-right" target="_blank"
+         [href]="entry.absolute_uri" [title]="'OPEN_IN_BLOG' | translate">
+        <fa-icon [fixedWidth]="true" [icon]="faLink"></fa-icon>
+      </a>
     </div>
   </div>
 </div>

@@ -22,6 +22,7 @@ import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { EntryService } from './entry.service';
 
 @Component({
@@ -59,7 +60,7 @@ export class EntryComponent implements OnInit {
    */
   readonly statusFilters: Filter<EntryStatus>[] = [{
     value: '',
-    label: 'ANY_STATUS',
+    label: 'ALL',
   }, {
     value: EntryStatus.Published,
     label: 'PUBLISHED',
@@ -149,6 +150,11 @@ export class EntryComponent implements OnInit {
   select: boolean;
 
   /**
+   * It holds subscription for entries list which we will use to prevent duplicate subscriptions.
+   */
+  entriesSubscription: Subscription;
+
+  /**
    * @returns Selected entries
    */
   get entriesSelected(): Entry[] {
@@ -199,6 +205,12 @@ export class EntryComponent implements OnInit {
    * @param resetPagination Reset pagination
    */
   getEntries(page: number = 1, resetPagination?: boolean): void {
+    /**
+     * Prevent duplicate API calls for getting entries. It prevents UI from showing incorrect status.
+     */
+    if (this.entriesSubscription) {
+      this.entriesSubscription.unsubscribe();
+    }
     this.pagination.currentPage = page;
     this.loading = true;
     let ordering = '';
@@ -208,7 +220,7 @@ export class EntryComponent implements OnInit {
     if (this.sortOrder === Order.DESCENDING) {
       ordering = `-${ordering}`;
     }
-    this.entryService.getEntries({
+    this.entriesSubscription = this.entryService.getEntries({
       is_page: this.isPages,
       status: this.statusFilter.value,
       search: this.search || '',
@@ -263,7 +275,7 @@ export class EntryComponent implements OnInit {
   updateEntries(property: keyof Entry, value: any): void {
     for (const entry of this.entriesSelected) {
       const payload: { [property: string]: any } = {
-        is_direct_save: true ,
+        is_direct_save: true,
       };
       payload[property] = value;
       this.entryService.update(entry.id, payload).subscribe(((data: Entry): void => {
