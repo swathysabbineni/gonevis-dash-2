@@ -66,7 +66,7 @@ export class UserComponent implements OnInit, OnDestroy {
       if (!(event instanceof NavigationEnd)) {
         return;
       }
-      document.getElementsByClassName('main-scroller')[0].scrollTo(0, 0);
+      document.getElementsByClassName('feed-scroller')[0].scrollTo(0, 0);
     });
   }
 
