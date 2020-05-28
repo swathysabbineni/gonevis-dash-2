@@ -116,7 +116,8 @@
 
         <!-- Chart -->
         <div class="card-body pl-0 pb-0">
-          <app-metric-stat-chart-line [item]="statisticsItem.value"
+          <app-metric-stat-chart-line [refresh]="statisticsRefresh"
+                                      [item]="statisticsItem.value"
                                       [resolution]="statisticsResolution"
                                       [height]="317">
           </app-metric-stat-chart-line>
