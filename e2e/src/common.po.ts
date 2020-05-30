@@ -7,6 +7,7 @@ export class CommonPage {
       email: 'e2e@gonevis.com',
       username: 'e2e',
       password: 'password',
+      name: 'End-to-end',
     },
   };
 

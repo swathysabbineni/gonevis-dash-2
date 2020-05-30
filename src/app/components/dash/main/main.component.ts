@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -56,6 +56,11 @@ export class MainComponent implements OnInit, OnDestroy {
    * and just disposes the resource held by the subscription
    */
   private readonly subscription: Subscription = new Subscription();
+
+  /**
+   * Refresh the statistics data
+   */
+  readonly statisticsRefresh = new EventEmitter<void>();
 
   /**
    * List of resolutions for statistics panel filter
@@ -245,6 +250,12 @@ export class MainComponent implements OnInit, OnDestroy {
           this.templateConfig = data.template_config;
         });
       }
+      /**
+       * Update statistics
+       */
+      setTimeout((): void => {
+        this.statisticsRefresh.emit();
+      });
     }));
   }
 

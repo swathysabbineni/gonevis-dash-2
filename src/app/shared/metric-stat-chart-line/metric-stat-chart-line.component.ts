@@ -1,5 +1,5 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, EventEmitter, OnInit } from '@angular/core';
 import { MetricStatItem } from '@app/enums/metric-stat-item';
 import { MetricStatResolution } from '@app/enums/metric-stat-resolution';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -13,7 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./metric-stat-chart-line.component.scss'],
   providers: [DatePipe, DecimalPipe],
 })
-export class MetricStatChartLineComponent implements OnChanges {
+export class MetricStatChartLineComponent implements OnInit, OnChanges {
 
   private static readonly METRIC_ITEM_TEXT: Record<MetricStatItem, string> = {
     [MetricStatItem.LIKES]: 'LIKES',
@@ -32,6 +32,11 @@ export class MetricStatChartLineComponent implements OnChanges {
    * Chart height
    */
   @Input() readonly height = 300;
+
+  /**
+   * Refresh data trigger
+   */
+  @Input() readonly refresh = new EventEmitter<void>();
 
   /**
    * Stats resolution
@@ -66,39 +71,41 @@ export class MetricStatChartLineComponent implements OnChanges {
               private decimal: DecimalPipe) {
   }
 
+  ngOnInit() {
+    /**
+     * Refresh the data on trigger
+     */
+    this.refresh.subscribe((): void => {
+      this.stats = null;
+      this.results = [];
+      this.blogService.getMetricStat(this.item, {
+        resolution: this.resolution,
+      }).subscribe((data: ApiResponse<MetricStat>): void => {
+        this.stats = data.results;
+        this.results.push({
+          name: this.translate.instant(MetricStatChartLineComponent.METRIC_ITEM_TEXT[this.item]),
+          series: [],
+        });
+        for (const stat of this.stats) {
+          this.results[0].series.push({
+            name: this.date.transform(
+              stat.date, MetricStatChartLineComponent.METRIC_RESOLUTION_DATE_FORMAT[this.resolution],
+            ),
+            value: stat.count,
+          });
+        }
+      });
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.resolution) {
       this.resolution = changes.resolution.currentValue;
-      this.update();
+      this.refresh.emit();
     } else if (changes.item) {
       this.item = changes.item.currentValue;
-      this.update();
+      this.refresh.emit();
     }
-  }
-
-  /**
-   * Fetch or update statistics
-   */
-  update(): void {
-    this.stats = null;
-    this.results = [];
-    this.blogService.getMetricStat(this.item, {
-      resolution: this.resolution,
-    }).subscribe((data: ApiResponse<MetricStat>): void => {
-      this.stats = data.results;
-      this.results.push({
-        name: this.translate.instant(MetricStatChartLineComponent.METRIC_ITEM_TEXT[this.item]),
-        series: [],
-      });
-      for (const stat of this.stats) {
-        this.results[0].series.push({
-          name: this.date.transform(
-            stat.date, MetricStatChartLineComponent.METRIC_RESOLUTION_DATE_FORMAT[this.resolution],
-          ),
-          value: stat.count,
-        });
-      }
-    });
   }
 
   /**
