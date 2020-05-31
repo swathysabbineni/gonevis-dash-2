@@ -9,7 +9,8 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { User } from '@app/interfaces/user';
 import { Blog } from '@app/interfaces/zero/blog';
 import { Entry } from '@app/interfaces/zero/entry';
-import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user',
@@ -17,6 +18,13 @@ import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
   styleUrls: ['./user.component.scss'],
 })
 export class UserComponent implements OnInit, OnDestroy {
+
+  /**
+   * Represents a disposable resource, such as the execution of an Observable.
+   * A subscription has one important method, `unsubscribe`, that takes no argument
+   * and just disposes the resource held by the subscription.
+   */
+  private readonly subscription: Subscription = new Subscription();
 
   /**
    * User username (from params)
@@ -60,40 +68,43 @@ export class UserComponent implements OnInit, OnDestroy {
               private feedService: FeedService,
               private blogService: BlogService) {
     /**
-     * Scroll to top on route enter
+     * Scroll to top when route navigation ends successfully.
      */
-    this.router.events.pipe(untilComponentDestroyed(this)).subscribe((event: RouterEvent): void => {
-      if (!(event instanceof NavigationEnd)) {
-        return;
-      }
-      document.getElementsByClassName('feed-scroller')[0].scrollTo(0, 0);
-    });
+    this.subscription.add(
+      this.router.events.pipe(
+        filter((event: RouterEvent): boolean => event instanceof NavigationEnd),
+      ).subscribe((): void => {
+        document.getElementsByClassName('feed-scroller')[0].scrollTo(0, 0);
+      }),
+    );
   }
 
   ngOnInit(): void {
     /**
      * Get username from params (and watch)
      */
-    this.route.params.subscribe((params: Params): void => {
-      /**
-       * Store user username
-       */
-      this.username = params.username;
-      /**
-       * Get data of this user
-       */
-      this.userService.getUser(params.username).subscribe((data: User): void => {
-        this.user = data;
+    this.subscription.add(
+      this.route.params.subscribe((params: Params): void => {
         /**
-         * Update title
+         * Store user username
          */
-        this.title.setTitle(`${this.user.display_name}${AppComponent.TITLE_SUFFIX}`);
-      });
-      /**
-       * Get entries or blogs of this user
-       */
-      this.setCurrent('entries');
-    });
+        this.username = params.username;
+        /**
+         * Get data of this user
+         */
+        this.userService.getUser(params.username).subscribe((data: User): void => {
+          this.user = data;
+          /**
+           * Update title
+           */
+          this.title.setTitle(`${this.user.display_name}${AppComponent.TITLE_SUFFIX}`);
+        });
+        /**
+         * Get entries or blogs of this user
+         */
+        this.setCurrent('entries');
+      }),
+    );
   }
 
   /**
@@ -123,5 +134,6 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
