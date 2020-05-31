@@ -24,7 +24,7 @@ export class Element {
   /**
    * HTML attributes
    */
-  attributes: { [name: string]: string | string[] | number };
+  attributes: { [name: string]: any } = {};
 
   /**
    * HTML inner HTML elements
@@ -54,14 +54,14 @@ export class Element {
     if (this.attributes) {
       attributes = ' ';
       const attributesKeys: string[] = Object.keys(this.attributes);
-      for (const attributeKey of attributesKeys) {
-        const attribute: string | string[] | number = this.attributes[attributeKey];
+      for (const key of attributesKeys) {
+        const attribute: string | string[] | number = this.attributes[key];
         let value: string = String(attribute);
-        if (typeof attribute === 'object') {
+        if (Array.isArray(attribute)) {
           value = attribute.join(' ');
         }
-        attributes += `${attributeKey}="${value}"`;
-        if (attributesKeys.indexOf(attributeKey) !== attributesKeys.length - 1) {
+        attributes += `${key}="${value}"`;
+        if (attributesKeys.indexOf(key) !== attributesKeys.length - 1) {
           attributes += ' ';
         }
       }
