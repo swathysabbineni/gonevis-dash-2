@@ -112,7 +112,7 @@ export class CommentsComponent implements OnInit {
   /**
    * Current status filter
    */
-  statusFilter: Filter<CommentStatus> = this.statusFilters[1];
+  statusFilter: Filter<CommentStatus> = this.statusFilters[0];
 
   constructor(public utils: UtilService,
               private commentsService: CommentsService,
