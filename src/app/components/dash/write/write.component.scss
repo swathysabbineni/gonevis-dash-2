@@ -108,16 +108,13 @@
 
 .next-btn {
   color: $primary;
-  font-weight: 500;
   padding: 0 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 36px;
-  text-transform: uppercase;
   border-radius: 4px;
-  letter-spacing: 1.25px;
-  font-size: 14px;
+  font-size: 0.9rem;
   position: relative;
   overflow: hidden;
   background: none;
@@ -527,18 +524,20 @@
   display: inline-block;
   height: 100%;
 
-  &.alignment button[dropdowntoggle] {
-    width: 70px;
-  }
+  &:not(.default-toggle) {
+    button[dropdowntoggle] {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 125px;
+      padding: 0 16px;
+      min-width: max-content;
+    }
 
-  button[dropdowntoggle] {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 125px;
-    padding: 0 16px;
-    min-width: max-content;
+    &.alignment button[dropdowntoggle] {
+      width: 70px;
+    }
   }
 
   .dropdown-menu {
@@ -567,8 +566,8 @@
       button {
         display: flex;
         width: 100%;
-        padding: 0 16px;
-        height: 36px;
+        padding: 4px 16px;
+        min-height: 36px;
         color: rgba(0, 0, 0, 0.87);
         font-size: 14px;
         letter-spacing: .2px;
@@ -632,4 +631,25 @@
   .custom-control-label {
     font-weight: 500;
   }
+}
+
+.loading-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  background: rgb(255, 255, 255, .95);
+}
+
+.mat-hint {
+  color: mat-color($foreground, secondary-text);
+}
+
+.font-weight-medium {
+  font-weight: 500;
 }
