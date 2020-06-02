@@ -410,8 +410,8 @@
   "ALL": "All",
   "PUBLIC": "Public",
   "PUBLIC_DESCRIPTION": "Visible to everyone",
-  "PUBLISH_ENTRY_CONFIRM": "Are you sure you want to publish this post?",
-  "DRAFT_ENTRY_CONFIRM": "Switching to draft will cause the post to be hidden from public view and be visible to only blog admins and editors.\nAre you sure?",
+  "PUBLISH_ENTRY_CONFIRM": "Your post will be published for everyone to see on your blog.\nAre you sure?",
+  "DRAFT_ENTRY_CONFIRM": "Drafting the post will make it hidden on your blog.\nAre you sure?",
   "DRAFT_DESCRIPTION": "Only visible to blog admins and editors",
   "COLLABORATING": "Collaborating"
 }

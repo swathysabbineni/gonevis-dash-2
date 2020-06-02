@@ -418,7 +418,6 @@
           <div *ngIf="isEditing">
             <!-- Entry's state -->
             <span class="mat-hint mr-2">
-<!--              {{ (loading ? 'SAVING' : 'SAVED') | translate }}-->
               <span *ngIf="loading">{{ 'SAVING' | translate }}</span>
               <span *ngIf="!loading && !hasUnsavedChanges">{{ 'SAVED' | translate }}</span>
               <span *ngIf="!loading && hasUnsavedChanges">Unsaved changes</span>
