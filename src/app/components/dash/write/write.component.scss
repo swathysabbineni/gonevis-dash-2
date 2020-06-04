@@ -490,14 +490,22 @@
   box-shadow: none !important;
   background: transparent !important;
   border: none;
-  font-size: 2.25rem;
-  margin-top: 65px;
-  color: $dark;
-  font-weight: 700;
-  padding: 0 105px;
+  font-size: 34px;
+  color: mat-color($foreground, text);
   line-height: 3rem;
+  padding: 0;
+  margin-bottom: 1rem;
   resize: none;
   flex: 0 0 auto;
+  box-sizing: content-box;
+
+  &::placeholder {
+    color: mat-color($foreground, secondary-text);
+  }
+}
+
+.editor-upper {
+  padding: 0 105px;
 }
 
 .editor {
@@ -652,4 +660,39 @@
 
 .font-weight-medium {
   font-weight: 500;
+}
+
+.editor-cover {
+  position: relative;
+  min-height: 385px;
+  width: 100%;
+  background-size: 100%;
+  background-position: center;
+  transition: background-size $mat-elevation-transition-duration $mat-elevation-transition-timing-function;
+  overflow: hidden;
+
+  .inner {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition-property: opacity, transform;
+    transition-timing-function: $mat-elevation-transition-timing-function;
+    transition-duration: $mat-elevation-transition-duration;
+    background: rgba(0, 0, 0, .74);
+    transform: scale(1.15);
+  }
+
+  &:hover {
+    background-size: 125%;
+
+    .inner {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 }

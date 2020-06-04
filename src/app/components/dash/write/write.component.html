@@ -460,8 +460,27 @@
         <div class="loading-bar" *ngIf="!entryLoaded && editorInit">
           <mat-progress-spinner [diameter]="30" [strokeWidth]="3" mode="indeterminate"></mat-progress-spinner>
         </div>
-        <div class="editor h-100 overflow-auto"
-             (scroll)="scrolled = $event.target['scrollTop'] > 0">
+        <div class="editor h-100 overflow-auto" (scroll)="scrolled = $event.target['scrollTop'] > 0">
+          <!-- Entry cover image -->
+          <div class="editor-cover" [style.background-image]="'url(' + coverImage.file + ')'"
+               *ngIf="coverImage">
+            <div class="inner text-white">
+              <!-- Icon -->
+              <fa-icon [icon]="faBorderStyle" [fixedWidth]="true" size="8x"></fa-icon>
+              <!-- Title and description -->
+              <h3 class="m-0 font-weight-normal mt-4" translate>UPDATE_COVER_IMAGE</h3>
+              <p class="mt-2 mb-4 text-center" translate>COVER_IMAGE_DESCRIPTION</p>
+              <!-- File selection button -->
+              <button class="btn btn-light mb-2" (click)="showFileListModal(false)" type="button" translate>
+                CHANGE_COVER_IMAGE
+              </button>
+              <!-- Remove cover image -->
+              <button class="btn text-white"
+                      (click)="form.get('cover_image').setValue(null); coverImage = null"
+                      type="button" translate>REMOVE
+              </button>
+            </div>
+          </div>
           <!-- Adding the "notranslate" class will prevent chrome from translating the editor and messing things up -->
           <div class="container d-flex flex-column position-relative notranslate">
             <!-- Compose -->
@@ -684,21 +703,43 @@
                  [class.invert-color]="selectionFormats.hasOwnProperty('code-block')"
                  [class.link]="selectionFormats.hasOwnProperty('link')"
                  [class.show]="showCaret"></div>
-            <!-- Title -->
-            <textarea id="title"
-                      autosize
-                      class="form-control" formControlName="title"
-                      placeholder="{{ 'TITLE' | translate }}"
-                      autocomplete="off"
-                      (keydown)="preventBreak($event)"
-                      (blur)="updateTitle()"
-                      [required]="true"></textarea>
+            <!-- Section above the editor content -->
+            <div class="editor-upper">
+              <!-- Updated by -->
+              <div class="d-flex align-items-center mt-3" *ngIf="oldEntry.updated_by">
+                <!-- Updated by image -->
+                <img [src]="oldEntry.updated_by.media.thumbnail_48x48" class="mr-2 rounded-circle" width="24"
+                     *ngIf="oldEntry.updated_by && oldEntry.updated_by.media.picture">
+                <!-- Updated by name -->
+                <span class="mat-small">{{ oldEntry.updated_by.name }}</span>
+                <!-- Update date -->
+                <div class="ml-1 mat-hint mat-small">
+                  &bull; {{ oldEntry.updated | date:'h:mm a - MMM d, y' }}
+                </div>
+              </div>
+              <!-- Title -->
+              <textarea id="title"
+                        cdkTextareaAutosize
+                        cdkAutosizeMinRows="1"
+                        class="form-control mt-3"
+                        [class.mt-5]="!oldEntry.updated_by"
+                        formControlName="title"
+                        placeholder="{{ 'TITLE' | translate }}"
+                        autocomplete="off"
+                        (keydown.enter)="preventBreak()"
+                        (keydown.shift.enter)="preventBreak()"
+                        (keydown.control.enter)="preventBreak()"
+                        (keydown.arrowDown)="onTitleArrowDown()"
+                        (blur)="updateTitle()"
+                        [required]="true"
+                        [readOnly]="!entryLoaded && editorInit"></textarea>
+            </div>
             <!-- Quill editor -->
-            <quill-editor [readOnly]="!entryLoaded"
+            <quill-editor [readOnly]="!entryLoaded && editorInit"
                           formControlName="content"
                           theme="bootstrap"
                           [modules]="options"
-                          [placeholder]="'CONTENT' | translate"
+                          [placeholder]="'EDITOR_CONTENT_PLACEHOLDER' | translate"
                           scrollingContainer=".editor"
                           bounds=".editor"
                           [styles]="{borderWidth: 0, fontSize: '1rem'}"
