@@ -661,3 +661,38 @@
 .font-weight-medium {
   font-weight: 500;
 }
+
+.editor-cover {
+  position: relative;
+  min-height: 385px;
+  width: 100%;
+  background-size: 100%;
+  background-position: center;
+  transition: background-size $mat-elevation-transition-duration $mat-elevation-transition-timing-function;
+  overflow: hidden;
+
+  .inner {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition-property: opacity, transform;
+    transition-timing-function: $mat-elevation-transition-timing-function;
+    transition-duration: $mat-elevation-transition-duration;
+    background: rgba(0, 0, 0, .74);
+    transform: scale(1.15);
+  }
+
+  &:hover {
+    background-size: 125%;
+
+    .inner {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}

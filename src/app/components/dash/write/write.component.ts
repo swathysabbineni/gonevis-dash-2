@@ -61,6 +61,7 @@ import { faAlignJustify } from '@fortawesome/free-solid-svg-icons/faAlignJustify
 import { faAlignLeft } from '@fortawesome/free-solid-svg-icons/faAlignLeft';
 import { faAlignRight } from '@fortawesome/free-solid-svg-icons/faAlignRight';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { faBorderStyle } from '@fortawesome/free-solid-svg-icons/faBorderStyle';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import { faCode } from '@fortawesome/free-solid-svg-icons/faCode';
@@ -191,6 +192,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly faSave: IconDefinition = faSave;
   readonly faDraftingCompass: IconDefinition = faDraftingCompass;
   readonly faNewspaper: IconDefinition = faNewspaper;
+  readonly faBorderStyle: IconDefinition = faBorderStyle;
 
   /**
    * Current entry ID
