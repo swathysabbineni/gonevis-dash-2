@@ -1344,9 +1344,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param range Range
    */
   setBubblePosition(element: HTMLElement, range: RangeStatic): void {
-    /**
-     * Prevent code from running if the editor is not yet initialized or given range is invalid.
-     */
+    // Prevent code from running if the editor is not yet initialized or given range is invalid.
     if (!range || !this.editor) {
       return;
     }
@@ -1668,16 +1666,12 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param status Status of entry
    */
   save(status?: EntryStatus): void {
-    /**
-     * Setup payload and required fields.
-     */
+    // Setup payload and required fields.
     const payload: Params = Object.assign({}, this.form.value);
     payload.content = this.editor.root.innerHTML;
     payload.id = this.id;
     payload.site = BlogService.currentBlog.id;
-    /**
-     * Set status property only if it was given. This is used for saving entrydraft.
-     */
+    // Set status property only if it was given. Status is given only when user is changing entry's status directly.
     if (status !== null) {
       payload.status = status;
     }
@@ -1687,9 +1681,9 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     if (payload.start_publication === '') {
       payload.start_publication = null;
     }
-    /**
-     * If method was called with auto save in progress, then remove `status` property from payload to save entrydraft.
-     */
+    // If method was called with auto save in progress,
+    // then remove `status` property from payload to save the changes in draft. Basically not sending status to endpoint
+    // will cause the changes to be saved as draft.
     if (this.autoSave || status === null) {
       delete payload.status;
     }
@@ -1707,16 +1701,14 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param status Entry status to update to.
    */
   setStatus(status: EntryStatus): void {
-    /**
-     * It's being used to display confirm message based on given entry status from param.
-     */
-    let confirmMessage = 'PUBLISH_ENTRY_CONFIRM';
+    // It's being used to display confirm message based on given entry status from param.
+    let confirmMessage: 'PUBLISH_ENTRY_CONFIRM' | 'DRAFT_ENTRY_CONFIRM';
     if (status === EntryStatus.Draft) {
       confirmMessage = 'DRAFT_ENTRY_CONFIRM';
+    } else {
+      confirmMessage = 'PUBLISH_ENTRY_CONFIRM';
     }
-    /**
-     * Prompt a native confirm alert to ask the user to change status.
-     */
+    // Prompt a native confirm alert to ask the user to change status.
     if (!confirm(this.translateService.instant(confirmMessage))) {
       return;
     }
