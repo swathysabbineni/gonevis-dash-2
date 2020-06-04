@@ -240,7 +240,7 @@
   "NEXT": "Next",
   "PREV": "Prev",
   "TITLE": "Title",
-  "CONTENT": "Content",
+  "EDITOR_CONTENT_PLACEHOLDER": "Start writing...",
   "START_NEW_BLOG": "Start New Blog",
   "SIZE": "Size",
   "TYPE": "Type",

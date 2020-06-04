@@ -556,7 +556,13 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       container: '.toolbar',
       handlers: {
         divider: (): void => this.insertDivider(),
-        video: (): void => this.displayLinkInsert(this.editor.getSelection(true), '', '', true),
+        video: (): void => {
+          // In case if editor was not yet initialized.
+          if (!this.editor) {
+            return;
+          }
+          this.displayLinkInsert(this.editor.getSelection(true), '', '', true);
+        },
       },
     },
   };
@@ -1850,20 +1856,30 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * @description
-   *
-   * Check if key "TAB" || "ENTER" is pressed and focus on editor
-   *
-   * @param event KeyboardEvent
-   *
-   * @returns False which will prevent input's default behavior
+   * Check if "ENTER" is pressed and focus on editor conditionally.
    */
-  preventBreak(event: KeyboardEvent): boolean {
-    if (event.key === 'Enter' || event.key === 'Tab') {
-      this.editor.focus();
-
-      return false;
+  preventBreak(): false {
+    // Get first line of the editor.
+    const firstLine: [BlockBlot, number] = this.editor.getLine(0);
+    // If first line is empty and it has no children, then move selection to it,
+    // otherwise create an empty line and set the selection to it.
+    if (firstLine[0] && firstLine[0].domNode && firstLine[0].domNode.firstChild instanceof HTMLBRElement) {
+      this.editor.setSelection(0, 0, 'silent');
+    } else {
+      this.editor.insertText(0, '\n', {}, 'user');
+      this.editor.setSelection(0, 0, 'silent');
     }
+    // Prevent ENTER event so textarea won't have break line in it.
+    return false;
+  }
+
+  /**
+   * On title arrow key pressed, restore previous selection on editor and focus on it.
+   */
+  onTitleArrowDown(): false {
+    this.editor.getSelection(true);
+    // Prevent keyboard event so the default behavior of keyboard doesn't apply.
+    return false;
   }
 
   /**

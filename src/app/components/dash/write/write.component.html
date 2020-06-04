@@ -694,11 +694,11 @@
                       (blur)="updateTitle()"
                       [required]="true"></textarea>
             <!-- Quill editor -->
-            <quill-editor [readOnly]="!entryLoaded"
+            <quill-editor [readOnly]="!entryLoaded && editorInit"
                           formControlName="content"
                           theme="bootstrap"
                           [modules]="options"
-                          [placeholder]="'CONTENT' | translate"
+                          [placeholder]="'EDITOR_CONTENT_PLACEHOLDER' | translate"
                           scrollingContainer=".editor"
                           bounds=".editor"
                           [styles]="{borderWidth: 0, fontSize: '1rem'}"
