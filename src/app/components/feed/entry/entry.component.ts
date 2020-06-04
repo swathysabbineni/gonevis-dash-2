@@ -1,11 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, RouterEvent, NavigationStart, Router } from '@angular/router';
 import { AppComponent } from '@app/app.component';
 import { FeedService } from '@app/components/feed/feed.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
-import { ApiResponseCreated } from '@app/interfaces/api-response-created';
 import { Comment } from '@app/interfaces/comment';
 import { CommentFormEvent } from '@app/interfaces/comment-form-event';
 import { UserAuth } from '@app/interfaces/user-auth';
@@ -23,12 +22,21 @@ import { faHeart as faHeartFill } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-entry', templateUrl: './entry.component.html',
   styleUrls: ['./entry.component.scss'],
 })
-export class EntryComponent implements OnInit {
+export class EntryComponent implements OnInit, OnDestroy {
+
+  /**
+   * Represents a disposable resource, such as the execution of an Observable.
+   * A subscription has one important method, `unsubscribe`, that takes no argument
+   * and just disposes the resource held by the subscription.
+   */
+  private readonly subscription: Subscription = new Subscription();
 
   readonly heart: IconDefinition = faHeart;
   readonly heartFill: IconDefinition = faHeartFill;
@@ -78,6 +86,7 @@ export class EntryComponent implements OnInit {
   loading: boolean;
 
   constructor(public utils: UtilService,
+              private router: Router,
               private activatedRoute: ActivatedRoute,
               private changeDetectorRef: ChangeDetectorRef,
               private title: Title,
@@ -97,6 +106,25 @@ export class EntryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // If navigating to any other route than 'feed/explore', 'feed/updates' and 'feed/bookmarks'
+    // then clear the cache to prevent data from existing in code and to improve code performance.
+    // For now, we only have those routes available for caching.
+    this.subscription.add(
+      this.router.events
+        .pipe(filter((event: RouterEvent): boolean => event instanceof NavigationStart))
+        .subscribe((event: NavigationStart): void => {
+          // Check if URL contains routes that has caching feature.
+          const allowedForCaching: string[] = ['feed/explore', 'feed/updates', 'feed/bookmarks']
+            .filter((route: string): boolean => event.url.includes(route));
+          if (!allowedForCaching.length) {
+            FeedService.readerCache = {
+              key: null,
+              response: null,
+              scrollTopPosition: null,
+            };
+          }
+        }),
+    );
     /**
      * Get authenticated user
      */
@@ -236,5 +264,12 @@ export class EntryComponent implements OnInit {
         this.comments.push(comment);
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    // Disposes the resources held by the subscription. May, for instance, cancel
+    // an ongoing Observable execution or cancel any other type of work that
+    // started when the Subscription was created.
+    this.subscription.unsubscribe();
   }
 }

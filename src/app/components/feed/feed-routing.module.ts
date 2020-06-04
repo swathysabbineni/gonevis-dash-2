@@ -14,6 +14,7 @@ const routes: Routes = [{
     data: {
       route: 'explore',
       title: 'EXPLORE',
+      showFilter: '',
     },
   }, {
     path: 'updates',
@@ -21,6 +22,7 @@ const routes: Routes = [{
     data: {
       route: 'updates',
       title: 'UPDATES',
+      showFilter: 'feed',
     },
   }, {
     path: 'bookmarks',
@@ -28,6 +30,7 @@ const routes: Routes = [{
     data: {
       route: 'bookmarks',
       title: 'BOOKMARKS',
+      showFilter: 'bookmarked',
     },
   }, {
     path: 'entry/:entryId',
