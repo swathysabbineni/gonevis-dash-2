@@ -55,6 +55,7 @@ import { Tag } from '@app/interfaces/v1/tag';
 import { BlogService } from '@app/services/blog/blog.service';
 import { FileSelectionComponent } from '@app/shared/file-selection/file-selection.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { faAlignCenter } from '@fortawesome/free-solid-svg-icons/faAlignCenter';
 import { faAlignJustify } from '@fortawesome/free-solid-svg-icons/faAlignJustify';
 import { faAlignLeft } from '@fortawesome/free-solid-svg-icons/faAlignLeft';
@@ -64,6 +65,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import { faCode } from '@fortawesome/free-solid-svg-icons/faCode';
 import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
+import { faDraftingCompass } from '@fortawesome/free-solid-svg-icons/faDraftingCompass';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons/faExternalLinkAlt';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faFont } from '@fortawesome/free-solid-svg-icons/faFont';
@@ -74,6 +76,7 @@ import { faIndent } from '@fortawesome/free-solid-svg-icons/faIndent';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
+import { faNewspaper } from '@fortawesome/free-solid-svg-icons/faNewspaper';
 import { faOutdent } from '@fortawesome/free-solid-svg-icons/faOutdent';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
@@ -82,6 +85,7 @@ import { faSlidersH } from '@fortawesome/free-solid-svg-icons/faSlidersH';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faUndo } from '@fortawesome/free-solid-svg-icons/faUndo';
 import { faUnlink } from '@fortawesome/free-solid-svg-icons/faUnlink';
+import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import { TranslateService } from '@ngx-translate/core';
 import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
@@ -183,6 +187,10 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly faExternalLinkAlt: IconDefinition = faExternalLinkAlt;
   readonly faArrowLeft: IconDefinition = faArrowLeft;
   readonly faEye: IconDefinition = faEye;
+  readonly faUpload: IconDefinition = faUpload;
+  readonly faSave: IconDefinition = faSave;
+  readonly faDraftingCompass: IconDefinition = faDraftingCompass;
+  readonly faNewspaper: IconDefinition = faNewspaper;
 
   /**
    * Current entry ID
@@ -321,6 +329,16 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
    * API loading indicator
    */
   loading: boolean;
+
+  /**
+   * Determines whether or not entry loaded from API call.
+   */
+  entryLoaded: boolean;
+
+  /**
+   * Determines whether or not editor is initialized.
+   */
+  editorInit: boolean;
 
   /**
    * Determine whether editing or creating new entry
@@ -780,6 +798,8 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       if (params.id && (params.id !== 'new' && params.id !== 'page')) {
         clearInterval(this.autoSaveInterval);
         this.getEntry(params.id.toString());
+      } else {
+        this.entryLoaded = true;
       }
       setTimeout((): void => {
         this.updateTitle();
@@ -1010,6 +1030,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Editor instance
     this.editor = editor;
+    this.editorInit = true;
     this.editor.addContainer(this.sideBarControls.nativeElement);
     // this.editor.addContainer(this.selectionBubble.nativeElement);
     this.editor.addContainer(this.linkBubble.nativeElement);
@@ -1315,7 +1336,8 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param range Range
    */
   setBubblePosition(element: HTMLElement, range: RangeStatic): void {
-    if (!range) {
+    // Prevent code from running if the editor is not yet initialized or given range is invalid.
+    if (!range || !this.editor) {
       return;
     }
     const rangeBounds: BoundsStatic = this.editor.getBounds(range.index, range.length);
@@ -1542,7 +1564,9 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     this.id = id;
     this.writeService.getEntry(id).subscribe((data: Entry): void => {
       this.loading = false;
+      this.entryLoaded = true;
       this.oldEntry = cloneDeep(data);
+      const tags = data.tags;
       if (data.entrydraft) {
         this.postChanged = true;
         data = data.entrydraft;
@@ -1550,6 +1574,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
           this.toast.warning(response.UNPUBLISHED_CHANGES as string, response.LOADING_DRAFT as string);
         });
       }
+      data.tags = tags;
       /**
        * Don't patch if user was creating post
        */
@@ -1598,16 +1623,48 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * Update entry
+   *
+   * @param payload Payload required by backend
+   * @param status Status of entry
+   */
+  updateEntry(payload: Params, status?: EntryStatus): void {
+    this.loading = true;
+    this.writeService.updateEntry(payload).subscribe((data: Entry): void => {
+      if (!this.autoSave) {
+        this.oldEntry = cloneDeep(data);
+        this.postChanged = false;
+        const tags = data.tags;
+        if (data.entrydraft) {
+          data = data.entrydraft;
+        }
+        data.tags = tags;
+        this.patchForm(data);
+      } else {
+        this.postChanged = true;
+        this.autoSave = false;
+        this.oldForm = cloneDeep(this.form.value);
+        this.hasUnsavedChanges = false;
+      }
+      this.loading = false;
+    }, (): void => {
+      this.loading = false;
+    });
+  }
+
+  /**
    * Save entry
    *
    * @param status Status of entry
    */
   save(status?: EntryStatus): void {
+    // Setup payload and required fields.
     const payload: Params = Object.assign({}, this.form.value);
     payload.content = this.editor.root.innerHTML;
     payload.id = this.id;
     payload.site = BlogService.currentBlog.id;
-    if (status !== undefined) {
+    // Set status property only if it was given. Status is given only when user is changing entry's status directly.
+    if (status !== null) {
       payload.status = status;
     }
     /**
@@ -1616,10 +1673,10 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     if (payload.start_publication === '') {
       payload.start_publication = null;
     }
-    /**
-     * Check status before updating
-     */
-    if (this.autoSave) {
+    // If method was called with auto save in progress,
+    // then remove `status` property from payload to save the changes in draft. Basically not sending status to endpoint
+    // will cause the changes to be saved as draft.
+    if (this.autoSave || status === null) {
       delete payload.status;
     }
     if (this.isEditing) {
@@ -1629,32 +1686,25 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+
   /**
-   * Update entry
+   * Set entry's status based on given param's value and prompt a confirm alert before updating.
    *
-   * @param payload Payload required by backend
-   * @param status Status of entry
+   * @param status Entry status to update to.
    */
-  updateEntry(payload: Params, status?: EntryStatus): void {
-    this.loading = true;
-    this.writeService.updateEntry(payload).subscribe((data: Entry): void => {
-      this.loading = false;
-      if (!this.autoSave) {
-        this.oldEntry = cloneDeep(data);
-        this.postChanged = false;
-        if (data.entrydraft) {
-          data = data.entrydraft;
-        }
-        this.patchForm(data);
-      } else {
-        this.postChanged = true;
-        this.autoSave = false;
-        this.oldForm = cloneDeep(this.form.value);
-        this.form.updateValueAndValidity();
-      }
-    }, (): void => {
-      this.loading = false;
-    });
+  setStatus(status: EntryStatus): void {
+    // It's being used to display confirm message based on given entry status from param.
+    let confirmMessage: 'PUBLISH_ENTRY_CONFIRM' | 'DRAFT_ENTRY_CONFIRM';
+    if (status === EntryStatus.Draft) {
+      confirmMessage = 'DRAFT_ENTRY_CONFIRM';
+    } else {
+      confirmMessage = 'PUBLISH_ENTRY_CONFIRM';
+    }
+    // Prompt a native confirm alert to ask the user to change status.
+    if (!confirm(this.translateService.instant(confirmMessage))) {
+      return;
+    }
+    this.save(status);
   }
 
   /**

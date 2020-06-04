@@ -14,16 +14,49 @@
         <div>
           <!-- Status selection -->
           <div class="mb-4">
-            <h5 translate>STATUS</h5>
-            <p class="mat-hint" translate>VISIBILITY</p>
-            <select class="custom-select" formControlName="status" id="status">
-              <!-- Draft -->
-              <option [ngValue]="entryStatus.Draft" [title]="'SET_DRAFT' | translate" translate>DRAFT</option>
-              <!-- Published -->
-              <option [ngValue]="entryStatus.Published" [title]="'SET_PUBLISHED' | translate" translate>
-                PUBLISHED
-              </option>
-            </select>
+            <h5 class="d-inline" translate>VISIBILITY</h5>
+            <p class="mat-hint" translate>VISIBILITY_DESCRIPTION</p>
+            <!-- Header -->
+            <div class="dropdown custom-header default-toggle" dropdown>
+              <!-- Current blog -->
+              <button class="btn btn-primary" dropdownToggle [disabled]="loading">
+                {{ (form.get('status').value === entryStatus.Published ? 'PUBLIC' : 'DRAFT') | translate }}
+                <fa-icon [icon]="faChevronDown" class="ml-auto" size="sm"></fa-icon>
+              </button>
+              <!-- Dropdown menu -->
+              <ul class="dropdown-menu" *dropdownMenu>
+                <!-- Public -->
+                <li>
+                  <button class="dropdown-item fancy"
+                          [class.activated]="form.get('status').value === entryStatus.Published"
+                          (click)="setStatus(entryStatus.Published)">
+                    <!-- Icon -->
+                    <fa-icon [fixedWidth]="true" [icon]="faNewspaper"></fa-icon>
+                    <span class="d-flex flex-column">
+                      <!-- Label -->
+                      <span class="label font-weight-medium" translate>PUBLIC</span>
+                      <!-- Description -->
+                      <span class="mat-hint mat-small" translate>PUBLIC_DESCRIPTION</span>
+                    </span>
+                  </button>
+                </li>
+                <!-- Draft -->
+                <li>
+                  <button class="dropdown-item fancy"
+                          [class.activated]="form.get('status').value === entryStatus.Draft"
+                          (click)="setStatus(entryStatus.Draft)">
+                    <!-- Icon -->
+                    <fa-icon [fixedWidth]="true" [icon]="faDraftingCompass"></fa-icon>
+                    <span class="d-flex flex-column">
+                      <!-- Label -->
+                      <span class="label font-weight-medium" translate>DRAFT</span>
+                      <!-- Description -->
+                      <span class="mat-hint mat-small" translate>DRAFT_DESCRIPTION</span>
+                    </span>
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
           <!-- Start publication -->
           <div class="mb-4">
@@ -194,7 +227,9 @@
             <div class="dropdown custom-header"
                  dropdown>
               <!-- Current blog -->
-              <button class="fancy" dropdownToggle [tooltip]="'HEADER' | translate" placement="bottom">
+              <button class="fancy" dropdownToggle
+                      [tooltip]="'HEADER' | translate"
+                      placement="bottom" [disabled]="entryLoaded && !editorInit">
                 <span *ngIf="selectionFormats.header == headerKey.H1" translate>HEADING_1</span>
                 <span *ngIf="selectionFormats.header == headerKey.H2" translate>HEADING_2</span>
                 <span *ngIf="selectionFormats.header == headerKey.H3" translate>HEADING_3</span>
@@ -261,34 +296,45 @@
           </div>
           <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
-            <button class="ql-bold fancy" [tooltip]="boldTooltip" placement="bottom"></button>
-            <button class="ql-italic fancy" [tooltip]="italicTooltip" placement="bottom"></button>
-            <button class="ql-underline fancy" [tooltip]="underlineTooltip" placement="bottom"></button>
-            <button class="ql-strike fancy" [tooltip]="strikeTooltip" placement="bottom"></button>
+            <button class="ql-bold fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="boldTooltip"
+                    placement="bottom"></button>
+            <button class="ql-italic fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="italicTooltip"
+                    placement="bottom"></button>
+            <button class="ql-underline fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="underlineTooltip"
+                    placement="bottom"></button>
+            <button class="ql-strike fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="strikeTooltip"
+                    placement="bottom"></button>
           </div>
           <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
             <button class="fancy"
+                    [disabled]="entryLoaded && !editorInit"
                     [tooltip]="linkTooltip"
                     [class.activated]="selectionFormats.link"
                     (click)="insertLink()"
                     placement="bottom">
               <fa-icon [icon]="faLink"></fa-icon>
             </button>
-            <button class="ql-blockquote fancy" [tooltip]="blockquoteTooltip" placement="bottom"></button>
-            <button class="ql-code-block fancy" [tooltip]="'CODE_BLOCK' | translate" placement="bottom"></button>
-            <button class="ql-divider fancy" [tooltip]="'DIVIDER' | translate" placement="bottom"></button>
+            <button class="ql-blockquote fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="blockquoteTooltip"
+                    placement="bottom"></button>
+            <button class="ql-code-block fancy" [disabled]="entryLoaded && !editorInit"
+                    [tooltip]="'CODE_BLOCK' | translate" placement="bottom"></button>
+            <button class="ql-divider fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="'DIVIDER' | translate"
+                    placement="bottom"></button>
           </div>
           <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
-            <button class="ql-list fancy" [tooltip]="listNumberedTooltip" placement="bottom"
+            <button class="ql-list fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="listNumberedTooltip"
+                    placement="bottom"
                     value="ordered"></button>
-            <button class="ql-list fancy" [tooltip]="listBulletTooltip" placement="bottom"
+            <button class="ql-list fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="listBulletTooltip"
+                    placement="bottom"
                     value="bullet"></button>
             <!-- Align & indent -->
             <div class="dropdown custom-header alignment" dropdown>
               <!-- Current blog -->
-              <button class="fancy" dropdownToggle [tooltip]="'ALIGN_AND_INDENT' | translate" placement="bottom">
+              <button class="fancy" dropdownToggle [disabled]="entryLoaded && !editorInit"
+                      [tooltip]="'ALIGN_AND_INDENT' | translate" placement="bottom">
                 <fa-icon [icon]="faAlignLeft"
                          *ngIf="selectionFormats.align === '' || !selectionFormats.align"></fa-icon>
                 <fa-icon [icon]="faAlignRight" *ngIf="selectionFormats.align === 'right'"></fa-icon>
@@ -350,30 +396,46 @@
               </ul>
             </div>
             <!-- Direction -->
-            <button class="ql-direction fancy" value="rtl" [tooltip]="'DIRECTION' | translate" placement="bottom"></button>
+            <button class="ql-direction fancy" [disabled]="entryLoaded && !editorInit" value="rtl"
+                    [tooltip]="'DIRECTION' | translate"
+                    placement="bottom"></button>
           </div>
           <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
-            <button class="ql-image fancy" [tooltip]="'INSERT_IMAGE' | translate" placement="bottom"></button>
-            <button class="ql-video fancy" [tooltip]="embedTooltip" placement="bottom" #qlVideo></button>
+            <button class="ql-image fancy" [disabled]="entryLoaded && !editorInit"
+                    [tooltip]="'INSERT_IMAGE' | translate" placement="bottom"></button>
+            <button class="ql-video fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="embedTooltip"
+                    placement="bottom" #qlVideo></button>
           </div>
           <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
           <div class="ql-formats">
-            <button class="ql-clean fancy" [tooltip]="removeFormattingTooltip" placement="bottom"></button>
+            <button class="ql-clean fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="removeFormattingTooltip"
+                    placement="bottom"></button>
           </div>
         </div>
         <!-- Submit buttons -->
         <div class="d-flex align-items-center ml-auto">
-          <!-- Entry's state -->
-          <span class="mat-hint mr-2" *ngIf="isEditing && !hasUnsavedChanges">
-            {{ (loading ? 'SAVING' : 'SAVED') | translate }}
-          </span>
+          <div *ngIf="isEditing">
+            <!-- Entry's state -->
+            <span class="mat-hint mr-2">
+              <span *ngIf="loading">{{ 'SAVING' | translate }}</span>
+              <span *ngIf="!loading && !hasUnsavedChanges">{{ 'SAVED' | translate }}</span>
+              <span *ngIf="!loading && hasUnsavedChanges">Unsaved changes</span>
+            </span>
+            <button class="next-btn ml-2"
+                    [disabled]="loading"
+                    [tooltip]="publishTooltip"
+                    (click)="save()">
+              <fa-icon [icon]="faSave" [fixedWidth]="true" class="mr-2"></fa-icon>
+              Save
+            </button>
+          </div>
           <!-- Publish/create -->
           <button class="btn btn-primary ml-2"
                   [ngClass]="{'btn-primary': isEditing, 'btn-success': !isEditing}"
                   [disabled]="loading"
-                  [tooltip]="publishTooltip"
-                  (click)="save()">
+                  (click)="save(entryStatus.Published)">
+            <fa-icon [icon]="faUpload" [fixedWidth]="true" class="mr-2"></fa-icon>
             {{ (isEditing ? 'PUBLISH' : 'CREATE') | translate }}
           </button>
           <!-- Close -->
@@ -383,7 +445,7 @@
           <!-- View on blog -->
           <button class="next-btn next-icon mr-2"
                   [tooltip]="'VIEW_ON_BLOG' | translate"
-                  (click)="viewOnBlog()" *ngIf="isEditing">
+                  (click)="viewOnBlog()" *ngIf="isEditing" [disabled]="!entryLoaded">
             <fa-icon [icon]="faEye" [fixedWidth]="true"></fa-icon>
           </button>
           <!-- Toggle side nav -->
@@ -393,7 +455,11 @@
         </div>
       </div>
       <!-- Editor -->
-      <div class="d-flex h-100">
+      <div class="d-flex h-100 position-relative">
+        <!-- Progress spinner -->
+        <div class="loading-bar" *ngIf="!entryLoaded && editorInit">
+          <mat-progress-spinner [diameter]="30" [strokeWidth]="3" mode="indeterminate"></mat-progress-spinner>
+        </div>
         <div class="editor h-100 overflow-auto"
              (scroll)="scrolled = $event.target['scrollTop'] > 0">
           <!-- Adding the "notranslate" class will prevent chrome from translating the editor and messing things up -->
@@ -628,7 +694,8 @@
                       (blur)="updateTitle()"
                       [required]="true"></textarea>
             <!-- Quill editor -->
-            <quill-editor formControlName="content"
+            <quill-editor [readOnly]="!entryLoaded"
+                          formControlName="content"
                           theme="bootstrap"
                           [modules]="options"
                           [placeholder]="'CONTENT' | translate"
@@ -636,7 +703,6 @@
                           bounds=".editor"
                           [styles]="{borderWidth: 0, fontSize: '1rem'}"
                           style="flex: 1"
-                          classes="text-dark"
                           (onEditorCreated)="onEditorInit($event)"
                           (onEditorChanged)="onEditorChange($event)">
             </quill-editor>

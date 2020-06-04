@@ -11,6 +11,7 @@
 @include mat-autocomplete-theme($gonevis-theme);
 @include mat-option-theme($gonevis-theme);
 @include mat-toolbar-theme($gonevis-theme);
+@include mat-progress-spinner-theme($gonevis-theme);
 
 .editor-page {
   .tooltip {

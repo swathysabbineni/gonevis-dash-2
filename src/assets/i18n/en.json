@@ -132,7 +132,7 @@
   "BLOG_DESCRIPTION": "Blog Description",
   "ADDRESS": "Address",
   "HELP_TEXT_BLOG_DESCRIPTION": "Explain to your audience what this blog is about.",
-  "DISCARD_CHANGES_PROMPT": "All the changes you have not published will be lost, are you sure",
+  "DISCARD_CHANGES_PROMPT": "All the changes you have not published will be lost, are you sure?",
   "NOTHING_HERE_YET": "Nothing here yet.",
   "CONFIRM_DELETE_DOMAIN": "Are you sure you want to delete this domain?",
   "LABEL": "Label",
@@ -383,6 +383,7 @@
   "REMOVE_LINK": "Remove link",
   "ALIGN_AND_INDENT": "Align & indent",
   "VISIBILITY": "Visibility",
+  "VISIBILITY_DESCRIPTION": "Set your post's visibility from public.",
   "COVER_IMAGE_DESCRIPTION": "Select one of your images to set as cover.",
   "EXCERPT_DESCRIPTION": "A slight description of your content.",
   "SLUG_DESCRIPTION": "User & search friendly name for URL address.",
@@ -407,5 +408,10 @@
   "DIRECTION": "Direction",
   "OPEN_IN_BLOG": "Open in blog",
   "ALL": "All",
+  "PUBLIC": "Public",
+  "PUBLIC_DESCRIPTION": "Visible to everyone",
+  "PUBLISH_ENTRY_CONFIRM": "Your post will be published for everyone to see on your blog.\nAre you sure?",
+  "DRAFT_ENTRY_CONFIRM": "Drafting the post will make it hidden on your blog.\nAre you sure?",
+  "DRAFT_DESCRIPTION": "Only visible to blog admins and editors",
   "COLLABORATING": "Collaborating"
 }

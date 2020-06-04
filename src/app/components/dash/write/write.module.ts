@@ -12,6 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { KeyManagerComponent } from '@app/components/dash/write/core/key-manager.component';
@@ -62,6 +63,7 @@ import { WriteComponent } from './write.component';
     MatChipsModule,
     MatAutocompleteModule,
     MatToolbarModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class WriteModule {
