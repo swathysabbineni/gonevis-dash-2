@@ -15,16 +15,15 @@ import { KeyManagerComponent } from '@app/components/dash/write/core/key-manager
 import { FileSelectionModule } from '@app/shared/file-selection/file-selection.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { QuillModule } from 'ngx-quill';
 import { FocusableOptionDirective } from './core/focusable-option.directive';
 
 import { WriteRoutingModule } from './write-routing.module';
 import { WriteComponent } from './write.component';
+import { ShortcutsComponent } from './shared/components/shortcuts/shortcuts.component';
 
 
 @NgModule({
@@ -32,6 +31,7 @@ import { WriteComponent } from './write.component';
     WriteComponent,
     FocusableOptionDirective,
     KeyManagerComponent,
+    ShortcutsComponent,
   ],
   imports: [
     CommonModule,
@@ -40,9 +40,7 @@ import { WriteComponent } from './write.component';
     ReactiveFormsModule,
     TranslateModule.forChild(),
     QuillModule.forRoot(),
-    PopoverModule.forRoot(),
     TooltipModule.forRoot(),
-    CollapseModule.forRoot(),
     ModalModule.forRoot(),
     TextFieldModule,
     FontAwesomeModule,

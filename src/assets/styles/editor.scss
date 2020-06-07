@@ -860,3 +860,29 @@ iframe,
   display: flex;
   flex-wrap: wrap;
 }
+
+.editor-modal {
+  font-family: Roboto, serif;
+  display: flex;
+  height: 100%;
+  max-width: 80vw;
+  margin: auto;
+
+  .modal-content {
+    max-height: 80%;
+    width: auto;
+    margin: auto;
+    flex-direction: unset;
+
+    .modal-header {
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+      background-color: transparent;
+      z-index: 1;
+    }
+  }
+
+  kbd {
+    font-family: Roboto, serif;
+    letter-spacing: .75px;
+  }
+}

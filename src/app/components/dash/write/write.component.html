@@ -483,6 +483,12 @@
           </div>
           <!-- Adding the "notranslate" class will prevent chrome from translating the editor and messing things up -->
           <div class="container d-flex flex-column position-relative notranslate">
+            <!-- Show shortcuts button -->
+            <button class="next-btn next-icon show-shortcuts"
+                    (click)="showShortcuts()"
+                    placement="right" [tooltip]="shortcutsTooltip">
+              <fa-icon [icon]="faKeyboard"></fa-icon>
+            </button>
             <!-- Compose -->
             <div class="compose" #sideBarControls [class.show]="showComposeContainer">
               <!-- Button to open compose options -->
@@ -744,6 +750,7 @@
                           bounds=".editor"
                           [styles]="{borderWidth: 0, fontSize: '1rem'}"
                           style="flex: 1"
+                          dir="auto"
                           (onEditorCreated)="onEditorInit($event)"
                           (onEditorChanged)="onEditorChange($event)">
             </quill-editor>
@@ -814,4 +821,9 @@
 <ng-template #composeTooltip>
   <span class="d-block">Add</span>
   <span class="d-inline-block text-secondary">&#8677; Tab</span>
+</ng-template>
+<!-- Compose add button tooltip -->
+<ng-template #shortcutsTooltip>
+  <span class="d-block" translate>KEYBOARD_SHORTCUTS</span>
+  <span class="d-inline-block text-secondary">Ctrl+/</span>
 </ng-template>
