@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { MetricStatItem } from '@app/enums/metric-stat-item';
 import { MetricStatResolution } from '@app/enums/metric-stat-resolution';
 
@@ -29,6 +29,11 @@ export class StatisticsComponent implements OnInit {
   ];
 
   /**
+   * Refresh the statistics data
+   */
+  readonly statisticsRefresh = new EventEmitter<void>();
+
+  /**
    * Selected resolution for statistics panel filter
    */
   statisticsResolution = this.statisticsResolutions[0];
@@ -39,5 +44,11 @@ export class StatisticsComponent implements OnInit {
   statisticsItem: { value: MetricStatItem, label: string } = this.statisticsItems[0];
 
   ngOnInit(): void {
+    /**
+     * Update statistics
+     */
+    setTimeout((): void => {
+      this.statisticsRefresh.emit();
+    });
   }
 }
