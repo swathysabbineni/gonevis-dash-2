@@ -1,0 +1,54 @@
+<div class="d-flex flex-column h-100">
+  <div class="modal-header align-items-center">
+    <div class="modal-title">
+      <!-- Title -->
+      <h5 class="font-weight-medium" translate>KEYBOARD_SHORTCUTS</h5>
+      <!-- Tip -->
+      <p class="mat-small mat-hint m-0" [innerHTML]="'KEYBOARD_SHORTCUTS_TIP' | translate"></p>
+    </div>
+    <!-- Close button -->
+    <button class="next-btn next-icon" (click)="modalRef.hide()">
+      <fa-icon [icon]="faTimes"></fa-icon>
+    </button>
+  </div>
+  <div class="modal-body d-flex overflow-auto" (scroll)="onScroll($event)">
+    <!-- Group names to scroll to -->
+    <ul class="scroll-indicator sticky-top">
+      <li *ngFor="let shortcutGroup of shortcuts | keyvalue:originalOrder">
+        <a [class.active]="currentGroup === shortcutGroup.key"
+           (click)="scrollToGroup(shortcutGroup.key)" translate>{{ shortcutGroup.key }}</a>
+      </li>
+    </ul>
+    <!-- List of shortcuts -->
+    <div class="shortcuts-list">
+      <div #group [attr.group-name]="shortcutGroup.key"
+           *ngFor="let shortcutGroup of shortcuts | keyvalue:originalOrder; let first = first;">
+        <!-- Divider -->
+        <mat-divider *ngIf="!first"></mat-divider>
+        <!-- Group name -->
+        <div class="group-name" translate>{{ shortcutGroup.key }}</div>
+        <!-- Shortcut -->
+        <div class="single-shortcut" *ngFor="let shortcut of shortcutGroup.value">
+          <!-- Icon -->
+          <div class="shortcut-icon mr-2">
+            <fa-icon [icon]="shortcut.icon" *ngIf="shortcut.icon"></fa-icon>
+          </div>
+          <!-- Shortcut name -->
+          <span class="shortcut-name" translate>{{ shortcut.name }}</span>
+          <!-- Keys -->
+          <div class="shortcut-combination">
+            <span *ngFor="let key of shortcut.keys; let last = last;">
+              <kbd>{{ key }}</kbd> <span *ngIf="!last"> + </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <br>
+      <!-- Divider -->
+      <mat-divider class="my-3 ml-0"></mat-divider>
+      <!-- Note -->
+      <p class="text-center mat-hint" translate>SHORTCUTS_MADE_BY</p>
+    </div>
+  </div>
+</div>
+

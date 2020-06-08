@@ -42,6 +42,7 @@ import '@app/components/dash/write/blots/soundcloud.ts';
 import '@app/components/dash/write/blots/video.ts';
 import { KeyManagerComponent } from '@app/components/dash/write/core/key-manager.component';
 import '@app/components/dash/write/modules/clipboard.ts';
+import { ShortcutsComponent } from '@app/components/dash/write/shared/components/shortcuts/shortcuts.component';
 import '@app/components/dash/write/themes/bootstrap.ts';
 import { WriteService } from '@app/components/dash/write/write.service';
 import { DashUiStatus } from '@app/enums/dash-ui-status';
@@ -74,6 +75,7 @@ import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
 import { faHeading } from '@fortawesome/free-solid-svg-icons/faHeading';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
 import { faIndent } from '@fortawesome/free-solid-svg-icons/faIndent';
+import { faKeyboard } from '@fortawesome/free-solid-svg-icons/faKeyboard';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
@@ -150,12 +152,22 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   /**
-   * @description
-   *
+   * Determines whether or not shortcuts modal is open. It's to prevent 'Ctrl+/' shortcut
+   * from opening multiple shortcuts modal.
+   */
+  private isShortcutsModalOpen: boolean;
+
+  /**
    * An un-listen function for disposing of keydown listener.
    * On component destroy, we call this function to dispose.
    */
   private keydownListener: () => void;
+
+  /**
+   * An un-listen function for disposing of keydown listener.
+   * On component destroy, we call this function to dispose.
+   */
+  private shortcutsModalKeydownListener: () => void;
 
   /**
    * Icons for inline
@@ -193,6 +205,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly faDraftingCompass: IconDefinition = faDraftingCompass;
   readonly faNewspaper: IconDefinition = faNewspaper;
   readonly faBorderStyle: IconDefinition = faBorderStyle;
+  readonly faKeyboard: IconDefinition = faKeyboard;
 
   /**
    * Current entry ID
@@ -731,6 +744,16 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       this.autoSave = true;
       this.save();
     });
+    // Add keydown listener to Ctrl+/ to open shortcuts modal.
+    this.shortcutsModalKeydownListener = this.renderer2.listen(document, 'keydown.control./',
+      (event: KeyboardEvent): void => {
+        // Prevent shortcuts modal from opening multiple times when it's already opened.
+        if (this.isShortcutsModalOpen) {
+          return;
+        }
+        event.preventDefault();
+        this.showShortcuts();
+      });
     /**
      * Setup entry form
      */
@@ -824,6 +847,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
      * Un-listen function for disposing of keydown listener.
      */
     this.keydownListener();
+    this.shortcutsModalKeydownListener();
     /**
      * Clear auto save interval from running after page destroy.
      */
@@ -2200,6 +2224,18 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     this.setBubblePosition(this.linkBubble.nativeElement, range);
     this.changeDetectorRef.detectChanges();
     this.linkUrlInput.nativeElement.select();
+  }
+
+  /**
+   * Open shortcuts modal
+   */
+  showShortcuts(): void {
+    this.isShortcutsModalOpen = true;
+    const modalRef: BsModalRef = this.modalService.show(ShortcutsComponent, { class: 'editor-modal' });
+    // On modal closed update variable so 'Ctrl+/' can work.
+    modalRef.content.modalClosed.subscribe((): void => {
+      this.isShortcutsModalOpen = false;
+    });
   }
 
   private makeCodeBlockHandler(indent: boolean): any {
