@@ -78,6 +78,7 @@ import { faIndent } from '@fortawesome/free-solid-svg-icons/faIndent';
 import { faKeyboard } from '@fortawesome/free-solid-svg-icons/faKeyboard';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
+import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { faNewspaper } from '@fortawesome/free-solid-svg-icons/faNewspaper';
 import { faOutdent } from '@fortawesome/free-solid-svg-icons/faOutdent';
@@ -203,6 +204,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly faUpload: IconDefinition = faUpload;
   readonly faSave: IconDefinition = faSave;
   readonly faDraftingCompass: IconDefinition = faDraftingCompass;
+  readonly faLock: IconDefinition = faLock;
   readonly faNewspaper: IconDefinition = faNewspaper;
   readonly faBorderStyle: IconDefinition = faBorderStyle;
   readonly faKeyboard: IconDefinition = faKeyboard;
@@ -738,7 +740,8 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     this.keydownListener = this.renderer2.listen(document, 'keydown.control.s', (event: KeyboardEvent): void => {
       event.preventDefault();
-      if (this.loading) {
+      // Prevent saving if entry's status is set to trash.
+      if (this.loading || this.oldEntry.status === EntryStatus.Trash) {
         return;
       }
       this.autoSave = true;
@@ -748,7 +751,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     this.shortcutsModalKeydownListener = this.renderer2.listen(document, 'keydown.control./',
       (event: KeyboardEvent): void => {
         // Prevent shortcuts modal from opening multiple times when it's already opened.
-        if (this.isShortcutsModalOpen) {
+        if (this.isShortcutsModalOpen || this.oldEntry.status === EntryStatus.Trash) {
           return;
         }
         event.preventDefault();
@@ -1723,15 +1726,9 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
    * Set entry's status based on given param's value and prompt a confirm alert before updating.
    *
    * @param status Entry status to update to.
+   * @param confirmMessage Message to show when confirm prompted.
    */
-  setStatus(status: EntryStatus): void {
-    // It's being used to display confirm message based on given entry status from param.
-    let confirmMessage: 'PUBLISH_ENTRY_CONFIRM' | 'DRAFT_ENTRY_CONFIRM';
-    if (status === EntryStatus.Draft) {
-      confirmMessage = 'DRAFT_ENTRY_CONFIRM';
-    } else {
-      confirmMessage = 'PUBLISH_ENTRY_CONFIRM';
-    }
+  setStatus(status: EntryStatus, confirmMessage: string): void {
     // Prompt a native confirm alert to ask the user to change status.
     if (!confirm(this.translateService.instant(confirmMessage))) {
       return;
@@ -1789,6 +1786,40 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
        * Raise a toaster to let user know about the failure.
        */
       this.translateService.get('ERROR_MOVING_TO_TRASH').subscribe((response: string): void => {
+        this.toast.error(response);
+      });
+    });
+  }
+
+  /**
+   * Restore entry from trash status to draft status and edit it.
+   *
+   * @see EntryStatus.Trash
+   */
+  restoreToEdit(): void {
+    this.loading = true;
+    this.writeService.updateEntry({
+      id: this.id,
+      status: EntryStatus.Draft,
+    }).subscribe((data: Entry): void => {
+      this.loading = false;
+      this.oldEntry = cloneDeep(data);
+      this.postChanged = false;
+      const tags = data.tags;
+      // Check just in case if entrydraft exists.
+      if (data.entrydraft) {
+        data = data.entrydraft;
+      }
+      data.tags = tags;
+      // Update entry form and notify it.
+      this.patchForm(data);
+      // Raise a toaster to let the user know about restoring back to draft.
+      this.translateService.get('POST_RESTORED').subscribe((response: string): void => {
+        this.toast.success(response);
+      });
+    }, (): void => {
+      // Raise a toaster to let the user know about the failure.
+      this.translateService.get('ERROR_RESTORING_POST').subscribe((response: string): void => {
         this.toast.error(response);
       });
     });

@@ -1,765 +1,812 @@
-<mat-sidenav-container class="editor-page h-100">
-  <mat-sidenav #sidenav mode="over" [autoFocus]="false" [fixedInViewport]="true" position="end">
-    <div class="d-flex flex-column h-100">
-      <!-- Toolbar with close button -->
-      <mat-toolbar class="px-4 flex-shrink-0">
-        <!-- Toggle side nav -->
-        <button class="next-btn next-icon" (click)="sidenav.toggle()">
-          <fa-icon [icon]="faArrowLeft" [fixedWidth]="true"></fa-icon>
-        </button>
-      </mat-toolbar>
-      <!-- Sidenav content -->
-      <div class="overflow-auto p-4" [formGroup]="form">
-        <!-- Status -->
-        <div>
-          <!-- Status selection -->
-          <div class="mb-4">
-            <h5 class="d-inline" translate>VISIBILITY</h5>
-            <p class="mat-hint" translate>VISIBILITY_DESCRIPTION</p>
-            <!-- Header -->
-            <div class="dropdown custom-header default-toggle" dropdown>
-              <!-- Current blog -->
-              <button class="btn btn-primary" dropdownToggle [disabled]="loading">
-                {{ (form.get('status').value === entryStatus.Published ? 'PUBLIC' : 'DRAFT') | translate }}
-                <fa-icon [icon]="faChevronDown" class="ml-auto" size="sm"></fa-icon>
-              </button>
-              <!-- Dropdown menu -->
-              <ul class="dropdown-menu" *dropdownMenu>
-                <!-- Public -->
-                <li>
-                  <button class="dropdown-item fancy"
-                          [class.activated]="form.get('status').value === entryStatus.Published"
-                          (click)="setStatus(entryStatus.Published)">
-                    <!-- Icon -->
-                    <fa-icon [fixedWidth]="true" [icon]="faNewspaper"></fa-icon>
-                    <span class="d-flex flex-column">
+<div class="h-100 editor-page">
+  <mat-sidenav-container class="h-100" [hidden]="oldEntry.status === entryStatus.Trash">
+    <mat-sidenav #sidenav mode="over" [autoFocus]="false" [fixedInViewport]="true" position="end">
+      <div class="d-flex flex-column h-100">
+        <!-- Toolbar with close button -->
+        <mat-toolbar class="px-4 flex-shrink-0">
+          <!-- Toggle side nav -->
+          <button class="next-btn next-icon" (click)="sidenav.toggle()">
+            <fa-icon [icon]="faArrowLeft" [fixedWidth]="true"></fa-icon>
+          </button>
+        </mat-toolbar>
+        <!-- Sidenav content -->
+        <div class="overflow-auto p-4" [formGroup]="form">
+          <!-- Status -->
+          <div>
+            <!-- Status selection -->
+            <div class="mb-4">
+              <h5 class="d-inline" translate>VISIBILITY</h5>
+              <p class="mat-hint" translate>VISIBILITY_DESCRIPTION</p>
+              <!-- Header -->
+              <div class="dropdown custom-header default-toggle" dropdown>
+                <!-- Current blog -->
+                <button class="btn btn-primary" dropdownToggle [disabled]="loading">
+                  <!-- Published -->
+                  <ng-template [ngIf]="form.get('status').value === entryStatus.Published">
+                    {{ 'PUBLIC' | translate }}
+                  </ng-template>
+                  <!-- Draft -->
+                  <ng-template [ngIf]="form.get('status').value === entryStatus.Draft">
+                    {{ 'DRAFT' | translate }}
+                  </ng-template>
+                  <!-- Private -->
+                  <ng-template [ngIf]="form.get('status').value === entryStatus.Private">
+                    {{ 'PRIVATE' | translate }}
+                  </ng-template>
+                  <fa-icon [icon]="faChevronDown" class="ml-auto" size="sm"></fa-icon>
+                </button>
+                <!-- Dropdown menu -->
+                <ul class="dropdown-menu" *dropdownMenu>
+                  <!-- Public -->
+                  <li>
+                    <button class="dropdown-item fancy"
+                            [class.activated]="form.get('status').value === entryStatus.Published"
+                            (click)="setStatus(entryStatus.Published, 'PUBLISH_ENTRY_CONFIRM')">
+                      <!-- Icon -->
+                      <fa-icon [fixedWidth]="true" [icon]="faNewspaper"></fa-icon>
+                      <span class="d-flex flex-column">
                       <!-- Label -->
                       <span class="label font-weight-medium" translate>PUBLIC</span>
-                      <!-- Description -->
+                        <!-- Description -->
                       <span class="mat-hint mat-small" translate>PUBLIC_DESCRIPTION</span>
                     </span>
-                  </button>
-                </li>
-                <!-- Draft -->
-                <li>
-                  <button class="dropdown-item fancy"
-                          [class.activated]="form.get('status').value === entryStatus.Draft"
-                          (click)="setStatus(entryStatus.Draft)">
-                    <!-- Icon -->
-                    <fa-icon [fixedWidth]="true" [icon]="faDraftingCompass"></fa-icon>
-                    <span class="d-flex flex-column">
+                    </button>
+                  </li>
+                  <!-- Draft -->
+                  <li>
+                    <button class="dropdown-item fancy"
+                            [class.activated]="form.get('status').value === entryStatus.Draft"
+                            (click)="setStatus(entryStatus.Draft, 'DRAFT_ENTRY_CONFIRM')">
+                      <!-- Icon -->
+                      <fa-icon [fixedWidth]="true" [icon]="faDraftingCompass"></fa-icon>
+                      <span class="d-flex flex-column">
                       <!-- Label -->
                       <span class="label font-weight-medium" translate>DRAFT</span>
-                      <!-- Description -->
+                        <!-- Description -->
                       <span class="mat-hint mat-small" translate>DRAFT_DESCRIPTION</span>
                     </span>
-                  </button>
-                </li>
-              </ul>
+                    </button>
+                  </li>
+                  <!-- Private -->
+                  <li>
+                    <button class="dropdown-item fancy"
+                            [class.activated]="form.get('status').value === entryStatus.Private"
+                            (click)="setStatus(entryStatus.Private, 'PRIVATE_ENTRY_CONFIRM')">
+                      <!-- Icon -->
+                      <fa-icon [fixedWidth]="true" [icon]="faLock"></fa-icon>
+                      <span class="d-flex flex-column">
+                      <!-- Label -->
+                      <span class="label font-weight-medium" translate>PRIVATE</span>
+                        <!-- Description -->
+                      <span class="mat-hint mat-small" translate>PRIVATE_DESCRIPTION</span>
+                    </span>
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-          <!-- Start publication -->
-          <div class="mb-4">
-            <h5 translate>START_PUBLICATION</h5>
-            <p class="mat-hint" translate>START_PUBLICATION_DESCRIPTION</p>
-            <input class="form-control"
-                   [placeholder]="'START_PUBLICATION' | translate"
-                   type="datetime-local"
-                   name="start_publication"
-                   formControlName="start_publication">
-          </div>
-          <!-- Revert changes -->
-          <div class="form-group">
-            <button type="button" (click)="revertChanges()" *ngIf="postChanged"
-                    class="btn btn-outline-danger btn-sm btn-block" [disabled]="loading">
-              <fa-icon [icon]="undo" [fixedWidth]="true"></fa-icon>
-              {{ 'DISCARD_CHANGES' | translate }}
-            </button>
-          </div>
-        </div>
-        <mat-divider></mat-divider>
-        <!-- Tags -->
-        <div>
-          <h5 translate>TAGS</h5>
-          <p class="mat-hint" translate>TAGS_DESCRIPTION</p>
-          <!-- List of tags -->
-          <mat-chip-list class="d-flex mb-3">
-            <mat-chip [disableRipple]="true"
-                      [removable]="true"
-                      (removed)="removeTag(tag)"
-                      *ngFor="let tag of form.get('tags').value">
-              {{ tag }}
-              <fa-icon [icon]="times" matChipRemove></fa-icon>
-            </mat-chip>
-          </mat-chip-list>
-          <div class="form-group">
-            <!-- Input -->
-            <input class="form-control"
-                   type="text"
-                   [placeholder]="'SEARCH_TAGS' | translate"
-                   [formControl]="tagQueryControl"
-                   [matAutocomplete]="auto">
-            <!-- Auto complete -->
-            <mat-autocomplete #auto="matAutocomplete"
-                              autoActiveFirstOption
-                              (optionSelected)="addTag($event.option.value);">
-              <mat-option *ngFor="let tag of tags" [value]="tag.slug">
-                {{tag.name}}
-              </mat-option>
-            </mat-autocomplete>
-          </div>
-        </div>
-        <mat-divider></mat-divider>
-        <!-- Cover image -->
-        <div>
-          <h5 translate>COVER_IMAGE</h5>
-          <p class="mat-hint" translate>COVER_IMAGE_DESCRIPTION</p>
-          <!-- Cover image full picture -->
-          <div class="form-group" *ngIf="form.get('cover_image').value">
-            <img [src]="coverImage.file" class="mw-100 rounded" alt="">
-          </div>
-          <div class="form-group">
-            <!-- Set cover image - when no cover image -->
-            <button class="btn btn-light btn-block" (click)="showFileListModal(false)"
-                    translate
-                    *ngIf="!form.get('cover_image').value">
-              SET_COVER_IMAGE
-            </button>
-            <div class="btn-group btn-block" role="group" *ngIf="form.get('cover_image').value">
-              <!-- Change cover image - when cover image exists -->
-              <button type="button" class="btn btn-light"
-                      (click)="showFileListModal(false)"
-                      translate>
-                CHANGE_COVER_IMAGE
-              </button>
-              <button type="button" class="btn btn-danger" (click)="form.get('cover_image').setValue(null)">
-                <fa-icon [icon]="times" [fixedWidth]="true"></fa-icon>
+            <!-- Start publication -->
+            <div class="mb-4">
+              <h5 translate>START_PUBLICATION</h5>
+              <p class="mat-hint" translate>START_PUBLICATION_DESCRIPTION</p>
+              <input class="form-control"
+                     [placeholder]="'START_PUBLICATION' | translate"
+                     type="datetime-local"
+                     name="start_publication"
+                     formControlName="start_publication">
+            </div>
+            <!-- Revert changes -->
+            <div class="form-group">
+              <button type="button" (click)="revertChanges()" *ngIf="postChanged"
+                      class="btn btn-outline-danger btn-sm btn-block" [disabled]="loading">
+                <fa-icon [icon]="undo" [fixedWidth]="true"></fa-icon>
+                {{ 'DISCARD_CHANGES' | translate }}
               </button>
             </div>
           </div>
-        </div>
-        <mat-divider></mat-divider>
-        <!-- More options -->
-        <div>
-          <!-- Excerpt -->
-          <div class="mb-4">
-            <h5 translate>EXCERPT</h5>
-            <p class="mat-hint" translate>EXCERPT_DESCRIPTION</p>
-            <!-- Input -->
-            <textarea class="form-control"
-                      [placeholder]="'EXCERPT' | translate"
-                      type="text"
-                      name="excerpt"
-                      formControlName="excerpt"
-                      rows="5"></textarea>
-          </div>
-          <!-- Slug -->
-          <div class="mb-4">
-            <h5 translate>SLUG</h5>
-            <p class="mat-hint" translate>SLUG_DESCRIPTION</p>
-            <input class="form-control"
-                   [placeholder]="'SLUG_PLACEHOLDER' | translate"
-                   type="text" name="slug" formControlName="slug">
-          </div>
-          <!-- Meta description -->
-          <div class="mb-4">
-            <h5 translate>META_DESCRIPTION</h5>
-            <p class="mat-hint" translate>META_DESCRIPTION_INFO</p>
-            <input class="form-control" #metaDescriptionInput
-                   [placeholder]="'META_DESCRIPTION_PLACEHOLDER' | translate"
-                   type="text"
-                   maxlength="200"
-                   name="meta_description"
-                   formControlName="meta_description">
-            <!-- Letter count -->
-            <p class="mat-hint text-right">{{ metaDescriptionInput.value?.length || 0 }}/200</p>
-          </div>
-          <!-- Enable commenting -->
-          <div class="form-group custom-control custom-checkbox">
-            <!-- Checkbox -->
-            <input type="checkbox" class="custom-control-input" id="commentEnabled" formControlName="comment_enabled">
-            <!-- Label -->
-            <label class="custom-control-label" for="commentEnabled"
-                   translate>ENABLE_COMMENTING</label>
-            <p class="mat-hint" translate>ENABLE_COMMENTING_DESCRIPTION</p>
-          </div>
-          <!-- Featured -->
-          <div class="form-group custom-control custom-checkbox">
-            <!-- Checkbox -->
-            <input type="checkbox" class="custom-control-input" id="featured" formControlName="featured">
-            <!-- Label -->
-            <label class="custom-control-label" for="featured" translate>FEATURED</label>
-            <p class="mat-hint" translate>FEATURED_DESCRIPTION</p>
-          </div>
-          <!-- Set as page -->
-          <div class="form-group custom-control custom-checkbox">
-            <!-- Checkbox -->
-            <input type="checkbox" class="custom-control-input" id="setAsPage" formControlName="is_page">
-            <!-- Label -->
-            <label class="custom-control-label" for="setAsPage" translate>SET_AS_PAGE</label>
-            <p class="mat-hint" translate>SET_AS_PAGE_DESCRIPTION</p>
-          </div>
-        </div>
-        <!-- Trash -->
-        <div *ngIf="isEditing">
           <mat-divider></mat-divider>
-          <h5 translate>TRASH</h5>
-          <!-- Button -->
-          <button class="btn btn-danger" type="button"
-                  [disabled]="loading"
-                  (click)="moveToTrash()" translate>
-            MOVE_TO_TRASH
-          </button>
+          <!-- Tags -->
+          <div>
+            <h5 translate>TAGS</h5>
+            <p class="mat-hint" translate>TAGS_DESCRIPTION</p>
+            <!-- List of tags -->
+            <mat-chip-list class="d-flex mb-3">
+              <mat-chip [disableRipple]="true"
+                        [removable]="true"
+                        (removed)="removeTag(tag)"
+                        *ngFor="let tag of form.get('tags').value">
+                {{ tag }}
+                <fa-icon [icon]="times" matChipRemove></fa-icon>
+              </mat-chip>
+            </mat-chip-list>
+            <div class="form-group">
+              <!-- Input -->
+              <input class="form-control"
+                     type="text"
+                     [placeholder]="'SEARCH_TAGS' | translate"
+                     [formControl]="tagQueryControl"
+                     [matAutocomplete]="auto">
+              <!-- Auto complete -->
+              <mat-autocomplete #auto="matAutocomplete"
+                                autoActiveFirstOption
+                                (optionSelected)="addTag($event.option.value);">
+                <mat-option *ngFor="let tag of tags" [value]="tag.slug">
+                  {{tag.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <!-- Cover image -->
+          <div>
+            <h5 translate>COVER_IMAGE</h5>
+            <p class="mat-hint" translate>COVER_IMAGE_DESCRIPTION</p>
+            <!-- Cover image full picture -->
+            <div class="form-group" *ngIf="form.get('cover_image').value">
+              <img [src]="coverImage.file" class="mw-100 rounded" alt="">
+            </div>
+            <div class="form-group">
+              <!-- Set cover image - when no cover image -->
+              <button class="btn btn-light btn-block" (click)="showFileListModal(false)"
+                      translate
+                      *ngIf="!form.get('cover_image').value">
+                SET_COVER_IMAGE
+              </button>
+              <div class="btn-group btn-block" role="group" *ngIf="form.get('cover_image').value">
+                <!-- Change cover image - when cover image exists -->
+                <button type="button" class="btn btn-light"
+                        (click)="showFileListModal(false)"
+                        translate>
+                  CHANGE_COVER_IMAGE
+                </button>
+                <button type="button" class="btn btn-danger" (click)="form.get('cover_image').setValue(null)">
+                  <fa-icon [icon]="times" [fixedWidth]="true"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <!-- More options -->
+          <div>
+            <!-- Excerpt -->
+            <div class="mb-4">
+              <h5 translate>EXCERPT</h5>
+              <p class="mat-hint" translate>EXCERPT_DESCRIPTION</p>
+              <!-- Input -->
+              <textarea class="form-control"
+                        [placeholder]="'EXCERPT' | translate"
+                        type="text"
+                        name="excerpt"
+                        formControlName="excerpt"
+                        rows="5"></textarea>
+            </div>
+            <!-- Slug -->
+            <div class="mb-4">
+              <h5 translate>SLUG</h5>
+              <p class="mat-hint" translate>SLUG_DESCRIPTION</p>
+              <input class="form-control"
+                     [placeholder]="'SLUG_PLACEHOLDER' | translate"
+                     type="text" name="slug" formControlName="slug">
+            </div>
+            <!-- Meta description -->
+            <div class="mb-4">
+              <h5 translate>META_DESCRIPTION</h5>
+              <p class="mat-hint" translate>META_DESCRIPTION_INFO</p>
+              <input class="form-control" #metaDescriptionInput
+                     [placeholder]="'META_DESCRIPTION_PLACEHOLDER' | translate"
+                     type="text"
+                     maxlength="200"
+                     name="meta_description"
+                     formControlName="meta_description">
+              <!-- Letter count -->
+              <p class="mat-hint text-right">{{ metaDescriptionInput.value?.length || 0 }}/200</p>
+            </div>
+            <!-- Enable commenting -->
+            <div class="form-group custom-control custom-checkbox">
+              <!-- Checkbox -->
+              <input type="checkbox" class="custom-control-input" id="commentEnabled"
+                     formControlName="comment_enabled">
+              <!-- Label -->
+              <label class="custom-control-label" for="commentEnabled"
+                     translate>ENABLE_COMMENTING</label>
+              <p class="mat-hint" translate>ENABLE_COMMENTING_DESCRIPTION</p>
+            </div>
+            <!-- Featured -->
+            <div class="form-group custom-control custom-checkbox">
+              <!-- Checkbox -->
+              <input type="checkbox" class="custom-control-input" id="featured" formControlName="featured">
+              <!-- Label -->
+              <label class="custom-control-label" for="featured" translate>FEATURED</label>
+              <p class="mat-hint" translate>FEATURED_DESCRIPTION</p>
+            </div>
+            <!-- Set as page -->
+            <div class="form-group custom-control custom-checkbox">
+              <!-- Checkbox -->
+              <input type="checkbox" class="custom-control-input" id="setAsPage" formControlName="is_page">
+              <!-- Label -->
+              <label class="custom-control-label" for="setAsPage" translate>SET_AS_PAGE</label>
+              <p class="mat-hint" translate>SET_AS_PAGE_DESCRIPTION</p>
+            </div>
+          </div>
+          <!-- Trash -->
+          <div *ngIf="isEditing">
+            <mat-divider></mat-divider>
+            <h5 translate>TRASH</h5>
+            <!-- Button -->
+            <button class="btn btn-danger" type="button"
+                    [disabled]="loading"
+                    (click)="moveToTrash()" translate>
+              MOVE_TO_TRASH
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </mat-sidenav>
+    </mat-sidenav>
 
-  <!-- Sidenav content -->
-  <mat-sidenav-content>
-    <!-- Editor -->
-    <form class="d-flex flex-column h-100 bg-white" [formGroup]="form">
-      <div class="d-flex align-items-center px-3 header" [class.scrolled]="scrolled">
-        <!-- Custom toolbar -->
-        <div class="toolbar">
-          <div class="ql-formats">
-            <!-- Header -->
-            <div class="dropdown custom-header"
-                 dropdown>
-              <!-- Current blog -->
-              <button class="fancy" dropdownToggle
-                      [tooltip]="'HEADER' | translate"
-                      placement="bottom" [disabled]="entryLoaded && !editorInit">
-                <span *ngIf="selectionFormats.header == headerKey.H1" translate>HEADING_1</span>
-                <span *ngIf="selectionFormats.header == headerKey.H2" translate>HEADING_2</span>
-                <span *ngIf="selectionFormats.header == headerKey.H3" translate>HEADING_3</span>
-                <span *ngIf="selectionFormats.header == headerKey.H4" translate>HEADING_4</span>
-                <span *ngIf="selectionFormats.header == headerKey.H5" translate>HEADING_5</span>
-                <span *ngIf="selectionFormats.header == headerKey.H6" translate>HEADING_6</span>
-                <span *ngIf="!selectionFormats.header" translate>NORMAL_TEXT</span>
-                <fa-icon [icon]="faChevronDown" class="ml-auto" size="sm"></fa-icon>
+    <!-- Sidenav content -->
+    <mat-sidenav-content>
+      <!-- Editor -->
+      <form class="d-flex flex-column h-100 bg-white" [formGroup]="form">
+        <div class="d-flex align-items-center px-3 header" [class.scrolled]="scrolled">
+          <!-- Custom toolbar -->
+          <div class="toolbar">
+            <div class="ql-formats">
+              <!-- Header -->
+              <div class="dropdown custom-header"
+                   dropdown>
+                <!-- Current blog -->
+                <button class="fancy" dropdownToggle
+                        [tooltip]="'HEADER' | translate"
+                        placement="bottom" [disabled]="entryLoaded && !editorInit">
+                  <span *ngIf="selectionFormats.header == headerKey.H1" translate>HEADING_1</span>
+                  <span *ngIf="selectionFormats.header == headerKey.H2" translate>HEADING_2</span>
+                  <span *ngIf="selectionFormats.header == headerKey.H3" translate>HEADING_3</span>
+                  <span *ngIf="selectionFormats.header == headerKey.H4" translate>HEADING_4</span>
+                  <span *ngIf="selectionFormats.header == headerKey.H5" translate>HEADING_5</span>
+                  <span *ngIf="selectionFormats.header == headerKey.H6" translate>HEADING_6</span>
+                  <span *ngIf="!selectionFormats.header" translate>NORMAL_TEXT</span>
+                  <fa-icon [icon]="faChevronDown" class="ml-auto" size="sm"></fa-icon>
+                </button>
+                <!-- Dropdown menu -->
+                <ul class="dropdown-menu" *dropdownMenu>
+                  <li>
+                    <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 1"
+                            (click)="format('header', headerKey.H1)">
+                      <span class="label" translate>HEADING_1</span>
+                      <span class="shortcut">Ctrl+Alt+1</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 2"
+                            (click)="format('header', headerKey.H2)">
+                      <span class="label" translate>HEADING_2</span>
+                      <span class="shortcut">Ctrl+Alt+2</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 3"
+                            (click)="format('header', headerKey.H3)">
+                      <span class="label" translate>HEADING_3</span>
+                      <span class="shortcut">Ctrl+Alt+3</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 4"
+                            (click)="format('header', headerKey.H4)">
+                      <span class="label" translate>HEADING_4</span>
+                      <span class="shortcut">Ctrl+Alt+4</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 5"
+                            (click)="format('header', headerKey.H5)">
+                      <span class="label" translate>HEADING_5</span>
+                      <span class="shortcut">Ctrl+Alt+5</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 6"
+                            (click)="format('header', headerKey.H6)">
+                      <span class="label" translate>HEADING_6</span>
+                      <span class="shortcut">Ctrl+Alt+6</span>
+                    </button>
+                  </li>
+                  <li class="editor-dropdown-divider"></li>
+                  <li>
+                    <button class="dropdown-item fancy" [class.activated]="!selectionFormats.header"
+                            (click)="format('header', false)">
+                      <span class="label" translate>NORMAL_TEXT</span>
+                      <span class="shortcut">Ctrl+Shift+0</span>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
+            <div class="ql-formats">
+              <button class="ql-bold fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="boldTooltip"
+                      placement="bottom"></button>
+              <button class="ql-italic fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="italicTooltip"
+                      placement="bottom"></button>
+              <button class="ql-underline fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="underlineTooltip"
+                      placement="bottom"></button>
+              <button class="ql-strike fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="strikeTooltip"
+                      placement="bottom"></button>
+            </div>
+            <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
+            <div class="ql-formats">
+              <button class="fancy"
+                      [disabled]="entryLoaded && !editorInit"
+                      [tooltip]="linkTooltip"
+                      [class.activated]="selectionFormats.link"
+                      (click)="insertLink()"
+                      placement="bottom">
+                <fa-icon [icon]="faLink"></fa-icon>
               </button>
-              <!-- Dropdown menu -->
-              <ul class="dropdown-menu" *dropdownMenu>
-                <li>
-                  <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 1"
-                          (click)="format('header', headerKey.H1)">
-                    <span class="label" translate>HEADING_1</span>
-                    <span class="shortcut">Ctrl+Alt+1</span>
-                  </button>
-                </li>
-                <li>
-                  <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 2"
-                          (click)="format('header', headerKey.H2)">
-                    <span class="label" translate>HEADING_2</span>
-                    <span class="shortcut">Ctrl+Alt+2</span>
-                  </button>
-                </li>
-                <li>
-                  <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 3"
-                          (click)="format('header', headerKey.H3)">
-                    <span class="label" translate>HEADING_3</span>
-                    <span class="shortcut">Ctrl+Alt+3</span>
-                  </button>
-                </li>
-                <li>
-                  <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 4"
-                          (click)="format('header', headerKey.H4)">
-                    <span class="label" translate>HEADING_4</span>
-                    <span class="shortcut">Ctrl+Alt+4</span>
-                  </button>
-                </li>
-                <li>
-                  <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 5"
-                          (click)="format('header', headerKey.H5)">
-                    <span class="label" translate>HEADING_5</span>
-                    <span class="shortcut">Ctrl+Alt+5</span>
-                  </button>
-                </li>
-                <li>
-                  <button class="dropdown-item fancy" [class.activated]="selectionFormats.header === 6"
-                          (click)="format('header', headerKey.H6)">
-                    <span class="label" translate>HEADING_6</span>
-                    <span class="shortcut">Ctrl+Alt+6</span>
-                  </button>
-                </li>
-                <li class="editor-dropdown-divider"></li>
-                <li>
-                  <button class="dropdown-item fancy" [class.activated]="!selectionFormats.header"
-                          (click)="format('header', false)">
-                    <span class="label" translate>NORMAL_TEXT</span>
-                    <span class="shortcut">Ctrl+Shift+0</span>
-                  </button>
-                </li>
-              </ul>
+              <button class="ql-blockquote fancy" [disabled]="entryLoaded && !editorInit"
+                      [tooltip]="blockquoteTooltip"
+                      placement="bottom"></button>
+              <button class="ql-code-block fancy" [disabled]="entryLoaded && !editorInit"
+                      [tooltip]="'CODE_BLOCK' | translate" placement="bottom"></button>
+              <button class="ql-divider fancy" [disabled]="entryLoaded && !editorInit"
+                      [tooltip]="'DIVIDER' | translate"
+                      placement="bottom"></button>
+            </div>
+            <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
+            <div class="ql-formats">
+              <button class="ql-list fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="listNumberedTooltip"
+                      placement="bottom"
+                      value="ordered"></button>
+              <button class="ql-list fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="listBulletTooltip"
+                      placement="bottom"
+                      value="bullet"></button>
+              <!-- Align & indent -->
+              <div class="dropdown custom-header alignment" dropdown>
+                <!-- Current blog -->
+                <button class="fancy" dropdownToggle [disabled]="entryLoaded && !editorInit"
+                        [tooltip]="'ALIGN_AND_INDENT' | translate" placement="bottom">
+                  <fa-icon [icon]="faAlignLeft"
+                           *ngIf="selectionFormats.align === '' || !selectionFormats.align"></fa-icon>
+                  <fa-icon [icon]="faAlignRight" *ngIf="selectionFormats.align === 'right'"></fa-icon>
+                  <fa-icon [icon]="faAlignCenter" *ngIf="selectionFormats.align === 'center'"></fa-icon>
+                  <fa-icon [icon]="faAlignJustify" *ngIf="selectionFormats.align === 'justify'"></fa-icon>
+                  <fa-icon [icon]="faChevronDown" class="ml-auto" size="sm"></fa-icon>
+                </button>
+                <!-- Dropdown menu -->
+                <ul class="dropdown-menu with-icon" *dropdownMenu>
+                  <li>
+                    <button class="dropdown-item fancy"
+                            [class.activated]="selectionFormats.align === '' || !selectionFormats.align"
+                            (click)="format('align', '')">
+                      <fa-icon [fixedWidth]="true" [icon]="faAlignLeft"></fa-icon>
+                      <span class="label" translate>LEFT</span>
+                      <span class="shortcut">Ctrl+Shift+L</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'center'"
+                            (click)="format('align', 'center')">
+                      <fa-icon [fixedWidth]="true" [icon]="faAlignCenter"></fa-icon>
+                      <span class="label" translate>CENTER</span>
+                      <span class="shortcut">Ctrl+Shift+E</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'right'"
+                            (click)="format('align', 'right')">
+                      <fa-icon [fixedWidth]="true" [icon]="faAlignRight"></fa-icon>
+                      <span class="label" translate>RIGHT</span>
+                      <span class="shortcut">Ctrl+Shift+R</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'justify'"
+                            (click)="format('align', 'justify')">
+                      <fa-icon [fixedWidth]="true" [icon]="faAlignJustify"></fa-icon>
+                      <span class="label" translate>JUSTIFIED</span>
+                      <span class="shortcut">Ctrl+Shift+J</span>
+                    </button>
+                  </li>
+                  <li class="editor-dropdown-divider"></li>
+                  <li>
+                    <button class="dropdown-item fancy" (click)="format('indent', '+1')">
+                      <fa-icon [fixedWidth]="true" [icon]="faIndent"></fa-icon>
+                      <span class="label" translate>INCREASE_INDENT</span>
+                      <span class="shortcut">Ctrl+]</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item fancy"
+                            (click)="format('indent', '-1')">
+                      <fa-icon [fixedWidth]="true" [icon]="faOutdent"></fa-icon>
+                      <span class="label" translate>DECREASE_INDENT</span>
+                      <span class="shortcut">Ctrl+[</span>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <!-- Direction -->
+              <button class="ql-direction fancy" [disabled]="entryLoaded && !editorInit" value="rtl"
+                      [tooltip]="'DIRECTION' | translate"
+                      placement="bottom"></button>
+            </div>
+            <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
+            <div class="ql-formats">
+              <button class="ql-image fancy" [disabled]="entryLoaded && !editorInit"
+                      [tooltip]="'INSERT_IMAGE' | translate" placement="bottom"></button>
+              <button class="ql-video fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="embedTooltip"
+                      placement="bottom" #qlVideo></button>
+            </div>
+            <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
+            <div class="ql-formats">
+              <button class="ql-clean fancy" [disabled]="entryLoaded && !editorInit"
+                      [tooltip]="removeFormattingTooltip"
+                      placement="bottom"></button>
             </div>
           </div>
-          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
-          <div class="ql-formats">
-            <button class="ql-bold fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="boldTooltip"
-                    placement="bottom"></button>
-            <button class="ql-italic fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="italicTooltip"
-                    placement="bottom"></button>
-            <button class="ql-underline fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="underlineTooltip"
-                    placement="bottom"></button>
-            <button class="ql-strike fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="strikeTooltip"
-                    placement="bottom"></button>
-          </div>
-          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
-          <div class="ql-formats">
-            <button class="fancy"
-                    [disabled]="entryLoaded && !editorInit"
-                    [tooltip]="linkTooltip"
-                    [class.activated]="selectionFormats.link"
-                    (click)="insertLink()"
-                    placement="bottom">
-              <fa-icon [icon]="faLink"></fa-icon>
-            </button>
-            <button class="ql-blockquote fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="blockquoteTooltip"
-                    placement="bottom"></button>
-            <button class="ql-code-block fancy" [disabled]="entryLoaded && !editorInit"
-                    [tooltip]="'CODE_BLOCK' | translate" placement="bottom"></button>
-            <button class="ql-divider fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="'DIVIDER' | translate"
-                    placement="bottom"></button>
-          </div>
-          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
-          <div class="ql-formats">
-            <button class="ql-list fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="listNumberedTooltip"
-                    placement="bottom"
-                    value="ordered"></button>
-            <button class="ql-list fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="listBulletTooltip"
-                    placement="bottom"
-                    value="bullet"></button>
-            <!-- Align & indent -->
-            <div class="dropdown custom-header alignment" dropdown>
-              <!-- Current blog -->
-              <button class="fancy" dropdownToggle [disabled]="entryLoaded && !editorInit"
-                      [tooltip]="'ALIGN_AND_INDENT' | translate" placement="bottom">
-                <fa-icon [icon]="faAlignLeft"
-                         *ngIf="selectionFormats.align === '' || !selectionFormats.align"></fa-icon>
-                <fa-icon [icon]="faAlignRight" *ngIf="selectionFormats.align === 'right'"></fa-icon>
-                <fa-icon [icon]="faAlignCenter" *ngIf="selectionFormats.align === 'center'"></fa-icon>
-                <fa-icon [icon]="faAlignJustify" *ngIf="selectionFormats.align === 'justify'"></fa-icon>
-                <fa-icon [icon]="faChevronDown" class="ml-auto" size="sm"></fa-icon>
-              </button>
-              <!-- Dropdown menu -->
-              <ul class="dropdown-menu with-icon" *dropdownMenu>
-                <li>
-                  <button class="dropdown-item fancy"
-                          [class.activated]="selectionFormats.align === '' || !selectionFormats.align"
-                          (click)="format('align', '')">
-                    <fa-icon [fixedWidth]="true" [icon]="faAlignLeft"></fa-icon>
-                    <span class="label" translate>LEFT</span>
-                    <span class="shortcut">Ctrl+Shift+L</span>
-                  </button>
-                </li>
-                <li>
-                  <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'center'"
-                          (click)="format('align', 'center')">
-                    <fa-icon [fixedWidth]="true" [icon]="faAlignCenter"></fa-icon>
-                    <span class="label" translate>CENTER</span>
-                    <span class="shortcut">Ctrl+Shift+E</span>
-                  </button>
-                </li>
-                <li>
-                  <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'right'"
-                          (click)="format('align', 'right')">
-                    <fa-icon [fixedWidth]="true" [icon]="faAlignRight"></fa-icon>
-                    <span class="label" translate>RIGHT</span>
-                    <span class="shortcut">Ctrl+Shift+R</span>
-                  </button>
-                </li>
-                <li>
-                  <button class="dropdown-item fancy" [class.activated]="selectionFormats.align === 'justify'"
-                          (click)="format('align', 'justify')">
-                    <fa-icon [fixedWidth]="true" [icon]="faAlignJustify"></fa-icon>
-                    <span class="label" translate>JUSTIFIED</span>
-                    <span class="shortcut">Ctrl+Shift+J</span>
-                  </button>
-                </li>
-                <li class="editor-dropdown-divider"></li>
-                <li>
-                  <button class="dropdown-item fancy" (click)="format('indent', '+1')">
-                    <fa-icon [fixedWidth]="true" [icon]="faIndent"></fa-icon>
-                    <span class="label" translate>INCREASE_INDENT</span>
-                    <span class="shortcut">Ctrl+]</span>
-                  </button>
-                </li>
-                <li>
-                  <button class="dropdown-item fancy"
-                          (click)="format('indent', '-1')">
-                    <fa-icon [fixedWidth]="true" [icon]="faOutdent"></fa-icon>
-                    <span class="label" translate>DECREASE_INDENT</span>
-                    <span class="shortcut">Ctrl+[</span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <!-- Direction -->
-            <button class="ql-direction fancy" [disabled]="entryLoaded && !editorInit" value="rtl"
-                    [tooltip]="'DIRECTION' | translate"
-                    placement="bottom"></button>
-          </div>
-          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
-          <div class="ql-formats">
-            <button class="ql-image fancy" [disabled]="entryLoaded && !editorInit"
-                    [tooltip]="'INSERT_IMAGE' | translate" placement="bottom"></button>
-            <button class="ql-video fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="embedTooltip"
-                    placement="bottom" #qlVideo></button>
-          </div>
-          <mat-divider vertical class="mx-2 align-self-center"></mat-divider>
-          <div class="ql-formats">
-            <button class="ql-clean fancy" [disabled]="entryLoaded && !editorInit" [tooltip]="removeFormattingTooltip"
-                    placement="bottom"></button>
-          </div>
-        </div>
-        <!-- Submit buttons -->
-        <div class="d-flex align-items-center ml-auto">
-          <div *ngIf="isEditing">
-            <!-- Entry's state -->
-            <span class="mat-hint mr-2">
+          <!-- Submit buttons -->
+          <div class="d-flex align-items-center ml-auto">
+            <div *ngIf="isEditing">
+              <!-- Entry's state -->
+              <span class="mat-hint mr-2">
               <span *ngIf="loading">{{ 'SAVING' | translate }}</span>
               <span *ngIf="!loading && !hasUnsavedChanges">{{ 'SAVED' | translate }}</span>
               <span *ngIf="!loading && hasUnsavedChanges">Unsaved changes</span>
             </span>
-            <button class="next-btn ml-2"
+              <button class="next-btn ml-2"
+                      [disabled]="loading"
+                      [tooltip]="publishTooltip"
+                      (click)="save()">
+                <fa-icon [icon]="faSave" [fixedWidth]="true" class="mr-2"></fa-icon>
+                Save
+              </button>
+            </div>
+            <!-- Publish/create -->
+            <button class="btn btn-primary ml-2"
+                    [ngClass]="{'btn-primary': isEditing, 'btn-success': !isEditing}"
                     [disabled]="loading"
-                    [tooltip]="publishTooltip"
-                    (click)="save()">
-              <fa-icon [icon]="faSave" [fixedWidth]="true" class="mr-2"></fa-icon>
-              Save
+                    (click)="save(entryStatus.Published)">
+              <fa-icon [icon]="faUpload" [fixedWidth]="true" class="mr-2"></fa-icon>
+              {{ (isEditing ? 'PUBLISH' : 'CREATE') | translate }}
+            </button>
+            <!-- Close -->
+            <button class="btn btn-light ml-2" (click)="goBack()" translate>CLOSE</button>
+            <!-- Divider -->
+            <mat-divider vertical class="mx-2"></mat-divider>
+            <!-- View on blog -->
+            <button class="next-btn next-icon mr-2"
+                    [tooltip]="'VIEW_ON_BLOG' | translate"
+                    (click)="viewOnBlog()" *ngIf="isEditing" [disabled]="!entryLoaded">
+              <fa-icon [icon]="faEye" [fixedWidth]="true"></fa-icon>
+            </button>
+            <!-- Toggle side nav -->
+            <button class="next-btn next-icon" (click)="sidenav.toggle()">
+              <fa-icon [icon]="faSlidersH" [fixedWidth]="true"></fa-icon>
             </button>
           </div>
-          <!-- Publish/create -->
-          <button class="btn btn-primary ml-2"
-                  [ngClass]="{'btn-primary': isEditing, 'btn-success': !isEditing}"
-                  [disabled]="loading"
-                  (click)="save(entryStatus.Published)">
-            <fa-icon [icon]="faUpload" [fixedWidth]="true" class="mr-2"></fa-icon>
-            {{ (isEditing ? 'PUBLISH' : 'CREATE') | translate }}
-          </button>
-          <!-- Close -->
-          <button class="btn btn-light ml-2" (click)="goBack()" translate>CLOSE</button>
-          <!-- Divider -->
-          <mat-divider vertical class="mx-2"></mat-divider>
-          <!-- View on blog -->
-          <button class="next-btn next-icon mr-2"
-                  [tooltip]="'VIEW_ON_BLOG' | translate"
-                  (click)="viewOnBlog()" *ngIf="isEditing" [disabled]="!entryLoaded">
-            <fa-icon [icon]="faEye" [fixedWidth]="true"></fa-icon>
-          </button>
-          <!-- Toggle side nav -->
-          <button class="next-btn next-icon" (click)="sidenav.toggle()">
-            <fa-icon [icon]="faSlidersH" [fixedWidth]="true"></fa-icon>
-          </button>
         </div>
-      </div>
-      <!-- Editor -->
-      <div class="d-flex h-100 position-relative">
-        <!-- Progress spinner -->
-        <div class="loading-bar" *ngIf="!entryLoaded && editorInit">
-          <mat-progress-spinner [diameter]="30" [strokeWidth]="3" mode="indeterminate"></mat-progress-spinner>
-        </div>
-        <div class="editor h-100 overflow-auto" (scroll)="scrolled = $event.target['scrollTop'] > 0">
-          <!-- Entry cover image -->
-          <div class="editor-cover" [style.background-image]="'url(' + coverImage.file + ')'"
-               *ngIf="coverImage">
-            <div class="inner text-white">
-              <!-- Icon -->
-              <fa-icon [icon]="faBorderStyle" [fixedWidth]="true" size="8x"></fa-icon>
-              <!-- Title and description -->
-              <h3 class="m-0 font-weight-normal mt-4" translate>UPDATE_COVER_IMAGE</h3>
-              <p class="mt-2 mb-4 text-center" translate>COVER_IMAGE_DESCRIPTION</p>
-              <!-- File selection button -->
-              <button class="btn btn-light mb-2" (click)="showFileListModal(false)" type="button" translate>
-                CHANGE_COVER_IMAGE
-              </button>
-              <!-- Remove cover image -->
-              <button class="btn text-white"
-                      (click)="form.get('cover_image').setValue(null); coverImage = null"
-                      type="button" translate>REMOVE
-              </button>
-            </div>
+        <!-- Editor -->
+        <div class="d-flex h-100 position-relative">
+          <!-- Progress spinner -->
+          <div class="loading-bar" *ngIf="!entryLoaded && editorInit">
+            <mat-progress-spinner [diameter]="30" [strokeWidth]="3" mode="indeterminate"></mat-progress-spinner>
           </div>
-          <!-- Adding the "notranslate" class will prevent chrome from translating the editor and messing things up -->
-          <div class="container d-flex flex-column position-relative notranslate">
-            <!-- Show shortcuts button -->
-            <button class="next-btn next-icon show-shortcuts"
-                    (click)="showShortcuts()"
-                    placement="right" [tooltip]="shortcutsTooltip">
-              <fa-icon [icon]="faKeyboard"></fa-icon>
-            </button>
-            <!-- Compose -->
-            <div class="compose" #sideBarControls [class.show]="showComposeContainer">
-              <!-- Button to open compose options -->
-              <button (click)="showComposeOptions = !showComposeOptions"
-                      [tooltip]="composeTooltip"
-                      container=".editor-page"
-                      placement="bottom">
-                <fa-icon [icon]="plus"></fa-icon>
-              </button>
-              <!-- App key manager -->
-              <app-key-manager (blackListKeydown)="onBlackListKeydown($event)"
-                               [class.invisible]="!showComposeOptions"
-                               [@scaleIn]="showComposeOptions ? 'true' : 'false'" cdkTrapFocus #keyManagerComponent>
-                <!-- Remove format -->
-                <button appFocusableOption (click)="format('header', false)">
-                  <fa-icon [icon]="faFont"></fa-icon>
+          <div class="editor h-100 overflow-auto" (scroll)="scrolled = $event.target['scrollTop'] > 0">
+            <!-- Entry cover image -->
+            <div class="editor-cover" [style.background-image]="'url(' + coverImage.file + ')'"
+                 *ngIf="coverImage">
+              <div class="inner text-white">
+                <!-- Icon -->
+                <fa-icon [icon]="faBorderStyle" [fixedWidth]="true" size="8x"></fa-icon>
+                <!-- Title and description -->
+                <h3 class="m-0 font-weight-normal mt-4" translate>UPDATE_COVER_IMAGE</h3>
+                <p class="mt-2 mb-4 text-center" translate>COVER_IMAGE_DESCRIPTION</p>
+                <!-- File selection button -->
+                <button class="btn btn-light mb-2" (click)="showFileListModal(false)" type="button" translate>
+                  CHANGE_COVER_IMAGE
                 </button>
-                <!-- Header - 2 -->
-                <button appFocusableOption (click)="format('header', '2')">
-                  <fa-icon [icon]="faHeading"></fa-icon>
+                <!-- Remove cover image -->
+                <button class="btn text-white"
+                        (click)="form.get('cover_image').setValue(null); coverImage = null"
+                        type="button" translate>REMOVE
                 </button>
-                <!-- Insert image -->
-                <button appFocusableOption (click)="insertImage()">
-                  <fa-icon [icon]="faImage"></fa-icon>
-                </button>
-                <!-- Insert video -->
-                <button appFocusableOption (click)="qlVideo.click();showComposeOptions = false;">
-                  <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
-                </button>
-                <!-- Code block -->
-                <button appFocusableOption (click)="format('code-block', true)">
-                  <fa-icon [icon]="faCode"></fa-icon>
-                </button>
-                <!-- List - bullet -->
-                <button appFocusableOption (click)="format('list', 'bullet')">
-                  <fa-icon [icon]="faListUl"></fa-icon>
-                </button>
-                <!-- Blockquote -->
-                <button appFocusableOption (click)="format('blockquote', true)">
-                  <fa-icon [icon]="faQuoteLeft"></fa-icon>
-                </button>
-                <!-- Divider -->
-                <button appFocusableOption (click)="insertDivider()">
-                  <fa-icon [icon]="faMinus"></fa-icon>
-                </button>
-              </app-key-manager>
+              </div>
             </div>
-            <!-- Selection bubble -->
-            <!--        <div class="selection-tooltip" #selectionBubble [class.show]="showSelectionBubble">-->
-            <!--          <app-key-manager stripArrowKeys="true"-->
-            <!--                           (blackListKeydown)="onBlackListKeydown($event)"-->
-            <!--                           class="d-flex align-items-center"-->
-            <!--                           cdkTrapFocus-->
-            <!--                           #keyManagerComponentBubble>-->
-            <!--            &lt;!&ndash; Bold &ndash;&gt;-->
-            <!--            <button appFocusableOption (click)="formatText('bold', 0)"-->
-            <!--                    [class.active]="selectionFormats.hasOwnProperty('bold')"-->
-            <!--                    [disabled]="selectionFormats.hasOwnProperty('code-block')"-->
-            <!--                    [tooltip]="boldTooltip" triggers="hover" placement="top">-->
-            <!--              <fa-icon [icon]="faBold"></fa-icon>-->
-            <!--            </button>-->
-            <!--            &lt;!&ndash; Italic &ndash;&gt;-->
-            <!--            <button appFocusableOption (click)="formatText('italic', 1)"-->
-            <!--                    [class.active]="selectionFormats.hasOwnProperty('italic')"-->
-            <!--                    [disabled]="selectionFormats.hasOwnProperty('code-block')"-->
-            <!--                    [tooltip]="italicTooltip" triggers="hover" placement="top">-->
-            <!--              <fa-icon [icon]="faItalic"></fa-icon>-->
-            <!--            </button>-->
-            <!--            &lt;!&ndash; Underline &ndash;&gt;-->
-            <!--            <button appFocusableOption (click)="formatText('underline', 2)"-->
-            <!--                    [class.active]="selectionFormats.hasOwnProperty('underline')"-->
-            <!--                    [disabled]="selectionFormats.hasOwnProperty('code-block')"-->
-            <!--                    [tooltip]="underlineTooltip" triggers="hover" placement="top">-->
-            <!--              <fa-icon [icon]="faUnderline"></fa-icon>-->
-            <!--            </button>-->
-            <!--            &lt;!&ndash; Strikethrough &ndash;&gt;-->
-            <!--            <button appFocusableOption (click)="formatText('strike', 3)"-->
-            <!--                    [class.active]="selectionFormats.hasOwnProperty('strike')"-->
-            <!--                    [disabled]="selectionFormats.hasOwnProperty('code-block')"-->
-            <!--                    [tooltip]="strikeTooltip" triggers="hover" placement="top">-->
-            <!--              <fa-icon [icon]="faStrikethrough"></fa-icon>-->
-            <!--            </button>-->
-            <!--            &lt;!&ndash; Strikethrough &ndash;&gt;-->
-            <!--            <button appFocusableOption (click)="insertLink(4)"-->
-            <!--                    [class.active]="selectionFormats.hasOwnProperty('link')"-->
-            <!--                    [disabled]="selectionFormats.hasOwnProperty('code-block')"-->
-            <!--                    [tooltip]="linkTooltip" triggers="hover" placement="top">-->
-            <!--              <fa-icon [icon]="faLink"></fa-icon>-->
-            <!--            </button>-->
-            <!--            <span class="tooltip-divider"></span>-->
-            <!--            &lt;!&ndash; List - ordered &ndash;&gt;-->
-            <!--            <button appFocusableOption (click)="formatLine('list', 5, 'ordered')"-->
-            <!--                    [class.active]="selectionFormats.list === 'ordered'"-->
-            <!--                    [tooltip]="listNumberedTooltip" triggers="hover" placement="top">-->
-            <!--              <fa-icon [icon]="faListOl"></fa-icon>-->
-            <!--            </button>-->
-            <!--            &lt;!&ndash; List - bullet &ndash;&gt;-->
-            <!--            <button appFocusableOption (click)="formatLine('list',6, 'bullet')"-->
-            <!--                    [class.active]="selectionFormats.list === 'bullet'"-->
-            <!--                    [tooltip]="listBulletTooltip" triggers="hover" placement="top">-->
-            <!--              <fa-icon [icon]="faListUl"></fa-icon>-->
-            <!--            </button>-->
-            <!--            &lt;!&ndash; Blockquote &ndash;&gt;-->
-            <!--            <button appFocusableOption (click)="formatLine('blockquote',8)"-->
-            <!--                    [class.active]="selectionFormats.hasOwnProperty('blockquote')"-->
-            <!--                    [tooltip]="blockquoteTooltip" triggers="hover" placement="top">-->
-            <!--              <fa-icon [icon]="faQuoteLeft"></fa-icon>-->
-            <!--            </button>-->
-            <!--            &lt;!&ndash; Code block &ndash;&gt;-->
-            <!--            <button appFocusableOption (click)="formatLine('code-block', 7)"-->
-            <!--                    [class.active]="selectionFormats.hasOwnProperty('code-block')"-->
-            <!--                    tooltip="Code block" placement="bottom">-->
-            <!--              <fa-icon [icon]="faCode"></fa-icon>-->
-            <!--            </button>-->
-            <!--          </app-key-manager>-->
-            <!--        </div>-->
-            <!-- Link -->
-            <div class="link-bubble flex-column" #linkBubble [class.show]="showLinkBubble">
-              <!-- Link edit portal -->
-              <ng-template [cdkPortalOutlet]="selectedLinkPortalOutlet"></ng-template>
-              <ng-template #linkPreviewTemplateRef let-data>
-                <div class="link-preview">
-                  <div class="link-body d-flex align-items-center py-2">
-                    <fa-icon [icon]="faGlobe" class="mr-3"></fa-icon>
-                    <div class="link-detail d-flex flex-column">
-                      <!-- Text -->
-                      <div class="text-truncate" style="font-weight: 500">{{ data.text }}</div>
-                      <!-- Link -->
-                      <a class="text-truncate"
-                         [title]="data.link"
-                         [href]="data.link"
-                         target="_blank">{{ data.link }}</a>
-                    </div>
-                    <div class="d-flex ml-auto">
-                      <!-- Copy -->
-                      <button class="next-btn next-icon fancy rounded-circle"
-                              [cdkCopyToClipboard]="data.link"
-                              [tooltip]="'COPY_LINK' | translate"
-                              container=".editor-page">
-                        <fa-icon [icon]="faCopy"></fa-icon>
-                      </button>
-                      <!-- Edit -->
-                      <button class="next-btn next-icon fancy rounded-circle"
-                              [tooltip]="'EDIT_LINK' | translate"
-                              container=".editor-page"
-                              (click)="editLink(data)">
-                        <fa-icon [icon]="faPencilAlt"></fa-icon>
-                      </button>
-                      <!-- Remove link -->
-                      <button class="next-btn next-icon fancy rounded-circle"
-                              [tooltip]="'REMOVE_LINK' | translate"
-                              container=".editor-page"
-                              (click)="removeLink()">
-                        <fa-icon [icon]="faUnlink"></fa-icon>
-                      </button>
+            <!-- Adding the "notranslate" class will prevent chrome from translating the editor and messing things up -->
+            <div class="container d-flex flex-column position-relative notranslate">
+              <!-- Show shortcuts button -->
+              <button class="next-btn next-icon show-shortcuts"
+                      (click)="showShortcuts()"
+                      placement="right" [tooltip]="shortcutsTooltip">
+                <fa-icon [icon]="faKeyboard"></fa-icon>
+              </button>
+              <!-- Compose -->
+              <div class="compose" #sideBarControls [class.show]="showComposeContainer">
+                <!-- Button to open compose options -->
+                <button (click)="showComposeOptions = !showComposeOptions"
+                        [tooltip]="composeTooltip"
+                        container=".editor-page"
+                        placement="bottom">
+                  <fa-icon [icon]="plus"></fa-icon>
+                </button>
+                <!-- App key manager -->
+                <app-key-manager (blackListKeydown)="onBlackListKeydown($event)"
+                                 [class.invisible]="!showComposeOptions"
+                                 [@scaleIn]="showComposeOptions ? 'true' : 'false'" cdkTrapFocus #keyManagerComponent>
+                  <!-- Remove format -->
+                  <button appFocusableOption (click)="format('header', false)">
+                    <fa-icon [icon]="faFont"></fa-icon>
+                  </button>
+                  <!-- Header - 2 -->
+                  <button appFocusableOption (click)="format('header', '2')">
+                    <fa-icon [icon]="faHeading"></fa-icon>
+                  </button>
+                  <!-- Insert image -->
+                  <button appFocusableOption (click)="insertImage()">
+                    <fa-icon [icon]="faImage"></fa-icon>
+                  </button>
+                  <!-- Insert video -->
+                  <button appFocusableOption (click)="qlVideo.click();showComposeOptions = false;">
+                    <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
+                  </button>
+                  <!-- Code block -->
+                  <button appFocusableOption (click)="format('code-block', true)">
+                    <fa-icon [icon]="faCode"></fa-icon>
+                  </button>
+                  <!-- List - bullet -->
+                  <button appFocusableOption (click)="format('list', 'bullet')">
+                    <fa-icon [icon]="faListUl"></fa-icon>
+                  </button>
+                  <!-- Blockquote -->
+                  <button appFocusableOption (click)="format('blockquote', true)">
+                    <fa-icon [icon]="faQuoteLeft"></fa-icon>
+                  </button>
+                  <!-- Divider -->
+                  <button appFocusableOption (click)="insertDivider()">
+                    <fa-icon [icon]="faMinus"></fa-icon>
+                  </button>
+                </app-key-manager>
+              </div>
+              <!-- Selection bubble -->
+              <!--        <div class="selection-tooltip" #selectionBubble [class.show]="showSelectionBubble">-->
+              <!--          <app-key-manager stripArrowKeys="true"-->
+              <!--                           (blackListKeydown)="onBlackListKeydown($event)"-->
+              <!--                           class="d-flex align-items-center"-->
+              <!--                           cdkTrapFocus-->
+              <!--                           #keyManagerComponentBubble>-->
+              <!--            &lt;!&ndash; Bold &ndash;&gt;-->
+              <!--            <button appFocusableOption (click)="formatText('bold', 0)"-->
+              <!--                    [class.active]="selectionFormats.hasOwnProperty('bold')"-->
+              <!--                    [disabled]="selectionFormats.hasOwnProperty('code-block')"-->
+              <!--                    [tooltip]="boldTooltip" triggers="hover" placement="top">-->
+              <!--              <fa-icon [icon]="faBold"></fa-icon>-->
+              <!--            </button>-->
+              <!--            &lt;!&ndash; Italic &ndash;&gt;-->
+              <!--            <button appFocusableOption (click)="formatText('italic', 1)"-->
+              <!--                    [class.active]="selectionFormats.hasOwnProperty('italic')"-->
+              <!--                    [disabled]="selectionFormats.hasOwnProperty('code-block')"-->
+              <!--                    [tooltip]="italicTooltip" triggers="hover" placement="top">-->
+              <!--              <fa-icon [icon]="faItalic"></fa-icon>-->
+              <!--            </button>-->
+              <!--            &lt;!&ndash; Underline &ndash;&gt;-->
+              <!--            <button appFocusableOption (click)="formatText('underline', 2)"-->
+              <!--                    [class.active]="selectionFormats.hasOwnProperty('underline')"-->
+              <!--                    [disabled]="selectionFormats.hasOwnProperty('code-block')"-->
+              <!--                    [tooltip]="underlineTooltip" triggers="hover" placement="top">-->
+              <!--              <fa-icon [icon]="faUnderline"></fa-icon>-->
+              <!--            </button>-->
+              <!--            &lt;!&ndash; Strikethrough &ndash;&gt;-->
+              <!--            <button appFocusableOption (click)="formatText('strike', 3)"-->
+              <!--                    [class.active]="selectionFormats.hasOwnProperty('strike')"-->
+              <!--                    [disabled]="selectionFormats.hasOwnProperty('code-block')"-->
+              <!--                    [tooltip]="strikeTooltip" triggers="hover" placement="top">-->
+              <!--              <fa-icon [icon]="faStrikethrough"></fa-icon>-->
+              <!--            </button>-->
+              <!--            &lt;!&ndash; Strikethrough &ndash;&gt;-->
+              <!--            <button appFocusableOption (click)="insertLink(4)"-->
+              <!--                    [class.active]="selectionFormats.hasOwnProperty('link')"-->
+              <!--                    [disabled]="selectionFormats.hasOwnProperty('code-block')"-->
+              <!--                    [tooltip]="linkTooltip" triggers="hover" placement="top">-->
+              <!--              <fa-icon [icon]="faLink"></fa-icon>-->
+              <!--            </button>-->
+              <!--            <span class="tooltip-divider"></span>-->
+              <!--            &lt;!&ndash; List - ordered &ndash;&gt;-->
+              <!--            <button appFocusableOption (click)="formatLine('list', 5, 'ordered')"-->
+              <!--                    [class.active]="selectionFormats.list === 'ordered'"-->
+              <!--                    [tooltip]="listNumberedTooltip" triggers="hover" placement="top">-->
+              <!--              <fa-icon [icon]="faListOl"></fa-icon>-->
+              <!--            </button>-->
+              <!--            &lt;!&ndash; List - bullet &ndash;&gt;-->
+              <!--            <button appFocusableOption (click)="formatLine('list',6, 'bullet')"-->
+              <!--                    [class.active]="selectionFormats.list === 'bullet'"-->
+              <!--                    [tooltip]="listBulletTooltip" triggers="hover" placement="top">-->
+              <!--              <fa-icon [icon]="faListUl"></fa-icon>-->
+              <!--            </button>-->
+              <!--            &lt;!&ndash; Blockquote &ndash;&gt;-->
+              <!--            <button appFocusableOption (click)="formatLine('blockquote',8)"-->
+              <!--                    [class.active]="selectionFormats.hasOwnProperty('blockquote')"-->
+              <!--                    [tooltip]="blockquoteTooltip" triggers="hover" placement="top">-->
+              <!--              <fa-icon [icon]="faQuoteLeft"></fa-icon>-->
+              <!--            </button>-->
+              <!--            &lt;!&ndash; Code block &ndash;&gt;-->
+              <!--            <button appFocusableOption (click)="formatLine('code-block', 7)"-->
+              <!--                    [class.active]="selectionFormats.hasOwnProperty('code-block')"-->
+              <!--                    tooltip="Code block" placement="bottom">-->
+              <!--              <fa-icon [icon]="faCode"></fa-icon>-->
+              <!--            </button>-->
+              <!--          </app-key-manager>-->
+              <!--        </div>-->
+              <!-- Link -->
+              <div class="link-bubble flex-column" #linkBubble [class.show]="showLinkBubble">
+                <!-- Link edit portal -->
+                <ng-template [cdkPortalOutlet]="selectedLinkPortalOutlet"></ng-template>
+                <ng-template #linkPreviewTemplateRef let-data>
+                  <div class="link-preview">
+                    <div class="link-body d-flex align-items-center py-2">
+                      <fa-icon [icon]="faGlobe" class="mr-3"></fa-icon>
+                      <div class="link-detail d-flex flex-column">
+                        <!-- Text -->
+                        <div class="text-truncate" style="font-weight: 500">{{ data.text }}</div>
+                        <!-- Link -->
+                        <a class="text-truncate"
+                           [title]="data.link"
+                           [href]="data.link"
+                           target="_blank">{{ data.link }}</a>
+                      </div>
+                      <div class="d-flex ml-auto">
+                        <!-- Copy -->
+                        <button class="next-btn next-icon fancy rounded-circle"
+                                [cdkCopyToClipboard]="data.link"
+                                [tooltip]="'COPY_LINK' | translate"
+                                container=".editor-page">
+                          <fa-icon [icon]="faCopy"></fa-icon>
+                        </button>
+                        <!-- Edit -->
+                        <button class="next-btn next-icon fancy rounded-circle"
+                                [tooltip]="'EDIT_LINK' | translate"
+                                container=".editor-page"
+                                (click)="editLink(data)">
+                          <fa-icon [icon]="faPencilAlt"></fa-icon>
+                        </button>
+                        <!-- Remove link -->
+                        <button class="next-btn next-icon fancy rounded-circle"
+                                [tooltip]="'REMOVE_LINK' | translate"
+                                container=".editor-page"
+                                (click)="removeLink()">
+                          <fa-icon [icon]="faUnlink"></fa-icon>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </ng-template>
-              <!-- Link edit portal template reference -->
-              <ng-template #linkEditTemplateRef let-data>
-                <form class="link-edit"
-                      (keydown.escape)="cancelLink()"
-                      (ngSubmit)="applyLinkChanges(linkTextInput.value, linkUrlInput.value)">
-                  <!-- Header - edit link -->
-                  <div class="link-header" *ngIf="!data.isEmbed && !data.isInserting" translate>EDIT_LINK</div>
-                  <!-- Header - insert embed -->
-                  <div class="link-header" *ngIf="data.isEmbed" translate>INSERT_EMBED</div>
-                  <!-- Header - insert link -->
-                  <div class="link-header" *ngIf="data.isInserting && !data.isEmbed" translate>INSERT_LINK</div>
-                  <!-- Body -->
-                  <div class="link-body d-flex align-items-end">
-                    <div class="flex-column w-100">
-                      <!-- Link text -->
-                      <div class="input-group mb-3" [hidden]="data.multiLine || data.isEmbed">
-                        <div class="input-group-prepend">
+                </ng-template>
+                <!-- Link edit portal template reference -->
+                <ng-template #linkEditTemplateRef let-data>
+                  <form class="link-edit"
+                        (keydown.escape)="cancelLink()"
+                        (ngSubmit)="applyLinkChanges(linkTextInput.value, linkUrlInput.value)">
+                    <!-- Header - edit link -->
+                    <div class="link-header" *ngIf="!data.isEmbed && !data.isInserting" translate>EDIT_LINK</div>
+                    <!-- Header - insert embed -->
+                    <div class="link-header" *ngIf="data.isEmbed" translate>INSERT_EMBED</div>
+                    <!-- Header - insert link -->
+                    <div class="link-header" *ngIf="data.isInserting && !data.isEmbed" translate>INSERT_LINK</div>
+                    <!-- Body -->
+                    <div class="link-body d-flex align-items-end">
+                      <div class="flex-column w-100">
+                        <!-- Link text -->
+                        <div class="input-group mb-3" [hidden]="data.multiLine || data.isEmbed">
+                          <div class="input-group-prepend">
                           <span class="input-group-text">
                             <!-- Icon -->
                             <fa-icon [icon]="faFont" [fixedWidth]="true"></fa-icon>
                           </span>
+                          </div>
+                          <!-- Input -->
+                          <input #linkTextInput
+                                 [placeholder]="'DISPLAY_TEXT' | translate"
+                                 [value]="data.text"
+                                 class="form-control"
+                                 type="text">
                         </div>
-                        <!-- Input -->
-                        <input #linkTextInput
-                               [placeholder]="'DISPLAY_TEXT' | translate"
-                               [value]="data.text"
-                               class="form-control"
-                               type="text">
-                      </div>
-                      <!-- Embed tip -->
-                      <small class="d-block mb-3" *ngIf="data.isEmbed">
-                        {{ 'INSERT_EMBED_TIP' | translate }}
-                        <kbd>CTRL</kbd><span class="mx-1">+</span><kbd>V</kbd>
-                      </small>
-                      <!-- Link URL -->
-                      <div class="input-group">
-                        <div class="input-group-prepend">
+                        <!-- Embed tip -->
+                        <small class="d-block mb-3" *ngIf="data.isEmbed">
+                          {{ 'INSERT_EMBED_TIP' | translate }}
+                          <kbd>CTRL</kbd><span class="mx-1">+</span><kbd>V</kbd>
+                        </small>
+                        <!-- Link URL -->
+                        <div class="input-group">
+                          <div class="input-group-prepend">
                           <span class="input-group-text">
                             <!-- Input -->
                             <fa-icon [icon]="faLink" [fixedWidth]="true"></fa-icon>
                           </span>
+                          </div>
+                          <!-- Input -->
+                          <input #linkUrlInput
+                                 [placeholder]="'LINK' | translate"
+                                 class="form-control"
+                                 [value]="data.link"
+                                 type="text">
                         </div>
-                        <!-- Input -->
-                        <input #linkUrlInput
-                               [placeholder]="'LINK' | translate"
-                               class="form-control"
-                               [value]="data.link"
-                               type="text">
                       </div>
+                      <!-- Apply button -->
+                      <button class="btn btn-primary ml-3" type="submit">Apply</button>
                     </div>
-                    <!-- Apply button -->
-                    <button class="btn btn-primary ml-3" type="submit">Apply</button>
-                  </div>
-                </form>
-              </ng-template>
-            </div>
-            <!-- Caret -->
-            <div class="caret" #caret
-                 [class.invert-color]="selectionFormats.hasOwnProperty('code-block')"
-                 [class.link]="selectionFormats.hasOwnProperty('link')"
-                 [class.show]="showCaret"></div>
-            <!-- Section above the editor content -->
-            <div class="editor-upper">
-              <!-- Updated by -->
-              <div class="d-flex align-items-center mt-3" *ngIf="oldEntry.updated_by">
-                <!-- Updated by image -->
-                <img [src]="oldEntry.updated_by.media.thumbnail_48x48" class="mr-2 rounded-circle" width="24"
-                     *ngIf="oldEntry.updated_by && oldEntry.updated_by.media.picture">
-                <!-- Updated by name -->
-                <span class="mat-small">{{ oldEntry.updated_by.name }}</span>
-                <!-- Update date -->
-                <div class="ml-1 mat-hint mat-small">
-                  &bull; {{ oldEntry.updated | date:'h:mm a - MMM d, y' }}
-                </div>
+                  </form>
+                </ng-template>
               </div>
-              <!-- Title -->
-              <textarea id="title"
-                        cdkTextareaAutosize
-                        cdkAutosizeMinRows="1"
-                        class="form-control mt-3"
-                        [class.mt-5]="!oldEntry.updated_by"
-                        formControlName="title"
-                        placeholder="{{ 'TITLE' | translate }}"
-                        autocomplete="off"
-                        (keydown.enter)="preventBreak()"
-                        (keydown.shift.enter)="preventBreak()"
-                        (keydown.control.enter)="preventBreak()"
-                        (keydown.arrowDown)="onTitleArrowDown()"
-                        (blur)="updateTitle()"
-                        [required]="true"
-                        [readOnly]="!entryLoaded && editorInit"></textarea>
+              <!-- Caret -->
+              <div class="caret" #caret
+                   [class.invert-color]="selectionFormats.hasOwnProperty('code-block')"
+                   [class.link]="selectionFormats.hasOwnProperty('link')"
+                   [class.show]="showCaret"></div>
+              <!-- Section above the editor content -->
+              <div class="editor-upper">
+                <!-- Updated by -->
+                <div class="d-flex align-items-center mt-3" *ngIf="oldEntry.updated_by">
+                  <!-- Updated by image -->
+                  <img [src]="oldEntry.updated_by.media.thumbnail_48x48" class="mr-2 rounded-circle" width="24"
+                       *ngIf="oldEntry.updated_by && oldEntry.updated_by.media.picture">
+                  <!-- Updated by name -->
+                  <span class="mat-small">{{ oldEntry.updated_by.name }}</span>
+                  <!-- Update date -->
+                  <div class="ml-1 mat-hint mat-small">
+                    &bull; {{ oldEntry.updated | date:'h:mm a - MMM d, y' }}
+                  </div>
+                </div>
+                <!-- Title -->
+                <textarea id="title"
+                          cdkTextareaAutosize
+                          cdkAutosizeMinRows="1"
+                          class="form-control mt-3"
+                          [class.mt-5]="!oldEntry.updated_by"
+                          formControlName="title"
+                          placeholder="{{ 'TITLE' | translate }}"
+                          autocomplete="off"
+                          (keydown.enter)="preventBreak()"
+                          (keydown.shift.enter)="preventBreak()"
+                          (keydown.control.enter)="preventBreak()"
+                          (keydown.arrowDown)="onTitleArrowDown()"
+                          (blur)="updateTitle()"
+                          [required]="true"
+                          [readOnly]="!entryLoaded && editorInit"></textarea>
+              </div>
+              <!-- Quill editor -->
+              <quill-editor [readOnly]="!entryLoaded && editorInit"
+                            formControlName="content"
+                            theme="bootstrap"
+                            [modules]="options"
+                            [placeholder]="'EDITOR_CONTENT_PLACEHOLDER' | translate"
+                            scrollingContainer=".editor"
+                            bounds=".editor"
+                            [styles]="{borderWidth: 0, fontSize: '1rem'}"
+                            style="flex: 1"
+                            (onEditorCreated)="onEditorInit($event)"
+                            (onEditorChanged)="onEditorChange($event)">
+              </quill-editor>
             </div>
-            <!-- Quill editor -->
-            <quill-editor [readOnly]="!entryLoaded && editorInit"
-                          formControlName="content"
-                          theme="bootstrap"
-                          [modules]="options"
-                          [placeholder]="'EDITOR_CONTENT_PLACEHOLDER' | translate"
-                          scrollingContainer=".editor"
-                          bounds=".editor"
-                          [styles]="{borderWidth: 0, fontSize: '1rem'}"
-                          style="flex: 1"
-                          dir="auto"
-                          (onEditorCreated)="onEditorInit($event)"
-                          (onEditorChanged)="onEditorChange($event)">
-            </quill-editor>
           </div>
         </div>
+      </form>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+  <!-- Shown when entry's status is set to trash -->
+  <ng-template [ngIf]="oldEntry.status === entryStatus.Trash">
+    <div class="d-flex align-items-center justify-content-center h-100">
+      <div class="p-4 bg-white rounded">
+        <!-- Title -->
+        <h3 class="font-weight-medium" translate>TRASH</h3>
+        <!-- Description -->
+        {{ 'RESTORE_TO_EDIT_ENTRY' | translate }}
+        <!-- Restore button -->
+        <div class="mt-3 text-right">
+          <button class="next-btn" [disabled]="loading" (click)="restoreToEdit()" translate>RESTORE_AND_EDIT</button>
+        </div>
       </div>
-    </form>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    </div>
+  </ng-template>
+</div>
 
 
 <!-- Bold tooltip -->
