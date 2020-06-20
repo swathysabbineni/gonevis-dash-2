@@ -1,21 +1,11 @@
-import { Media } from '@app/interfaces/media';
+import { UserAuth } from '@app/interfaces/user-auth';
 
 /**
  * Represents user settings data structure
  */
-export interface UserSettings {
+export interface UserSettings extends UserAuth {
   about: string;
-  get_absolute_uri: string;
-  get_full_name: string;
-  get_short_name: string;
-  has_verified_email: boolean;
-  id: string;
-  is_active: boolean;
+  absolute_url: string;
   location: string;
-  media: Media;
-  name: string;
-  receive_email_notification: boolean;
-  updated: string;
   date_joined: string;
-  username: string;
 }

@@ -31,7 +31,6 @@ export class EmailConfirmationComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: Params): void => {
       this.userService.verifyEmail(params.token).subscribe((data: AuthResponse): void => {
-        this.authService.setToken(data.token);
         UserService.user = data.user;
         this.router.navigate(AuthService.REDIRECT_SIGN_IN);
       }, (error: HttpErrorResponseApi): void => {

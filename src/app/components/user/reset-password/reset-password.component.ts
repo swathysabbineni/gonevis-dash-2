@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ApiError } from '@app/interfaces/api-error';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
@@ -70,15 +70,14 @@ export class ResetPasswordComponent implements OnInit {
       return;
     }
     // Save token to reset password
-    this.authService.setToken(this.token);
     this.loading = true;
     // API call
     this.userService.resetPassword(this.form.get('password').value).subscribe((): void => {
-      this.authService.signOut(false);
+      this.authService.signOut(false, AuthService.REDIRECT_SIGN_OUT, true);
     }, (error: HttpErrorResponseApi): void => {
       if (error.error.detail) {
         this.invalidToken = true;
-        this.authService.signOut(false, null);
+        this.authService.signOut(false, null, false);
       }
       this.error = error.error;
       this.loading = false;

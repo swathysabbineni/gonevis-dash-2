@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, Router, UrlSegment } from '@angular/router';
-import { AuthService } from '@app/services/auth/auth.service';
-import { CookieService } from 'ngx-cookie-service';
+import { UserService } from '@app/services/user/user.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -14,8 +13,7 @@ export class AnonymousGuardService implements CanLoad {
    */
   private readonly feedRoute: string = '/feed';
 
-  constructor(private router: Router,
-              private cookieService: CookieService) {
+  constructor(private router: Router) {
   }
 
   /**
@@ -35,7 +33,7 @@ export class AnonymousGuardService implements CanLoad {
    */
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
     // If user is not logged-in, then allow user to access current route.
-    if (!this.cookieService.check(AuthService.STORAGE_TOKEN_KEY)) {
+    if (!UserService.user) {
       return true;
     }
 

@@ -45,7 +45,6 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.isequal": "^4.5.0",
     "ngx-bootstrap": "^5.5.0",
-    "ngx-cookie-service": "^2.4.0",
     "ngx-google-analytics": "^8.0.0",
     "ngx-infinite-scroll": "^8.0.1",
     "ngx-pagination": "^5.0.0",

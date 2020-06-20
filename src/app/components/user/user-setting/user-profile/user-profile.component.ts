@@ -5,7 +5,6 @@ import { UserAuth } from '@app/interfaces/user-auth';
 import { UserSettings } from '@app/interfaces/user-settings';
 import { UserSettingsPatch } from '@app/interfaces/user-settings-patch';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
-import { AuthService } from '@app/services/auth/auth.service';
 import { UserService } from '@app/services/user/user.service';
 import { TranslateService } from '@ngx-translate/core';
 

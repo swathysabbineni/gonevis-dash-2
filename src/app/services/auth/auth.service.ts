@@ -5,12 +5,10 @@ import { AuthResponse } from '@app/interfaces/auth-response';
 import { AuthToken } from '@app/interfaces/auth-token';
 import { RegisterWithBlogResponse } from '@app/interfaces/v1/register-with-blog-response';
 import { ApiService } from '@app/services/api/api.service';
-import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-interceptor.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UserService } from '@app/services/user/user.service';
 import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
-import { CookieService } from 'ngx-cookie-service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -31,14 +29,14 @@ export class AuthService {
   static readonly STORAGE_VERSION_KEY = 'version';
 
   /**
-   * Storage key for authentication token
-   */
-  static readonly STORAGE_TOKEN_KEY = 'JWT';
-
-  /**
    * Sign in redirect path
    */
   static readonly REDIRECT_SIGN_IN = ['dash'];
+
+  /**
+   * Storage key for authentication token
+   */
+  private static readonly STORAGE_TOKEN_KEY = 'JWT';
 
   /**
    * Sign up redirect path
@@ -46,14 +44,14 @@ export class AuthService {
   private static readonly REDIRECT_SIGN_UP = ['feed', 'explore'];
 
   /**
-   * Sign out redirect path
-   */
-  private static readonly REDIRECT_SIGN_OUT = ['user', 'sign-in'];
-
-  /**
    * No blogs redirect path
    */
-  private static readonly NO_BLOGS_PATH = ['/user/start'];
+  private static readonly REDIRECT_NO_BLOGS = ['/user/start'];
+
+  /**
+   * Sign out redirect path
+   */
+  static readonly REDIRECT_SIGN_OUT = ['user', 'sign-in'];
 
   /**
    * It's being used to prevent multiple invalid authentication modal from displaying after another.
@@ -64,7 +62,6 @@ export class AuthService {
               private toast: ToastrService,
               private translate: TranslateService,
               private router: Router,
-              private cookie: CookieService,
               private api: ApiService) {
     /**
      * Check if user is authenticated
@@ -88,17 +85,6 @@ export class AuthService {
   }
 
   /**
-   * @returns Cookie domain based on environment
-   */
-  private static getCookieDomain() {
-    let domain: string = environment.cookieDomain;
-    if (environment.development && !domain.includes(location.hostname)) {
-      domain = location.hostname;
-    }
-    return domain;
-  }
-
-  /**
    * @return Parsed JTW token
    * @param token JWT token
    */
@@ -111,54 +97,66 @@ export class AuthService {
   }
 
   /**
+   * @returns Latest JWT token data from local storage
+   */
+  static get token(): string {
+    return localStorage.getItem(AuthService.STORAGE_TOKEN_KEY);
+  }
+
+  /**
+   * Set and update JWT token by updating local storage's 'JWT' item.
+   *
+   * @param token JWT token
+   */
+  static set token(token: string) {
+    localStorage.setItem(AuthService.STORAGE_TOKEN_KEY, token);
+  }
+
+  /**
    * @return Whether user authenticated or not
    */
   get isAuth(): boolean {
-    return this.cookie.check(AuthService.STORAGE_TOKEN_KEY);
+    return UserService.user !== null;
   }
 
   /**
-   * Update authentication token
-   * @param token Authentication token
-   * @returns Whether token was set or not
+   * Un-authenticate user by cleaning localStorage
+   *
+   * @param toast Determines whether or not we should show a toast regarding signing out.
+   * @param redirect When given it will redirect the user the specific route.
+   *                 By default it will redirect to {@link AuthService.REDIRECT_SIGN_OUT}.
+   * @param noApi Determines whether or not signing out should be with API call.
    */
-  setToken(token: string): boolean {
-    const parsedJwt: AuthToken = AuthService.parseJwt(token);
-    if (parsedJwt) {
-      this.cookie.set(AuthService.STORAGE_TOKEN_KEY,
-        token,
-        new Date(parsedJwt.exp * 1000),
-        '/',
-        AuthService.getCookieDomain(),
-        null,
-        'Lax',
-      );
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @returns Stored token from localStorage
-   */
-  getToken(): string | null {
-    return this.cookie.get(AuthService.STORAGE_TOKEN_KEY);
-  }
-
-  /**
-   * Un-authenticate user by cleaning localStorage and cookies
-   */
-  signOut(toast: boolean = true, redirect: string[] = AuthService.REDIRECT_SIGN_OUT): Promise<boolean> {
-    this.cookie.deleteAll('/', AuthService.getCookieDomain());
-    // Cookies don't get deleted sometimes so let's expire it
-    this.cookie.set(AuthService.STORAGE_TOKEN_KEY, '', new Date(), '/', AuthService.getCookieDomain(), null, 'Lax');
+  signOut(
+    toast: boolean = true,
+    redirect: string[] = AuthService.REDIRECT_SIGN_OUT,
+    noApi?: boolean,
+  ): Promise<void> {
     UserService.user = null;
     localStorage.clear();
+    // Show toast if needed.
     if (toast) {
       this.toast.info(this.translate.instant('TOAST_SIGN_OUT'));
     }
-    if (redirect) {
-      return this.router.navigate(redirect);
+    // Break code if environment was development. (rest of the code is session based)
+    if (environment.development) {
+      if (redirect) {
+        this.router.navigate(redirect);
+      }
+      return Promise.resolve();
+    }
+    // Check if demanding signing out with API call.
+    if (!noApi) {
+      return this.http.post<void>(`${this.api.base.v1}account/logout/`, null).toPromise().then((): void => {
+        if (redirect) {
+          this.router.navigate(redirect);
+        }
+      });
+    } else {
+      if (redirect) {
+        this.router.navigate(redirect);
+      }
+      return Promise.resolve();
     }
   }
 
@@ -180,11 +178,13 @@ export class AuthService {
       `${this.api.base.v1}account/login/`, { username, password },
     ).pipe(
       map((data: AuthResponse): string => {
-        // Store token into cookies
-        this.setToken(data.token);
         // Store user into localstorage
         UserService.user = data.user;
         BlogService.blogs = data.user.sites;
+        // Set token in local storage if current environment in development
+        if (environment.development) {
+          AuthService.token = data.token;
+        }
         // Store storage version
         localStorage.setItem(AuthService.STORAGE_VERSION_KEY, AuthService.STORAGE_VERSION.toString());
         // Show toast
@@ -197,7 +197,7 @@ export class AuthService {
         } else if (UserService.hasBlogs) {
           this.router.navigate(redirectPath);
         } else {
-          this.router.navigate(AuthService.NO_BLOGS_PATH);
+          this.router.navigate(AuthService.REDIRECT_NO_BLOGS);
         }
         AuthService.preventInvalidAuthenticationModal = false;
         // Return raw user data

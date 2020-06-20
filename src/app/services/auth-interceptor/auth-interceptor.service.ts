@@ -5,7 +5,6 @@ import { AuthService } from '@app/services/auth/auth.service';
 import { MessageModalComponent } from '@app/shared/message-modal/message-modal.component';
 import { environment } from '@environments/environment';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { CookieService } from 'ngx-cookie-service';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -14,8 +13,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class AuthInterceptorService implements HttpInterceptor {
 
-  constructor(private cookieService: CookieService,
-              private authService: AuthService,
+  constructor(private authService: AuthService,
               private modalService: BsModalService) {
   }
 
@@ -26,13 +24,21 @@ export class AuthInterceptorService implements HttpInterceptor {
     /**
      * Add authorization to headers
      */
-    const token = this.authService.getToken();
-    if (token && request.url.includes(environment.api.v1) || request.url.includes(environment.api.zero)) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: `JWT ${token}`,
-        },
-      });
+    if (request.url.includes(environment.api.v1) || request.url.includes(environment.api.zero)) {
+      // Use JWT if current environment is development otherwise send request with credentials.
+      if (environment.development) {
+        // Get token from localstorage and if there was a token then send it to the request.
+        const token: string = AuthService.token;
+        if (token) {
+          request = request.clone({
+            setHeaders: {
+              Authorization: `JWT ${token}`,
+            },
+          });
+        }
+      } else {
+        request = request.clone({ withCredentials: true });
+      }
     }
     /**
      * Error handling
@@ -79,7 +85,7 @@ export class AuthInterceptorService implements HttpInterceptor {
             /**
              * User authentication token is invalid
              */
-            this.authService.signOut(false).then((): void => {
+            this.authService.signOut(false, ['user/start'], true).then((): void => {
               this.modalService.show(MessageModalComponent, {
                 initialState: {
                   title: 'INVALID_AUTHENTICATION',

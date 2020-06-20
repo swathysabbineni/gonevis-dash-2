@@ -6,7 +6,9 @@ import { UserSettings } from '@app/interfaces/user-settings';
 import { UserSettingsPatch } from '@app/interfaces/user-settings-patch';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { ApiService } from '@app/services/api/api.service';
+import { BlogService } from '@app/services/blog/blog.service';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -88,7 +90,26 @@ export class UserService {
    * Get user information
    */
   getUser(): Observable<UserSettings> {
-    return this.http.get<UserSettings>(`${this.apiService.base.v1}account/me/`);
+    return this.http.get<UserSettings>(`${this.apiService.base.v1}account/me/`)
+      .pipe(
+        map((data: UserSettings): UserSettings => {
+          UserService.user = {
+            email: data.email,
+            get_absolute_uri: data.absolute_url,
+            has_verified_email: data.has_verified_email,
+            id: data.id,
+            is_active: data.is_active,
+            media: data.media,
+            name: data.name,
+            receive_email_notification: data.receive_email_notification,
+            sites: data.sites,
+            tour: data.tour,
+            username: data.username,
+          };
+          BlogService.blogs = data.sites;
+          return data;
+        }),
+      );
   }
 
   /**
