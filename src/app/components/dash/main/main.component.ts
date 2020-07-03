@@ -4,6 +4,7 @@ import { SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { CommentsService } from '@app/components/dash/comments/comments.service';
 import { EntryService } from '@app/components/dash/entry/entry.service';
+import { CommentStatus } from '@app/enums/comment-status';
 import { EntryStatus } from '@app/enums/entry-status.enum';
 import { MetricStatItem } from '@app/enums/metric-stat-item';
 import { MetricStatResolution } from '@app/enums/metric-stat-resolution';
@@ -24,6 +25,7 @@ import { faThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faComments } from '@fortawesome/free-solid-svg-icons/faComments';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
+import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -47,8 +49,10 @@ export class MainComponent implements OnInit, OnDestroy {
   readonly faFiles: IconDefinition = faDatabase;
   readonly eye: IconDefinition = faEye;
   readonly like: IconDefinition = faThumbsUp;
+  readonly user: IconDefinition = faUser;
 
   readonly entryStatusLabels: string[] = EntryService.STATUS_LABELS;
+  readonly commentStatusLabels: string[] = CommentsService.STATUS_LABELS;
 
   /**
    * Represents a disposable resource, such as the execution of an Observable. A
@@ -82,9 +86,14 @@ export class MainComponent implements OnInit, OnDestroy {
   ];
 
   /**
-   * Loading status for each data
+   * Loading status for each data of entries
    */
   loadingEntries: boolean;
+
+  /**
+   * Loading status for each data of comments
+   */
+  loadingComments: boolean;
 
   /**
    * Blog settings data
@@ -92,9 +101,21 @@ export class MainComponent implements OnInit, OnDestroy {
   blog: BlogSettings;
 
   /**
-   * List of recent blog comments
+   * List of recent blog comments grouped by status
    */
-  comments: Comment[];
+  commentGroups: {
+    status: CommentStatus,
+    comments: Comment[],
+  }[] = [{
+    status: CommentStatus.Pending,
+    comments: [],
+  }, {
+    status: CommentStatus.Active,
+    comments: [],
+  }, {
+    status: CommentStatus.Hidden,
+    comments: [],
+  }];
 
   /**
    * List of recent blog entries grouped by status
@@ -207,9 +228,19 @@ export class MainComponent implements OnInit, OnDestroy {
        * Reset data
        */
       this.templateConfig = null;
+      /**
+       * Entries data reset
+       */
       this.loadingEntries = true;
       for (const group of this.entryGroups) {
         group.entries = [];
+      }
+      /**
+       * Comments data reset
+       */
+      this.loadingComments = true;
+      for (const group of this.commentGroups) {
+        group.comments = [];
       }
       /**
        * Load blog data
@@ -234,7 +265,10 @@ export class MainComponent implements OnInit, OnDestroy {
       this.commentsService.getComments({
         limit: MainComponent.COMMENTS_LIMIT,
       }).subscribe((response: ApiResponse<Comment>): void => {
-        this.comments = response.results;
+        for (const comment of response.results) {
+          this.commentGroups[comment.status].comments.push(comment);
+        }
+        this.loadingComments = false;
       });
       /**
        * Load metrics

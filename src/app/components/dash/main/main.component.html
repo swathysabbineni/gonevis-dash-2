@@ -160,16 +160,15 @@
         </div>
 
         <!-- Body: Data (entries) -->
-        <div class="card-body" *ngIf="
+        <div class="card-body pt-0" *ngIf="
              tab === 'entries' && (
              loadingEntries &&
              entryGroups[0].entries.length ||
              entryGroups[1].entries.length)">
 
           <!-- Groups -->
-          <div *ngFor="let group of entryGroups; let first = first"
-               [hidden]="!group.entries.length"
-               [class.mt-4]="!first">
+          <div class="mt-4" *ngFor="let group of entryGroups"
+               [hidden]="!group.entries.length">
 
             <!-- Group -->
             <p class="font-weight-bold" translate>{{ entryStatusLabels[group.status] }}</p>
@@ -215,17 +214,48 @@
         </div>
 
         <!-- Body: Data (comments) -->
-        <div class="list-group-flush pb-1" *ngIf="tab === 'comments' && comments && comments.length">
-          <a class="list-group-item list-group-item-action" *ngFor="let comment of comments"
-             [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]"
-             [queryParams]="{ comment: comment.id }">
-            <!-- Name-->
-            <small class="text-secondary">{{ comment.user.name }}: </small>
-            <!-- Comment -->
-            <span [innerHTML]="utils.sanitizeHtml(comment.comment)"></span>
-            <!-- Date -->
-            <small class="float-right">{{ comment.created | date }}</small>
-          </a>
+        <div class="card-body pt-0" *ngIf="
+             tab === 'comments' && (
+             loadingComments &&
+             commentGroups[0].comments.length ||
+             commentGroups[1].comments.length ||
+             commentGroups[2].comments.length)">
+
+          <!-- Groups -->
+          <div class="mt-4" *ngFor="let group of commentGroups"
+               [hidden]="!group.comments.length">
+
+            <!-- Group -->
+            <p class="font-weight-bold" translate>{{ commentStatusLabels[group.status] }}</p>
+
+            <!-- Comments -->
+            <div class="card dash" *ngFor="let comment of group.comments; let last = last" [class.mb-2]="!last">
+              <div class="card-body">
+
+                <!-- Comment -->
+                <p class="m-1">
+                  <a [routerLink]="['/feed/entry', comment.commented_object_minimal_data.id]"
+                     [queryParams]="{ comment: comment.id }">{{ comment.comment }}</a>
+                </p>
+
+                <!-- Info -->
+                <div class="ml-1">
+
+                  <!-- Name -->
+                  <a *ngIf="comment.user" [routerLink]="['/feed/user', comment.user.username]">
+                    <fa-icon class="small" [fixedWidth]="true" [icon]="user"></fa-icon>
+                    <span class="ml-1">{{ comment.user.name }}</span>
+                  </a>
+
+                  <!-- Date -->
+                  <div class="float-right small text-secondary" [tooltip]="comment.created | date:'hh:mm aa'">
+                    <span translate>CREATED_ON</span>
+                    {{ comment.created | date }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Body: No data -->
@@ -235,8 +265,10 @@
              !entryGroups[0].entries.length &&
              !entryGroups[1].entries.length ||
              tab === 'comments' &&
-             comments &&
-             !comments.length">
+             !loadingComments &&
+             !commentGroups[0].comments.length &&
+             !commentGroups[1].comments.length &&
+             !commentGroups[2].comments.length">
           NOTHING_HERE_YET
         </div>
 

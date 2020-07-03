@@ -19,6 +19,16 @@ export class CommentsService {
    */
   static readonly PAGE_SIZE = 20;
 
+  /**
+   * Comment status labels
+   * @see CommentStatus
+   */
+  static readonly STATUS_LABELS: string[] = [
+    'PENDING',
+    'ACTIVE',
+    'HIDDEN',
+  ];
+
   constructor(private http: HttpClient,
               private apiService: ApiService) {
   }
