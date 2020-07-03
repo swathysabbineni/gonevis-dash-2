@@ -181,5 +181,9 @@ export class DashComponent implements OnInit, OnDestroy {
   toggleSidebar(): void {
     localStorage.setItem('sidebar', String(!this.openSidebar));
     this.openSidebar = !this.openSidebar;
+    // Dispatch a resize event on window after 200ms (which's the time it takes until sidebar opens) to fix charts.
+    setTimeout((): void => {
+      window.dispatchEvent(new Event('resize'));
+    }, 200);
   }
 }

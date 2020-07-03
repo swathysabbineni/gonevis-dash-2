@@ -1,4 +1,4 @@
-<div class="chart-wrapper" [style.minHeight]="stats && stats.length ? height : 0 + 'px'">
+<div class="chart-wrapper overflow-hidden" [style.minHeight]="stats && stats.length ? height : 0 + 'px'">
 
   <!-- Chart -->
   <ngx-charts-line-chart *ngIf="stats && stats.length"
