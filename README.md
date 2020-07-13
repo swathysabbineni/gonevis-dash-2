@@ -5,7 +5,7 @@
 GoNevis dashboard and reader front-end source code.
 
 - Production URL: https://dash.gonevis.com
-- Staging URL: http://dash-draft.gonevis.com
+- Staging URL: https://dash-draft.gonevis.com
 
 ![GoNevis](https://gonevis.s3.amazonaws.com/dolphin/d30affc4-4bef-47d8-8a28-34c45b418dff/1585072945206_Screenshot_182.png)
 
