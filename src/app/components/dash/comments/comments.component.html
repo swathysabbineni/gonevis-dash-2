@@ -71,15 +71,19 @@
       <tbody>
       <tr *ngFor="let comment of comments | paginate: pagination">
         <!-- Image -->
-        <th class="image" [class.p-0]="!comment.user.media">
-          <img class="rounded-circle" *ngIf="comment.user.media" [src]="comment.user.media.thumbnail_48x48">
+        <th class="image" [class.p-0]="!comment.user || !comment.user.media">
+          <img class="rounded-circle" *ngIf="comment.user && comment.user.media"
+               [src]="comment.user.media.thumbnail_48x48">
         </th>
         <!-- User, post, date and comment -->
         <th>
           <!-- User -->
-          <a class="text-primary font-weight-bold" [routerLink]="['/feed/user', comment.user.username]">
+          <a class="text-primary font-weight-bold" [routerLink]="['/feed/user', comment.user.username]"
+             *ngIf="comment.user">
             {{ comment.user.name }}
           </a>
+          <!-- Guest user -->
+          <span class="font-weight-bold">{{ comment.guest_name }} </span>
           <span class="text-lowercase" translate>COMMENTED_ON</span>
           <!-- Post -->
           <a class="text-primary font-weight-bold"

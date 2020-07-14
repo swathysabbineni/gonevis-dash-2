@@ -17,16 +17,20 @@
         [class.highlighted]="commentHighlighted === comment.id">
       <div class="media">
         <!-- Comment user image -->
-        <img class="rounded-circle mr-3 bg-secondary" *ngIf="!comment.user.media">
-        <img class="rounded-circle mr-3 bg-secondary" *ngIf="comment.user.media"
+        <img class="rounded-circle mr-3 bg-secondary" [width]="48" [height]="48"
+             *ngIf="comment.guest_name || (comment.user && !comment.user.media)">
+        <img class="rounded-circle mr-3 bg-secondary" *ngIf="comment.user && comment.user.media"
              [src]="comment.user.media.thumbnail_48x48">
         <!-- Comment -->
         <div class="media-body">
           <div>
             <!-- Comment user name -->
-            <a [routerLink]="['/feed/user', comment.user.username]" class="text-primary font-weight-bold">
+            <a *ngIf="comment.user" [routerLink]="['/feed/user', comment.user.username]"
+               class="text-primary font-weight-bold">
               {{ comment.user.display_name }}
             </a>
+            <!-- Comment guest name -->
+            <span *ngIf="comment.guest_name" class="font-weight-bold">{{ comment.guest_name }}</span>
             <!-- Comment date -->
             <a class="small ml-1" *ngIf="entry" [routerLink]="['/feed/entry', entry.id]"
                [queryParams]="{ comment: comment.id }">

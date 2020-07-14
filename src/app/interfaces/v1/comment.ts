@@ -7,6 +7,7 @@ export interface Comment {
   site: string;
   object_type: number;
   object_pk: ObjectType;
+  guest_name?: string;
   user: UserMin;
   comment: string;
   status: CommentStatus;
