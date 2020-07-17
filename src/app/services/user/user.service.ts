@@ -6,6 +6,7 @@ import { UserSettings } from '@app/interfaces/user-settings';
 import { UserSettingsPatch } from '@app/interfaces/user-settings-patch';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { ApiService } from '@app/services/api/api.service';
+import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-interceptor.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -88,9 +89,15 @@ export class UserService {
 
   /**
    * Get user information
+   *
+   * @param checkingAuth Params to prevent authentication modal from opening.
    */
-  getUser(): Observable<UserSettings> {
-    return this.http.get<UserSettings>(`${this.apiService.base.v1}account/me/`)
+  getUser(checkingAuth?: boolean): Observable<UserSettings> {
+    return this.http.get<UserSettings>(`${this.apiService.base.v1}account/me/`, {
+      params: {
+        [AuthInterceptorService.CHECKING_AUTH_PARAM]: String(checkingAuth),
+      },
+    })
       .pipe(
         map((data: UserSettings): UserSettings => {
           UserService.user = {

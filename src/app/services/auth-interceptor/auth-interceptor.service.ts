@@ -13,6 +13,13 @@ import { catchError } from 'rxjs/operators';
 })
 export class AuthInterceptorService implements HttpInterceptor {
 
+  /**
+   * Being used in API params to indicate that the API which is being called is just for
+   * checking if user is authenticated or not.
+   * It's main usage is for preventing authentication modal from opening.
+   */
+  static readonly CHECKING_AUTH_PARAM = 'checkingAuth';
+
   constructor(private authService: AuthService,
               private modalService: BsModalService) {
   }
@@ -86,6 +93,12 @@ export class AuthInterceptorService implements HttpInterceptor {
              * User authentication token is invalid
              */
             this.authService.signOut(false, ['user/start'], true).then((): void => {
+              /**
+               * Prevent showing invalid authentication modal if we are checking for authentication via API.
+               */
+              if (request.params.get(AuthInterceptorService.CHECKING_AUTH_PARAM) === 'true') {
+                return;
+              }
               this.modalService.show(MessageModalComponent, {
                 initialState: {
                   title: 'INVALID_AUTHENTICATION',

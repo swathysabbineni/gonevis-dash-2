@@ -47,7 +47,7 @@ export class AuthGuardService implements CanLoad, CanActivate {
         url = navigation.extractedUrl.toString();
       }
       // Get user data and on success redirect user to stored URL.
-      this.userService.getUser().subscribe((): void => {
+      this.userService.getUser(true).subscribe((): void => {
         this.router.navigateByUrl(url);
       });
     }
