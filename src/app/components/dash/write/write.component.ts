@@ -39,6 +39,7 @@ import '@app/components/dash/write/blots/divider.ts';
 import '@app/components/dash/write/blots/embed.ts';
 import '@app/components/dash/write/blots/icons.ts';
 import '@app/components/dash/write/blots/soundcloud.ts';
+import '@app/components/dash/write/blots/mixcloud.ts';
 import '@app/components/dash/write/blots/video.ts';
 import { KeyManagerComponent } from '@app/components/dash/write/core/key-manager.component';
 import '@app/components/dash/write/modules/clipboard.ts';
@@ -1097,7 +1098,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * Insert whitelist
      */
-    const insertWhitelist: string[] = ['image', 'video', 'divider', 'embed', 'soundcloud'];
+    const insertWhitelist: string[] = ['image', 'video', 'divider', 'embed', 'soundcloud', 'mixcloud'];
     /**
      * On clipboard element node pasted
      */
@@ -1183,6 +1184,24 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
           // Set cursor selection after SoundCloud embed
           editor.setSelection({ index: range.index + 2, length: 0 });
         });
+        return new Delta();
+      }
+      /**
+       * Insert MixCloud embed if given link matches MixCloud URL.
+       */
+      if (node.data.startsWith('https://www.mixcloud.com/')) {
+        // URL to embed MixCloud song.
+        let url: string = node.data;
+        // If URL was not pointing to an embed, then create an embed for it.
+        if (!node.data.startsWith('https://www.mixcloud.com/widget/iframe/')) {
+          url = `https://www.mixcloud.com/widget/iframe/?feed=${node.data.split('.com')[1]}`;
+        }
+        // Get current selection.
+        const range: RangeStatic = editor.getSelection(true);
+        // Insert MixCloud embed.
+        editor.insertEmbed(range.index, 'mixcloud', url);
+        // Set cursor selection after MixCloud embed.
+        editor.setSelection({ index: range.index + 2, length: 0 });
         return new Delta();
       }
 
@@ -2113,6 +2132,22 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
           // Set cursor selection after SoundCloud embed
           this.editor.setSelection({ index: range.index + 2, length: 0 });
         });
+        return;
+      }
+      /**
+       * Insert MixCloud embed if given link matches MixCloud URL.
+       */
+      if (link.startsWith('https://www.mixcloud.com/')) {
+        // URL to embed MixCloud song.
+        let url: string = link;
+        // If URL was not pointing to an embed, then create an embed for it.
+        if (!link.startsWith('https://www.mixcloud.com/widget/iframe/')) {
+          url = `https://www.mixcloud.com/widget/iframe/?feed=${link.split('.com')[1]}`;
+        }
+        // Insert MixCloud embed.
+        this.editor.insertEmbed(range.index, 'mixcloud', url);
+        // Set cursor selection after MixCloud embed.
+        this.editor.setSelection({ index: range.index + 2, length: 0 });
         return;
       }
       this.editor.updateContents(delta, 'user');
