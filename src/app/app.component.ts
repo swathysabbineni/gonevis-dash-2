@@ -11,6 +11,7 @@ import { UserService } from '@app/services/user/user.service';
 import { FeedbackModalComponent } from '@app/shared/feedback-modal/feedback-modal.component';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
 import { faRssSquare } from '@fortawesome/free-solid-svg-icons/faRssSquare';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
@@ -74,6 +75,7 @@ export class AppComponent implements OnInit {
   readonly faProfile: IconDefinition = faUserCircle;
   readonly faSettings: IconDefinition = faCog;
   readonly faSignOut: IconDefinition = faSignOutAlt;
+  readonly faUnverified: IconDefinition = faExclamationTriangle;
 
   readonly dashUiStatus = DashUiStatus;
 
@@ -103,7 +105,6 @@ export class AppComponent implements OnInit {
    * List of blogs
    */
   blogs: BlogMin[] = [];
-
   /**
    * Search form
    */

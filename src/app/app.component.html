@@ -1,5 +1,18 @@
 <!-- Main wrapper -->
 <div class="d-flex flex-column h-100">
+
+  <!-- Navbar for unverified alert -->
+  <div class="unverified-header" *ngIf="user && !user.has_verified_email">
+    <div [class.container]="!blogService.currentBlog"
+         [class.container-fluid]="blogService.currentBlog">
+      <fa-icon [fixedWidth]="true" [icon]="faUnverified"></fa-icon>
+      <div class="font-weight-bold ml-3">
+        <div translate>TEXT_EMAIL_NOT_VERIFIED_BANNER</div>
+        <div class="small font-weight-bold" translate>TEXT_EMAIL_NOT_VERIFIED_BANNER_SUB</div>
+      </div>
+    </div>
+  </div>
+
   <!-- Navbar -->
   <nav class="navbar navbar-expand navbar-dark sticky-top"
        [class.d-none]="uiStatus === dashUiStatus.HEADER || uiStatus === dashUiStatus.NONE"
@@ -56,7 +69,7 @@
             dropdown container="#search-form" id="search-form">
         <input class="form-control" type="search" placeholder="Search" formControlName="search" dropdownToggle required>
         <ul class="dropdown-menu" *dropdownMenu [class.d-none]="!searchSuggestions || !searchSuggestions.length">
-          <li *ngFor="let suggestion of searchSuggestions" >
+          <li *ngFor="let suggestion of searchSuggestions">
             <a class="dropdown-item" (click)="onSearchSuggestionClick(suggestion)">{{ suggestion }}</a>
           </li>
         </ul>
@@ -128,6 +141,8 @@
       </ul>
     </div>
   </nav>
+
+  <!-- Page -->
   <div class="overflow-auto flex-grow-1 main-scroller">
     <router-outlet></router-outlet>
   </div>

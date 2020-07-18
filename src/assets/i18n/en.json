@@ -204,6 +204,8 @@
   "TEXT_OLD_AUTH_VERSION": "Client authentication version is old, signing out.",
   "TEXT_EMAIL_NOT_VERIFIED": "Please verify your need to verify your email to do this action.",
   "TEXT_INVALID_AUTHENTICATION": "Your authentication is invalid or expired, sign in again, please.",
+  "TEXT_EMAIL_NOT_VERIFIED_BANNER": "Your email is not verified, please check your email for verification link.",
+  "TEXT_EMAIL_NOT_VERIFIED_BANNER_SUB": "Verify your email to unlock more GoNevis features.",
   "TEXT_REDIRECTED_TO_SIGN_UP": "You've been redirected to the sign up page.",
   "TOAST_SIGN_IN": "Signed in, welcome back!",
   "TOAST_SIGN_UP": "Welcome to GoNevis!",

@@ -162,3 +162,13 @@
     }
   }
 }
+
+.unverified-header {
+  background: $warning;
+
+  > div {
+    height: $navbar-height;
+    display: flex;
+    align-items: center;
+  }
+}
