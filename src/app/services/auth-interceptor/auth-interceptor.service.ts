@@ -1,6 +1,7 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
+import { ApiService } from '@app/services/api/api.service';
 import { AuthService } from '@app/services/auth/auth.service';
 import { MessageModalComponent } from '@app/shared/message-modal/message-modal.component';
 import { environment } from '@environments/environment';
@@ -12,13 +13,6 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthInterceptorService implements HttpInterceptor {
-
-  /**
-   * Being used in API params to indicate that the API which is being called is just for
-   * checking if user is authenticated or not.
-   * It's main usage is for preventing authentication modal from opening.
-   */
-  static readonly CHECKING_AUTH_PARAM = 'checkingAuth';
 
   constructor(private authService: AuthService,
               private modalService: BsModalService) {
@@ -96,7 +90,7 @@ export class AuthInterceptorService implements HttpInterceptor {
               /**
                * Prevent showing invalid authentication modal if we are checking for authentication via API.
                */
-              if (request.params.get(AuthInterceptorService.CHECKING_AUTH_PARAM) === 'true') {
+              if (request.params.get(ApiService.CHECKING_AUTH_PARAM) === 'true') {
                 return;
               }
               this.modalService.show(MessageModalComponent, {

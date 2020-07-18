@@ -11,6 +11,13 @@ import { Observable } from 'rxjs';
 export class ApiService {
 
   /**
+   * Being used in API params to indicate that the API which is being called is just for
+   * checking if user is authenticated or not.
+   * It's main usage is for preventing authentication modal from opening.
+   */
+  static readonly CHECKING_AUTH_PARAM = 'checking-auth';
+
+  /**
    * Base API endpoint URL
    */
   readonly base: Environment['api'] = environment.api;
