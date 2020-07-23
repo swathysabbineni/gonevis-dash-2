@@ -54,6 +54,7 @@ import { Params } from '@app/interfaces/params';
 import { SoundCloudEmbed } from '@app/interfaces/sound-cloud-embed';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
+import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { BlogService } from '@app/services/blog/blog.service';
 import { FileSelectionComponent } from '@app/shared/file-selection/file-selection.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -352,6 +353,11 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
    * Determines whether or not entry loaded from API call.
    */
   entryLoaded: boolean;
+
+  /**
+   * Determines whether or not entry was not found.
+   */
+  notFound: boolean;
 
   /**
    * Determines whether or not editor is initialized.
@@ -1640,6 +1646,12 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       // Initial auto-save
       this.initAutoSave();
+    }, (error: HttpErrorResponseApi): void => {
+      this.loading = false;
+      // Check if entry doesn't exist.
+      if (error.status === 404) {
+        this.notFound = true;
+      }
     });
   }
 

@@ -450,5 +450,7 @@
   "SHORTCUTS_MADE_BY": "Shortcuts made with ❤ by GoNevis.",
   "KEYBOARD_SHORTCUTS": "Keyboard shortcuts",
   "KEYBOARD_SHORTCUTS_TIP": "Press <kbd>Ctrl</kbd> + <kbd>/</kbd> to toggle this panel.",
+  "NOT_FOUND": "Not found",
+  "NOT_FOUND_ENTRY_DESCRIPTION": "You attempted to edit a post that doesn’t exist. Perhaps it was deleted?",
   "COLLABORATING": "Collaborating"
 }

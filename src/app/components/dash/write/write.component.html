@@ -1,5 +1,5 @@
 <div class="h-100 editor-page">
-  <mat-sidenav-container class="h-100" [hidden]="oldEntry.status === entryStatus.Trash">
+  <mat-sidenav-container class="h-100" [hidden]="oldEntry.status === entryStatus.Trash || notFound">
     <mat-sidenav #sidenav mode="over" [autoFocus]="false" [fixedInViewport]="true" position="end">
       <div class="d-flex flex-column h-100">
         <!-- Toolbar with close button -->
@@ -803,6 +803,18 @@
         <div class="mt-3 text-right">
           <button class="next-btn" [disabled]="loading" (click)="restoreToEdit()" translate>RESTORE_AND_EDIT</button>
         </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Shown when entry not found -->
+  <ng-template [ngIf]="notFound">
+    <div class="d-flex align-items-center justify-content-center h-100">
+      <div class="p-4 bg-white rounded">
+        <!-- Title -->
+        <h3 class="font-weight-medium" translate>NOT_FOUND</h3>
+        <!-- Description -->
+        {{ 'NOT_FOUND_ENTRY_DESCRIPTION' | translate }}
       </div>
     </div>
   </ng-template>
