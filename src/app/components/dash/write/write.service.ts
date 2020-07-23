@@ -62,7 +62,6 @@ export class WriteService {
    */
   getTags(search: string): Observable<ApiResponse<Tag>> {
     const httpParams: HttpParams = new HttpParams()
-      .set('site', BlogService.currentBlog.id)
       .set('limit', '100')
       .set('search', search);
 
