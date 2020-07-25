@@ -5,6 +5,7 @@ import { ActivatedRoute, Data, NavigationEnd, Router, RouterEvent } from '@angul
 import { DashUiStatus } from '@app/enums/dash-ui-status';
 import { UserAuth } from '@app/interfaces/user-auth';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
+import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { AuthService } from '@app/services/auth/auth.service';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UserService } from '@app/services/user/user.service';
@@ -18,6 +19,7 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
@@ -105,10 +107,21 @@ export class AppComponent implements OnInit {
    * List of blogs
    */
   blogs: BlogMin[] = [];
+
   /**
    * Search form
    */
   formSearch: FormGroup;
+
+  /**
+   * Determines email verification API call state.
+   */
+  resending: boolean;
+
+  /**
+   * Determines whether or not email verification has been sent successfully.
+   */
+  verificationSent: boolean;
 
   constructor(public authService: AuthService,
               private modalService: BsModalService,
@@ -116,7 +129,8 @@ export class AppComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private title: Title,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private toastrService: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -202,6 +216,27 @@ export class AppComponent implements OnInit {
      */
     this.formSearch.get('search').valueChanges.subscribe((data: string): void => {
       AppComponent.SEARCH_QUERY_UPDATE.emit(data);
+    });
+  }
+
+  /**
+   * Resend email verification link.
+   */
+  resendVerification(): void {
+    this.resending = true;
+    this.authService.resendVerification(this.user.email).subscribe((data: { email: string }): void => {
+      this.resending = false;
+      this.verificationSent = true;
+      // Show a toast to let user know that email verification link has been sent to them.
+      this.translate.get('EMAIL_VERIFICATION_SENT', { email: data.email }).subscribe((response: string): void => {
+        this.toastrService.success(response);
+      });
+    }, (error: HttpErrorResponseApi): void => {
+      if (error.error.email && error.error.email[0]) {
+        this.toastrService.error(error.error.email[0]);
+      }
+      this.resending = false;
+      this.verificationSent = false;
     });
   }
 

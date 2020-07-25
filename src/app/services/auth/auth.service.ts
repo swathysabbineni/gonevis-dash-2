@@ -265,4 +265,13 @@ export class AuthService {
       }),
     );
   }
+
+  /**
+   * Resend email verification link.
+   *
+   * @param email User's email address
+   */
+  resendVerification(email: string): Observable<{ email: string }> {
+    return this.http.post<{ email: string }>(`${this.api.base.v1}account/resend-email-confirmation/`, { email });
+  }
 }

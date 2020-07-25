@@ -10,6 +10,9 @@
         <div translate>TEXT_EMAIL_NOT_VERIFIED_BANNER</div>
         <div class="small font-weight-bold" translate>TEXT_EMAIL_NOT_VERIFIED_BANNER_SUB</div>
       </div>
+      <button class="btn btn-light ml-3" (click)="resendVerification()" [disabled]="resending || verificationSent">
+        {{ (verificationSent ? 'SENT' : 'RESEND') | translate }}
+      </button>
     </div>
   </div>
 
