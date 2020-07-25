@@ -1,5 +1,9 @@
 <div class="container-fluid py-3">
-  <div class="card dash tabs">
+  <!-- Permission access error -->
+  <div *ngIf="isEditor" class="w-100">
+    <app-permission-access></app-permission-access>
+  </div>
+  <div class="card dash tabs" *ngIf="!isEditor">
 
     <!-- Header -->
     <div class="card-header">

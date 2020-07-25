@@ -1,6 +1,8 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { MetricStatItem } from '@app/enums/metric-stat-item';
 import { MetricStatResolution } from '@app/enums/metric-stat-resolution';
+import { TeamRoles } from '@app/enums/team-roles';
+import { BlogService } from '@app/services/blog/blog.service';
 
 @Component({
   selector: 'app-statistics',
@@ -43,7 +45,16 @@ export class StatisticsComponent implements OnInit {
    */
   statisticsItem: { value: MetricStatItem, label: string } = this.statisticsItems[0];
 
+  /**
+   * Determines whether or not the user's role in current blog is editor
+   */
+  isEditor: boolean;
+
   ngOnInit(): void {
+    this.isEditor = BlogService.currentBlog.role === TeamRoles.Editor;
+    if (this.isEditor) {
+      return;
+    }
     /**
      * Update statistics
      */

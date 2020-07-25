@@ -16,6 +16,7 @@ import { Comment } from '@app/interfaces/v1/comment';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Metrics } from '@app/interfaces/v1/metrics';
 import { TemplateConfig } from '@app/interfaces/v1/template-config';
+import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UtilService } from '@app/services/util/util.service';
 import { UsersModalComponent } from '@app/shared/users-modal/users-modal.component';
@@ -86,6 +87,11 @@ export class MainComponent implements OnInit, OnDestroy {
   ];
 
   /**
+   * Team roles which is being used to hide/show widgets.
+   */
+  readonly teamRoles: typeof TeamRoles = TeamRoles;
+
+  /**
    * Loading status for each data of entries
    */
   loadingEntries: boolean;
@@ -99,6 +105,11 @@ export class MainComponent implements OnInit, OnDestroy {
    * Blog settings data
    */
   blog: BlogSettings;
+
+  /**
+   * Blog settings data
+   */
+  currentBlog: BlogMin;
 
   /**
    * List of recent blog comments grouped by status
@@ -224,6 +235,7 @@ export class MainComponent implements OnInit, OnDestroy {
      * Watch for current blog changes
      */
     this.subscription.add(this.activatedRoute.parent.parent.params.subscribe((): void => {
+      this.currentBlog = BlogService.currentBlog;
       /**
        * Reset data
        */
@@ -242,12 +254,6 @@ export class MainComponent implements OnInit, OnDestroy {
       for (const group of this.commentGroups) {
         group.comments = [];
       }
-      /**
-       * Load blog data
-       */
-      this.blogService.getSettings().subscribe((data: BlogSettings): void => {
-        this.blog = data;
-      });
       /**
        * Load entries
        */
@@ -271,25 +277,31 @@ export class MainComponent implements OnInit, OnDestroy {
         this.loadingComments = false;
       });
       /**
-       * Load metrics
-       */
-      this.blogService.getMetrics().subscribe((data: Metrics): void => {
-        this.metrics = data;
-      });
-      /**
        * Load template config (for owner and admins)
        */
       if (BlogService.currentBlog.role !== TeamRoles.Editor) {
+        /**
+         * Load metrics
+         */
+        this.blogService.getMetrics().subscribe((data: Metrics): void => {
+          this.metrics = data;
+        });
+        /**
+         * Load blog data
+         */
+        this.blogService.getSettings().subscribe((data: BlogSettings): void => {
+          this.blog = data;
+        });
         this.blogService.getTemplateConfig().subscribe((data: { template_config: TemplateConfig }): void => {
           this.templateConfig = data.template_config;
         });
+        /**
+         * Update statistics
+         */
+        setTimeout((): void => {
+          this.statisticsRefresh.emit();
+        });
       }
-      /**
-       * Update statistics
-       */
-      setTimeout((): void => {
-        this.statisticsRefresh.emit();
-      });
     }));
   }
 

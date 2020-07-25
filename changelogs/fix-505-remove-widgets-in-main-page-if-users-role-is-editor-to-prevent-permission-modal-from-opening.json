@@ -1,0 +1,1 @@
+{"title":"Remove widgets in main page if user's role is editor to prevent permission modal from opening.","issueID":"505","changeType":"fix"}

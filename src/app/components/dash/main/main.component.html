@@ -1,5 +1,6 @@
 <!-- Cover -->
-<div class="container-fluid pt-5 px-lg-4 cover" [style.background-image]="blogCover()">
+<div class="container-fluid pt-5 px-lg-4 cover" [style.background-image]="blogCover()"
+     *ngIf="currentBlog.role !== teamRoles.Editor">
   <div class="row">
 
     <!-- Stat: Publication -->
@@ -83,7 +84,7 @@
     <div class="col-lg-8">
 
       <!-- Statistics -->
-      <div class="card dash tabs mb-4">
+      <div class="card dash tabs mb-4" *ngIf="currentBlog.role !== teamRoles.Editor">
 
         <!-- Header -->
         <div class="card-header">
@@ -300,7 +301,7 @@
       </form>
 
       <!-- Publication -->
-      <div class="card dash mb-4">
+      <div class="card dash mb-4" *ngIf="currentBlog.role !== teamRoles.Editor">
         <div class="card-header text-capitalize" translate>PUBLICATION</div>
         <div class="list-group-flush pb-1">
           <!-- Posts -->
@@ -322,7 +323,7 @@
       </div>
 
       <!-- Comment overview -->
-      <div class="card dash mb-4">
+      <div class="card dash mb-4" *ngIf="currentBlog.role !== teamRoles.Editor">
         <div class="card-header">
           <a class="text-capitalize" routerLink="../../../comments" translate>COMMENT_OVERVIEW</a>
         </div>
@@ -351,7 +352,7 @@
       </div>
 
       <!-- Blog overview -->
-      <div class="card dash mb-4">
+      <div class="card dash mb-4" *ngIf="currentBlog.role !== teamRoles.Editor">
         <div class="card-header">
           <a class="text-capitalize" routerLink="../../../settings/general" translate>BLOG_OVERVIEW</a>
         </div>
@@ -375,7 +376,7 @@
       </div>
 
       <!-- Team -->
-      <div class="card dash mb-4">
+      <div class="card dash mb-4" *ngIf="currentBlog.role !== teamRoles.Editor">
         <div class="card-header">
           <a class="text-capitalize" routerLink="../../../team" translate>TEAM</a>
         </div>
