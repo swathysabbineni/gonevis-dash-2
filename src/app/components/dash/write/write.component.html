@@ -86,7 +86,7 @@
               </div>
             </div>
             <!-- Start publication -->
-            <div class="mb-4">
+            <div class="mb-4" *ngIf="oldEntry.status == entryStatus.Draft">
               <h5 translate>START_PUBLICATION</h5>
               <p class="mat-hint" translate>START_PUBLICATION_DESCRIPTION</p>
               <input class="form-control"
