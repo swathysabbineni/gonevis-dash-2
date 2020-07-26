@@ -52,17 +52,16 @@
             <a class="small text-secondary float-right ml-2" (click)="removeDomain(domain)">
               <fa-icon [icon]="faDelete"></fa-icon>
             </a>
-            <span class="small text-info float-right" *ngIf="domain.is_primary" triggers="hover"
+            <div class="small text-info float-right" *ngIf="domain.is_primary" triggers="hover"
                   [popover]="primaryTemplate" [popoverTitle]="'PRIMARY_DOMAIN' | translate"
                   [popoverContext]="{domain: domain}" placement="left">
-          <fa-icon [icon]="faPrimary"></fa-icon>
-        </span>
+              <fa-icon [icon]="faPrimary"></fa-icon>
+            </div>
             <a class="small text-secondary float-right" *ngIf="!domain.is_primary"
                [popover]="primaryTemplate" [popoverTitle]="'PRIMARY_DOMAIN' | translate"
                [popoverContext]="{domain: domain}" placement="left">
               <fa-icon [icon]="faNotPrimary"></fa-icon>
             </a>
-            <div class="small text-muted" [title]="'DNS_TARGET' | translate"><code>{{ domain.cname }}</code></div>
           </div>
         </div>
       </div>
