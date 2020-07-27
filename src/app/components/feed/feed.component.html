@@ -16,8 +16,13 @@
 
           <!-- Following blogs -->
           <div class="nav flex-column nav-pills my-3 small" *ngIf="blogs">
-            <a class="nav-link" *ngFor="let blog of blogs" [routerLink]="['blog', blog.id]" routerLinkActive="active">
-              <span class="pl-2">{{ blog.title }}</span>
+            <a class="nav-link d-flex align-items-center w-100" routerLinkActive="active"
+               *ngFor="let blog of blogs" [routerLink]="['blog', blog.id]">
+              <!-- Logo -->
+              <img class="rounded-circle mr-2" width="32" *ngIf="blog.logo" [src]="blog.logo.thumbnail_48x48">
+              <img class="rounded-circle bg-secondary mr-2" width="32" height="32" *ngIf="!blog.logo">
+              <!-- Title -->
+              <span class="pl-2 mb-1 text-truncate">{{ blog.title }}</span>
             </a>
           </div>
         </div>

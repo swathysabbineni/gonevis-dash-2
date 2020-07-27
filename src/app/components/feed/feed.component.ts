@@ -3,7 +3,7 @@ import { AppComponent } from '@app/app.component';
 import { BlogService } from '@app/components/feed/blog/blog.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { NavPill } from '@app/interfaces/nav-pill';
-import { Blog } from '@app/interfaces/v1/blog';
+import { Blog } from '@app/interfaces/zero/blog';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faStream } from '@fortawesome/free-solid-svg-icons';
 

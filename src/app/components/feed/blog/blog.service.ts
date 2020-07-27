@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ApiResponseFollow } from '@app/interfaces/v1/api-response-follow';
-import { Blog as v1Blog } from '@app/interfaces/v1/blog';
 import { Blog } from '@app/interfaces/zero/blog';
 import { ApiService } from '@app/services/api/api.service';
 import { Observable } from 'rxjs';
@@ -43,8 +42,8 @@ export class BlogService {
    */
   getFollowingBlogs(filters: {
     limit?: number,
-  } = {}): Observable<ApiResponse<v1Blog>> {
-    return this.http.get<ApiResponse<v1Blog>>(`${this.api.base.zero}website/site/`, {
+  } = {}): Observable<ApiResponse<Blog>> {
+    return this.http.get<ApiResponse<Blog>>(`${this.api.base.zero}website/site/`, {
       params: Object.assign(filters, {
         show: 'subscribed',
       }),
