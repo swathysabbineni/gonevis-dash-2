@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { ApiService } from '@app/services/api/api.service';
 import { AuthService } from '@app/services/auth/auth.service';
@@ -14,7 +14,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class AuthInterceptorService implements HttpInterceptor {
 
-  constructor(private authService: AuthService,
+  constructor(private injector: Injector,
               private modalService: BsModalService) {
   }
 
@@ -86,7 +86,10 @@ export class AuthInterceptorService implements HttpInterceptor {
             /**
              * User authentication token is invalid
              */
-            this.authService.signOut(false, ['user/start'], true).then((): void => {
+            // Get the auth header from the service.
+            const auth = this.injector.get(AuthService);
+            // const authToken = auth.signOut();
+            auth.signOut(false, ['user/start'], true).then((): void => {
               /**
                * Prevent showing invalid authentication modal if we are checking for authentication via API.
                */

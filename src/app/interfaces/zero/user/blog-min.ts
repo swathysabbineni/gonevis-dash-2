@@ -11,6 +11,7 @@ export interface BlogMin {
     }
   };
   role: TeamRoles;
+  plan_name: 'Free' | 'Personal' | 'Professional';
   title: string;
   url: string;
 }

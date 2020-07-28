@@ -106,7 +106,12 @@ export class MediaService {
    *
    * @param payload File payload
    */
-  uploadUrl(payload: { file_name: string, file_size: number, mime_type: string }): Observable<UploadUrlResponse> {
+  uploadUrl(payload: {
+    file_name: string,
+    file_size: number,
+    mime_type: string,
+    is_optimized: boolean
+  }): Observable<UploadUrlResponse> {
     return this.http.post<UploadUrlResponse>(
       `${this.api.base.v1}site/${BlogService.currentBlog.id}/upload-url/`, payload,
     );
@@ -143,11 +148,13 @@ export class MediaService {
   /**
    * Post file key
    *
-   * @param fileKey File key from the upload URL response
+   * @param fileKey File key from the upload URL response.
+   * @param isOptimized Determines whether or not file should be optimized.
    */
-  post(fileKey: string): Observable<FileMedia> {
+  post(fileKey: string, isOptimized: boolean): Observable<FileMedia> {
     return this.http.post<FileMedia>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/dolphin/file/`, {
       file_key: fileKey,
+      is_optimized: isOptimized,
     });
   }
 

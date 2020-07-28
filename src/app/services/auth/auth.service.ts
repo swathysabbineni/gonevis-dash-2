@@ -62,19 +62,21 @@ export class AuthService {
               private toast: ToastrService,
               private translate: TranslateService,
               private router: Router,
+              private userService: UserService,
               private api: ApiService) {
     /**
      * Check if user is authenticated
      */
     if (this.isAuth) {
       /**
-       * Sign user out if authentication version is old
+       * Refresh user if authentication version is old
        */
       if (AuthService.STORAGE_VERSION !== Number(localStorage.getItem(AuthService.STORAGE_VERSION_KEY))) {
-        this.signOut(false, ['user', 'sign-in']).then(() => {
-          this.toast.info(this.translate.instant('TEXT_OLD_AUTH_VERSION'), this.translate.instant('SIGN_IN_AGAIN'));
+        this.userService.getUser().subscribe((): void => {
+          // Store storage version
+          localStorage.setItem(AuthService.STORAGE_VERSION_KEY, AuthService.STORAGE_VERSION.toString());
+          AuthService.preventInvalidAuthenticationModal = false;
         });
-        return;
       }
       /**
        * Update authenticated user and blog data

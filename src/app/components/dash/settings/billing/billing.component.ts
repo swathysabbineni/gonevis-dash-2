@@ -7,6 +7,7 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { PlanSubscription } from '@app/interfaces/planSubscription';
 import { Transaction } from '@app/interfaces/transaction';
 import { BlogService } from '@app/services/blog/blog.service';
+import { UserService } from '@app/services/user/user.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
@@ -50,7 +51,8 @@ export class BillingComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private bsModalService: BsModalService,
               private settingsUpgradeService: UpgradesService,
-              private settingsBillingService: BillingService) {
+              private settingsBillingService: BillingService,
+              private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -77,6 +79,8 @@ export class BillingComponent implements OnInit {
   cancel(): void {
     this.canceling = true;
     this.settingsBillingService.cancelSubscription(this.subscription.id).subscribe((): void => {
+      // Refresh user.
+      this.userService.getUser().subscribe();
       this.router.navigate(['../upgrade'], {
         relativeTo: this.activatedRoute.parent,
       });

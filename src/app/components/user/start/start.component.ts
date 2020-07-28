@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BlogPlanName } from '@app/enums/blog-plan-name';
 import { TeamRoles } from '@app/enums/team-roles';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -175,6 +176,7 @@ export class StartComponent implements OnInit {
         title: data.title,
         url: data.url,
         id: data.id,
+        plan_name: BlogPlanName.FREE,
         media: {
           logo: null,
         },

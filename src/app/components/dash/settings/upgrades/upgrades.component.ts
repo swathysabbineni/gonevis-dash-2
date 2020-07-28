@@ -125,7 +125,8 @@ export class UpgradesComponent implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
               private bsModalService: BsModalService,
-              private upgradesService: UpgradesService) {
+              private upgradesService: UpgradesService,
+              private userService: UserService) {
     this.upgradesService.loadScript();
     this.subscription.add(
       this.bsModalService.onHide.subscribe((): void => {
@@ -230,6 +231,8 @@ export class UpgradesComponent implements OnInit, OnDestroy {
       this.validationInterval = setInterval((): void => {
         this.upgradesService.getSubscription().subscribe((data: { subscription: PlanSubscription }): void => {
           if (data.subscription && data.subscription.active) {
+            // Refresh user.
+            this.userService.getUser().subscribe();
             // Cancel interval
             clearInterval(this.validationInterval);
             // Close modal

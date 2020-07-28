@@ -1,10 +1,25 @@
 import { KeyValue } from '@angular/common';
 import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, ViewChild, Output, EventEmitter, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  Output,
+  EventEmitter,
+  Input,
+  ChangeDetectorRef,
+  OnDestroy,
+  ElementRef,
+  OnInit,
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MediaService } from '@app/components/dash/media/media.service';
+import { BlogPlanName } from '@app/enums/blog-plan-name';
 import { File as FileMedia } from '@app/interfaces/file';
 import { UploadUrlResponse } from '@app/interfaces/v1/upload-url-response';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
+import { BlogService } from '@app/services/blog/blog.service';
+import { Plan } from '@app/shared/locked-feature/shared/enums/plan';
 import { UploadingFile } from '@app/shared/upload/uploading-file';
 import { environment } from '@environments/environment';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -13,6 +28,8 @@ import { faTimesCircle } from '@fortawesome/free-regular-svg-icons/faTimesCircle
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch';
 import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons/faCloudUploadAlt';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
+import { ActiveToast } from 'ngx-toastr/toastr/toastr.service';
 import { forkJoin, Subscription, BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -20,7 +37,7 @@ import { forkJoin, Subscription, BehaviorSubject } from 'rxjs';
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.scss'],
 })
-export class UploadComponent implements OnDestroy {
+export class UploadComponent implements OnInit, OnDestroy {
 
   /**
    * Represents a disposable resource, such as the execution of an Observable. A
@@ -28,6 +45,9 @@ export class UploadComponent implements OnDestroy {
    * and just disposes the resource held by the subscription
    */
   private readonly subscription: Subscription = new Subscription();
+
+
+  readonly plan = Plan;
 
   readonly faUpload: IconDefinition = faCloudUploadAlt;
   readonly faFile: IconDefinition = faFileAlt;
@@ -38,6 +58,11 @@ export class UploadComponent implements OnDestroy {
    * Upload event (when file upload is finished)
    */
   @Output() upload: EventEmitter<FileMedia> = new EventEmitter<FileMedia>();
+
+  /**
+   * On navigate event is being used to close file selection modal once user clicks on optimized toaster.
+   */
+  @Output() navigated: EventEmitter<void> = new EventEmitter<void>();
 
   /**
    * Determines whether or not drag and drop should be triggered full screen instead of a certain position
@@ -52,7 +77,7 @@ export class UploadComponent implements OnDestroy {
   /**
    * File input reference
    */
-  @ViewChild('fileElement') fileElement: { nativeElement: { files: File[]; }; };
+  @ViewChild('fileElement') fileElement: ElementRef;
 
   /**
    * Selected files whether via drag and drop or via file manager selection
@@ -64,9 +89,51 @@ export class UploadComponent implements OnDestroy {
    */
   dragStarted: boolean;
 
-  constructor(private mediaService: MediaService,
+  /**
+   * File optimization control which is being used to toggle file optimization.
+   */
+  fileOptimizeControl: FormControl = new FormControl(false);
+
+  /**
+   * Optimization active toast which is being used to listen to clicks (which will redirect user to upgrade page),
+   * and being used to remove duplicated toasts.
+   */
+  fileOptimizeToast: ActiveToast<any>;
+
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private mediaService: MediaService,
               private translate: TranslateService,
-              private changeDetectorRef: ChangeDetectorRef) {
+              private changeDetectorRef: ChangeDetectorRef,
+              private toastrService: ToastrService) {
+  }
+
+  ngOnInit(): void {
+    this.fileOptimizeControl.valueChanges.subscribe((value: boolean): void => {
+      // Check if current blog's plan is Professional.
+      if (value === true && BlogService.currentBlog.plan_name !== BlogPlanName.PROFESSIONAL) {
+        // Remove and destroy file optimization toast if it's being shown already.
+        if (this.fileOptimizeToast) {
+          this.toastrService.remove(this.fileOptimizeToast.toastId);
+        }
+        // Uncheck optimization option.
+        this.fileOptimizeControl.setValue(false);
+        this.translate.get(['FILE_OPTIMIZATION_PLAN_ERROR', 'IMAGE_OPTIMIZATION_FEATURE'])
+          .subscribe((response: any): void => {
+            // Show a toaster which takes user to upgrade page once clicked on it.
+            this.fileOptimizeToast = this.toastrService.success(
+              response.FILE_OPTIMIZATION_PLAN_ERROR,
+              response.IMAGE_OPTIMIZATION_FEATURE,
+            );
+            this.fileOptimizeToast.onTap.subscribe((): void => {
+              // Redirect to upgrade page.
+              this.router.navigate(['dash', BlogService.currentBlogIndex, 'settings', 'upgrade']);
+              // Notify file selection modal to close itself.
+              this.navigated.emit();
+            });
+          });
+      }
+    });
   }
 
   /**
@@ -85,6 +152,7 @@ export class UploadComponent implements OnDestroy {
    * @param droppedFiles Dropped files
    */
   onFileSelected(droppedFiles?: File[]): void {
+    const isOptimized: boolean = this.fileOptimizeControl.value;
     let files: File[] = [];
     /**
      * If method was called from drop event, then get dropped files,
@@ -93,7 +161,7 @@ export class UploadComponent implements OnDestroy {
     if (droppedFiles) {
       files = droppedFiles;
     } else {
-      files = this.fileElement.nativeElement.files;
+      files = Object.assign([], this.fileElement.nativeElement.files);
     }
     if (!files[0]) {
       return;
@@ -102,6 +170,8 @@ export class UploadComponent implements OnDestroy {
      * List of observables which their type is {@link BehaviorSubject} that hold boolean as value
      */
     const observableList: BehaviorSubject<boolean>[] = [];
+    // Empty list of files so user can upload same file again.
+    this.fileElement.nativeElement.value = '';
     /**
      * Iterate through given files
      */
@@ -127,6 +197,7 @@ export class UploadComponent implements OnDestroy {
         file_name: file.name,
         file_size: file.size,
         mime_type: file.type,
+        is_optimized: isOptimized,
       }).subscribe((response: UploadUrlResponse): void => {
         /**
          * Mark file as in progress
@@ -171,7 +242,10 @@ export class UploadComponent implements OnDestroy {
               /**
                * API call
                */
-              this.mediaService.post(response.post_data.fields.key).subscribe((fileUploaded: FileMedia): void => {
+              this.mediaService.post(
+                response.post_data.fields.key,
+                isOptimized,
+              ).subscribe((fileUploaded: FileMedia): void => {
                 this.selectedFiles.get(file.name).updateProperty({
                   data: fileUploaded,
                   done: true,
@@ -218,6 +292,7 @@ export class UploadComponent implements OnDestroy {
      * Disposes the resources held by the subscription
      */
     this.subscription.unsubscribe();
+    this.navigated.unsubscribe();
   }
 
   /**

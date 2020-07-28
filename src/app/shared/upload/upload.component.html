@@ -1,11 +1,24 @@
 <!-- Upload -->
 <input type="file" [accept]="accept" class="d-none" #fileElement (change)="onFileSelected()" multiple>
 
-<!-- Button -->
-<button type="button" class="btn btn-primary" (click)="fileElement.click()" translate
-        *ngIf="globalDrop && !selectedFiles.size && !dragStarted">
-  UPLOAD
-</button>
+<div class="d-flex flex-wrap align-items-center" *ngIf="globalDrop && !selectedFiles.size && !dragStarted">
+  <!-- Button -->
+  <button type="button" class="btn btn-primary" (click)="fileElement.click()" translate>
+    UPLOAD
+  </button>
+  <!-- Is optimized -->
+  <div class="d-flex flex-column ml-3">
+    <div class="custom-control custom-checkbox">
+      <div class="d-flex align-items-center">
+        <input class="custom-control-input" type="checkbox"
+               id="is_optimized" [formControl]="fileOptimizeControl" [checked]="fileOptimizeControl.value">
+        <label class="custom-control-label" for="is_optimized" translate>OPTIMIZE_FILE</label>
+        <app-locked-feature [plan]="plan.Professional"></app-locked-feature>
+      </div>
+      <small class="text-secondary d-block" translate>OPTIMIZATION_DESCRIPTION</small>
+    </div>
+  </div>
+</div>
 
 <!-- Drop zone and uploading files -->
 <div class="row">
@@ -27,6 +40,19 @@
       <button class="btn btn-primary btn-sm mt-1 hide-on-drag" (click)="fileElement.click()" translate>
         BROWSE_FILE
       </button>
+      <hr class="my-4">
+      <!-- Is optimized -->
+      <div class="d-flex justify-content-center">
+        <div class="custom-control custom-checkbox">
+          <div class="d-flex align-items-center">
+            <input class="custom-control-input" type="checkbox"
+                   id="is_optimized_2" [formControl]="fileOptimizeControl" [checked]="fileOptimizeControl.value">
+            <label class="custom-control-label text-dark" for="is_optimized_2" translate>OPTIMIZE_FILE</label>
+            <app-locked-feature [plan]="plan.Professional"></app-locked-feature>
+          </div>
+          <small class="text-secondary d-block" translate>OPTIMIZATION_DESCRIPTION</small>
+        </div>
+      </div>
     </div>
   </div>
 
