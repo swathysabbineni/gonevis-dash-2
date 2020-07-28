@@ -21,7 +21,7 @@ export class AuthService {
   /**
    * Storage version to use to force user to sign in again (should only be increased)
    */
-  static readonly STORAGE_VERSION = 8;
+  static readonly STORAGE_VERSION = 9;
 
   /**
    * Storage key for storage version
