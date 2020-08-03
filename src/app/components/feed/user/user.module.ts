@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BlogListModule } from '@app/shared/blog-list/blog-list.module';
+import { UserCommentListModule } from '@app/shared/user-comment-list/user-comment-list.module';
 import { EntryListModule } from '@app/shared/entry-list/entry-list.module';
+import { UserVoteListModule } from '@app/shared/user-vote-list/user-vote-list.module';
 import { LoadingModule } from '@app/shared/loading/loading.module';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -17,6 +19,8 @@ import { UserComponent } from './user.component';
     EntryListModule,
     BlogListModule,
     LoadingModule,
+    UserVoteListModule,
+    UserCommentListModule,
   ],
 })
 export class UserModule {

@@ -7,7 +7,9 @@ import { FeedService } from '@app/components/feed/feed.service';
 import { UserService } from '@app/components/feed/user/user.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { User } from '@app/interfaces/user';
+import { Vote } from '@app/interfaces/zero/vote';
 import { Blog } from '@app/interfaces/zero/blog';
+import { Comment } from '@app/interfaces/zero/comment';
 import { Entry } from '@app/interfaces/zero/entry';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -47,6 +49,16 @@ export class UserComponent implements OnInit, OnDestroy {
   blogs: Blog[];
 
   /**
+   * List of votes of this user
+   */
+  userVotes: Vote[];
+
+  /**
+   * List of comments of this user
+   */
+  userComments: Comment[];
+
+  /**
    * API loading indicator
    */
   loading = true;
@@ -57,9 +69,9 @@ export class UserComponent implements OnInit, OnDestroy {
   next: string;
 
   /**
-   * Current view (show user entries or blogs)
+   * Current view (show user entries or blogs or votes or comments)
    */
-  current: 'entries' | 'blogs';
+  current: 'entries' | 'blogs' | 'votes' | 'comments';
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -112,7 +124,7 @@ export class UserComponent implements OnInit, OnDestroy {
    *
    * @param current Change to this view and load data
    */
-  setCurrent(current?: 'entries' | 'blogs'): void {
+  setCurrent(current?: 'entries' | 'blogs' | 'votes' | 'comments'): void {
     if (current) {
       this.current = current;
     }
@@ -128,6 +140,18 @@ export class UserComponent implements OnInit, OnDestroy {
       this.blogService.getBlogs(this.username).subscribe((data: ApiResponse<Blog>): void => {
         this.next = data.next;
         this.blogs = data.results;
+        this.loading = false;
+      });
+    } else if (this.current === 'votes') {
+      this.userService.getUserVotes(this.user.id).subscribe((data: ApiResponse<Vote>): void => {
+        this.next = data.next;
+        this.userVotes = data.results;
+        this.loading = false;
+      });
+    } else if (this.current === 'comments') {
+      this.userService.getUserComments(this.user.id).subscribe((data: ApiResponse<Comment>): void => {
+        this.next = data.next;
+        this.userComments = data.results;
         this.loading = false;
       });
     }

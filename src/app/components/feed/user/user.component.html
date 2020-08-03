@@ -5,8 +5,7 @@
   <div class="card-header d-flex">
 
     <!-- Logo -->
-    <img class="rounded-sm mr-3" *ngIf="user.media.thumbnail_128x128"
-         [src]="user.media.thumbnail_128x128">
+    <img class="rounded-circle mr-3" *ngIf="user.media.thumbnail_128x128" [src]="user.media.thumbnail_128x128">
 
     <!-- Title, date joined -->
     <div class="d-flex flex-column">
@@ -35,6 +34,12 @@
   <li class="nav-item">
     <a class="nav-link" translate [class.active]="current === 'blogs'" (click)="setCurrent('blogs')">BLOGS</a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" translate [class.active]="current === 'comments'" (click)="setCurrent('comments')">COMMENTS</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" translate [class.active]="current === 'votes'" (click)="setCurrent('votes')">LIKES</a>
+  </li>
 </ul>
 
 <!-- Loading -->
@@ -45,3 +50,17 @@
 
 <!-- User blogs -->
 <app-blog-list [blogs]="blogs" [next]="next" *ngIf="current === 'blogs'"></app-blog-list>
+
+<!-- User comments -->
+<app-user-comment-list [userComments]="userComments"
+                       [next]="next"
+                       [user]="user"
+                       *ngIf="current === 'comments'">
+</app-user-comment-list>
+
+<!-- User likes -->
+<app-user-vote-list [userVotes]="userVotes"
+                    [next]="next"
+                    [user]="user"
+                    *ngIf="current === 'votes'">
+</app-user-vote-list>

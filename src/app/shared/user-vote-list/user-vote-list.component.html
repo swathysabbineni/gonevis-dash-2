@@ -1,0 +1,45 @@
+<!-- User likes -->
+<div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+     infiniteScrollContainer=".feed-scroller"
+     fromRoot="false"
+     (scrolled)="loadMore(next)" appEmbed>
+
+  <!-- User like -->
+  <div class="card feed shadow-sm my-3" *ngFor="let vote of userVotes">
+
+    <!-- Header -->
+    <div class="card-header d-flex align-items-center">
+
+      <!-- User image -->
+      <div class="mr-3 mr-auto" *ngIf="user.media.thumbnail_48x48">
+        <img class="rounded-circle" [src]="user.media.thumbnail_48x48">
+      </div>
+
+      <!-- Like icon -->
+      <fa-icon [fixedWidth]="true" size="2x" [icon]="faLike" class="mr-2"></fa-icon>
+
+      <!-- Comment icon -->
+      <fa-icon [fixedWidth]="true" size="2x" [icon]="faComment"
+               *ngIf="vote.object_type === objectType.Comment"></fa-icon>
+
+      <!-- Post icon -->
+      <fa-icon [fixedWidth]="true" size="2x" [icon]="faPost"
+               *ngIf="vote.object_type === objectType.Entry"></fa-icon>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body">
+
+      <!-- Post title or comment content -->
+      <div class="white-space-pre-line mb-2" [innerHTML]="vote.title"></div>
+
+      <!-- Date -->
+      <span class="text-secondary">{{ vote.created | date }}</span>
+
+      <!-- View (post) -->
+      <a  *ngIf="vote.object_type === objectType.Entry"
+          [routerLink]="['/feed/entry', vote.object_pk]"
+         class="float-right" translate>VIEW</a>
+    </div>
+  </div>
+</div>
