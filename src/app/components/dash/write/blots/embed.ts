@@ -30,6 +30,7 @@ const BlockEmbed = Quill.import('blots/block/embed');
 class Embed extends BlockEmbed {
   static blotName = 'embed';
   static tagName = 'iframe';
+  static className = 'embed';
 
   static create(url: string): HTMLIFrameElement {
     const node: HTMLIFrameElement = super.create();

@@ -6,6 +6,7 @@ class MixCloudBlot extends BlockEmbed {
 
   static blotName = 'mixcloud';
   static tagName = 'iframe';
+  static className = 'mixcloud';
 
   static create(src: string): HTMLElement {
     const node: HTMLElement = super.create();
