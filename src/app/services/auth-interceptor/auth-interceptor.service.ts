@@ -54,6 +54,9 @@ export class AuthInterceptorService implements HttpInterceptor {
        */
       switch (error.status) {
         case 400: {
+          if (['POST', 'PATCH', 'PUT'].includes(request.method)) {
+            error.preventSentryCapture = true;
+          }
           /**
            * User email is not verified
            */
@@ -69,6 +72,7 @@ export class AuthInterceptorService implements HttpInterceptor {
           break;
         }
         case 401: {
+          error.preventSentryCapture = true;
           /**
            * Don't handle this error for reset-password endpoint
            */
@@ -109,6 +113,7 @@ export class AuthInterceptorService implements HttpInterceptor {
           break;
         }
         case 403: {
+          error.preventSentryCapture = true;
           /**
            * User does not have permission for this action
            */

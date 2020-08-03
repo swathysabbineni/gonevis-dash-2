@@ -1,0 +1,1 @@
+{"title":"Prevent Sentry from sending errors with status of 401, 403 or 400.","issueID":"535","changeType":"fix"}
