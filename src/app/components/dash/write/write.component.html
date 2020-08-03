@@ -137,6 +137,37 @@
             </div>
           </div>
           <mat-divider></mat-divider>
+          <div>
+            <h5 translate>CIRCLES</h5>
+            <p class="mat-hint" translate>CIRCLES_DESCRIPTION</p>
+            <!-- List of circles -->
+            <mat-chip-list class="d-flex mb-3">
+              <mat-chip [disableRipple]="true"
+                        [removable]="true"
+                        (removed)="removeCircle(circle.id)"
+                        *ngFor="let circle of form.get('circles').value">
+                {{ circle.name }}
+                <fa-icon [icon]="times" matChipRemove></fa-icon>
+              </mat-chip>
+            </mat-chip-list>
+            <div class="form-group">
+              <!-- Input -->
+              <input class="form-control"
+                     type="text"
+                     [placeholder]="'SEARCH_CIRCLES' | translate"
+                     [formControl]="circleQueryControl"
+                     [matAutocomplete]="circlesAutoComplete">
+              <!-- Auto complete -->
+              <mat-autocomplete #circlesAutoComplete="matAutocomplete"
+                                autoActiveFirstOption
+                                (optionSelected)="addCircle($event.option.value);">
+                <mat-option *ngFor="let circle of circles" [value]="circle">
+                  {{ circle.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
           <!-- Cover image -->
           <div>
             <h5 translate>COVER_IMAGE</h5>

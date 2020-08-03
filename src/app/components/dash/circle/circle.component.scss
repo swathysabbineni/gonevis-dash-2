@@ -1,0 +1,172 @@
+@import "variables";
+
+$circle-border-width: 16px;
+$circle-member-size: 48px + $circle-border-width;
+
+.page {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+
+  > .circles {
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+  }
+
+  > .followers {
+    height: 100%;
+    width: 340px;
+    background: $light;
+    flex-direction: column;
+    display: flex;
+    flex: 1 0 340px;
+    overflow-y: auto;
+
+    > .card {
+      margin-bottom: map_get($spacers, 2);
+      width: 100%;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      > .card-body {
+        > img {
+          width: 40px;
+          height: 40px;
+          flex-basis: 40px;
+          min-width: 40px;
+        }
+
+        > div > .text-truncate {
+          width: 160px;
+        }
+      }
+    }
+  }
+}
+
+.circle-wrapper {
+  width: 100%;
+  padding-bottom: 100%;
+
+  .circle {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .circle-info {
+      border: $circle-border-width solid $secondary;
+      width: 80%;
+      height: 80%;
+      border-radius: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: $gray-200;
+
+      .circle-name {
+        font-weight: bold;
+        font-size: $font-size-lg;
+        text-transform: uppercase;
+        color: $secondary;
+      }
+
+      .circle-members-count {
+        font-size: $font-size-lg * 2;
+        font-weight: bold;
+        color: lighten($primary, 5%);
+      }
+    }
+
+    .circle-members {
+      width: calc(80% + 48px);
+      height: calc(80% + 48px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+
+      .circle-member {
+        width: $circle-member-size;
+        height: $circle-member-size;
+        border: $circle-border-width / 2 solid $secondary;
+        border-radius: 100%;
+        position: absolute;
+        background-position: center;
+        background-size: cover;
+        background-color: $secondary;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-transform: uppercase;
+        color: white;
+        font-size: 2em;
+
+        &:nth-child(1) {
+          left: 5px;
+        }
+
+        &:nth-child(2) {
+          top: 0;
+          left: 0;
+          margin: calc(20% - #{$circle-member-size} / 2);
+        }
+
+        &:nth-child(3) {
+          top: 5px;
+        }
+
+        &:nth-child(4) {
+          top: 0;
+          right: 0;
+          margin: calc(20% - #{$circle-member-size} / 2);
+        }
+
+        &:nth-child(5) {
+          right: 5px;
+        }
+
+        &:nth-child(6) {
+          bottom: 0;
+          right: 0;
+          margin: calc(20% - #{$circle-member-size} / 2);
+        }
+
+        &:nth-child(7) {
+          bottom: 5px;
+        }
+
+        &:nth-child(8) {
+          bottom: 0;
+          left: 0;
+          margin: calc(20% - #{$circle-member-size} / 2);
+        }
+      }
+    }
+  }
+}
+
+.drop-zone {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    display: block;
+  }
+
+  &.drag-started {
+    &::before {
+      z-index: 1;
+    }
+  }
+}

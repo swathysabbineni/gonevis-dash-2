@@ -16,6 +16,7 @@ import { faComment } from '@fortawesome/free-solid-svg-icons/faComment';
 import { faHashtag } from '@fortawesome/free-solid-svg-icons/faHashtag';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons/faTachometerAlt';
 import { faThLarge } from '@fortawesome/free-solid-svg-icons/faThLarge';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
@@ -83,6 +84,10 @@ export class DashComponent implements OnInit, OnDestroy {
     path: 'media',
     label: 'MEDIA',
     icon: faImage,
+  }, {
+    path: 'circle',
+    label: 'CIRCLES',
+    icon: faSpinner,
   }, {
     path: 'statistics',
     label: 'STATISTICS',

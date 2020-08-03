@@ -34,6 +34,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from '@app/app.component';
+import { CircleService } from '@app/components/dash/circle/circle.service';
 import { MediaService } from '@app/components/dash/media/media.service';
 import '@app/components/dash/write/blots/divider.ts';
 import '@app/components/dash/write/blots/embed.ts';
@@ -52,6 +53,7 @@ import { ApiResponse } from '@app/interfaces/api-response';
 import { File as FileMedia } from '@app/interfaces/file';
 import { Params } from '@app/interfaces/params';
 import { SoundCloudEmbed } from '@app/interfaces/sound-cloud-embed';
+import { Circle } from '@app/interfaces/v1/circle';
 import { Entry } from '@app/interfaces/v1/entry';
 import { Tag } from '@app/interfaces/v1/tag';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
@@ -343,6 +345,16 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
    * Tag query form
    */
   tagQueryControl: FormControl = new FormControl('');
+
+  /**
+   * Circle query form
+   */
+  circleQueryControl: FormControl = new FormControl('');
+
+  /**
+   * Circle list
+   */
+  circles: Circle[] = [];
 
   /**
    * API loading indicator
@@ -717,6 +729,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
               private mediaService: MediaService,
               private writeService: WriteService,
               private toast: ToastrService,
+              private circleService: CircleService,
               @Inject(DOCUMENT) private document: Document) {
     /**
      * Dynamically inject editor-style.scss file if not injected
@@ -772,6 +785,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       content: ['', Validators.required],
       excerpt: [''],
       tags: [[]],
+      circles: [[]],
       status: [EntryStatus.Draft],
       slug: [''],
       comment_enabled: [true],
@@ -801,10 +815,31 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       this.getTags(value);
     });
     /**
+     * Set up circle query form
+     */
+    this.circleQueryControl.valueChanges.pipe(debounceTime(300)).subscribe((value: string): void => {
+      /**
+       * Value will be null when the user has selected an auto circle.
+       * So we don't retrieve circles again until user writes something.
+       */
+      if (value === null) {
+        return;
+      }
+      /**
+       * Retrieve circles based on given keyword.
+       */
+      this.getCircles(value);
+    });
+    /**
      * Retrieve tags initially so when the user focuses on the input,
      * he/she sees list of tags without writing anything.
      */
     this.getTags();
+    /**
+     * Retrieve circles initially so when the user focuses on the input,
+     * he/she sees list of circles without writing anything.
+     */
+    this.getCircles();
     /**
      * Make a copy of entry
      */
@@ -820,6 +855,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
           content: '',
           excerpt: '',
           tags: [],
+          circles: [],
           status: EntryStatus.Draft,
           slug: '',
           comment_enabled: true,
@@ -988,6 +1024,13 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * @returns AbstractControl
+   */
+  private get circlesControl(): AbstractControl {
+    return this.form.get('circles');
+  }
+
+  /**
    * Update form controls
    *
    * @param data Entry
@@ -998,6 +1041,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       content: data.content,
       excerpt: data.excerpt,
       tags: data.tags,
+      circles: this.oldEntry.circles,
       status: data.status,
       slug: data.slug,
       comment_enabled: data.comment_enabled,
@@ -1729,6 +1773,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     payload.content = this.editor.root.innerHTML;
     payload.id = this.id;
     payload.site = BlogService.currentBlog.id;
+    payload.circles = (payload.circles as any[]).map((circle: Circle): string => circle.id);
     // Set status property only if it was given. Status is given only when user is changing entry's status directly.
     if (status !== null) {
       payload.status = status;
@@ -1776,8 +1821,9 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
   addEntry(payload: Params, status?: EntryStatus): void {
     if (this.form.get('title').value.trim() === '') {
       this.form.get('title').setValue(`Untitled ${new Date().toDateString()}`);
+      payload.title = this.form.get('title').value;
     }
-    this.writeService.addEntry(this.form.value).subscribe((data: Entry): void => {
+    this.writeService.addEntry(payload).subscribe((data: Entry): void => {
       this.loading = false;
       if (this.autoSave) {
         this.wasCreating = true;
@@ -1880,6 +1926,18 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * Get circles which is being used for showing the list of circles for selection.
+   *
+   * @param search Search text
+   */
+  getCircles(search: string = ''): void {
+    this.circleService.list().subscribe((data: ApiResponse<Circle>): void => {
+      const circleIds: string[] = this.circlesControl.value.map((circle: Circle) => circle.id);
+      this.circles = data.results.filter((circle: Circle): boolean => !circleIds.includes(circle.id));
+    });
+  }
+
+  /**
    * Add tag
    *
    * @param slug Tag slugs
@@ -1902,6 +1960,30 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
   removeTag(slug: string): void {
     const newValue: string[] = this.tagsControl.value.filter((tagSlug: string): boolean => tagSlug !== slug);
     this.tagsControl.setValue(newValue);
+  }
+
+  /**
+   * Add circle
+   *
+   * @param circle Circle
+   */
+  addCircle(circle: Circle): void {
+    /**
+     * Clear {@link circleQueryControl}'s value so user can search another circle
+     */
+    this.circleQueryControl.setValue(null);
+    this.circles = [];
+    this.circlesControl.setValue(this.circlesControl.value.concat(circle));
+  }
+
+  /**
+   * Remove circle from entry
+   *
+   * @param id Circle ID
+   */
+  removeCircle(id: string): void {
+    const newValue: string[] = this.circlesControl.value.filter((circle: Circle): boolean => circle.id !== id);
+    this.circlesControl.setValue(newValue);
   }
 
   /**

@@ -42,7 +42,7 @@ export class WriteService {
   /**
    * Add entry
    */
-  addEntry(entry: Entry): Observable<Entry> {
+  addEntry(entry: Params): Observable<Entry> {
     return this.http.post<Entry>(`${this.apiService.base.v1}site/${BlogService.currentBlog.id}/entry/`, entry);
   }
 

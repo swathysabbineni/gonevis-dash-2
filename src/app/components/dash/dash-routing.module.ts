@@ -36,6 +36,9 @@ const routes: Routes = [{
     path: 'media',
     loadChildren: () => import('./media/media.module').then(m => m.MediaModule),
   }, {
+    path: 'circle',
+    loadChildren: () => import('./circle/circle.module').then(m => m.CircleModule),
+  }, {
     path: 'navigation',
     loadChildren: () => import('./navigation/navigation.module').then(m => m.NavigationModule),
   }, {
