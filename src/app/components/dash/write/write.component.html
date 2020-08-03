@@ -714,7 +714,7 @@
                 <ng-template #linkEditTemplateRef let-data>
                   <form class="link-edit"
                         (keydown.escape)="cancelLink()"
-                        (ngSubmit)="applyLinkChanges(linkTextInput.value, linkUrlInput.value)">
+                        (ngSubmit)="applyLinkChanges(linkTextInput.value, linkUrlInput.value, data.openInNewTab)">
                     <!-- Header - edit link -->
                     <div class="link-header" *ngIf="!data.isEmbed && !data.isInserting" translate>EDIT_LINK</div>
                     <!-- Header - insert embed -->
@@ -758,6 +758,14 @@
                                  class="form-control"
                                  [value]="data.link"
                                  type="text">
+                        </div>
+                        <!-- Select: Select input -->
+                        <div class="checkbox mt-3" [hidden]="data.isEmbed">
+                          <div class="custom-control custom-checkbox">
+                            <input #linkTarget type="checkbox" class="custom-control-input" id="open_in_new_tab"
+                                   [(ngModel)]="data.openInNewTab"  [ngModelOptions]="{standalone: true}" >
+                            <label class="custom-control-label" for="open_in_new_tab">Open in new tab</label>
+                          </div>
                         </div>
                       </div>
                       <!-- Apply button -->

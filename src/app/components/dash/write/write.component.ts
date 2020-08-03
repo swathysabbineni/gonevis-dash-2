@@ -39,9 +39,11 @@ import { MediaService } from '@app/components/dash/media/media.service';
 import '@app/components/dash/write/blots/divider.ts';
 import '@app/components/dash/write/blots/embed.ts';
 import '@app/components/dash/write/blots/icons.ts';
-import '@app/components/dash/write/blots/soundcloud.ts';
+import '@app/components/dash/write/blots/link.ts';
 import '@app/components/dash/write/blots/mixcloud.ts';
+import '@app/components/dash/write/blots/soundcloud.ts';
 import '@app/components/dash/write/blots/video.ts';
+import { LinkFormat } from '@app/components/dash/write/blots/link';
 import { KeyManagerComponent } from '@app/components/dash/write/core/key-manager.component';
 import '@app/components/dash/write/modules/clipboard.ts';
 import { ShortcutsComponent } from '@app/components/dash/write/shared/components/shortcuts/shortcuts.component';
@@ -1144,6 +1146,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       'webkitallowfullscreen',
       'mozallowfullscreen',
       'frameborder',
+      'target',
     ];
     /**
      * Insert whitelist
@@ -2140,6 +2143,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
         text: inline.domNode.innerText,
         link: inline.domNode.getAttribute('href'),
         blot: inline,
+        openInNewTab: inline.domNode.getAttribute('target') === '_blank',
         multiLine: false,
       });
       return;
@@ -2178,8 +2182,9 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
    *
    * @param text Link text
    * @param link Link URL address
+   * @param openInNewTab Determines whether or not link should be opened in new tab.
    */
-  applyLinkChanges(text: string, link: string): void {
+  applyLinkChanges(text: string, link: string, openInNewTab: string): void {
     /**
      * Get link {@link Blot} from {@link linkEditTemplatePortal} context
      */
@@ -2248,40 +2253,55 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       this.editor.setSelection({ index: range.index + 2, length: 0 });
       return;
     }
+    /**
+     * Create format required for editing/creating links.
+     */
+    const linkFormat: LinkFormat = {
+      href: link,
+      target: openInNewTab ? '_blank' : '_self',
+    };
     if (!linkBlot) {
       /**
        * Get current selection
        */
       const range: RangeStatic = this.editor.getSelection(true);
       if (multiLine) {
-        this.editor.format('link', link);
+        this.editor.formatText(range, 'link', linkFormat);
         this.editor.setSelection({ index: range.index + range.length, length: 0 });
       } else {
         /**
          * Insert link if no selection
          */
         if (!range.length) {
-          this.editor.insertText(range.index, text.trim() || link, { link });
+          this.editor.insertText(range.index, text.trim() || link, { link: linkFormat });
         } else {
           if (text === this.editor.getText(range.index, range.length)) {
-            this.editor.format('link', link);
+            this.editor.formatText(range, 'link', linkFormat);
           } else {
             this.editor.deleteText(range.index, range.length);
-            this.editor.insertText(range.index, text, { link });
+            this.editor.insertText(range.index, text, { link: linkFormat });
           }
         }
       }
     } else {
+      // Get current selection's index.
       let index: number = linkBlot.offset(this.editor.scroll) + linkBlot.length();
+      // If link URL exists, then format it, otherwise remove link format.
       if (link.trim() !== '') {
-        linkBlot.format('link', link);
+        linkBlot.format('link', linkFormat);
+        // Update link's inner text if text was updated.
         if (text !== linkBlot.domNode.innerText) {
           linkBlot.domNode.innerText = text || link;
         }
       } else {
+        // Clear formatting.
         linkBlot.format('link', false);
       }
+      // Wait a bit and update selection's position.
       setTimeout((): void => {
+        /**
+         * Check if link URL was given, then update {@link index} value.
+         */
         if (link.trim() !== '') {
           index = linkBlot.offset(this.editor.scroll) + linkBlot.length();
         }
@@ -2328,6 +2348,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
         $implicit: {
           text: inline.domNode.innerText,
           link: inline.domNode.getAttribute('href'),
+          openInNewTab: inline.domNode.getAttribute('target') === '_blank',
           blot: inline,
           multiLine: false,
         },
