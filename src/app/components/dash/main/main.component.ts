@@ -144,10 +144,6 @@ export class MainComponent implements OnInit, OnDestroy {
     entries: [],
     dateKey: 'published',
   }, {
-    status: EntryStatus.Private,
-    entries: [],
-    dateKey: 'created',
-  }, {
     status: EntryStatus.Trash,
     entries: [],
     dateKey: 'created',
@@ -261,7 +257,11 @@ export class MainComponent implements OnInit, OnDestroy {
         limit: MainComponent.POSTS_LIMIT,
       }).subscribe((response: ApiResponse<Entry>): void => {
         for (const entry of response.results) {
-          this.entryGroups[entry.status].entries.push(entry);
+          this.entryGroups.find((group: {
+            status: EntryStatus,
+            entries: Entry[],
+            dateKey: keyof Entry,
+          }) => group.status === entry.status).entries.push(entry);
         }
         this.loadingEntries = false;
       });

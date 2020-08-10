@@ -28,12 +28,7 @@
                   <!-- Draft -->
                   <ng-template [ngIf]="form.get('status').value === entryStatus.Draft">
                     {{ 'DRAFT' | translate }}
-                  </ng-template>
-                  <!-- Private -->
-                  <ng-template [ngIf]="form.get('status').value === entryStatus.Private">
-                    {{ 'PRIVATE' | translate }}
-                  </ng-template>
-                  <fa-icon [icon]="faChevronDown" class="ml-auto" size="sm"></fa-icon>
+                  </ng-template><fa-icon [icon]="faChevronDown" class="ml-auto" size="sm"></fa-icon>
                 </button>
                 <!-- Dropdown menu -->
                 <ul class="dropdown-menu" *dropdownMenu>
@@ -64,21 +59,6 @@
                       <span class="label font-weight-medium" translate>DRAFT</span>
                         <!-- Description -->
                       <span class="mat-hint mat-small" translate>DRAFT_DESCRIPTION</span>
-                    </span>
-                    </button>
-                  </li>
-                  <!-- Private -->
-                  <li>
-                    <button class="dropdown-item fancy"
-                            [class.activated]="form.get('status').value === entryStatus.Private"
-                            (click)="setStatus(entryStatus.Private, 'PRIVATE_ENTRY_CONFIRM')">
-                      <!-- Icon -->
-                      <fa-icon [fixedWidth]="true" [icon]="faLock"></fa-icon>
-                      <span class="d-flex flex-column">
-                      <!-- Label -->
-                      <span class="label font-weight-medium" translate>PRIVATE</span>
-                        <!-- Description -->
-                      <span class="mat-hint mat-small" translate>PRIVATE_DESCRIPTION</span>
                     </span>
                     </button>
                   </li>
