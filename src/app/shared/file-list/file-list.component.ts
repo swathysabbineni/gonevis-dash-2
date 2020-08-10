@@ -1,7 +1,6 @@
 import { DatePipe, KeyValue } from '@angular/common';
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { MediaService } from '@app/components/dash/media/media.service';
-import { EntryStatus } from '@app/enums/entry-status.enum';
 import { FileExtension } from '@app/enums/file-extension';
 import { Order } from '@app/enums/order';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -20,6 +19,7 @@ import { faFileExcel } from '@fortawesome/free-solid-svg-icons/faFileExcel';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
 import { faFilePowerpoint } from '@fortawesome/free-solid-svg-icons/faFilePowerpoint';
 import { faFileWord } from '@fortawesome/free-solid-svg-icons/faFileWord';
+import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 import { faSort } from '@fortawesome/free-solid-svg-icons/faSort';
 import { faSortAmountDown } from '@fortawesome/free-solid-svg-icons/faSortAmountDown';
 import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons/faSortAmountUp';
@@ -27,7 +27,6 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
-import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 
 @Component({
   selector: 'app-file-list',
@@ -35,7 +34,7 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
   styleUrls: ['./file-list.component.scss'],
   providers: [DatePipe],
 })
-export class FileListComponent implements OnInit, OnDestroy {
+export class FileListComponent implements OnInit {
 
   readonly faFilter: IconDefinition = faFilter;
   readonly faSort: IconDefinition = faSort;
@@ -340,8 +339,5 @@ export class FileListComponent implements OnInit, OnDestroy {
       return -1;
     }
     return 0;
-  }
-
-  ngOnDestroy(): void {
   }
 }
