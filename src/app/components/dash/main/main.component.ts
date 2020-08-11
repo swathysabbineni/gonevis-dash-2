@@ -19,6 +19,7 @@ import { TemplateConfig } from '@app/interfaces/v1/template-config';
 import { BlogMin } from '@app/interfaces/zero/user/blog-min';
 import { BlogService } from '@app/services/blog/blog.service';
 import { UtilService } from '@app/services/util/util.service';
+import { BytesPipe } from '@app/shared/bytes/bytes.pipe';
 import { UsersModalComponent } from '@app/shared/users-modal/users-modal.component';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
@@ -30,7 +31,6 @@ import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { BytesPipe } from 'ngx-pipes';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -214,8 +214,8 @@ export class MainComponent implements OnInit, OnDestroy {
   storageTooltip(): string {
     if (this.metrics) {
       const data = this.metrics.metrics.dolphin;
-      const used = this.bytes.transform(data.used_storage * 1000000, 1);
-      const total = this.bytes.transform((data.used_storage + data.available_storage) * 1000000, 1);
+      const used = this.bytes.transform(data.used_storage * 1000000);
+      const total = this.bytes.transform((data.used_storage + data.available_storage) * 1000000);
       return `${used} / ${total}`;
     }
   }

@@ -4,12 +4,12 @@ import { RouterModule } from '@angular/router';
 import { EmbedModule } from '@app/shared/embed/embed.module';
 import { LoadingModule } from '@app/shared/loading/loading.module';
 import { ShareModule } from '@app/shared/share/share.module';
+import { StripTagsModule } from '@app/shared/strip-tags/strip-tags.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { NgStringPipesModule } from 'ngx-pipes';
 
 import { EntryListComponent } from './entry-list.component';
 
@@ -28,7 +28,7 @@ import { EntryListComponent } from './entry-list.component';
     ShareModule,
     EmbedModule,
     LoadingModule,
-    NgStringPipesModule,
+    StripTagsModule,
   ],
   exports: [
     EntryListComponent,
