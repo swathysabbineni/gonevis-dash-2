@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InfoBannerModule } from '@app/shared/info-banner/info-banner.module';
 import { LoadingModule } from '@app/shared/loading/loading.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,6 +20,7 @@ import { CircleComponent } from './circle.component';
     TranslateModule.forChild(),
     ReactiveFormsModule,
     LoadingModule,
+    InfoBannerModule,
   ],
 })
 export class CircleModule {

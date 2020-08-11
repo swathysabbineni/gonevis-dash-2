@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { CircleService } from '@app/components/dash/circle/circle.service';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -10,8 +10,8 @@ import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { UtilService } from '@app/services/util/util.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
-import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -22,9 +22,15 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class CircleComponent implements OnInit {
 
-  faDelete: IconDefinition = faTrash;
-  faArrowLeft: IconDefinition = faArrowLeft;
-  faEdit: IconDefinition = faPencilAlt;
+  readonly faDelete: IconDefinition = faTrash;
+  readonly faBack: IconDefinition = faArrowLeft;
+  readonly faEdit: IconDefinition = faPencilAlt;
+  readonly faCircles: IconDefinition = faSpinner;
+
+  /**
+   * Info banner visibility
+   */
+  infoBannerDismissed: boolean;
 
   /**
    * List of blog circles
@@ -35,12 +41,10 @@ export class CircleComponent implements OnInit {
    * Extra data for blog circles
    * Key is circle ID.
    */
-  circlesData: {
-    [circle: string]: {
-      members: Subscriber[],
-      membersCount: number,
-    }
-  } = {};
+  circlesData: Record<string, {
+    members: Subscriber[],
+    membersCount: number,
+  }> = {};
 
   /**
    * Selected circle which is being used to display a circle and it's members.
@@ -92,6 +96,7 @@ export class CircleComponent implements OnInit {
   dragStarted: boolean;
 
   constructor(public util: UtilService,
+              private changeDetectorRef: ChangeDetectorRef,
               private circleService: CircleService,
               private formBuilder: FormBuilder,
               private translate: TranslateService) {
@@ -236,9 +241,6 @@ export class CircleComponent implements OnInit {
 
   /**
    * Remove a member from a circle
-   *
-   * @param circleId Circle ID
-   * @param memberId Member ID
    */
   removeMember(memberId: string): void {
     const circleId: string = this.selectedCircle.circle.id;
@@ -375,5 +377,13 @@ export class CircleComponent implements OnInit {
       }, (): void => {
         this.savingCircle = false;
       });
+  }
+
+  /**
+   * Dismiss info banner and detect changes to update UI on time.
+   */
+  dismissInfoBanner(): void {
+    this.infoBannerDismissed = true;
+    this.changeDetectorRef.detectChanges();
   }
 }

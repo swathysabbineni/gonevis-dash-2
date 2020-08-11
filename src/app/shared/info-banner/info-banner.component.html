@@ -1,0 +1,12 @@
+<div class="bg-primary p-5 rounded text-white shadow-sm d-flex" *ngIf="visibility">
+  <fa-icon [fixedWidth]="true" class="mr-5 align-self-center" size="3x" [icon]="icon" *ngIf="icon"></fa-icon>
+  <div class="w-100">
+    <h4 class="font-weight-bold m-0">
+      <span *ngIf="title">{{ title | translate }}</span>
+      <button class="btn btn-link text-light float-right" (click)="close()">
+        <fa-icon [icon]="faClose" size="lg"></fa-icon>
+      </button>
+    </h4>
+    <p class="mb-0" [class.mt-3]="title" *ngIf="detail">{{ detail | translate }}</p>
+  </div>
+</div>

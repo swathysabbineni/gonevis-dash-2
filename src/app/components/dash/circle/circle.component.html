@@ -6,6 +6,16 @@
     <div class="container mt-4 px-4">
       <div class="row">
 
+        <!-- Info banner -->
+        <app-info-banner *ngIf="!infoBannerDismissed && circles && !circles.length"
+                         [icon]="faCircles"
+                         (dismiss)="dismissInfoBanner()"
+                         class="col-12 mb-3"
+                         title="CIRCLES"
+                         detail="INFO.CIRCLES"
+                         key="circles">
+        </app-info-banner>
+
         <!-- Form -->
         <div class="col-12">
           <div class="row">
@@ -17,8 +27,8 @@
                     <button class="btn btn-success text-uppercase" [disabled]="form.loading" translate>CREATE</button>
                   </div>
                 </div>
-                <p class="text-danger" *ngIf="form.error.name">{{ form.error.name[0] }}</p>
-                <p class="text-danger" *ngIf="form.error.non_field_errors">{{ form.error.non_field_errors[0] }}</p>
+                <p class="text-danger" *ngIf="form.error.name">{{ form.error.name[ 0 ] }}</p>
+                <p class="text-danger" *ngIf="form.error.non_field_errors">{{ form.error.non_field_errors[ 0 ] }}</p>
                 <p class="text-danger" *ngIf="form.error.detail">{{ form.error.detail }}</p>
               </form>
             </div>
@@ -39,14 +49,14 @@
                   <div class="circle-info">
                     <div class="circle-name">{{ circle.name }}</div>
                     <div class="circle-members-count">
-                      {{ circlesData[circle.id].membersCount | number }}
+                      {{ circlesData[ circle.id ].membersCount | number }}
                     </div>
                   </div>
                   <div class="circle-members">
                     <div class="circle-member" *ngFor="let member of circlesData[circle.id].members | slice:0:8"
                          [style.background-image]="util.sanitizeBackgroundImage(member.user.media.thumbnail_48x48)">
                       <span *ngIf="!member.user.media.picture" [title]="member.user.name">
-                        {{ member.user.name[0] }}
+                        {{ member.user.name[ 0 ] }}
                       </span>
                     </div>
                   </div>
@@ -104,7 +114,7 @@
         <div class="mb-3 d-flex align-items-center" *ngIf="!isEditing">
           <!-- Back button -->
           <button class="btn btn-light mr-1" (click)="selectedCircle.circle = null; selectedCircle.members = null;">
-            <fa-icon [icon]="faArrowLeft"></fa-icon>
+            <fa-icon [icon]="faBack"></fa-icon>
           </button>
           <!-- Circle information -->
           <div>
@@ -142,7 +152,8 @@
           <hr>
         </form>
         <!-- Search input -->
-        <form [formGroup]="formSearch" (ngSubmit)="searchCircleMembers(this.formSearch.get('circleMemberSearch').value)">
+        <form [formGroup]="formSearch"
+              (ngSubmit)="searchCircleMembers(this.formSearch.get('circleMemberSearch').value)">
           <div class="form-group">
             <input type="text" class="form-control" [placeholder]="'SEARCH' | translate"
                    formControlName="circleMemberSearch">

@@ -8,6 +8,7 @@
           <a [routerLink]="[link.path]" routerLinkActive="active">
             <fa-icon [icon]="link.icon" [fixedWidth]="true"></fa-icon>
             {{ link.label | translate }}
+            <span class="badge badge-primary text-uppercase ml-auto" *ngIf="link.new" translate>NEW</span>
           </a>
         </li>
       </ul>

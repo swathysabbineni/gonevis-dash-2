@@ -88,6 +88,7 @@ export class DashComponent implements OnInit, OnDestroy {
     path: 'circle',
     label: 'CIRCLES',
     icon: faSpinner,
+    new: true,
   }, {
     path: 'statistics',
     label: 'STATISTICS',
