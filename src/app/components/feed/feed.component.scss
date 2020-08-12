@@ -1,15 +1,5 @@
 @import "variables";
 
-$link-color: $secondary;
-$link-hover-color: $dark;
-$nav-pills-link-active-color: $secondary;
-$nav-pills-link-active-bg: $light;
-
-@import "~bootstrap/scss/bootstrap";
-
-$text-font-size: 13px;
-$text-color: $secondary;
-
 .nav-pills {
 
   .nav-link {

@@ -1,13 +1,17 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap');
-
-$font-family-base: 'Open Sans', 'Roboto', 'Helvetica', sans-serif;
-$font-size-base: 0.9rem;
+// Not changed but defined to use here
+$info: #17a2b8;
+$warning: #ffc107;
+$light: #f8f9fa;
+$dark: #343a40;
 
 $primary: #2980b9;
 $success: #2ecc71;
 $danger: #e74c3c;
 $secondary: #6f7a8b;
 $unimportant: lighten($secondary, 25);
+
+$font-family-base: 'Open Sans', 'Roboto', 'Helvetica', sans-serif;
+$font-size-base: 0.9rem;
 
 $body-bg: #edeef0;
 $body-color: #40454D;
@@ -18,47 +22,32 @@ $theme-colors: (
 
 $navbar-height: 55px;
 
+$input-group-addon-bg: none;
+$input-group-addon-color: $dark;
+
+$list-group-border-color: $light;
+
+$card-border-width: 0;
+
+$link-color: $secondary;
+$link-hover-color: $dark;
+$link-hover-decoration: none;
+
+$table-border-color: $light;
+
+$tooltip-arrow-color: $dark;
+$tooltip-bg: $dark;
+
+$modal-footer-border-width: 0;
+$modal-content-border-width: 0;
+$modal-header-border-width: 0;
+
+$dropdown-link-active-bg: $dark;
+$dropdown-border-radius: 0.2rem;
+$dropdown-item-padding-y: 0.5rem;
+
+$nav-pills-link-active-color: $secondary;
+$nav-pills-link-active-bg: $light;
+
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
-@import '~@angular/material/theming';
-
-$mat-material-blue: (
-  50 : #ece1fd,
-  100 : #cfb3fa,
-  200 : #b081f7,
-  300 : #904ef3,
-  400 : #7828f1,
-  500 : #6002ee,
-  600 : #5802ec,
-  700 : #4e01e9,
-  800 : #4401e7,
-  900 : #3301e2,
-  A100 : #ffffff,
-  A200 : #ddd6ff,
-  A400 : #b2a3ff,
-  A700 : #9d8aff,
-  contrast: (
-    50 : $dark-primary-text,
-    100 : $dark-primary-text,
-    200 : $dark-primary-text,
-    300 : $light-primary-text,
-    400 : $light-primary-text,
-    500 : $light-primary-text,
-    600 : $light-primary-text,
-    700 : $light-primary-text,
-    800 : $light-primary-text,
-    900 : $light-primary-text,
-    A100 : $dark-primary-text,
-    A200 : $dark-primary-text,
-    A400 : $dark-primary-text,
-    A700 : $dark-primary-text,
-  )
-);
-
-$gonevis-primary: mat-palette($mat-material-blue);
-$gonevis-accent: mat-palette($mat-pink, A200, A100, A400);
-$gonevis-warn: mat-palette($mat-red);
-$gonevis-theme: mat-light-theme($gonevis-primary, $gonevis-accent, $gonevis-warn);
-$foreground: map-get($gonevis-theme, foreground);
-$background: map-get($gonevis-theme, background);
-$config: mat-typography-config();

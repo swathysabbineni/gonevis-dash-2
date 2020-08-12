@@ -44,7 +44,7 @@ export class BlogService {
     limit?: number,
   } = {}): Observable<ApiResponse<Blog>> {
     return this.http.get<ApiResponse<Blog>>(`${this.api.base.zero}website/site/`, {
-      params: Object.assign(filters, {
+      params: Object.assign(filters as Record<string, string>, {
         show: 'subscribed',
       }),
     });

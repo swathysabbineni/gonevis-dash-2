@@ -1,5 +1,98 @@
 @import "variables";
-@import "../../../write.component";
+@import "material/variables";
+
+.mat-hint {
+  color: mat-color($foreground, secondary-text);
+}
+
+.font-weight-medium {
+  font-weight: 500;
+}
+
+.next-btn {
+  color: $primary;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  position: relative;
+  overflow: hidden;
+  background: none;
+  border: none;
+  outline: none;
+  user-select: none;
+
+  &:disabled {
+    color: rgba(0, 0, 0, .37) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    &::after,
+    &::before {
+      background: black !important;
+      opacity: .12 !important;
+    }
+  }
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+  }
+
+  &::before {
+    transition: opacity 15ms linear, background-color 15ms linear;
+    z-index: 1;
+  }
+
+  &::after {
+    transition: opacity .15s linear;
+  }
+
+  &:not(:disabled) {
+    &::after,
+    &::before {
+      background: $primary;
+    }
+
+    &:hover::before {
+      opacity: .04;
+    }
+
+    &:focus::before {
+      transition-duration: 75ms;
+      opacity: .12;
+    }
+
+    &:active::after {
+      transition-duration: 75ms;
+      opacity: .12;
+    }
+  }
+
+  &.next-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 50px;
+    color: mat-color($foreground, secondary-text);
+
+    &::before,
+    &::after {
+      background: #000000;
+    }
+  }
+}
 
 .scroll-indicator {
   list-style: none;

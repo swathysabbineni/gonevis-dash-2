@@ -46,8 +46,8 @@ import '@app/components/dash/write/blots/video.ts';
 import { LinkFormat } from '@app/components/dash/write/blots/link';
 import { KeyManagerComponent } from '@app/components/dash/write/core/key-manager.component';
 import '@app/components/dash/write/modules/clipboard.ts';
+import '@app/components/dash/write/modules/markdown-shortcuts.ts';
 import { ShortcutsComponent } from '@app/components/dash/write/shared/components/shortcuts/shortcuts.component';
-import '@app/components/dash/write/themes/bootstrap.ts';
 import { WriteService } from '@app/components/dash/write/write.service';
 import { DashUiStatus } from '@app/enums/dash-ui-status';
 import { EntryStatus } from '@app/enums/entry-status.enum';
@@ -97,11 +97,11 @@ import { faUndo } from '@fortawesome/free-solid-svg-icons/faUndo';
 import { faUnlink } from '@fortawesome/free-solid-svg-icons/faUnlink';
 import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import { TranslateService } from '@ngx-translate/core';
-import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
+import isEqual from 'lodash.isequal';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { QuillModules } from 'ngx-quill';
-import { Range } from 'ngx-quill/src/quill-editor.component';
+import { Range } from 'ngx-quill/public-api';
 import { ToastrService } from 'ngx-toastr';
 import Parchment from 'parchment';
 import BlockBlot from 'parchment/dist/src/blot/block';
@@ -668,7 +668,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       if (!this.loading) {
         if (this.form.get('content').value) {
           // Check if entry has an unsaved changes
-          if (!equal(this.oldForm, this.form.value)) {
+          if (!isEqual(this.oldForm, this.form.value)) {
             this.autoSave = true;
             this.save();
           }
@@ -798,7 +798,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
       meta_description: [''],
     });
     this.form.valueChanges.pipe(debounceTime(300)).subscribe((data): void => {
-      this.hasUnsavedChanges = !equal(this.oldForm, data);
+      this.hasUnsavedChanges = !isEqual(this.oldForm, data);
     });
     /**
      * Set up tag query form
@@ -903,7 +903,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * Auto save entry after the user leaves page by navigation.
      */
-    if (!this.loading && !equal(this.form.value, this.oldForm)) {
+    if (!this.loading && !isEqual(this.form.value, this.oldForm)) {
       this.autoSave = true;
       this.save();
     }
@@ -1726,7 +1726,7 @@ export class WriteComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       rootPage = 'posts';
     }
-    if (!equal(this.form.value, this.oldForm)) {
+    if (!isEqual(this.form.value, this.oldForm)) {
       this.autoSave = true;
       this.save();
     }

@@ -25,12 +25,14 @@
             "aot": true,
             "extractCss": true,
             "assets": [
-              "src/assets"
+              "src/assets/i18n",
+              "src/assets/img",
+              "src/assets/manifest"
             ],
             "styles": [
               "src/assets/styles/gonevis.scss",
               {
-                "input": "src/assets/styles/editor.scss",
+                "input": "src/assets/styles/material/editor.scss",
                 "bundleName": "editor-styles",
                 "inject": false
               }
@@ -52,7 +54,10 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": {
+                "styles": true,
+                "scripts": true
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
@@ -80,11 +85,14 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": {
+                "styles": true,
+                "scripts": true
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
+              "extractLicenses": false,
               "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
@@ -170,7 +178,9 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
-              "src/assets"
+              "src/assets/i18n",
+              "src/assets/img",
+              "src/assets/manifest"
             ],
             "styles": [
               "src/assets/styles/gonevis.scss"

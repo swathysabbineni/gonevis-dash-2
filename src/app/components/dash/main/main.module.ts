@@ -6,7 +6,7 @@ import { MetricStatChartLineModule } from '@app/shared/metric-stat-chart-line/me
 import { UsersModalModule } from '@app/shared/users-modal/users-modal.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 

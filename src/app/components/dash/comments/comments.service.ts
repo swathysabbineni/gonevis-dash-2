@@ -48,7 +48,7 @@ export class CommentsService {
     return this.http.get<ApiResponse<Comment>>(
       `${this.apiService.base.v1}site/${BlogService.currentBlog.id}/sushial/comment/`,
       {
-        params: Object.assign(filters, {
+        params: Object.assign(filters as Record<string, string>, {
           limit: (filters.limit || CommentsService.PAGE_SIZE).toString(),
           offset: UtilService.getPageOffset(CommentsService.PAGE_SIZE, page),
         }),

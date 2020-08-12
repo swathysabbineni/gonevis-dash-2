@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EntryFormat } from '@app/enums/entry-format.enum';
 import { EntryStatus } from '@app/enums/entry-status.enum';
@@ -58,7 +58,7 @@ export class EntryService {
     page: number = 1,
   ): Observable<ApiResponse<Entry>> {
     return this.http.get<ApiResponse<Entry>>(`${this.api.base.v1}site/${BlogService.currentBlog.id}/entry/`, {
-      params: Object.assign(filter, {
+      params: Object.assign(filter as Record<string, string>, {
         limit: (filter.limit || EntryService.PAGE_SIZE).toString(),
         offset: UtilService.getPageOffset(filter.limit || EntryService.PAGE_SIZE, page),
       }),
