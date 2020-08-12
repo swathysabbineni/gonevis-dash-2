@@ -3,6 +3,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-interceptor.service';
 import { SentryErrorHandler } from '@app/services/sentry-error-handler/sentry-error-handler.service';
 import { FeedbackModalModule } from '@app/shared/feedback-modal/feedback-modal.module';
@@ -63,6 +64,7 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: !environment.development }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
