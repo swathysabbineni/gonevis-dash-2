@@ -81,9 +81,14 @@ export class UserService {
    * Reset password
    *
    * @param password user password
+   * @param token JWT token
    */
-  resetPassword(password: string): Observable<void> {
-    return this.http.post<void>(`${this.apiService.base.v1}account/password-reset/`, { password });
+  resetPassword(password: string, token: string): Observable<void> {
+    return this.http.post<void>(`${this.apiService.base.v1}account/password-reset/`, { password }, {
+      headers: {
+        Authorization: `JWT ${token}`,
+      }
+    });
   }
 
   /**
