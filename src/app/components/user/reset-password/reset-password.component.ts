@@ -72,12 +72,11 @@ export class ResetPasswordComponent implements OnInit {
     // Save token to reset password
     this.loading = true;
     // API call
-    this.userService.resetPassword(this.form.get('password').value).subscribe((): void => {
+    this.userService.resetPassword(this.form.get('password').value, this.token).subscribe((): void => {
       this.authService.signOut(false, AuthService.REDIRECT_SIGN_OUT, true);
     }, (error: HttpErrorResponseApi): void => {
       if (error.error.detail) {
         this.invalidToken = true;
-        this.authService.signOut(false, null, false);
       }
       this.error = error.error;
       this.loading = false;
