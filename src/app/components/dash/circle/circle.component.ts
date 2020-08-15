@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { trigger, transition, query, style, stagger, animate, sequence } from '@angular/animations';
+import { SelectionModel } from '@angular/cdk/collections';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { CircleService } from '@app/components/dash/circle/circle.service';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -11,14 +13,54 @@ import { UtilService } from '@app/services/util/util.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
+import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
+import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 import { TranslateService } from '@ngx-translate/core';
+import { BehaviorSubject, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-circle',
   templateUrl: './circle.component.html',
   styleUrls: ['./circle.component.scss'],
+  animations: [
+    trigger('scaleIn', [
+      transition('void => *', [
+        query('.circle-member', [
+          style({ transform: 'scale(0.5)', opacity: 0 }),
+          stagger(75, [
+            animate('300ms cubic-bezier(0.35, 0, 0.25, 1)', style({ transform: '*', opacity: '1' })),
+          ]),
+        ], { optional: true }),
+      ]),
+      transition('* => void', [
+        query('.circle-member', [
+          style({ opacity: '1' }),
+          animate('100ms cubic-bezier(0.35, 0, 0.25, 1)', style({ opacity: 0 })),
+        ], { optional: true }),
+      ]),
+      transition('* => *', [
+        query(':enter', [
+          style({ transform: 'scale(0.5)', opacity: 0 }),
+          stagger(75, [
+            animate('300ms cubic-bezier(0.35, 0, 0.25, 1)', style({ transform: '*', opacity: '1' })),
+          ]),
+        ], { optional: true }),
+      ]),
+    ]),
+    trigger('onMemberAdd', [
+      transition('void => *', [
+        style({ transform: 'translateY(0)', opacity: 1 }),
+        sequence([
+          animate('0.3s cubic-bezier(0.35, 0, 0.25, 1)', style({ opacity: 1, transform: 'translateY(-100px)' })),
+          animate('1s', style({ opacity: 1, transform: 'translateY(-100px)' })),
+          animate('.2s ease', style({ opacity: 0 })),
+        ]),
+      ]),
+    ]),
+  ],
 })
 export class CircleComponent implements OnInit {
 
@@ -26,6 +68,19 @@ export class CircleComponent implements OnInit {
   readonly faBack: IconDefinition = faArrowLeft;
   readonly faEdit: IconDefinition = faPencilAlt;
   readonly faCircles: IconDefinition = faSpinner;
+  readonly faPlus: IconDefinition = faPlus;
+  readonly faUser: IconDefinition = faUser;
+  readonly faUserFriends: IconDefinition = faUserFriends;
+
+  /**
+   * Get template reference responsible for holding drag preview.
+   */
+  @ViewChild('dragPreviewTemplateRef') private dragPreviewTemplateRef: ElementRef<HTMLDivElement>;
+
+  /**
+   * Selection model is a class which will select/deselect items and other functionalities.
+   */
+  selection: SelectionModel<Subscriber> = new SelectionModel<Subscriber>(true, []);
 
   /**
    * Info banner visibility
@@ -44,6 +99,11 @@ export class CircleComponent implements OnInit {
   circlesData: Record<string, {
     members: Subscriber[],
     membersCount: number,
+    hovered: boolean,
+    added: {
+      count: number,
+      showInfo: boolean,
+    }
   }> = {};
 
   /**
@@ -53,6 +113,8 @@ export class CircleComponent implements OnInit {
     circle: null,
     members: null,
   };
+
+  circlesWithMember: string[] = [];
 
   /**
    * Determines whether or not the user is editing a circle.
@@ -95,6 +157,11 @@ export class CircleComponent implements OnInit {
    */
   dragStarted: boolean;
 
+  /**
+   * Stores last member selected/deselected. It's being used for multi selecting followers with SHIFT Click.
+   */
+  lastSelection: Subscriber;
+
   constructor(public util: UtilService,
               private changeDetectorRef: ChangeDetectorRef,
               private circleService: CircleService,
@@ -135,11 +202,17 @@ export class CircleComponent implements OnInit {
         this.circlesData[circle.id] = {
           membersCount: 0,
           members: [],
+          hovered: false,
+          added: {
+            count: 0,
+            showInfo: false,
+          },
         };
         this.circleService.getMembers(circle.id, {
           limit: 8,
         }).subscribe((members: ApiResponse<Subscriber>): void => {
           this.circlesData[circle.id].membersCount = members.count;
+          // this.circlesData[circle.id].members = members.results.length ? [members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0]] : [];
           this.circlesData[circle.id].members = members.results;
         });
       }
@@ -154,43 +227,96 @@ export class CircleComponent implements OnInit {
    * Load available members
    */
   loadAvailableCircleMembers(search: string = '') {
+    this.selection.clear();
     this.circleService.getAvailableMembers(search).subscribe((data: ApiResponse<Subscriber>): void => {
       this.availableCircleMembers = data.results;
     });
   }
 
   /**
-   * On circle member drop capture member ID from {@see DataTransfer}
+   * On circle member drop capture member ID from {@see DataTransfer}.
    */
   onCircleDrop(event: DragEvent, circle: CircleMin): void {
+    const selected: Subscriber[] = this.selection.selected;
     // Break code if dropped item doesn't have an ID, it means it's not a user.
     if (!event.dataTransfer.getData('id')) {
       return;
     }
+    this.selection.clear();
     event.preventDefault();
     /**
-     * Remove drag indicator for the circle
+     * Remove drag indicator for the circle.
      */
-    this.circleDragIndicator(event, false);
+    this.circleDragIndicator(event, false, circle.id);
+    this.circlesData[circle.id].hovered = true;
     /**
-     * Notify circles that dragging ended
+     * Notify circles that dragging ended.
      */
     this.dragStarted = false;
     /**
-     * Find member with that ID
+     * List of observables which their type is {@link BehaviorSubject} that hold boolean as value.
      */
-    const member: Subscriber = this.availableCircleMembers.find((item: Subscriber): boolean => {
-      return item.id === event.dataTransfer.getData('id');
-    });
-    /**
-     * Add member to circle
-     */
-    if (!this.isCircleMember(circle.id, member.id)) {
-      this.circleService.addMember(circle.id, member.id).subscribe((): void => {
-        this.circlesData[circle.id].membersCount++;
-        this.circlesData[circle.id].members.push(member);
+    const observableList: BehaviorSubject<boolean>[] = [];
+    if (selected.length > 1) {
+      selected.forEach((member: Subscriber): void => {
+        /**
+         * Add member to circle
+         */
+        if (!this.isCircleMember(circle.id, member.id)) {
+          /**
+           * Create a [behavior subject]{@link BehaviorSubject} with `false` as its default value.
+           */
+          const statusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+          observableList.push(statusSubject);
+          this.addMember(circle.id, member, statusSubject);
+        }
       });
+    } else {
+      /**
+       * Find member with that ID.
+       */
+      const member: Subscriber = this.availableCircleMembers.find((item: Subscriber): boolean => {
+        return item.id === event.dataTransfer.getData('id');
+      });
+      /**
+       * Add member to circle
+       */
+      if (!this.isCircleMember(circle.id, member.id)) {
+        /**
+         * Create a [behavior subject]{@link BehaviorSubject} with `false` as its default value.
+         */
+        const statusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+        observableList.push(statusSubject);
+        this.addMember(circle.id, member, statusSubject);
+      }
     }
+    /**
+     * Wait for all observables to be done and show number of members that successfully has been added to the circle.
+     */
+    forkJoin(observableList).subscribe((data: boolean[]): void => {
+      this.circlesData[circle.id].added = {
+        count: data.length,
+        showInfo: true,
+      };
+    });
+  }
+
+  /**
+   * Add a member to a circle.
+   *
+   * @param circleId Circle ID to update circle's members.
+   * @param member Member to update circle's members list.
+   * @param behaviorSubject Subject to determine whether or not member successfully was added.
+   */
+  addMember(circleId: string, member: Subscriber, behaviorSubject: BehaviorSubject<boolean>): void {
+    this.circleService.addMember(circleId, member.id).subscribe((): void => {
+      this.circlesData[circleId].membersCount++;
+      this.circlesData[circleId].members.push(member);
+      behaviorSubject.next(true);
+      behaviorSubject.complete();
+    }, (): void => {
+      behaviorSubject.complete();
+    });
   }
 
   /**
@@ -199,8 +325,9 @@ export class CircleComponent implements OnInit {
    *
    * @param event DragEvent
    * @param add Whether to add .drag-entered class or not
+   * @param circleId Circle ID
    */
-  circleDragIndicator(event: DragEvent, add: boolean): void {
+  circleDragIndicator(event: DragEvent, add: boolean, circleId: string): void {
     /**
      * Get circle element based on {@link DragEvent}
      */
@@ -210,8 +337,10 @@ export class CircleComponent implements OnInit {
      */
     if (add) {
       circleElement.classList.add('drag-entered');
+      this.circlesData[circleId].hovered = true;
     } else {
       circleElement.classList.remove('drag-entered');
+      this.circlesData[circleId].hovered = false;
     }
   }
 
@@ -219,17 +348,26 @@ export class CircleComponent implements OnInit {
    * On member dragging started set ID as specified data
    *
    * @param event Drag event
-   * @param member Member ID to set as data for dragging event
+   * @param member Member to set its ID as data for dragging event
    */
-  onMemberDragStart(event: DragEvent, member: string): void {
+  onMemberDragStart(event: DragEvent, member: Subscriber): void {
+    if (!event.ctrlKey && !this.selection.isSelected(member)) {
+      this.selection.clear();
+    }
+    this.selection.select(member);
+    event.dataTransfer.setDragImage(new Image(), 0, 0);
     /**
      * Set member ID as specified data
      */
-    event.dataTransfer.setData('id', member);
+    event.dataTransfer.setData('id', member.id);
     /**
      * Notify circles that dragging started
      */
     this.dragStarted = true;
+    setTimeout(() => {
+      this.circlesWithMember = [];
+      this.changeDetectorRef.detectChanges();
+    }, 100);
   }
 
   /**
@@ -237,6 +375,94 @@ export class CircleComponent implements OnInit {
    */
   isCircleMember(circleId: string, memberId: string): boolean {
     return this.circlesData[circleId].members.some(member => member.id === memberId);
+  }
+
+  onMemberDragging(event: DragEvent): void {
+    const element = this.dragPreviewTemplateRef.nativeElement;
+    element.style.left = `${event.pageX + 10}px`;
+    element.style.top = `${event.pageY + 10}px`;
+  }
+
+  /**
+   * On member hover highlight circles that contains that member.
+   *
+   * @param memberId Member ID.
+   */
+  onMemberHover(memberId: string): void {
+    this.circles.forEach((circle: CircleMin): void => {
+      if (this.circlesData[circle.id].members.some((member: Subscriber): boolean => member.id === memberId)) {
+        this.circlesWithMember.push(circle.id);
+      }
+    });
+  }
+
+  /**
+   * Handle member multi selection.
+   *
+   * @param event MouseEvent which is required to multi select.
+   * @param member Member to add to {@link SelectionModel selection}
+   * @param index Member index.
+   */
+  handleMemberClick(event: MouseEvent, member: Subscriber, index: number): void {
+    if (event.shiftKey) {
+      /**
+       * Store if member is selected, because we will clear the selection.
+       */
+      const isSelected: boolean = this.selection.isSelected(member);
+      /**
+       * Toggle selection.
+       */
+      if (isSelected) {
+        this.selection.deselect(member);
+      } else {
+        this.selection.select(member);
+      }
+      if (!this.lastSelection) {
+        this.lastSelection = member;
+      }
+      const start: number = index;
+      const end: number = this.availableCircleMembers
+        .findIndex((alsoMember: Subscriber): boolean => this.lastSelection.id === alsoMember.id);
+
+      this.availableCircleMembers
+        .slice(Math.min(start, end), Math.max(start, end) + 1)
+        .forEach((current: Subscriber): void => {
+          if (this.selection.isSelected(member)) {
+            this.selection.select(current);
+          } else {
+            this.selection.deselect(current);
+          }
+        });
+
+      this.lastSelection = member;
+      return;
+    } else {
+      /**
+       * Store if member is selected, because we will clear the selection.
+       */
+      const isSelected: boolean = this.selection.isSelected(member);
+      /**
+       * Check to see if user is holding the CTRL key or not. If not holding, then clear the selection and if member was
+       * {@link selected} previously, then added to selection.
+       */
+      if (!event.ctrlKey) {
+        this.selection.clear();
+        this.lastSelection = member;
+        if (isSelected) {
+          this.selection.select(member);
+          return;
+        }
+      }
+      /**
+       * Toggle selection.
+       */
+      if (isSelected) {
+        this.selection.deselect(member);
+      } else {
+        this.selection.select(member);
+      }
+      this.lastSelection = member;
+    }
   }
 
   /**
@@ -274,6 +500,11 @@ export class CircleComponent implements OnInit {
       this.circlesData[data.id] = {
         membersCount: 0,
         members: [],
+        hovered: false,
+        added: {
+          count: 0,
+          showInfo: false,
+        },
       };
       this.form.form.reset();
       this.form.loading = false;
@@ -385,5 +616,17 @@ export class CircleComponent implements OnInit {
   dismissInfoBanner(): void {
     this.infoBannerDismissed = true;
     this.changeDetectorRef.detectChanges();
+  }
+
+  /**
+   * Clear {@link selection} if user clicks on empty space.
+   *
+   * @param event MouseEvent required to get element that has been clicked on.
+   */
+  onUsersContainerClick(event: MouseEvent): void {
+    const target: HTMLElement = (event.target as HTMLElement);
+    if (target.classList.contains('row') || target.classList.contains('users-container')) {
+      this.selection.clear();
+    }
   }
 }

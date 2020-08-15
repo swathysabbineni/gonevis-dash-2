@@ -156,6 +156,7 @@ $circle-member-size: 48px + $circle-border-width;
   &::before {
     content: '';
     position: absolute;
+    border-radius: 50%;
     top: 0;
     left: 0;
     right: 0;
@@ -165,8 +166,164 @@ $circle-member-size: 48px + $circle-border-width;
   }
 
   &.drag-started {
+    border: 2px dashed $primary;
+
     &::before {
       z-index: 1;
     }
+
+    &.drag-entered {
+      background: rgba($primary, 0.12) !important;
+      color: $primary !important;
+      width: 100% !important;
+      height: 100% !important;
+
+      .members .circle-member {
+        opacity: 1 !important;
+      }
+    }
   }
+}
+
+.users-container,
+.circles-container {
+  flex: 0 1 50%;
+  overflow: auto;
+
+  .card {
+    &.selected {
+      background: rgba($primary, 0.12);
+
+      a {
+        color: $primary !important;
+      }
+    }
+  }
+}
+
+/// Mixin to place items on a circle
+/// @author Hugo Giraudel
+/// @author Ana Tudor
+/// @param {Integer} $item-count - Number of items on the circle
+/// @param {Length} $circle-size - Large circle size
+/// @param {Length} $item-size - Single item size
+@mixin on-circle($item-count, $circle-size, $item-size) {
+  position: absolute;
+  padding: 0;
+  border-radius: 50%;
+  list-style: none;
+
+  > * {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: $item-size;
+    height: $item-size;
+    margin: -($item-size / 2);
+
+    $angle: (360 / $item-count);
+    $rot: 270;
+
+    @for $i from 1 through $item-count {
+      &:nth-of-type(#{$i}) {
+        transform: rotate($rot * 1deg) translate(($circle-size / 2) - 16) scale(1) rotate($rot * -1deg);
+      }
+
+      $rot: $rot + $angle;
+    }
+  }
+}
+
+.circles-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  > div {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+
+    > div {
+      background: #eee;
+      border-radius: 50%;
+      width: 80%;
+      height: 80%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
+      transition-property: width, height, border;
+      transition-duration: 0.1s;
+      position: relative;
+
+
+      &:hover,
+      &.hovered {
+        width: 100%;
+        height: 100%;
+
+        .members .circle-member {
+          opacity: 1;
+        }
+      }
+
+      &.member-exists {
+        box-shadow: 0 0 0 2px black;
+      }
+
+      .members {
+        @include on-circle($item-count: 8, $circle-size: 200px, $item-size: 48px);
+
+        .circle-member {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+
+  .added-information {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: $success;
+    color: #fff;
+    font-size: 22px;
+  }
+}
+
+.drag-preview {
+  position: absolute;
+  background: $primary;
+  color: white;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.circles-help {
+  flex-basis: 48px;
+  flex-shrink: 0;
+  display: flex;
+  color: rgba(0, 0, 0, 0.54);
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+}
+
+.dragging-selected {
+  opacity: 0.5;
 }
