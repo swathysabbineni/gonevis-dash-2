@@ -5,6 +5,7 @@
 /* Variables */
 
 @import "variables";
+@import "material/variables";
 
 /* Toastr */
 
@@ -47,6 +48,27 @@
 //@import "~bootstrap/scss/spinners";
 @import "~bootstrap/scss/utilities";
 //@import "~bootstrap/scss/print";
+
+@include mat-core($config);
+@include mat-core-theme($gonevis-theme);
+@include mat-input-theme($gonevis-theme);
+@include mat-form-field-theme($gonevis-theme);
+@include mat-sidenav-theme($gonevis-theme);
+@include mat-divider-theme($gonevis-theme);
+@include mat-chips-theme($gonevis-theme);
+@include mat-autocomplete-theme($gonevis-theme);
+@include mat-toolbar-theme($gonevis-theme);
+@include mat-progress-spinner-theme($gonevis-theme);
+@include mat-dialog-theme($gonevis-theme);
+@include mat-button-theme($gonevis-theme);
+
+
+/* Material styles */
+
+button[mat-button]:focus {
+  outline: none;
+}
+
 
 /* Global styles */
 

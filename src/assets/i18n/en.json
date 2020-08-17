@@ -469,5 +469,11 @@
   "SENT": "Sent",
   "NOT_FOUND": "Not found",
   "NOT_FOUND_ENTRY_DESCRIPTION": "You attempted to edit a post that doesn’t exist. Perhaps it was deleted?",
+  "NEW_CIRCLE": "New Circle",
+  "REQUIRED": "*Required",
+  "ERROR_THIS_FIELD_IS_REQUIRED": "Error: This field is required",
+  "CIRCLE_MEMBERS_HINT": "Optional - select followers to add to this circles. (<em>note that you can also modify this list later</em>)",
+  "NEW_MEMBER": "New member...",
+  "ADD": "Add",
   "COLLABORATING": "Collaborating"
 }

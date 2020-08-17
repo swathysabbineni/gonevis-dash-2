@@ -2,6 +2,7 @@ import { trigger, transition, query, style, stagger, animate, sequence } from '@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CircleService } from '@app/components/dash/circle/circle.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ReactiveFormData } from '@app/interfaces/reactive-form-data';
@@ -20,6 +21,8 @@ import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, forkJoin } from 'rxjs';
+import { CircleCreatorComponent } from 'src/app/components/dash/circle/circle-creator/circle-creator.component';
+import { CircleCreated } from 'src/app/interfaces/circle-created';
 
 @Component({
   selector: 'app-circle',
@@ -166,6 +169,7 @@ export class CircleComponent implements OnInit {
               private changeDetectorRef: ChangeDetectorRef,
               private circleService: CircleService,
               private formBuilder: FormBuilder,
+              private dialog: MatDialog,
               private translate: TranslateService) {
   }
 
@@ -212,7 +216,6 @@ export class CircleComponent implements OnInit {
           limit: 8,
         }).subscribe((members: ApiResponse<Subscriber>): void => {
           this.circlesData[circle.id].membersCount = members.count;
-          // this.circlesData[circle.id].members = members.results.length ? [members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0], members.results[0]] : [];
           this.circlesData[circle.id].members = members.results;
         });
       }
@@ -628,5 +631,55 @@ export class CircleComponent implements OnInit {
     if (target.classList.contains('row') || target.classList.contains('users-container')) {
       this.selection.clear();
     }
+  }
+
+  /**
+   * Show modal to create a new circle.
+   *
+   * @param members Members to add.
+   */
+  showCircleCreatorModal(members?: Subscriber[]): void {
+    const dialogRef: MatDialogRef<CircleCreatorComponent, void> = this.dialog.open(CircleCreatorComponent, {
+      width: '560px',
+    });
+    /**
+     * Handle circle creation.
+     */
+    dialogRef.componentInstance.onCircleCreate.subscribe((data: CircleCreated): void => {
+      this.circles.push(data.circle);
+      this.circlesData[data.circle.id] = {
+        membersCount: 0,
+        members: [],
+        hovered: false,
+        added: {
+          count: 0,
+          showInfo: false,
+        },
+      };
+      this.circlesData[data.circle.id].hovered = true;
+      /**
+       * List of observables which their type is {@link BehaviorSubject} that hold boolean as value.
+       */
+      const observableList: BehaviorSubject<boolean>[] = [];
+      if (data.members.length) {
+        data.members.forEach((member: Subscriber): void => {
+          /**
+           * Create a [behavior subject]{@link BehaviorSubject} with `false` as its default value.
+           */
+          const statusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+          observableList.push(statusSubject);
+          this.addMember(data.circle.id, member, statusSubject);
+        });
+      }
+      /**
+       * Wait for all observables to be done and show number of members that successfully has been added to the circle.
+       */
+      forkJoin(observableList).subscribe((observables: boolean[]): void => {
+        this.circlesData[data.circle.id].added = {
+          count: observables.length,
+          showInfo: true,
+        };
+      });
+    });
   }
 }

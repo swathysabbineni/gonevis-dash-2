@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 import { InfoBannerModule } from '@app/shared/info-banner/info-banner.module';
 import { LoadingModule } from '@app/shared/loading/loading.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
+import { CircleCreatorModule } from 'src/app/components/dash/circle/circle-creator/circle-creator.module';
 
 import { CircleRoutingModule } from './circle-routing.module';
 import { CircleComponent } from './circle.component';
@@ -21,6 +23,8 @@ import { CircleComponent } from './circle.component';
     ReactiveFormsModule,
     LoadingModule,
     InfoBannerModule,
+    CircleCreatorModule,
+    MatDialogModule,
   ],
 })
 export class CircleModule {
