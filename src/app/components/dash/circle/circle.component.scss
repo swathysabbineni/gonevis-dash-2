@@ -1,4 +1,5 @@
 @import "variables";
+@import "material/variables";
 
 $circle-border-width: 16px;
 $circle-member-size: 48px + $circle-border-width;
@@ -80,7 +81,7 @@ $circle-member-size: 48px + $circle-border-width;
       .circle-members-count {
         font-size: $font-size-lg * 2;
         font-weight: bold;
-        color: lighten($primary, 5%);
+        color: lighten(mat-color($gonevis-primary), 5%);
       }
     }
 
@@ -166,15 +167,15 @@ $circle-member-size: 48px + $circle-border-width;
   }
 
   &.drag-started {
-    border: 2px dashed $primary;
+    border: 2px dashed mat-color($gonevis-primary);
 
     &::before {
       z-index: 1;
     }
 
     &.drag-entered {
-      background: rgba($primary, 0.12) !important;
-      color: $primary !important;
+      background: rgba(mat-color($gonevis-primary), 0.12) !important;
+      color: mat-color($gonevis-primary) !important;
       width: 100% !important;
       height: 100% !important;
 
@@ -192,10 +193,10 @@ $circle-member-size: 48px + $circle-border-width;
 
   .card {
     &.selected {
-      background: rgba($primary, 0.12);
+      background: rgba(mat-color($gonevis-primary), 0.12);
 
       a {
-        color: $primary !important;
+        color: mat-color($gonevis-primary) !important;
       }
     }
   }
@@ -249,6 +250,42 @@ $circle-member-size: 48px + $circle-border-width;
     justify-content: center;
     border-radius: 50%;
 
+    &.circle-creator-button .members {
+      fa-icon,
+      .helper-text {
+        transition-timing-function: $ease-in-out-curve-function;
+        transition-duration: $mat-elevation-transition-duration / 2;
+        transition-property: opacity, transform;
+      }
+
+      fa-icon {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      .helper-text {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+
+      &:hover .helper-text,
+      fa-icon {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      &:hover fa-icon,
+      .helper-text {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+
     > div {
       background: #eee;
       border-radius: 50%;
@@ -257,10 +294,11 @@ $circle-member-size: 48px + $circle-border-width;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
+      transition-timing-function: $ease-in-out-curve-function;
       transition-property: width, height, border;
-      transition-duration: 0.1s;
+      transition-duration: $mat-elevation-transition-duration / 2;
       position: relative;
+      cursor: pointer;
 
 
       &:hover,
@@ -304,7 +342,7 @@ $circle-member-size: 48px + $circle-border-width;
 
 .drag-preview {
   position: absolute;
-  background: $primary;
+  background: mat-color($gonevis-primary);
   color: white;
   height: 48px;
   display: flex;

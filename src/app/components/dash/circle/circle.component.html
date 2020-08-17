@@ -40,11 +40,12 @@
   </div>
   <!-- circles -->
   <div class="circles-container bg-white py-2">
-    <div class="d-flex flex-column" (click)="showCircleCreatorModal()">
+    <div class="d-flex flex-column circle-creator-button">
       <!-- Members -->
-      <div class="members" [@scaleIn]>
-        <div>
-          <fa-icon [icon]="faPlus" size="5x"></fa-icon>
+      <div class="members" matRipple (click)="showCircleCreatorModal()">
+        <fa-icon [icon]="faPlus" size="5x"></fa-icon>
+        <div class="helper-text text-center mat-hint">
+          Drop or click to <br> create circle
         </div>
       </div>
     </div>
