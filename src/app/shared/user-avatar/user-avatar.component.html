@@ -1,0 +1,9 @@
+<div [ngClass]="classList"
+     [ngStyle]="{
+          width: size + 'px',
+          height: size + 'px',
+          backgroundImage: media.picture ? 'url('+ media.thumbnail_48x48 +')' : 'url()',
+          backgroundColor: !media.picture ? color : ''
+     }">
+  <span *ngIf="!media.picture">{{ acronym }}</span>
+</div>
