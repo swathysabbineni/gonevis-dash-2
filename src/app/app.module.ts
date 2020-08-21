@@ -8,6 +8,7 @@ import { AuthInterceptorService } from '@app/services/auth-interceptor/auth-inte
 import { SentryErrorHandler } from '@app/services/sentry-error-handler/sentry-error-handler.service';
 import { FeedbackModalModule } from '@app/shared/feedback-modal/feedback-modal.module';
 import { MessageModalModule } from '@app/shared/message-modal/message-modal.module';
+import { UserAvatarModule } from '@app/shared/user-avatar/user-avatar.module';
 import { environment } from '@environments/environment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
@@ -65,6 +66,7 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     FormsModule,
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: !environment.development }),
+    UserAvatarModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },

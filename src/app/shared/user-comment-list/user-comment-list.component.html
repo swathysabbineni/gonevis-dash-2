@@ -25,9 +25,7 @@
     <div class="card-body d-flex">
 
       <!-- User image -->
-      <div class="mr-3" *ngIf="user.media.thumbnail_48x48">
-        <img class="rounded-circle" [src]="user.media.thumbnail_48x48">
-      </div>
+      <app-user-avatar [name]="user.name" [media]="user.media" class="mr-3"></app-user-avatar>
 
       <!-- Comment, date and view -->
       <div class="w-100">

@@ -17,10 +17,9 @@
         [class.highlighted]="commentHighlighted === comment.id">
       <div class="media">
         <!-- Comment user image -->
-        <img class="rounded-circle mr-3 bg-secondary" [width]="48" [height]="48"
-             *ngIf="comment.guest_name || (comment.user && !comment.user.media)">
-        <img class="rounded-circle mr-3 bg-secondary" *ngIf="comment.user && comment.user.media"
-             [src]="comment.user.media.thumbnail_48x48">
+        <app-user-avatar [name]="comment.guest_name" class="mr-3" *ngIf="comment.guest_name"></app-user-avatar>
+        <app-user-avatar [media]="comment.user.media" [name]="comment.user.display_name" class="mr-3"
+                         *ngIf="comment.user"></app-user-avatar>
         <!-- Comment -->
         <div class="media-body">
           <div>

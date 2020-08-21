@@ -97,9 +97,8 @@
         <li class="nav-item dropdown" dropdown>
           <!-- Dropdown label -->
           <a class="nav-link dropdown-toggle" id="user-dropdown" dropdownToggle>
-            <!-- User picture -->
-            <img class="rounded-circle" *ngIf="user.media.picture" [src]="user.media.thumbnail_48x48">
-            <span class="rounded-circle img-placeholder" *ngIf="!user.media.picture"></span>
+            <!-- User avatar -->
+            <app-user-avatar [name]="user.name" [media]="user.media" size="32" class="mr-1"></app-user-avatar>
             <!-- User name -->
             <span>{{ user.name.split(' ')[0] || user.username }}</span>
           </a>

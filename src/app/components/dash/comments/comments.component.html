@@ -71,9 +71,10 @@
       <tbody>
       <tr *ngFor="let comment of comments | paginate: pagination">
         <!-- Image -->
-        <th class="image" [class.p-0]="!comment.user || !comment.user.media">
-          <img class="rounded-circle" *ngIf="comment.user && comment.user.media"
-               [src]="comment.user.media.thumbnail_48x48">
+        <th class="image">
+          <app-user-avatar [name]="comment.guest_name" *ngIf="comment.guest_name"></app-user-avatar>
+          <app-user-avatar [name]="comment.user.name" [media]="comment.user.media"
+                           *ngIf="comment.user"></app-user-avatar>
         </th>
         <!-- User, post, date and comment -->
         <th>

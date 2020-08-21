@@ -6,6 +6,7 @@ import { EntryListModule } from '@app/shared/entry-list/entry-list.module';
 import { UserVoteListModule } from '@app/shared/user-vote-list/user-vote-list.module';
 import { LoadingModule } from '@app/shared/loading/loading.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
@@ -21,6 +22,7 @@ import { UserComponent } from './user.component';
     LoadingModule,
     UserVoteListModule,
     UserCommentListModule,
+    UserAvatarModule,
   ],
 })
 export class UserModule {

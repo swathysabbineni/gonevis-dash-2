@@ -11,9 +11,7 @@
     <div class="card-header d-flex align-items-center">
 
       <!-- User image -->
-      <div class="mr-3 mr-auto" *ngIf="user.media.thumbnail_48x48">
-        <img class="rounded-circle" [src]="user.media.thumbnail_48x48">
-      </div>
+      <app-user-avatar [media]="user.media" [name]="user.display_name" class="mr-auto"></app-user-avatar>
 
       <!-- Like icon -->
       <fa-icon [fixedWidth]="true" size="2x" [icon]="faLike" class="mr-2"></fa-icon>

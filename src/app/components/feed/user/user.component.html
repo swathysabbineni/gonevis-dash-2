@@ -4,8 +4,8 @@
   <!-- Header -->
   <div class="card-header d-flex">
 
-    <!-- Logo -->
-    <img class="rounded-circle mr-3" *ngIf="user.media.thumbnail_128x128" [src]="user.media.thumbnail_128x128">
+    <!-- User avatar -->
+    <app-user-avatar [name]="user.name" [media]="user.media" class="mr-3"></app-user-avatar>
 
     <!-- Title, date joined -->
     <div class="d-flex flex-column">

@@ -6,6 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 @NgModule({
   declarations: [CommentFormComponent],
@@ -17,6 +18,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     TooltipModule.forRoot(),
     PopoverModule.forRoot(),
     TranslateModule.forChild(),
+    UserAvatarModule,
   ],
   exports: [CommentFormComponent],
 })
