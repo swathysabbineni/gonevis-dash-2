@@ -2,9 +2,9 @@
      [ngStyle]="{
           width: size + 'px',
           height: size + 'px',
-          backgroundImage: media.picture ? 'url('+ media[this.resolution] +')' : 'url()',
-          backgroundColor: !media.picture ? backgroundColor : '',
+          backgroundImage: media && media.picture ? 'url('+ media[this.resolution] +')' : 'url()',
+          backgroundColor: !media || !media.picture ? backgroundColor : '',
           color: color
      }">
-  <span *ngIf="!media.picture">{{ acronym }}</span>
+  <span *ngIf="!media || !media.picture">{{ acronym }}</span>
 </div>

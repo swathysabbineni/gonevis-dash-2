@@ -52,7 +52,8 @@ export class UserAvatarComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.classList = ['d-flex', 'align-items-center', 'justify-content-center'].concat(this.classList);
+    this.classList = ['d-flex', 'align-items-center', 'justify-content-center', 'text-uppercase']
+      .concat(this.classList);
     /**
      * Change {@link media} resolution based on given {@link size}.
      */

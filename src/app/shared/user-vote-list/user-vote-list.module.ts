@@ -7,6 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 import { UserVoteListComponent } from './user-vote-list.component';
 
@@ -23,6 +24,7 @@ import { UserVoteListComponent } from './user-vote-list.component';
     EmbedModule,
     TooltipModule,
     FontAwesomeModule,
+    UserAvatarModule,
   ],
   exports: [
     UserVoteListComponent,

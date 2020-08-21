@@ -7,6 +7,7 @@ import { SearchBarModule } from '@app/shared/search-bar/search-bar.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 import { CommentsRoutingModule } from './comments-routing.module';
 
@@ -23,6 +24,7 @@ import { CommentsRoutingModule } from './comments-routing.module';
     LoadingModule,
     PaginationModule,
     SearchBarModule,
+    UserAvatarModule,
   ],
 })
 export class CommentsModule {

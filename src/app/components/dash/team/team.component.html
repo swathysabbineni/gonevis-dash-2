@@ -17,8 +17,8 @@
           <!-- Team members -->
           <tr *ngFor="let member of team.team">
             <!-- Image -->
-            <th class="image" [class.p-0]="!member.user.media">
-              <img class="rounded-circle" *ngIf="member.user.media" [src]="member.user.media.thumbnail_48x48">
+            <th class="image">
+              <app-user-avatar [name]="member.user.name" [media]="member.user.media"></app-user-avatar>
             </th>
             <!-- Name, role and email -->
             <th>
@@ -54,7 +54,9 @@
 
           <!-- Team members pending -->
           <tr *ngFor="let member of team.team_pending">
-            <th></th>
+            <th>
+              <app-user-avatar [name]="member.email[0]"></app-user-avatar>
+            </th>
             <!-- Email, role and invited by -->
             <th>
               <!-- Email -->

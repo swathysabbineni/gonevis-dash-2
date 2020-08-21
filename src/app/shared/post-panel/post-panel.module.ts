@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 import { PostPanelComponent } from './post-panel.component';
 
@@ -15,6 +16,7 @@ import { PostPanelComponent } from './post-panel.component';
     TranslateModule.forChild(),
     ReactiveFormsModule,
     RouterModule,
+    UserAvatarModule,
   ],
   exports: [
     PostPanelComponent,
