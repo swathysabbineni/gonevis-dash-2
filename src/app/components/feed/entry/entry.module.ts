@@ -10,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 import { EntryRoutingModule } from './entry-routing.module';
 
@@ -28,6 +29,7 @@ import { EntryRoutingModule } from './entry-routing.module';
     EntryListModule,
     CommentFormModule,
     InfiniteScrollModule,
+    UserAvatarModule,
   ],
 })
 export class EntryModule {

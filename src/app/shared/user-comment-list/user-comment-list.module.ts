@@ -5,6 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 import { UserCommentListComponent } from './user-comment-list.component';
 
@@ -19,6 +20,7 @@ import { UserCommentListComponent } from './user-comment-list.component';
     RouterModule,
     TooltipModule,
     FontAwesomeModule,
+    UserAvatarModule,
   ],
   exports: [
     UserCommentListComponent,

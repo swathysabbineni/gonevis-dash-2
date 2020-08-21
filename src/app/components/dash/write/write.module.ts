@@ -13,6 +13,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { KeyManagerComponent } from '@app/components/dash/write/core/key-manager.component';
 import { FileSelectionModule } from '@app/shared/file-selection/file-selection.module';
+import { UserAvatarModule } from '@app/shared/user-avatar/user-avatar.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -55,6 +56,7 @@ import { ShortcutsComponent } from './shared/components/shortcuts/shortcuts.comp
     MatAutocompleteModule,
     MatToolbarModule,
     MatProgressSpinnerModule,
+    UserAvatarModule,
   ],
 })
 export class WriteModule {
