@@ -135,6 +135,9 @@ export class UserProfileComponent implements OnInit {
     this.userService.updateProfile(payload).subscribe((data: UserSettingsPatch): void => {
       // Update local user data with the new changes from back-end
       for (const key in data) {
+        if (this.user.hasOwnProperty(key)) {
+          this.user[key] = data[key];
+        }
         if (this.userAuth.hasOwnProperty(key)) {
           this.userAuth[key] = data[key];
         }

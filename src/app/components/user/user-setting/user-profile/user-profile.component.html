@@ -18,9 +18,9 @@
           </button>
         </div>
       </div>
-      <!-- Image -->
-      <img class="rounded bg-secondary" *ngIf="user && user.media.picture" [src]="user.media.thumbnail_128x128">
-      <img class="rounded bg-secondary" *ngIf="!user || !user.media.picture">
+      <!-- User avatar -->
+      <app-user-avatar size="64" [name]="user.name" [media]="user.media" [classList]="['rounded']"
+                       *ngIf="user"></app-user-avatar>
     </div>
     <!-- Name -->
     <div class="form-group">
