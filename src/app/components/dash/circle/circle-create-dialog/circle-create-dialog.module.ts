@@ -10,11 +10,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
-import { CircleCreatorComponent } from 'src/app/components/dash/circle/circle-creator/circle-creator.component';
+import { CircleCreateDialogComponent } from 'src/app/components/dash/circle/circle-create-dialog/circle-create-dialog.component';
 
 @NgModule({
   declarations: [
-    CircleCreatorComponent,
+    CircleCreateDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -30,8 +30,8 @@ import { CircleCreatorComponent } from 'src/app/components/dash/circle/circle-cr
     MatListModule,
   ],
   entryComponents: [
-    CircleCreatorComponent,
+    CircleCreateDialogComponent,
   ],
 })
-export class CircleCreatorModule {
+export class CircleCreateDialogModule {
 }

@@ -1,7 +1,7 @@
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { Component, OnInit, Input, ElementRef, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, EventEmitter, Inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CircleService } from '@app/components/dash/circle/circle.service';
 import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -13,12 +13,13 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { debounceTime } from 'rxjs/operators';
+import { CircleMin } from 'src/app/interfaces/v1/circle-min';
 
 @Component({
-  selector: 'app-circle-creator',
-  templateUrl: './circle-creator.component.html',
+  selector: 'app-circle-create-dialog',
+  templateUrl: './circle-create-dialog.component.html',
 })
-export class CircleCreatorComponent implements OnInit {
+export class CircleCreateDialogComponent implements OnInit {
 
   readonly faTimes: IconDefinition = faTimes;
   readonly faTimesCircle: IconDefinition = faTimesCircle;
@@ -72,11 +73,14 @@ export class CircleCreatorComponent implements OnInit {
    */
   error: ApiError = {};
 
-  constructor(public dialogRef: MatDialogRef<CircleCreatorComponent>,
+  constructor(public dialogRef: MatDialogRef<CircleCreateDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: { selected: Subscriber[], },
               private circleService: CircleService) {
   }
 
   ngOnInit(): void {
+    console.log(this.data);
+    this.selectedFollowers = this.data.selected;
     this.nameControl = new FormControl('', Validators.required);
     this.queryControl = new FormControl('');
     /**

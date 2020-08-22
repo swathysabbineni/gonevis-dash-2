@@ -41,5 +41,5 @@
   <button mat-button mat-dialog-close>{{ 'CANCEL' | translate }}</button>
   <!-- Submit -->
   <button mat-button [disabled]="nameControl.invalid || loading"
-          translate (click)="createCircle()">{{ 'ADD' | translate }}</button>
+          (click)="createCircle()">{{ 'ADD' | translate }}</button>
 </mat-dialog-actions>
