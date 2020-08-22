@@ -1,0 +1,18 @@
+<h2 mat-dialog-title translate>EDIT_CIRCLE</h2>
+<mat-dialog-content class="mat-typography">
+  <!-- Name form field -->
+  <mat-form-field class="w-100 mb-3" appearance="fill">
+    <mat-label translate>NAME</mat-label>
+    <input type="text" matInput cdkFocusInitial [formControl]="nameControl" required>
+    <mat-hint translate>REQUIRED</mat-hint>
+    <mat-error translate *ngIf="nameControl.getError('required')">ERROR_THIS_FIELD_IS_REQUIRED</mat-error>
+    <mat-error translate *ngIf="error['name']">{{ error['name'][0] }}</mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <!-- Cancel -->
+  <button mat-button mat-dialog-close [disabled]="loading">{{ 'CANCEL' | translate }}</button>
+  <!-- Submit -->
+  <button mat-button [disabled]="nameControl.invalid || loading"
+          (click)="updateCircle()">{{'APPLY' | translate}}</button>
+</mat-dialog-actions>
