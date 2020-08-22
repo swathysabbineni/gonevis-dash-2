@@ -1,7 +1,7 @@
 import { trigger, transition, query, style, stagger, animate, sequence } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CircleService } from '@app/components/dash/circle/circle.service';
 import { ApiResponse } from '@app/interfaces/api-response';
@@ -13,16 +13,21 @@ import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { UtilService } from '@app/services/util/util.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, forkJoin } from 'rxjs';
-import { CircleCreatorComponent } from 'src/app/components/dash/circle/circle-creator/circle-creator.component';
+import { CircleCreateDialogComponent } from 'src/app/components/dash/circle/circle-create-dialog/circle-create-dialog.component';
+import { CircleEditDialogComponent } from 'src/app/components/dash/circle/circle-edit-dialog/circle-edit-dialog.component';
 import { CircleCreated } from 'src/app/interfaces/circle-created';
+import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-modal/confirmation-dialog.component';
 
 @Component({
   selector: 'app-circle',
@@ -63,6 +68,99 @@ import { CircleCreated } from 'src/app/interfaces/circle-created';
         ]),
       ]),
     ]),
+    trigger('onMembersLoaded', [
+      transition('void => *', [
+        style({ transform: 'translateY(20px)', opacity: 0 }),
+        animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
+    ]),
+    trigger('onCircleChange', [
+      transition('* => void', [
+        style({ opacity: 1, height: '*' }),
+        animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 0, height: '0' })),
+      ]),
+      transition('void => *', [
+        style({ opacity: 0, height: '0' }),
+        animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 1, height: '*' })),
+      ]),
+    ]),
+    trigger('onReveal', [
+      transition('* => void', [
+        style({ opacity: 1, height: '*', width: '*', margin: '*', transform: 'scale(1)' }),
+        animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({
+          opacity: 0,
+          height: '0',
+          width: '0',
+          margin: '0',
+          transform: 'scale(0)',
+        })),
+      ]),
+      transition('void => *', [
+        style({ opacity: 0, height: '0', width: '0', margin: '0', transform: 'scale(0)' }),
+        animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({
+          opacity: 1,
+          height: '*',
+          width: '*',
+          margin: '*',
+          transform: 'scale(1)',
+        })),
+      ]),
+    ]),
+    trigger('onMemberRemove', [
+      transition('* => void', [
+        style({ opacity: 1, flexBasis: '*', width: '*', margin: '*' }),
+        animate('400ms cubic-bezier(0.4, 0, 0.2, 1)', style({
+          opacity: 0,
+          width: '0',
+          margin: '0',
+          flexBasis: '0',
+        })),
+      ]),
+    ]),
+    trigger('onSearch', [
+      transition('* => void', [
+        style({ opacity: 1, transform: 'scale(1)' }),
+        animate('175ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 0, transform: 'scale(0)' })),
+      ]),
+      transition('void => *', [
+        style({ opacity: 0, transform: 'scale(0)' }),
+        animate('175ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 1, transform: 'scale(1)' })),
+      ]),
+    ]),
+    trigger('onCircleListChange', [
+      transition(':increment', [
+        query(':enter', [
+          style({ transform: 'scale(0.5)', width: 0, height: 0, opacity: 0 }),
+          stagger(300, [
+            animate('300ms cubic-bezier(0.35, 0, 0.25, 1)', style({
+              transform: '*',
+              width: '*',
+              height: '*',
+              opacity: '1',
+            })),
+          ]),
+        ], { optional: true }),
+      ]),
+      transition(':decrement', [
+        query(':leave', [
+          style({ transform: 'scale(1)', width: '*', height: '*', opacity: 1 }),
+          animate('300ms cubic-bezier(0.35, 0, 0.25, 1)', style({
+            transform: 'scale(0)',
+            width: '0',
+            height: '0',
+            opacity: 0,
+          })),
+        ], { optional: true }),
+      ]),
+      transition('* => *', [
+        query(':enter', [
+          style({ transform: 'scale(0.5)', opacity: 0 }),
+          stagger(75, [
+            animate('300ms cubic-bezier(0.35, 0, 0.25, 1)', style({ transform: '*', opacity: '1' })),
+          ]),
+        ], { optional: true }),
+      ]),
+    ]),
   ],
 })
 export class CircleComponent implements OnInit {
@@ -74,6 +172,11 @@ export class CircleComponent implements OnInit {
   readonly faPlus: IconDefinition = faPlus;
   readonly faUser: IconDefinition = faUser;
   readonly faUserFriends: IconDefinition = faUserFriends;
+  readonly faCheck: IconDefinition = faCheck;
+  readonly faSearch: IconDefinition = faSearch;
+  readonly faTimes: IconDefinition = faTimes;
+
+  triggerIt: boolean;
 
   /**
    * Get template reference responsible for holding drag preview.
@@ -103,6 +206,7 @@ export class CircleComponent implements OnInit {
     members: Subscriber[],
     membersCount: number,
     hovered: boolean,
+    inDetail: boolean,
     added: {
       count: number,
       showInfo: boolean,
@@ -134,6 +238,11 @@ export class CircleComponent implements OnInit {
    * Loading indicator for getting a single circle.
    */
   loading: boolean;
+
+  /**
+   * Loading indicator for searching.
+   */
+  searching: boolean;
 
   /**
    * Form data
@@ -174,6 +283,9 @@ export class CircleComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.selection.changed.subscribe((): void => {
+      this.changeDetectorRef.detectChanges();
+    });
     /**
      * Setup form
      */
@@ -207,6 +319,7 @@ export class CircleComponent implements OnInit {
           membersCount: 0,
           members: [],
           hovered: false,
+          inDetail: false,
           added: {
             count: 0,
             showInfo: false,
@@ -231,8 +344,12 @@ export class CircleComponent implements OnInit {
    */
   loadAvailableCircleMembers(search: string = '') {
     this.selection.clear();
+    this.searching = true;
     this.circleService.getAvailableMembers(search).subscribe((data: ApiResponse<Subscriber>): void => {
       this.availableCircleMembers = data.results;
+      this.searching = false;
+    }, (): void => {
+      this.searching = false;
     });
   }
 
@@ -304,6 +421,25 @@ export class CircleComponent implements OnInit {
     });
   }
 
+  onAddMemberDrop(event: DragEvent): void {
+    const selected: Subscriber[] = this.selection.selected;
+    // Break code if dropped item doesn't have an ID, it means it's not a user.
+    if (!event.dataTransfer.getData('id')) {
+      return;
+    }
+    this.selection.clear();
+    event.preventDefault();
+    /**
+     * Remove drag indicator for the button.
+     */
+    this.circleDragIndicator(event, false, null);
+    /**
+     * Notify circles that dragging ended.
+     */
+    this.dragStarted = false;
+    this.showCircleCreateDialog(selected);
+  }
+
   /**
    * Add a member to a circle.
    *
@@ -340,10 +476,14 @@ export class CircleComponent implements OnInit {
      */
     if (add) {
       circleElement.classList.add('drag-entered');
-      this.circlesData[circleId].hovered = true;
+      if (circleId) {
+        this.circlesData[circleId].hovered = true;
+      }
     } else {
       circleElement.classList.remove('drag-entered');
-      this.circlesData[circleId].hovered = false;
+      if (circleId) {
+        this.circlesData[circleId].hovered = false;
+      }
     }
   }
 
@@ -403,10 +543,12 @@ export class CircleComponent implements OnInit {
    * Handle member multi selection.
    *
    * @param event MouseEvent which is required to multi select.
-   * @param member Member to add to {@link SelectionModel selection}
+   * @param member Member to add to {@link SelectionModel selection}.
+   * @param memberList Member list to iterate through.
    * @param index Member index.
    */
-  handleMemberClick(event: MouseEvent, member: Subscriber, index: number): void {
+  handleMemberClick(event: MouseEvent, member: Subscriber, memberList: Subscriber[], index: number): void {
+    console.log('AAA');
     if (event.shiftKey) {
       /**
        * Store if member is selected, because we will clear the selection.
@@ -424,10 +566,10 @@ export class CircleComponent implements OnInit {
         this.lastSelection = member;
       }
       const start: number = index;
-      const end: number = this.availableCircleMembers
+      const end: number = memberList
         .findIndex((alsoMember: Subscriber): boolean => this.lastSelection.id === alsoMember.id);
 
-      this.availableCircleMembers
+      memberList
         .slice(Math.min(start, end), Math.max(start, end) + 1)
         .forEach((current: Subscriber): void => {
           if (this.selection.isSelected(member)) {
@@ -504,6 +646,7 @@ export class CircleComponent implements OnInit {
         membersCount: 0,
         members: [],
         hovered: false,
+        inDetail: false,
         added: {
           count: 0,
           showInfo: false,
@@ -522,15 +665,18 @@ export class CircleComponent implements OnInit {
    * Delete a circle
    */
   delete(circle: CircleMin): void {
-    if (!confirm(this.translate.instant('CONFIRM_DELETE_CIRCLE'))) {
-      return;
-    }
+    this.loading = true;
     this.circleService.delete(circle.id).subscribe((): void => {
+      this.loading = false;
+      this.formSearch.get('search').setValue('');
+      if (!this.selectedCircle.circle) {
+        this.loadAvailableCircleMembers();
+      }
       this.circles.splice(this.circles.indexOf(circle), 1);
       /**
        * Remove selected circle
        */
-      if (circle.id === this.selectedCircle.circle.id) {
+      if (this.selectedCircle.circle && circle.id === this.selectedCircle.circle.id) {
         this.selectedCircle = {
           circle: null,
           members: null,
@@ -544,6 +690,7 @@ export class CircleComponent implements OnInit {
    */
   viewCircle(circle: CircleMin): void {
     this.cancelEdit();
+    this.selection.clear();
     this.loading = true;
     this.selectedCircle.circle = circle;
     this.formSearch.get('circleMemberSearch').setValue('');
@@ -561,10 +708,14 @@ export class CircleComponent implements OnInit {
    * @param search Search text
    */
   searchCircleMembers(search: string = ''): void {
+    this.searching = true;
     this.circleService.getMembers(this.selectedCircle.circle.id, {
       search,
     }).subscribe((members: ApiResponse<Subscriber>): void => {
       this.selectedCircle.members = members;
+      this.searching = false;
+    }, (): void => {
+      this.searching = false;
     });
   }
 
@@ -634,13 +785,16 @@ export class CircleComponent implements OnInit {
   }
 
   /**
-   * Show modal to create a new circle.
+   * Show dialog to create a new circle.
    *
    * @param members Members to add.
    */
-  showCircleCreatorModal(members?: Subscriber[]): void {
-    const dialogRef: MatDialogRef<CircleCreatorComponent, void> = this.dialog.open(CircleCreatorComponent, {
+  showCircleCreateDialog(members: Subscriber[] = []): void {
+    const dialogRef: MatDialogRef<CircleCreateDialogComponent, void> = this.dialog.open(CircleCreateDialogComponent, {
       width: '560px',
+      data: {
+        selected: members,
+      },
     });
     /**
      * Handle circle creation.
@@ -651,6 +805,7 @@ export class CircleComponent implements OnInit {
         membersCount: 0,
         members: [],
         hovered: false,
+        inDetail: false,
         added: {
           count: 0,
           showInfo: false,
@@ -681,5 +836,74 @@ export class CircleComponent implements OnInit {
         };
       });
     });
+  }
+
+  /**
+   * Show dialog to edit a circle.
+   *
+   * @param circle Circle to edit.
+   */
+  showCircleEditDialog(circle: CircleMin): void {
+    const dialogRef: MatDialogRef<CircleEditDialogComponent, CircleMin> = this.dialog.open(CircleEditDialogComponent, {
+      data: circle,
+    });
+    /**
+     * Update given circle in the list with latest data.
+     */
+    dialogRef.afterClosed().subscribe((data: CircleMin): void => {
+      if (!data) {
+        return;
+      }
+      // Find circle in the list and update its properties.
+      const foundCircle: CircleMin = this.circles.find((circleMin: CircleMin): boolean => circleMin.id === data.id);
+      if (foundCircle) {
+        circle.name = data.name;
+      }
+    });
+  }
+
+  /**
+   * Show a confirmation dialog before deleting a circle.
+   *
+   * @param circle Circle to delete.
+   */
+  showDeleteCircleDialog(circle: CircleMin): void {
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialog
+      .open(ConfirmationDialogComponent, {
+        data: {
+          title: 'CIRCLE_DELETE_DIALOG_TITLE',
+          content: 'CIRCLE_DELETE_DIALOG_CONTENT',
+        },
+      });
+    /**
+     * Handle circle deletion after returned results from the confirmation dialog.
+     */
+    dialogRef.afterClosed().subscribe((data: boolean): void => {
+      if (data && data === true) {
+        this.delete(circle);
+      }
+    });
+  }
+
+  /**
+   * Clear search input and refocus on the input.
+   *
+   * @param abstractControl Abstract control to clear its value.
+   * @param input Input HTML element to clear text and refocus on it.
+   */
+  clearSearch(abstractControl: AbstractControl, input: HTMLInputElement): void {
+    input.value = '';
+    abstractControl.setValue('');
+    input.focus();
+  }
+
+  /**
+   * Remove selected members and clear selection.
+   */
+  removeSelectedMembers(): void {
+    this.selection.selected.forEach((member: Subscriber): void => {
+      this.removeMember(member.id);
+    });
+    this.selection.clear();
   }
 }

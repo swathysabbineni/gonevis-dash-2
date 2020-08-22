@@ -61,12 +61,19 @@
 @include mat-progress-spinner-theme($gonevis-theme);
 @include mat-dialog-theme($gonevis-theme);
 @include mat-button-theme($gonevis-theme);
+@include mat-checkbox-theme($gonevis-theme);
+@include mat-list-theme($gonevis-theme);
+@include mat-tooltip-theme($gonevis-theme);
 
 
 /* Material styles */
 
-button[mat-button]:focus {
+button.mat-button-base:focus {
   outline: none;
+}
+
+.mat-checkbox .mat-checkbox-layout {
+  margin: 0;
 }
 
 
