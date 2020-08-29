@@ -51,6 +51,9 @@ const routes: Routes = [{
     path: 'help',
     loadChildren: () => import('./help/help.module').then(m => m.HelpModule),
   }, {
+    path: 'builder',
+    loadChildren: () => import('./builder/builder.module').then(m => m.BuilderModule),
+  }, {
     path: '**',
     pathMatch: 'full',
     redirectTo: 'main',
