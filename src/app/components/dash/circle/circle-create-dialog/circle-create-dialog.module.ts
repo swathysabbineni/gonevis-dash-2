@@ -11,6 +11,7 @@ import { MatListModule } from '@angular/material/list';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { CircleCreateDialogComponent } from 'src/app/components/dash/circle/circle-create-dialog/circle-create-dialog.component';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { CircleCreateDialogComponent } from 'src/app/components/dash/circle/circ
     MatChipsModule,
     MatAutocompleteModule,
     MatListModule,
+    UserAvatarModule,
   ],
   entryComponents: [
     CircleCreateDialogComponent,

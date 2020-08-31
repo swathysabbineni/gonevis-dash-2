@@ -22,6 +22,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, forkJoin } from 'rxjs';
 import { CircleCreateDialogComponent } from 'src/app/components/dash/circle/circle-create-dialog/circle-create-dialog.component';
@@ -75,10 +76,6 @@ import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-modal/c
       ]),
     ]),
     trigger('onCircleChange', [
-      transition('* => void', [
-        style({ opacity: 1, height: '*' }),
-        animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 0, height: '0' })),
-      ]),
       transition('void => *', [
         style({ opacity: 0, height: '0' }),
         animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 1, height: '*' })),
@@ -171,6 +168,7 @@ export class CircleComponent implements OnInit {
   readonly faCircles: IconDefinition = faSpinner;
   readonly faPlus: IconDefinition = faPlus;
   readonly faUser: IconDefinition = faUser;
+  readonly faUserPlus: IconDefinition = faUserPlus;
   readonly faUserFriends: IconDefinition = faUserFriends;
   readonly faCheck: IconDefinition = faCheck;
   readonly faSearch: IconDefinition = faSearch;
@@ -274,6 +272,16 @@ export class CircleComponent implements OnInit {
    */
   lastSelection: Subscriber;
 
+  /**
+   * Query text related to list of followers.
+   */
+  followersQuery: string;
+
+  /**
+   * Query text related to list of member of a circle.
+   */
+  membersQuery: string;
+
   constructor(public util: UtilService,
               private changeDetectorRef: ChangeDetectorRef,
               private circleService: CircleService,
@@ -336,15 +344,16 @@ export class CircleComponent implements OnInit {
     /**
      * Load available members
      */
-    this.loadAvailableCircleMembers();
+    this.getFollowersList();
   }
 
   /**
-   * Load available members
+   * Get list of followers.
    */
-  loadAvailableCircleMembers(search: string = '') {
+  getFollowersList(search: string = '') {
     this.selection.clear();
     this.searching = true;
+    this.followersQuery = search;
     this.circleService.getAvailableMembers(search).subscribe((data: ApiResponse<Subscriber>): void => {
       this.availableCircleMembers = data.results;
       this.searching = false;
@@ -670,7 +679,7 @@ export class CircleComponent implements OnInit {
       this.loading = false;
       this.formSearch.get('search').setValue('');
       if (!this.selectedCircle.circle) {
-        this.loadAvailableCircleMembers();
+        this.getFollowersList();
       }
       this.circles.splice(this.circles.indexOf(circle), 1);
       /**
@@ -686,7 +695,7 @@ export class CircleComponent implements OnInit {
   }
 
   /**
-   * View a circle
+   * View a circle.
    */
   viewCircle(circle: CircleMin): void {
     this.cancelEdit();
@@ -709,6 +718,7 @@ export class CircleComponent implements OnInit {
    */
   searchCircleMembers(search: string = ''): void {
     this.searching = true;
+    this.membersQuery = search;
     this.circleService.getMembers(this.selectedCircle.circle.id, {
       search,
     }).subscribe((members: ApiResponse<Subscriber>): void => {
@@ -905,5 +915,14 @@ export class CircleComponent implements OnInit {
       this.removeMember(member.id);
     });
     this.selection.clear();
+  }
+
+  /** Clear selected circle and go back to list of followers. */
+  showFollowers(): void {
+    this.selectedCircle = {
+      circle: null,
+      members: null,
+    };
+    this.getFollowersList();
   }
 }

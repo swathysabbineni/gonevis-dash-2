@@ -1,9 +1,8 @@
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { Component, OnInit, Input, ElementRef, ViewChild, EventEmitter, Inject } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CircleService } from '@app/components/dash/circle/circle.service';
-import { ApiError } from '@app/interfaces/api-error';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { CircleCreated } from '@app/interfaces/circle-created';
 import { Circle } from '@app/interfaces/v1/circle';
@@ -13,7 +12,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { debounceTime } from 'rxjs/operators';
-import { CircleMin } from 'src/app/interfaces/v1/circle-min';
+import { ReactiveFormData } from 'src/app/interfaces/reactive-form-data';
 
 @Component({
   selector: 'app-circle-create-dialog',
@@ -25,9 +24,7 @@ export class CircleCreateDialogComponent implements OnInit {
   readonly faTimesCircle: IconDefinition = faTimesCircle;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  /**
-   * Get element reference responsible for holding follower search input.
-   */
+  /** Get element reference responsible for holding follower search input. */
   @ViewChild('followerInput') followerInput: ElementRef<HTMLInputElement>;
 
   /**
@@ -38,50 +35,37 @@ export class CircleCreateDialogComponent implements OnInit {
    */
   onCircleCreate: EventEmitter<CircleCreated> = new EventEmitter<CircleCreated>();
 
-  /**
-   * Selected members.
-   */
+  /** Selected members. */
   @Input() members: Subscriber[];
 
-  /**
-   * Search form.
-   */
+  /** Search form. */
   queryControl: FormControl;
 
-  /**
-   * Circle name control.
-   */
-  nameControl: FormControl;
+  /** Circle creation form. */
+  form: ReactiveFormData = {
+    error: {},
+  };
 
-  /**
-   * Stores selected followers which will be used to add them to the circle after it's created.
-   */
+  /** Stores selected followers which will be used to add them to the circle after it's created. */
   selectedFollowers: Subscriber[] = [];
 
-  /**
-   * List of blog's followers.
-   */
+  /** List of blog's followers. */
   followers: Subscriber[];
-
-  /**
-   * API loading indicator.
-   */
-  loading: boolean;
-
-  /**
-   * API errors.
-   */
-  error: ApiError = {};
 
   constructor(public dialogRef: MatDialogRef<CircleCreateDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: { selected: Subscriber[], },
+              private formBuilder: FormBuilder,
               private circleService: CircleService) {
   }
 
   ngOnInit(): void {
-    console.log(this.data);
+    // Update selected followers if dialog was given list of followers.
     this.selectedFollowers = this.data.selected;
-    this.nameControl = new FormControl('', Validators.required);
+    // Setup circle creation form.
+    this.form.form = this.formBuilder.group({
+      name: ['', Validators.required],
+    });
+    // Setup query control for searching followers.
     this.queryControl = new FormControl('');
     /**
      * Get followers once {@link queryControl}'s value changed. (which is being used for autocomplete)
@@ -89,10 +73,8 @@ export class CircleCreateDialogComponent implements OnInit {
     this.queryControl.valueChanges
       .pipe(debounceTime(300))
       .subscribe((value: string): void => {
-        /**
-         * Value will be null when the user has selected an auto tag.
-         * So we don't retrieve tags again until user writes something.
-         */
+        // Value will be null when the user has selected an auto tag.
+        // So we don't retrieve tags again until user writes something.
         if (value === null) {
           return;
         }
@@ -102,7 +84,9 @@ export class CircleCreateDialogComponent implements OnInit {
   }
 
   /**
-   * Load available members
+   * Load available members.
+   *
+   * @param search Search text.
    */
   getFollowers(search: string = ''): void {
     this.circleService.getAvailableMembers(search).subscribe((data: ApiResponse<Subscriber>): void => {
@@ -129,42 +113,34 @@ export class CircleCreateDialogComponent implements OnInit {
   selected(follower: Subscriber): void {
     this.selectedFollowers.push(follower);
     this.followerInput.nativeElement.value = '';
-    /**
-     * Clear {@link queryControl}'s value so user can search another follower.
-     */
+    // Clear search input so user can search another follower.
     this.queryControl.setValue(null);
     this.followers = [];
   }
 
-  /**
-   * Create circle with selected members.
-   */
+
+  /** Create circle with selected members. */
   createCircle(): void {
-    /**
-     * Prevent creation if {@link nameControl} is invalid.
-     * In other words if user didn't provide any name, prevent creation.
-     */
-    if (this.nameControl.invalid) {
+    // Prevent creation if form is invalid.
+    // In other words if user didn't provide any name, prevent creation.
+    if (this.form.form.invalid) {
       return;
     }
-    this.loading = true;
-    this.circleService.create({ name: this.nameControl.value }).subscribe((data: Circle): void => {
-      /**
-       * Emit created circle with selected members.
-       */
+    this.form.loading = true;
+    this.circleService.create(this.form.form.value).subscribe((data: Circle): void => {
+      // Emit created circle with selected members.
       this.onCircleCreate.emit({ circle: data, members: this.selectedFollowers });
+      // Close the dialog after creating the circle.
       this.dialogRef.close();
-      this.loading = false;
+      this.form.loading = false;
     }, (error: HttpErrorResponseApi): void => {
-      this.error = error.error;
-      /**
-       * If error is related to name field then mark {@link nameControl} as invalid and show the error.
-       */
-      if (this.error.name) {
-        this.nameControl.setErrors({ invalid: true });
-        this.nameControl.markAllAsTouched();
+      this.form.error = error.error;
+      // If error is related to name field then mark form as invalid and show the error.
+      if (this.form.error.name) {
+        this.form.form.get('name').setErrors({ invalid: true });
+        this.form.form.markAllAsTouched();
       }
-      this.loading = false;
+      this.form.loading = false;
     });
   }
 }

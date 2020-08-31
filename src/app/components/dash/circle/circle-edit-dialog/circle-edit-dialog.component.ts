@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CircleService } from 'src/app/components/dash/circle/circle.service';
 import { ApiError } from 'src/app/interfaces/api-error';
+import { ReactiveFormData } from 'src/app/interfaces/reactive-form-data';
 import { CircleMin } from 'src/app/interfaces/v1/circle-min';
 import { HttpErrorResponseApi } from 'src/app/models/http-error-response-api';
 
@@ -12,57 +13,49 @@ import { HttpErrorResponseApi } from 'src/app/models/http-error-response-api';
 })
 export class CircleEditDialogComponent implements OnInit {
 
-  /**
-   * Name control to edit circle name.
-   */
-  nameControl: FormControl;
-
-  /**
-   * API loading indicator
-   */
-  loading: boolean;
-
-  /**
-   * API errors.
-   */
-  error: ApiError = {};
+  /** Edit form. */
+  form: ReactiveFormData = {
+    error: {},
+  };
 
   constructor(public dialogRef: MatDialogRef<CircleEditDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: CircleMin,
+              private formBuilder: FormBuilder,
               private circleService: CircleService) {
   }
 
   ngOnInit(): void {
-    this.nameControl = new FormControl(this.data.name, Validators.required);
+    // Setup circle edit form.
+    this.form.form = this.formBuilder.group({
+      name: [this.data.name, Validators.required],
+    });
   }
 
-  /**
-   * Update circle name.
-   */
+  /** Update circle name. */
   updateCircle(): void {
-    /**
-     * Prevent code from continuing if {@link nameControl} is invalid.
-     */
-    if (this.nameControl.invalid) {
+    // Prevent creation if form is invalid.
+    // In other words if user didn't provide any name, prevent edition.
+    if (this.form.form.invalid) {
       return;
     }
+    // Forbid the user from closing the dialog, because we return the edition data after dialog is closed.
     this.dialogRef.disableClose = true;
-    this.loading = true;
-    this.circleService.update(this.data.id, { name: this.nameControl.value })
+    this.form.loading = true;
+    this.circleService.update(this.data.id, this.form.form.value)
       .subscribe((data: CircleMin): void => {
+        // Close dialog with new circle data.
         this.dialogRef.close(data);
-        this.loading = false;
+        this.form.loading = false;
         this.dialogRef.disableClose = false;
       }, (error: HttpErrorResponseApi): void => {
-        this.error = error.error;
-        /**
-         * If error is related to name field then mark {@link nameControl} as invalid and show the error.
-         */
-        if (this.error.name) {
-          this.nameControl.setErrors({ invalid: true });
-          this.nameControl.markAllAsTouched();
+        this.form.error = error.error;
+        // If error is related to name field then mark name as invalid and show the error.
+        if (this.form.error.name) {
+          this.form.form.get('name').setErrors({ invalid: true });
+          this.form.form.markAllAsTouched();
         }
-        this.loading = false;
+        this.form.loading = false;
+        // Allow the user to close the dialog.
         this.dialogRef.disableClose = false;
       });
   }

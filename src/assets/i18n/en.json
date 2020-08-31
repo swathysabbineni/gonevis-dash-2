@@ -478,5 +478,15 @@
   "APPLY": "Apply",
   "CIRCLE_DELETE_DIALOG_TITLE": "Remove circle?",
   "CIRCLE_DELETE_DIALOG_CONTENT": "All published posts in this circle will be set to draft if not published in other circles.",
+  "SEARCH_FOLLOWERS": "Search followers",
+  "SEARCH_CIRCLE_MEMBERS": "Search circle members",
+  "BACK_TO_FOLLOWERS_LIST": "Back to followers list",
+  "CIRCLE_EMPTY_MESSAGE": "There's no one in this circle... yet!",
+  "ADD_A_PERSON": "Add a person",
+  "NO_FOLLOWERS_FOUND": "No followers found.",
+  "YOU_DONT_HAVE_ANY_FOLLOWERS": "You don't have any followers yet.",
+  "DROP_OR_CLICK_TO_CREATE_CIRCLE": "Drop or click to <br> create circle",
+  "DRAG_PEOPLE_TO_CIRCLES": "Drag people to your circles to add",
+  "DELETE_CIRCLE": "Delete circle",
   "COLLABORATING": "Collaborating"
 }

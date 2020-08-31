@@ -1,45 +1,53 @@
 <h2 mat-dialog-title translate>NEW_CIRCLE</h2>
-<mat-dialog-content class="mat-typography">
-  <!-- Name form field -->
-  <mat-form-field class="w-100 mb-3" appearance="fill">
-    <mat-label translate>NAME</mat-label>
-    <input type="text" matInput cdkFocusInitial [formControl]="nameControl" required>
-    <mat-hint translate>REQUIRED</mat-hint>
-    <mat-error translate *ngIf="nameControl.getError('required')">ERROR_THIS_FIELD_IS_REQUIRED</mat-error>
-    <mat-error translate *ngIf="error['name']">{{ error['name'][0] }}</mat-error>
-  </mat-form-field>
-  <!-- Followers to add -->
-  <mat-form-field class="w-100" appearance="fill">
-    <mat-label translate>MEMBERS</mat-label>
-    <mat-hint [innerHTML]="'CIRCLE_MEMBERS_HINT' | translate"></mat-hint>
-    <mat-chip-list #chipList>
-      <!-- List of selected followers -->
-      <mat-chip class="pl-1 pr-2" (removed)="remove(follower.id)" *ngFor="let follower of selectedFollowers">
-        <img class="rounded-circle mr-2" width="24px" [src]="follower.user.media.thumbnail_48x48" alt="">
-        {{ follower.user.name }}
-        <!-- Remove button -->
-        <fa-icon matChipRemove [icon]="faTimesCircle"
-                 class="ml-2 d-flex justify-content-center align-items-center"></fa-icon>
-      </mat-chip>
-      <!-- Follower search -->
-      <input #followerInput
-             [placeholder]="'NEW_MEMBER' | translate"
-             [matChipInputFor]="chipList"
-             [matAutocomplete]="auto"
-             [matChipInputSeparatorKeyCodes]="[]"
-             [formControl]="queryControl">
-    </mat-chip-list>
-    <!-- Followers autocomplete -->
-    <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption (optionSelected)="selected($event.option.value)">
-      <mat-option *ngFor="let follower of followers" [value]="follower">{{ follower.user.name }}</mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+<form [formGroup]="form.form">
+  <mat-dialog-content class="mat-typography">
+    <!-- Name form field -->
+    <mat-form-field class="w-100 mb-3" appearance="fill">
+      <mat-label translate>NAME</mat-label>
+      <input type="text" matInput cdkFocusInitial formControlName="name" required>
+      <mat-hint translate>REQUIRED</mat-hint>
+      <mat-error translate *ngIf="form.form.get('name').getError('required')">ERROR_THIS_FIELD_IS_REQUIRED</mat-error>
+      <mat-error translate *ngIf="form.error['name']">{{ form.error['name'][0] }}</mat-error>
+    </mat-form-field>
+    <!-- Followers to add -->
+    <mat-form-field class="w-100" appearance="fill">
+      <mat-label translate>MEMBERS</mat-label>
+      <mat-hint [innerHTML]="'CIRCLE_MEMBERS_HINT' | translate"></mat-hint>
+      <mat-chip-list #chipList>
+        <!-- List of selected followers -->
+        <mat-chip class="pl-1 pr-2" (removed)="remove(follower.id)" *ngFor="let follower of selectedFollowers">
+          <app-user-avatar [name]="follower.user.name" [media]="follower.user.media" size="24"
+                           class="mr-2 small"></app-user-avatar>
+          {{ follower.user.name }}
+          <!-- Remove button -->
+          <fa-icon matChipRemove [icon]="faTimesCircle"
+                   class="ml-2 d-flex justify-content-center align-items-center"></fa-icon>
+        </mat-chip>
+        <!-- Follower search -->
+        <input #followerInput
+               [placeholder]="'NEW_MEMBER' | translate"
+               [matChipInputFor]="chipList"
+               [matAutocomplete]="auto"
+               [matChipInputSeparatorKeyCodes]="[]"
+               [formControl]="queryControl">
+      </mat-chip-list>
+      <!-- Followers autocomplete -->
+      <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption (optionSelected)="selected($event.option.value)">
+        <mat-option class="d-flex" *ngFor="let follower of followers" [value]="follower">
+          <div class="d-flex align-items-center">
+            <app-user-avatar size="36" [media]="follower.user.media" [name]="follower.user.name" class="mr-2"></app-user-avatar>
+            <span>{{ follower.user.name }}</span>
+          </div>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <!-- Cancel -->
-  <button mat-button mat-dialog-close>{{ 'CANCEL' | translate }}</button>
-  <!-- Submit -->
-  <button mat-button [disabled]="nameControl.invalid || loading"
-          (click)="createCircle()">{{ 'ADD' | translate }}</button>
-</mat-dialog-actions>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <!-- Cancel -->
+    <button mat-button mat-dialog-close>{{ 'CANCEL' | translate }}</button>
+    <!-- Submit -->
+    <button mat-button [disabled]="form.form.invalid || form.loading"
+            (click)="createCircle()">{{ 'ADD' | translate }}</button>
+  </mat-dialog-actions>
+</form>

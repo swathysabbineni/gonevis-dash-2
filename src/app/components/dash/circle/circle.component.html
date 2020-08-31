@@ -8,7 +8,7 @@
         <div class="d-flex align-items-center justify-content-center mb-3">
           <!-- Search form -->
           <form class="search-form align-self-center" [formGroup]="formSearch"
-                (ngSubmit)="loadAvailableCircleMembers(this.formSearch.value.search)">
+                (ngSubmit)="getFollowersList(this.formSearch.value.search)">
             <div class="position-relative">
               <!-- Search button -->
               <button mat-button mat-icon-button [disabled]="searching"
@@ -24,7 +24,7 @@
               <!-- Search input -->
               <input type="text" class="form-control" [class.has-value]="formSearch.get('search').value"
                      #availableMembersInput
-                     [placeholder]="'SEARCH' | translate" formControlName="search">
+                     [placeholder]="'SEARCH_FOLLOWERS' | translate" formControlName="search">
               <!-- Search clear button -->
               <button mat-button mat-icon-button
                       (click)="clearSearch(formSearch.get('search'), availableMembersInput)"
@@ -61,6 +61,11 @@
             <fa-icon [icon]="faCheck" class="ml-3 selected-icon"></fa-icon>
           </mat-list-item>
         </mat-list>
+        <!-- Nothing text -->
+        <p *ngIf="!searching && !availableCircleMembers.length" class="mat-hint text-center">
+          <span *ngIf="followersQuery" translate>NO_FOLLOWERS_FOUND</span>
+          <span *ngIf="!followersQuery" translate>YOU_DONT_HAVE_ANY_FOLLOWERS</span>
+        </p>
       </div>
     </ng-template>
     <!-- Loading indicator -->
@@ -72,7 +77,14 @@
     <!-- Circle detail -->
     <ng-template [ngIf]="!loading && selectedCircle.circle">
       <div class="d-flex flex-column" [@onCircleChange]>
-        <h3 class="text-center mb-3">{{ selectedCircle.circle.name }}</h3>
+        <h3 class="d-flex align-items-center justify-content-center mb-3">
+          <button mat-icon-button mat-button class="mr-2" (click)="showFollowers()"
+                  [matTooltip]="'BACK_TO_FOLLOWERS_LIST' | translate"
+                  matTooltipShowDelay="400">
+            <fa-icon [icon]="faBack"></fa-icon>
+          </button>
+          {{ selectedCircle.circle.name }}
+        </h3>
         <div class="d-flex align-items-center justify-content-center mb-3">
           <!-- Delete selected members -->
           <button mat-icon-button mat-button color="warn" [@onReveal] *ngIf="selection.hasValue()"
@@ -97,7 +109,7 @@
               <!-- Search input -->
               <input type="text" class="form-control" [class.has-value]="formSearch.get('circleMemberSearch').value"
                      #circleMembersInput
-                     [placeholder]="'SEARCH' | translate" formControlName="circleMemberSearch">
+                     [placeholder]="'SEARCH_CIRCLE_MEMBERS' | translate" formControlName="circleMemberSearch">
               <!-- Search clear button -->
               <button mat-button mat-icon-button
                       (click)="clearSearch(formSearch.get('circleMemberSearch'), circleMembersInput)"
@@ -110,7 +122,15 @@
         </div>
         <!-- List of users (followers/members) -->
         <mat-list class="row no-gutters d-flex" [@onMembersLoaded]
-                  *ngIf="!searching && selectedCircle.members && selectedCircle.members.results.length">
+                  *ngIf="!searching && selectedCircle.members">
+          <!-- Add a person -->
+          <mat-list-item class="col-md-4 col-lg-3 col-xl-2" (click)="showFollowers()">
+            <fa-icon [icon]="faUserPlus" class="d-flex align-items-center justify-content-center mat-hint"
+                     mat-list-avatar></fa-icon>
+            <div mat-line class="font-weight-bold mat-hint" translate>ADD_A_PERSON</div>
+            <div mat-line></div>
+          </mat-list-item>
+
           <!-- Member -->
           <mat-list-item class="col-md-4 col-lg-3 col-xl-2"
                          *ngFor="let member of selectedCircle.members.results; let last = last; let index = index"
@@ -135,12 +155,17 @@
             <fa-icon [icon]="faCheck" class="ml-3 selected-icon"></fa-icon>
           </mat-list-item>
         </mat-list>
+        <!-- Nothing text -->
+        <p *ngIf="!searching && !selectedCircle.members.results.length" class="mat-hint text-center">
+          <span *ngIf="membersQuery" translate>NO_MEMBERS_FOUND</span>
+          <span *ngIf="!membersQuery" translate>CIRCLE_EMPTY_MESSAGE</span>
+        </p>
       </div>
     </ng-template>
   </div>
   <!-- Circle help -->
   <div class="circles-help text-center">
-    Drag people to your circles to share
+    {{ 'DRAG_PEOPLE_TO_CIRCLES' | translate }}
     <fa-icon [icon]="faUserFriends" class="ml-3"></fa-icon>
   </div>
   <!-- circles -->
@@ -153,9 +178,7 @@
            (dragover)="$event.preventDefault()"
            (click)="showCircleCreateDialog()" [class.drag-started]="dragStarted">
         <fa-icon [icon]="faPlus" size="3x"></fa-icon>
-        <div class="helper-text text-center mat-hint">
-          Drop or click to <br> create circle
-        </div>
+        <div class="helper-text text-center mat-hint" [innerHTML]="'DROP_OR_CLICK_TO_CREATE_CIRCLE' | translate"></div>
       </div>
     </div>
     <div class="outer" *ngFor="let circle of circles">
@@ -180,7 +203,7 @@
           <ng-template [ngIf]="circlesData[circle.id].hovered">
             <div class="members" [@scaleIn]="circlesData[circle.id].members.length">
               <app-user-avatar class="circle-member" [media]="member.user.media"
-                               [name]="member.user.name"
+                               [name]="member.user.name" [size]="40"
                                *ngFor="let member of circlesData[circle.id].members | slice:0:32">
               </app-user-avatar>
             </div>
@@ -188,11 +211,13 @@
         </div>
         <div class="d-inline-block circle-options">
           <!-- Delete circle -->
-          <button mat-icon-button matTooltip="Delete circle" (click)="showDeleteCircleDialog(circle)">
+          <button mat-button mat-icon-button [matTooltip]="'DELETE_CIRCLE' | translate"
+                  (click)="showDeleteCircleDialog(circle)">
             <fa-icon [icon]="faDelete"></fa-icon>
           </button>
           <!-- Edit circle -->
-          <button mat-icon-button matTooltip="Edit circle" (click)="showCircleEditDialog(circle)">
+          <button mat-button mat-icon-button [matTooltip]="'EDIT_CIRCLE' | translate"
+                  (click)="showCircleEditDialog(circle)">
             <fa-icon [icon]="faEdit"></fa-icon>
           </button>
         </div>
