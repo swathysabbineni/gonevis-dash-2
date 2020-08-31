@@ -6,10 +6,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CircleService } from '@app/components/dash/circle/circle.service';
 import { ApiResponse } from '@app/interfaces/api-response';
 import { ReactiveFormData } from '@app/interfaces/reactive-form-data';
-import { Circle } from '@app/interfaces/v1/circle';
 import { CircleMin } from '@app/interfaces/v1/circle-min';
 import { Subscriber } from '@app/interfaces/v1/subscriber';
-import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
 import { UtilService } from '@app/services/util/util.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
@@ -17,13 +15,11 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
-import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, forkJoin } from 'rxjs';
 import { CircleCreateDialogComponent } from 'src/app/components/dash/circle/circle-create-dialog/circle-create-dialog.component';
 import { CircleEditDialogComponent } from 'src/app/components/dash/circle/circle-edit-dialog/circle-edit-dialog.component';
@@ -165,7 +161,6 @@ export class CircleComponent implements OnInit {
   readonly faDelete: IconDefinition = faTrash;
   readonly faBack: IconDefinition = faArrowLeft;
   readonly faEdit: IconDefinition = faPencilAlt;
-  readonly faCircles: IconDefinition = faSpinner;
   readonly faPlus: IconDefinition = faPlus;
   readonly faUser: IconDefinition = faUser;
   readonly faUserPlus: IconDefinition = faUserPlus;
@@ -173,8 +168,6 @@ export class CircleComponent implements OnInit {
   readonly faCheck: IconDefinition = faCheck;
   readonly faSearch: IconDefinition = faSearch;
   readonly faTimes: IconDefinition = faTimes;
-
-  triggerIt: boolean;
 
   /**
    * Get template reference responsible for holding drag preview.
@@ -185,11 +178,6 @@ export class CircleComponent implements OnInit {
    * Selection model is a class which will select/deselect items and other functionalities.
    */
   selection: SelectionModel<Subscriber> = new SelectionModel<Subscriber>(true, []);
-
-  /**
-   * Info banner visibility
-   */
-  infoBannerDismissed: boolean;
 
   /**
    * List of blog circles
@@ -222,20 +210,14 @@ export class CircleComponent implements OnInit {
   circlesWithMember: string[] = [];
 
   /**
-   * Determines whether or not the user is editing a circle.
-   * If `true` it will show a form for editing a circle.
-   */
-  isEditing: boolean;
-
-  /**
-   * Determines whether or not we are saving circle changes.
-   */
-  savingCircle: boolean;
-
-  /**
    * Loading indicator for getting a single circle.
    */
   loading: boolean;
+
+  /**
+   * Determines whether the circles has been initialized.
+   */
+  initialized: boolean;
 
   /**
    * Loading indicator for searching.
@@ -251,11 +233,6 @@ export class CircleComponent implements OnInit {
    * Search form
    */
   formSearch: FormGroup;
-
-  /**
-   * Form being used to edit a single circle.
-   */
-  circleForm: FormGroup;
 
   /**
    * Available circle members
@@ -286,8 +263,7 @@ export class CircleComponent implements OnInit {
               private changeDetectorRef: ChangeDetectorRef,
               private circleService: CircleService,
               private formBuilder: FormBuilder,
-              private dialog: MatDialog,
-              private translate: TranslateService) {
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -308,16 +284,10 @@ export class CircleComponent implements OnInit {
       circleMemberSearch: [''],
     });
     /**
-     * Setup circle form
-     */
-    this.circleForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      description: [''],
-    });
-    /**
      * Load the circles
      */
     this.circleService.list().subscribe((data: ApiResponse<CircleMin>): void => {
+      this.initialized = true;
       this.circles = data.results;
       /**
        * Load circle members
@@ -349,10 +319,14 @@ export class CircleComponent implements OnInit {
 
   /**
    * Get list of followers.
+   *
+   * @param search Get followers based on given text.
    */
-  getFollowersList(search: string = '') {
+  getFollowersList(search: string = ''): void {
+    // Clear selection list.
     this.selection.clear();
     this.searching = true;
+    // Update followers query text to show a message if API returned empty list.
     this.followersQuery = search;
     this.circleService.getAvailableMembers(search).subscribe((data: ApiResponse<Subscriber>): void => {
       this.availableCircleMembers = data.results;
@@ -430,6 +404,11 @@ export class CircleComponent implements OnInit {
     });
   }
 
+  /**
+   * When dragged users are dropped on add circle button.
+   *
+   * @param event Used for checking if dragged elements are carrying data and to indicate drop zones.
+   */
   onAddMemberDrop(event: DragEvent): void {
     const selected: Subscriber[] = this.selection.selected;
     // Break code if dropped item doesn't have an ID, it means it's not a user.
@@ -529,6 +508,12 @@ export class CircleComponent implements OnInit {
     return this.circlesData[circleId].members.some(member => member.id === memberId);
   }
 
+  /**
+   * When dragging members, show an element next to the cursor that shows how many
+   * people user is dragging currently.
+   *
+   * @param event Used to position an element next to the cursor position.
+   */
   onMemberDragging(event: DragEvent): void {
     const element = this.dragPreviewTemplateRef.nativeElement;
     element.style.left = `${event.pageX + 10}px`;
@@ -641,40 +626,13 @@ export class CircleComponent implements OnInit {
   }
 
   /**
-   * Submit form
-   */
-  submit(): void {
-    this.form.loading = true;
-    this.circleService.create(this.form.form.value).subscribe((data: Circle): void => {
-      this.circles.push({
-        id: data.id,
-        name: data.name,
-        description: data.description,
-      });
-      this.circlesData[data.id] = {
-        membersCount: 0,
-        members: [],
-        hovered: false,
-        inDetail: false,
-        added: {
-          count: 0,
-          showInfo: false,
-        },
-      };
-      this.form.form.reset();
-      this.form.loading = false;
-      this.form.error = {};
-    }, (data: HttpErrorResponseApi): void => {
-      this.form.loading = false;
-      this.form.error = data.error;
-    });
-  }
-
-  /**
-   * Delete a circle
+   * Delete a circle.
+   *
+   * @param circle Circle to remove.
    */
   delete(circle: CircleMin): void {
     this.loading = true;
+    this.lastSelection = null;
     this.circleService.delete(circle.id).subscribe((): void => {
       this.loading = false;
       this.formSearch.get('search').setValue('');
@@ -698,8 +656,8 @@ export class CircleComponent implements OnInit {
    * View a circle.
    */
   viewCircle(circle: CircleMin): void {
-    this.cancelEdit();
     this.selection.clear();
+    this.lastSelection = null;
     this.loading = true;
     this.selectedCircle.circle = circle;
     this.formSearch.get('circleMemberSearch').setValue('');
@@ -714,10 +672,11 @@ export class CircleComponent implements OnInit {
   /**
    * Search circle members.
    *
-   * @param search Search text
+   * @param search Get circle members based on given text.
    */
   searchCircleMembers(search: string = ''): void {
     this.searching = true;
+    // Update members query text to show a message if API returned empty list.
     this.membersQuery = search;
     this.circleService.getMembers(this.selectedCircle.circle.id, {
       search,
@@ -727,59 +686,6 @@ export class CircleComponent implements OnInit {
     }, (): void => {
       this.searching = false;
     });
-  }
-
-  /**
-   * Being used to show editing form for circle.
-   */
-  startEditingCircle(): void {
-    this.circleForm.patchValue({
-      name: this.selectedCircle.circle.name,
-      description: this.selectedCircle.circle.description,
-    });
-    this.isEditing = true;
-  }
-
-  /**
-   * Cancel editing a circle and reset {@link circleForm circle form}.
-   */
-  cancelEdit(): void {
-    this.circleForm.reset();
-    this.isEditing = false;
-  }
-
-  /**
-   * Update selected circle
-   */
-  updateCircle(): void {
-    // Prevent API call if form was invalid.
-    if (this.circleForm.invalid) {
-      return;
-    }
-    this.savingCircle = true;
-    this.circleService.update(this.selectedCircle.circle.id, this.circleForm.value)
-      .subscribe((data: CircleMin): void => {
-        this.cancelEdit();
-        // Find circle in the list and update its properties.
-        const circle: CircleMin = this.circles.find((circleMin: CircleMin): boolean => {
-          return circleMin.id === this.selectedCircle.circle.id;
-        });
-        if (circle) {
-          circle.name = data.name;
-          circle.description = data.description;
-        }
-        this.savingCircle = false;
-      }, (): void => {
-        this.savingCircle = false;
-      });
-  }
-
-  /**
-   * Dismiss info banner and detect changes to update UI on time.
-   */
-  dismissInfoBanner(): void {
-    this.infoBannerDismissed = true;
-    this.changeDetectorRef.detectChanges();
   }
 
   /**
@@ -914,6 +820,7 @@ export class CircleComponent implements OnInit {
     this.selection.selected.forEach((member: Subscriber): void => {
       this.removeMember(member.id);
     });
+    this.lastSelection = null;
     this.selection.clear();
   }
 

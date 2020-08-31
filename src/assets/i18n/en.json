@@ -488,5 +488,8 @@
   "DROP_OR_CLICK_TO_CREATE_CIRCLE": "Drop or click to <br> create circle",
   "DRAG_PEOPLE_TO_CIRCLES": "Drag people to your circles to add",
   "DELETE_CIRCLE": "Delete circle",
+  "CIRCLES_TITLE_INFORMATION": "Decide who to share with!",
+  "CIRCLES_DESCRIPTION_INFORMATION": "Circles allows you to share the content exclusively only for a group of selected people.",
+  "CREATE_A_CIRCLE": "Create a Circle",
   "COLLABORATING": "Collaborating"
 }

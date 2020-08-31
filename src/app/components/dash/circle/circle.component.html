@@ -1,236 +1,255 @@
 <div class="d-flex flex-column h-100 mat-app-background">
-  <!-- Users -->
-  <div class="users-container p-3" (click)="onUsersContainerClick($event)">
-    <ng-template [ngIf]="!loading && !selectedCircle.circle">
-      <div class="d-flex flex-column" [@onCircleChange]>
-        <!-- Title -->
-        <h3 class="text-center mb-3" translate>FOLLOWERS</h3>
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <!-- Search form -->
-          <form class="search-form align-self-center" [formGroup]="formSearch"
-                (ngSubmit)="getFollowersList(this.formSearch.value.search)">
-            <div class="position-relative">
-              <!-- Search button -->
-              <button mat-button mat-icon-button [disabled]="searching"
-                      class="d-flex justify-content-center align-items-center search-icon">
-                <!-- Icon -->
-                <fa-icon class="d-block" [icon]="faSearch" *ngIf="!searching" [@onSearch]></fa-icon>
-                <!-- Spinner -->
-                <span class="search-loading-indicator">
-                  <mat-progress-spinner [diameter]="18" [strokeWidth]="2" mode="indeterminate" *ngIf="searching"
-                                        [@onSearch]></mat-progress-spinner>
-                </span>
-              </button>
-              <!-- Search input -->
-              <input type="text" class="form-control" [class.has-value]="formSearch.get('search').value"
-                     #availableMembersInput
-                     [placeholder]="'SEARCH_FOLLOWERS' | translate" formControlName="search">
-              <!-- Search clear button -->
-              <button mat-button mat-icon-button
-                      (click)="clearSearch(formSearch.get('search'), availableMembersInput)"
-                      type="button"
-                      [hidden]="!formSearch.get('search').value">
-                <fa-icon [icon]="faTimes"></fa-icon>
-              </button>
-            </div>
-          </form>
-        </div>
-        <!-- List of users (followers/members) -->
-        <mat-list class="row no-gutters d-flex" *ngIf="!searching && availableCircleMembers.length" [@onMembersLoaded]>
-          <!-- Member -->
-          <mat-list-item class="mb-3 mr-3 col-md-4 col-lg-3 col-xl-2"
-                         *ngFor="let member of availableCircleMembers; let last = last; let index = index"
-                         (click)="handleMemberClick($event, member, availableCircleMembers, index)"
-                         [class.selected]="selection.isSelected(member)"
-                         [class.dragging-selected]="dragStarted && selection.isSelected(member)"
-                         [draggable]="true"
-                         (dragstart)="onMemberDragStart($event, member)"
-                         (drag)="onMemberDragging($event)"
-                         (dragend)="dragStarted = false"
-                         (mouseenter)="onMemberHover(member.id)"
-                         (mouseleave)="circlesWithMember = []">
-            <!-- Avatar -->
-            <app-user-avatar mat-list-avatar
-                             [media]="member.user.media"
-                             [name]="member.user.name" size="40"></app-user-avatar>
-            <!-- Username -->
-            <div mat-line class="font-weight-bold">{{member.user.username}}</div>
-            <!-- Name -->
-            <div mat-line class="mat-hint">{{member.user.name}}</div>
-            <!-- Selected indicator -->
-            <fa-icon [icon]="faCheck" class="ml-3 selected-icon"></fa-icon>
-          </mat-list-item>
-        </mat-list>
-        <!-- Nothing text -->
-        <p *ngIf="!searching && !availableCircleMembers.length" class="mat-hint text-center">
-          <span *ngIf="followersQuery" translate>NO_FOLLOWERS_FOUND</span>
-          <span *ngIf="!followersQuery" translate>YOU_DONT_HAVE_ANY_FOLLOWERS</span>
-        </p>
-      </div>
-    </ng-template>
-    <!-- Loading indicator -->
-    <ng-template [ngIf]="loading">
-      <div class="d-flex align-items-center justify-content-center loading-indicator">
-        <mat-progress-spinner [diameter]="30" [strokeWidth]="3" mode="indeterminate"></mat-progress-spinner>
-      </div>
-    </ng-template>
-    <!-- Circle detail -->
-    <ng-template [ngIf]="!loading && selectedCircle.circle">
-      <div class="d-flex flex-column" [@onCircleChange]>
-        <h3 class="d-flex align-items-center justify-content-center mb-3">
-          <button mat-icon-button mat-button class="mr-2" (click)="showFollowers()"
-                  [matTooltip]="'BACK_TO_FOLLOWERS_LIST' | translate"
-                  matTooltipShowDelay="400">
-            <fa-icon [icon]="faBack"></fa-icon>
-          </button>
-          {{ selectedCircle.circle.name }}
-        </h3>
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <!-- Delete selected members -->
-          <button mat-icon-button mat-button color="warn" [@onReveal] *ngIf="selection.hasValue()"
-                  (click)="removeSelectedMembers()">
-            <fa-icon [icon]="faDelete"></fa-icon>
-          </button>
-          <!-- Search form -->
-          <form class="search-form align-self-center" [formGroup]="formSearch"
-                (ngSubmit)="searchCircleMembers(this.formSearch.get('circleMemberSearch').value)">
-            <div class="position-relative">
-              <!-- Search button -->
-              <button mat-button mat-icon-button [disabled]="searching"
-                      class="d-flex justify-content-center align-items-center search-icon">
-                <!-- Icon -->
-                <fa-icon class="d-block" [icon]="faSearch" *ngIf="!searching" [@onSearch]></fa-icon>
-                <!-- Spinner -->
-                <span class="search-loading-indicator">
-                  <mat-progress-spinner [diameter]="18" [strokeWidth]="2" mode="indeterminate" *ngIf="searching"
-                                        [@onSearch]></mat-progress-spinner>
-                </span>
-              </button>
-              <!-- Search input -->
-              <input type="text" class="form-control" [class.has-value]="formSearch.get('circleMemberSearch').value"
-                     #circleMembersInput
-                     [placeholder]="'SEARCH_CIRCLE_MEMBERS' | translate" formControlName="circleMemberSearch">
-              <!-- Search clear button -->
-              <button mat-button mat-icon-button
-                      (click)="clearSearch(formSearch.get('circleMemberSearch'), circleMembersInput)"
-                      type="button"
-                      [hidden]="!formSearch.get('circleMemberSearch').value">
-                <fa-icon [icon]="faTimes"></fa-icon>
-              </button>
-            </div>
-          </form>
-        </div>
-        <!-- List of users (followers/members) -->
-        <mat-list class="row no-gutters d-flex" [@onMembersLoaded]
-                  *ngIf="!searching && selectedCircle.members">
-          <!-- Add a person -->
-          <mat-list-item class="col-md-4 col-lg-3 col-xl-2" (click)="showFollowers()">
-            <fa-icon [icon]="faUserPlus" class="d-flex align-items-center justify-content-center mat-hint"
-                     mat-list-avatar></fa-icon>
-            <div mat-line class="font-weight-bold mat-hint" translate>ADD_A_PERSON</div>
-            <div mat-line></div>
-          </mat-list-item>
+  <!-- When there are circles -->
+  <ng-template [ngIf]="initialized && circles && circles.length">
 
-          <!-- Member -->
-          <mat-list-item class="col-md-4 col-lg-3 col-xl-2"
-                         *ngFor="let member of selectedCircle.members.results; let last = last; let index = index"
-                         (click)="handleMemberClick($event, member, selectedCircle.members.results, index)"
-                         [class.selected]="selection.isSelected(member)"
-                         [class.dragging-selected]="dragStarted && selection.isSelected(member)"
-                         [draggable]="true"
-                         (dragstart)="onMemberDragStart($event, member)"
-                         (drag)="onMemberDragging($event)"
-                         (dragend)="dragStarted = false"
-                         (mouseenter)="onMemberHover(member.id)"
-                         (mouseleave)="circlesWithMember = []" [@onMemberRemove]>
-            <!-- Avatar -->
-            <app-user-avatar mat-list-avatar
-                             [media]="member.user.media"
-                             [name]="member.user.name" size="40"></app-user-avatar>
-            <!-- Username -->
-            <div mat-line class="font-weight-bold">{{member.user.username}}</div>
+    <!-- Users -->
+    <div class="users-container p-3" (click)="onUsersContainerClick($event)">
+      <ng-template [ngIf]="!loading && !selectedCircle.circle">
+        <div class="d-flex flex-column" [@onCircleChange]>
+          <!-- Title -->
+          <h3 class="text-center mb-3" translate>FOLLOWERS</h3>
+          <div class="d-flex align-items-center justify-content-center mb-3">
+            <!-- Search form -->
+            <form class="search-form align-self-center" [formGroup]="formSearch"
+                  (ngSubmit)="getFollowersList(this.formSearch.value.search)">
+              <div class="position-relative">
+                <!-- Search button -->
+                <button mat-button mat-icon-button [disabled]="searching"
+                        class="d-flex justify-content-center align-items-center search-icon">
+                  <!-- Icon -->
+                  <fa-icon class="d-block" [icon]="faSearch" *ngIf="!searching" [@onSearch]></fa-icon>
+                  <!-- Spinner -->
+                  <span class="search-loading-indicator">
+                  <mat-progress-spinner [diameter]="18" [strokeWidth]="2" mode="indeterminate" *ngIf="searching"
+                                        [@onSearch]></mat-progress-spinner>
+                </span>
+                </button>
+                <!-- Search input -->
+                <input type="text" class="form-control" [class.has-value]="formSearch.get('search').value"
+                       #availableMembersInput
+                       [placeholder]="'SEARCH_FOLLOWERS' | translate" formControlName="search">
+                <!-- Search clear button -->
+                <button mat-button mat-icon-button
+                        (click)="clearSearch(formSearch.get('search'), availableMembersInput)"
+                        type="button"
+                        [hidden]="!formSearch.get('search').value">
+                  <fa-icon [icon]="faTimes"></fa-icon>
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- List of users (followers/members) -->
+          <mat-list class="row no-gutters d-flex" *ngIf="!searching && availableCircleMembers.length" [@onMembersLoaded]>
+            <!-- Member -->
+            <mat-list-item class="mb-3 mr-3 col-md-4 col-lg-3 col-xl-2"
+                           *ngFor="let member of availableCircleMembers; let last = last; let index = index"
+                           (click)="handleMemberClick($event, member, availableCircleMembers, index)"
+                           [class.selected]="selection.isSelected(member)"
+                           [class.dragging-selected]="dragStarted && selection.isSelected(member)"
+                           [draggable]="true"
+                           (dragstart)="onMemberDragStart($event, member)"
+                           (drag)="onMemberDragging($event)"
+                           (dragend)="dragStarted = false"
+                           (mouseenter)="onMemberHover(member.id)"
+                           (mouseleave)="circlesWithMember = []">
+              <!-- Avatar -->
+              <app-user-avatar mat-list-avatar
+                               [media]="member.user.media"
+                               [name]="member.user.name" size="40"></app-user-avatar>
+              <!-- Username -->
+              <div mat-line class="font-weight-bold">{{member.user.username}}</div>
+              <!-- Name -->
+              <div mat-line class="mat-hint">{{member.user.name}}</div>
+              <!-- Selected indicator -->
+              <fa-icon [icon]="faCheck" class="ml-3 selected-icon"></fa-icon>
+            </mat-list-item>
+          </mat-list>
+          <!-- Nothing text -->
+          <p *ngIf="!searching && !availableCircleMembers.length" class="mat-hint text-center">
+            <span *ngIf="followersQuery" translate>NO_FOLLOWERS_FOUND</span>
+            <span *ngIf="!followersQuery" translate>YOU_DONT_HAVE_ANY_FOLLOWERS</span>
+          </p>
+        </div>
+      </ng-template>
+      <!-- Loading indicator -->
+      <ng-template [ngIf]="loading">
+        <div class="d-flex align-items-center justify-content-center loading-indicator">
+          <mat-progress-spinner [diameter]="30" [strokeWidth]="3" mode="indeterminate"></mat-progress-spinner>
+        </div>
+      </ng-template>
+      <!-- Circle detail -->
+      <ng-template [ngIf]="!loading && selectedCircle.circle">
+        <div class="d-flex flex-column" [@onCircleChange]>
+          <h3 class="d-flex align-items-center justify-content-center mb-3">
+            <button mat-icon-button mat-button class="mr-2" (click)="showFollowers()"
+                    [matTooltip]="'BACK_TO_FOLLOWERS_LIST' | translate"
+                    matTooltipShowDelay="400">
+              <fa-icon [icon]="faBack"></fa-icon>
+            </button>
+            {{ selectedCircle.circle.name }}
+          </h3>
+          <div class="d-flex align-items-center justify-content-center mb-3">
+            <!-- Delete selected members -->
+            <button mat-icon-button mat-button color="warn" [@onReveal] *ngIf="selection.hasValue()"
+                    (click)="removeSelectedMembers()">
+              <fa-icon [icon]="faDelete"></fa-icon>
+            </button>
+            <!-- Search form -->
+            <form class="search-form align-self-center" [formGroup]="formSearch"
+                  (ngSubmit)="searchCircleMembers(this.formSearch.get('circleMemberSearch').value)">
+              <div class="position-relative">
+                <!-- Search button -->
+                <button mat-button mat-icon-button [disabled]="searching"
+                        class="d-flex justify-content-center align-items-center search-icon">
+                  <!-- Icon -->
+                  <fa-icon class="d-block" [icon]="faSearch" *ngIf="!searching" [@onSearch]></fa-icon>
+                  <!-- Spinner -->
+                  <span class="search-loading-indicator">
+                  <mat-progress-spinner [diameter]="18" [strokeWidth]="2" mode="indeterminate" *ngIf="searching"
+                                        [@onSearch]></mat-progress-spinner>
+                </span>
+                </button>
+                <!-- Search input -->
+                <input type="text" class="form-control" [class.has-value]="formSearch.get('circleMemberSearch').value"
+                       #circleMembersInput
+                       [placeholder]="'SEARCH_CIRCLE_MEMBERS' | translate" formControlName="circleMemberSearch">
+                <!-- Search clear button -->
+                <button mat-button mat-icon-button
+                        (click)="clearSearch(formSearch.get('circleMemberSearch'), circleMembersInput)"
+                        type="button"
+                        [hidden]="!formSearch.get('circleMemberSearch').value">
+                  <fa-icon [icon]="faTimes"></fa-icon>
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- List of users (followers/members) -->
+          <mat-list class="row no-gutters d-flex" [@onMembersLoaded]
+                    *ngIf="!searching && selectedCircle.members">
+            <!-- Add a person -->
+            <mat-list-item class="col-md-4 col-lg-3 col-xl-2" (click)="showFollowers()">
+              <fa-icon [icon]="faUserPlus" class="d-flex align-items-center justify-content-center mat-hint"
+                       mat-list-avatar></fa-icon>
+              <div mat-line class="font-weight-bold mat-hint" translate>ADD_A_PERSON</div>
+              <div mat-line></div>
+            </mat-list-item>
+
+            <!-- Member -->
+            <mat-list-item class="col-md-4 col-lg-3 col-xl-2"
+                           *ngFor="let member of selectedCircle.members.results; let last = last; let index = index"
+                           (click)="handleMemberClick($event, member, selectedCircle.members.results, index)"
+                           [class.selected]="selection.isSelected(member)"
+                           [class.dragging-selected]="dragStarted && selection.isSelected(member)"
+                           [draggable]="true"
+                           (dragstart)="onMemberDragStart($event, member)"
+                           (drag)="onMemberDragging($event)"
+                           (dragend)="dragStarted = false"
+                           (mouseenter)="onMemberHover(member.id)"
+                           (mouseleave)="circlesWithMember = []" [@onMemberRemove]>
+              <!-- Avatar -->
+              <app-user-avatar mat-list-avatar
+                               [media]="member.user.media"
+                               [name]="member.user.name" size="40"></app-user-avatar>
+              <!-- Username -->
+              <div mat-line class="font-weight-bold">{{member.user.username}}</div>
+              <!-- Name -->
+              <div mat-line class="mat-hint">{{member.user.name}}</div>
+              <!-- Selected indicator -->
+              <fa-icon [icon]="faCheck" class="ml-3 selected-icon"></fa-icon>
+            </mat-list-item>
+          </mat-list>
+          <!-- Nothing text -->
+          <p *ngIf="!searching && !selectedCircle.members.results.length" class="mat-hint text-center">
+            <span *ngIf="membersQuery" translate>NO_MEMBERS_FOUND</span>
+            <span *ngIf="!membersQuery" translate>CIRCLE_EMPTY_MESSAGE</span>
+          </p>
+        </div>
+      </ng-template>
+    </div>
+    <!-- Circle help -->
+    <div class="circles-help text-center">
+      {{ 'DRAG_PEOPLE_TO_CIRCLES' | translate }}
+      <fa-icon [icon]="faUserFriends" class="ml-3"></fa-icon>
+    </div>
+    <!-- circles -->
+    <div class="circles-container py-2" [@onCircleListChange]="circles.length" *ngIf="circles">
+      <div class="d-flex flex-column circle-creator-button outer">
+        <div class="inner drop-zone" matRipple
+             (drop)="onAddMemberDrop($event)"
+             (dragenter)="circleDragIndicator($event, true, null)"
+             (dragleave)="circleDragIndicator($event, false, null)"
+             (dragover)="$event.preventDefault()"
+             (click)="showCircleCreateDialog()" [class.drag-started]="dragStarted">
+          <fa-icon [icon]="faPlus" size="3x"></fa-icon>
+          <div class="helper-text text-center mat-hint" [innerHTML]="'DROP_OR_CLICK_TO_CREATE_CIRCLE' | translate"></div>
+        </div>
+      </div>
+      <div class="outer" *ngFor="let circle of circles">
+        <div class="d-flex flex-column drop-zone inner"
+             (drop)="onCircleDrop($event, circle)"
+             (dragenter)="circleDragIndicator($event, true, circle.id)"
+             (dragleave)="circleDragIndicator($event, false, circle.id)"
+             (dragover)="$event.preventDefault()"
+             (mouseenter)="circlesData[circle.id].hovered = true"
+             (mouseleave)="circlesData[circle.id].hovered = false"
+             [class.drag-started]="dragStarted && (!selectedCircle.circle || selectedCircle.circle.id !== circle.id)"
+             [class.member-exists]="!dragStarted && circlesWithMember.includes(circle.id)"
+             [class.selected]="selectedCircle.circle && selectedCircle.circle.id === circle.id"
+             [class.hovered]="circlesData[circle.id].hovered">
+          <div class="d-flex flex-column w-100 h-100 align-items-center justify-content-center content"
+               (click)="viewCircle(circle)">
             <!-- Name -->
-            <div mat-line class="mat-hint">{{member.user.name}}</div>
-            <!-- Selected indicator -->
-            <fa-icon [icon]="faCheck" class="ml-3 selected-icon"></fa-icon>
-          </mat-list-item>
-        </mat-list>
-        <!-- Nothing text -->
-        <p *ngIf="!searching && !selectedCircle.members.results.length" class="mat-hint text-center">
-          <span *ngIf="membersQuery" translate>NO_MEMBERS_FOUND</span>
-          <span *ngIf="!membersQuery" translate>CIRCLE_EMPTY_MESSAGE</span>
-        </p>
-      </div>
-    </ng-template>
-  </div>
-  <!-- Circle help -->
-  <div class="circles-help text-center">
-    {{ 'DRAG_PEOPLE_TO_CIRCLES' | translate }}
-    <fa-icon [icon]="faUserFriends" class="ml-3"></fa-icon>
-  </div>
-  <!-- circles -->
-  <div class="circles-container py-2" [@onCircleListChange]="circles.length" *ngIf="circles">
-    <div class="d-flex flex-column circle-creator-button outer">
-      <div class="inner drop-zone" matRipple
-           (drop)="onAddMemberDrop($event)"
-           (dragenter)="circleDragIndicator($event, true, null)"
-           (dragleave)="circleDragIndicator($event, false, null)"
-           (dragover)="$event.preventDefault()"
-           (click)="showCircleCreateDialog()" [class.drag-started]="dragStarted">
-        <fa-icon [icon]="faPlus" size="3x"></fa-icon>
-        <div class="helper-text text-center mat-hint" [innerHTML]="'DROP_OR_CLICK_TO_CREATE_CIRCLE' | translate"></div>
+            <span class="font-weight-bold text-truncate px-3 w-100 text-center">{{ circle.name }}</span>
+            <!-- Members count -->
+            <span class="mat-hint">{{ circlesData[circle.id].membersCount }}</span>
+            <!-- Members -->
+            <ng-template [ngIf]="circlesData[circle.id].hovered">
+              <div class="members" [@scaleIn]="circlesData[circle.id].members.length">
+                <app-user-avatar class="circle-member" [media]="member.user.media"
+                                 [name]="member.user.name" [size]="40"
+                                 *ngFor="let member of circlesData[circle.id].members | slice:0:32">
+                </app-user-avatar>
+              </div>
+            </ng-template>
+          </div>
+          <div class="d-inline-block circle-options">
+            <!-- Delete circle -->
+            <button mat-button mat-icon-button [matTooltip]="'DELETE_CIRCLE' | translate"
+                    (click)="showDeleteCircleDialog(circle)">
+              <fa-icon [icon]="faDelete"></fa-icon>
+            </button>
+            <!-- Edit circle -->
+            <button mat-button mat-icon-button [matTooltip]="'EDIT_CIRCLE' | translate"
+                    (click)="showCircleEditDialog(circle)">
+              <fa-icon [icon]="faEdit"></fa-icon>
+            </button>
+          </div>
+          <!-- Add animation -->
+          <div class="added-information" [@onMemberAdd]
+               (@onMemberAdd.done)="circlesData[circle.id].added.showInfo = false"
+               *ngIf="circlesData[circle.id].added.showInfo">+{{ circlesData[circle.id].added.count }}</div>
+        </div>
       </div>
     </div>
-    <div class="outer" *ngFor="let circle of circles">
-      <div class="d-flex flex-column drop-zone inner"
-           (drop)="onCircleDrop($event, circle)"
-           (dragenter)="circleDragIndicator($event, true, circle.id)"
-           (dragleave)="circleDragIndicator($event, false, circle.id)"
-           (dragover)="$event.preventDefault()"
-           (mouseenter)="circlesData[circle.id].hovered = true"
-           (mouseleave)="circlesData[circle.id].hovered = false"
-           [class.drag-started]="dragStarted && (!selectedCircle.circle || selectedCircle.circle.id !== circle.id)"
-           [class.member-exists]="!dragStarted && circlesWithMember.includes(circle.id)"
-           [class.selected]="selectedCircle.circle && selectedCircle.circle.id === circle.id"
-           [class.hovered]="circlesData[circle.id].hovered">
-        <div class="d-flex flex-column w-100 h-100 align-items-center justify-content-center content"
-             (click)="viewCircle(circle)">
-          <!-- Name -->
-          <span class="font-weight-bold text-truncate px-3 w-100 text-center">{{ circle.name }}</span>
-          <!-- Members count -->
-          <span class="mat-hint">{{ circlesData[circle.id].membersCount }}</span>
-          <!-- Members -->
-          <ng-template [ngIf]="circlesData[circle.id].hovered">
-            <div class="members" [@scaleIn]="circlesData[circle.id].members.length">
-              <app-user-avatar class="circle-member" [media]="member.user.media"
-                               [name]="member.user.name" [size]="40"
-                               *ngFor="let member of circlesData[circle.id].members | slice:0:32">
-              </app-user-avatar>
-            </div>
-          </ng-template>
-        </div>
-        <div class="d-inline-block circle-options">
-          <!-- Delete circle -->
-          <button mat-button mat-icon-button [matTooltip]="'DELETE_CIRCLE' | translate"
-                  (click)="showDeleteCircleDialog(circle)">
-            <fa-icon [icon]="faDelete"></fa-icon>
-          </button>
-          <!-- Edit circle -->
-          <button mat-button mat-icon-button [matTooltip]="'EDIT_CIRCLE' | translate"
-                  (click)="showCircleEditDialog(circle)">
-            <fa-icon [icon]="faEdit"></fa-icon>
-          </button>
-        </div>
-        <!-- Add animation -->
-        <div class="added-information" [@onMemberAdd]
-             (@onMemberAdd.done)="circlesData[circle.id].added.showInfo = false"
-             *ngIf="circlesData[circle.id].added.showInfo">+{{ circlesData[circle.id].added.count }}</div>
-      </div>
+  </ng-template>
+  <!-- When there are no circles -->
+  <ng-template [ngIf]="initialized && circles && !circles.length">
+    <div class="d-flex flex-column align-items-center justify-content-center h-100">
+      <img src="assets/img/circles-empty.png" width="160px" alt="">
+      <h4 class="mt-4 mb-3" translate>CIRCLES_TITLE_INFORMATION</h4>
+      <p class="mat-hint" translate>CIRCLES_DESCRIPTION_INFORMATION</p>
+      <button class="btn btn-success" (click)="showCircleCreateDialog()" translate>CREATE_A_CIRCLE</button>
     </div>
-  </div>
+  </ng-template>
+  <!-- Loading indicator for circles -->
+  <ng-template [ngIf]="!initialized">
+    <div class="d-flex align-items-center justify-content-center loading-indicator h-100">
+      <mat-progress-spinner [diameter]="30" [strokeWidth]="3" mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </ng-template>
 </div>
 
-<!-- Link edit portal -->
+<!-- Drag preview information -->
 <div #dragPreviewTemplateRef class="drag-preview shadow" *ngIf="dragStarted">
   <fa-icon class="mr-2" [icon]="selection.selected.length === 1 ? faUser : faUserFriends"></fa-icon>
   Move {{ selection.selected.length }} people
