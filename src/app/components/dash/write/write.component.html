@@ -28,7 +28,8 @@
                   <!-- Draft -->
                   <ng-template [ngIf]="form.get('status').value === entryStatus.Draft">
                     {{ 'DRAFT' | translate }}
-                  </ng-template><fa-icon [icon]="faChevronDown" class="ml-auto" size="sm"></fa-icon>
+                  </ng-template>
+                  <fa-icon [icon]="faChevronDown" class="ml-auto" size="sm"></fa-icon>
                 </button>
                 <!-- Dropdown menu -->
                 <ul class="dropdown-menu" *dropdownMenu>
@@ -743,7 +744,7 @@
                         <div class="checkbox mt-3" [hidden]="data.isEmbed">
                           <div class="custom-control custom-checkbox">
                             <input #linkTarget type="checkbox" class="custom-control-input" id="open_in_new_tab"
-                                   [(ngModel)]="data.openInNewTab"  [ngModelOptions]="{standalone: true}" >
+                                   [(ngModel)]="data.openInNewTab" [ngModelOptions]="{standalone: true}">
                             <label class="custom-control-label" for="open_in_new_tab">Open in new tab</label>
                           </div>
                         </div>
@@ -764,8 +765,10 @@
                 <!-- Updated by -->
                 <div class="d-flex align-items-center mt-3" *ngIf="oldEntry.updated_by">
                   <!-- Updated by image -->
-                  <img [src]="oldEntry.updated_by.media.thumbnail_48x48" class="mr-2 rounded-circle" width="24"
-                       *ngIf="oldEntry.updated_by && oldEntry.updated_by.media.picture">
+                  <app-user-avatar [media]="oldEntry.updated_by.media"
+                                   [name]="oldEntry.updated_by.name"
+                                   size="24"
+                                   class="small mr-2"></app-user-avatar>
                   <!-- Updated by name -->
                   <span class="mat-small">{{ oldEntry.updated_by.name }}</span>
                   <!-- Update date -->

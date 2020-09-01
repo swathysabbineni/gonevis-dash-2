@@ -5,6 +5,7 @@ import { LoadingModule } from '@app/shared/loading/loading.module';
 import { PermissionAccessModule } from '@app/shared/permission-access/permission-access.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
+import { UserAvatarModule } from 'src/app/shared/user-avatar/user-avatar.module';
 
 import { TeamRoutingModule } from './team-routing.module';
 import { TeamComponent } from './team.component';
@@ -22,6 +23,7 @@ import { TeamComponent } from './team.component';
     TranslateModule.forChild(),
     LoadingModule,
     PermissionAccessModule,
+    UserAvatarModule,
   ],
 })
 export class TeamModule {

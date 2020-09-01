@@ -2,9 +2,7 @@
 <form class="card-header bg-light" [formGroup]="form" (ngSubmit)="submit()" *ngIf="canComment">
   <div class="media">
     <!-- Comment user (current user) -->
-    <img class="rounded-circle mr-3 bg-secondary" *ngIf="!user.media">
-    <img class="rounded-circle mr-3 bg-secondary" *ngIf="user.media"
-         [src]="user.media.thumbnail_48x48">
+    <app-user-avatar [name]="user.name" [media]="user.media" class="mr-3"></app-user-avatar>
     <!-- Comment input and button -->
     <div class="media-body">
       <div class="input-group">

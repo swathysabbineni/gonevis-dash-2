@@ -1,161 +1,15 @@
 @import "variables";
+@import "material/variables";
+@import "~@angular/material/button/button-base";
 
 $circle-border-width: 16px;
 $circle-member-size: 48px + $circle-border-width;
-
-.page {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-
-  > .circles {
-    overflow-y: auto;
-    height: 100%;
-    width: 100%;
-  }
-
-  > .followers {
-    height: 100%;
-    width: 340px;
-    background: $light;
-    flex-direction: column;
-    display: flex;
-    flex: 1 0 340px;
-    overflow-y: auto;
-
-    > .card {
-      margin-bottom: map_get($spacers, 2);
-      width: 100%;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      > .card-body {
-        > img {
-          width: 40px;
-          height: 40px;
-          flex-basis: 40px;
-          min-width: 40px;
-        }
-
-        > div > .text-truncate {
-          width: 160px;
-        }
-      }
-    }
-  }
-}
-
-.circle-wrapper {
-  width: 100%;
-  padding-bottom: 100%;
-
-  .circle {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .circle-info {
-      border: $circle-border-width solid $secondary;
-      width: 80%;
-      height: 80%;
-      border-radius: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: $gray-200;
-
-      .circle-name {
-        font-weight: bold;
-        font-size: $font-size-lg;
-        text-transform: uppercase;
-        color: $secondary;
-      }
-
-      .circle-members-count {
-        font-size: $font-size-lg * 2;
-        font-weight: bold;
-        color: lighten($primary, 5%);
-      }
-    }
-
-    .circle-members {
-      width: calc(80% + 48px);
-      height: calc(80% + 48px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-
-      .circle-member {
-        width: $circle-member-size;
-        height: $circle-member-size;
-        border: $circle-border-width / 2 solid $secondary;
-        border-radius: 100%;
-        position: absolute;
-        background-position: center;
-        background-size: cover;
-        background-color: $secondary;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-transform: uppercase;
-        color: white;
-        font-size: 2em;
-
-        &:nth-child(1) {
-          left: 5px;
-        }
-
-        &:nth-child(2) {
-          top: 0;
-          left: 0;
-          margin: calc(20% - #{$circle-member-size} / 2);
-        }
-
-        &:nth-child(3) {
-          top: 5px;
-        }
-
-        &:nth-child(4) {
-          top: 0;
-          right: 0;
-          margin: calc(20% - #{$circle-member-size} / 2);
-        }
-
-        &:nth-child(5) {
-          right: 5px;
-        }
-
-        &:nth-child(6) {
-          bottom: 0;
-          right: 0;
-          margin: calc(20% - #{$circle-member-size} / 2);
-        }
-
-        &:nth-child(7) {
-          bottom: 5px;
-        }
-
-        &:nth-child(8) {
-          bottom: 0;
-          left: 0;
-          margin: calc(20% - #{$circle-member-size} / 2);
-        }
-      }
-    }
-  }
-}
 
 .drop-zone {
   &::before {
     content: '';
     position: absolute;
+    border-radius: 50%;
     top: 0;
     left: 0;
     right: 0;
@@ -165,8 +19,375 @@ $circle-member-size: 48px + $circle-border-width;
   }
 
   &.drag-started {
+    border: 2px dashed mat-color($gonevis-primary);
+
     &::before {
       z-index: 1;
     }
+
+    &.drag-entered {
+      background: rgba(mat-color($gonevis-primary), 0.12) !important;
+      color: mat-color($gonevis-primary) !important;
+      width: 100% !important;
+      height: 100% !important;
+
+      .members .circle-member {
+        opacity: 1 !important;
+      }
+    }
   }
+}
+
+.users-container,
+.circles-container {
+  flex: 0 1 50%;
+  overflow: auto;
+
+  .card {
+    &.selected {
+      background: rgba(mat-color($gonevis-primary), 0.12);
+      color: mat-color($gonevis-primary) !important;
+    }
+  }
+}
+
+.users-container {
+  position: relative;
+
+  .loading-indicator {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+
+  .search-form {
+    width: 50%;
+    margin: 0 16px;
+
+    .search-icon {
+      fa-icon,
+      .search-loading-indicator {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        left: 0;
+      }
+
+      .search-loading-indicator {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        left: 0;
+      }
+    }
+
+    button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 6px;
+      color: mat-color($foreground, secondary-text);
+    }
+
+    button:last-child {
+      right: 6px;
+      left: unset;
+    }
+
+    .form-control {
+      border: none;
+      background-color: mat-color($background, 'hover', 0.08);
+      color: mat-color($foreground, text);
+      border-radius: 6px;
+      padding: 0 $mat-icon-button-size + 12px;
+      height: 48px;
+      font-weight: 700;
+      font-size: mat-font-size($config, body-1);
+      transition: all $mat-fast-out-slow-in-timing-function $swift-ease-in-duration;
+
+      &::placeholder {
+        color: mat-color($foreground, secondary-text);
+      }
+
+      &:focus,
+      &.has-value {
+        background: mat-color($background, card);
+        @include mat-elevation(2);
+      }
+    }
+  }
+}
+
+
+.mat-list-item {
+  background-color: mat-color($background, 'card');
+  border-radius: $mat-button-border-radius;
+  transition: background ($swift-ease-in-duration / 2) $mat-fast-out-slow-in-timing-function;
+  cursor: pointer;
+  margin-bottom: 16px;
+  margin-right: 16px;
+
+  &:hover {
+    background: mat-color($background, 'hover');
+  }
+
+  &:active {
+    background: mat-color($background, 'hover', 0.12);
+  }
+
+  &.selected {
+    background: mat-color($background, 'hover', 0.12);
+
+    .selected-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .selected-icon {
+    transition: all ($swift-ease-in-duration / 2) $mat-fast-out-slow-in-timing-function;
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  .remove-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    background: rgb(0 0 0 / .2);
+  }
+
+  .mat-list-avatar {
+    background-size: contain;
+    background-position: center;
+    border-radius: $mat-button-border-radius;
+  }
+}
+
+/// Mixin to place items on a circle
+/// @author Hugo Giraudel
+/// @author Ana Tudor
+/// @param {Integer} $item-count - Number of items on the circle
+/// @param {Length} $circle-size - Large circle size
+/// @param {Length} $item-size - Single item size
+@mixin on-circle($item-count, $circle-size, $item-size) {
+  position: absolute;
+  padding: 0;
+  border-radius: 50%;
+  list-style: none;
+
+  > * {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: $item-size;
+    height: $item-size;
+    margin: -($item-size / 2);
+
+    $angle: (360 / $item-count);
+    $rot: 270;
+
+    @for $i from 1 through $item-count {
+      &:nth-of-type(#{$i}) {
+        transform: rotate($rot * 1deg) translate(($circle-size / 2) - 16) scale(1) rotate($rot * -1deg);
+      }
+
+      $rot: $rot + $angle;
+    }
+  }
+}
+
+.circles-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  .outer {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    position: relative;
+
+    &.circle-creator-button .inner {
+      background: mat-color($background, 'hover');
+
+      fa-icon,
+      .helper-text {
+        transition-timing-function: $mat-fast-out-slow-in-timing-function;
+        transition-duration: $mat-elevation-transition-duration / 2;
+        transition-property: opacity, transform;
+      }
+
+      fa-icon {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      .helper-text {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+
+      &:hover .helper-text,
+      fa-icon,
+      &.drag-started .helper-text {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      &:hover fa-icon,
+      .helper-text,
+      &.drag-started fa-icon {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+
+    .inner {
+      border-radius: 50%;
+      width: 80%;
+      height: 80%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition-property: width, height, border, box-shadow;
+      position: relative;
+      cursor: pointer;
+
+      &:hover,
+      &.hovered {
+        width: 100%;
+        height: 100%;
+
+        .content {
+          background: mat-color($background, 'hover', 0.08);
+
+          span {
+            opacity: 0;
+          }
+        }
+
+        .circle-options {
+          opacity: 1;
+        }
+      }
+
+      .content,
+      .content span,
+      .circle-options,
+      & {
+        transition-timing-function: $mat-fast-out-slow-in-timing-function;
+        transition-duration: $mat-elevation-transition-duration / 2;
+      }
+
+      .content {
+        transition-property: background;
+        border-radius: 50%;
+        background: mat-color($background, 'hover');
+
+        span {
+          transition-property: opacity;
+        }
+
+
+        &:active {
+          background: mat-color($background, 'hover', 0.12);
+        }
+      }
+
+      &.selected .content {
+        background: mat-color($gonevis-primary, default, .24);
+        color: mat-color($gonevis-primary, default);
+      }
+
+
+      &.member-exists {
+        box-shadow: 0 0 0 2px black;
+      }
+
+      .members {
+        @include on-circle($item-count: 8, $circle-size: 200px, $item-size: 40px);
+
+        .circle-member {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
+      }
+
+      .circle-options {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition-property: opacity;
+        border-radius: 50px;
+      }
+    }
+  }
+
+  .added-information {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: $success;
+    color: #fff;
+    font-size: 22px;
+  }
+}
+
+.drag-preview {
+  position: absolute;
+  background: mat-color($gonevis-primary);
+  color: white;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.circles-help {
+  flex-basis: 48px;
+  flex-shrink: 0;
+  display: flex;
+  color: rgba(0, 0, 0, 0.54);
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #e0e0e0;
+}
+
+.dragging-selected {
+  opacity: 0.5;
 }

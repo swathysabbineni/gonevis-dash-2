@@ -134,11 +134,14 @@ export class UserProfileComponent implements OnInit {
     // API call
     this.userService.updateProfile(payload).subscribe((data: UserSettingsPatch): void => {
       // Update local user data with the new changes from back-end
-      for (const key in data) {
+      Object.keys(data).forEach((key: string): void => {
+        if (this.user.hasOwnProperty(key)) {
+          this.user[key] = data[key];
+        }
         if (this.userAuth.hasOwnProperty(key)) {
           this.userAuth[key] = data[key];
         }
-      }
+      });
       UserService.user = this.userAuth;
       this.loading = false;
     }, (error: HttpErrorResponseApi): void => {
