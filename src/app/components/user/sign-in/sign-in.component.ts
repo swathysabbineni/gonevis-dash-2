@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
@@ -31,7 +32,8 @@ export class SignInComponent implements OnInit {
   showPassword: boolean;
 
   constructor(private formBuilder: FormBuilder,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private analytics: AngularFireAnalytics) {
   }
 
   ngOnInit(): void {
@@ -57,9 +59,11 @@ export class SignInComponent implements OnInit {
     // API call
     this.authService.signIn(this.f.username.value, this.f.password.value).subscribe((): void => {
       this.loading = false;
+      this.analytics.logEvent('login_success');
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
       this.loading = false;
+      this.analytics.logEvent('login_failure');
     });
   }
 }

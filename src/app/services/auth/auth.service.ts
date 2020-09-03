@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { FirebaseApp } from '@angular/fire';
 import { Router } from '@angular/router';
 import { AuthResponse } from '@app/interfaces/auth-response';
 import { AuthToken } from '@app/interfaces/auth-token';
@@ -59,6 +60,7 @@ export class AuthService {
   static preventInvalidAuthenticationModal: boolean;
 
   constructor(private http: HttpClient,
+              private firebaseApp: FirebaseApp,
               private toast: ToastrService,
               private translate: TranslateService,
               private router: Router,
@@ -134,6 +136,14 @@ export class AuthService {
     redirect: string[] = AuthService.REDIRECT_SIGN_OUT,
     noApi?: boolean,
   ): Promise<void> {
+    // Enable Firebase Performance and Analytics.
+    if (this.firebaseApp.performance()) {
+      this.firebaseApp.performance().dataCollectionEnabled = true;
+      this.firebaseApp.performance().instrumentationEnabled = true;
+    }
+    if (this.firebaseApp.analytics()) {
+      this.firebaseApp.analytics().setAnalyticsCollectionEnabled(true);
+    }
     UserService.user = null;
     localStorage.clear();
     // Show toast if needed.
@@ -180,6 +190,14 @@ export class AuthService {
       `${this.api.base.v1}account/login/`, { username, password },
     ).pipe(
       map((data: AuthResponse): string => {
+        // Enable Firebase Performance and Analytics.
+        if (this.firebaseApp.performance()) {
+          this.firebaseApp.performance().dataCollectionEnabled = data.user.privacy.fb_perf_web;
+          this.firebaseApp.performance().instrumentationEnabled = data.user.privacy.fb_perf_web;
+        }
+        if (this.firebaseApp.analytics()) {
+          this.firebaseApp.analytics().setAnalyticsCollectionEnabled(data.user.privacy.fb_ga_web);
+        }
         // Store user into localstorage
         UserService.user = data.user;
         BlogService.blogs = data.user.sites;

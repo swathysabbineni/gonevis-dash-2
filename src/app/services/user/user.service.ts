@@ -87,7 +87,7 @@ export class UserService {
     return this.http.post<void>(`${this.apiService.base.v1}account/password-reset/`, { password }, {
       headers: {
         Authorization: `JWT ${token}`,
-      }
+      },
     });
   }
 
@@ -110,6 +110,7 @@ export class UserService {
             has_verified_email: data.has_verified_email,
             id: data.id,
             is_active: data.is_active,
+            privacy: data.privacy,
             media: data.media,
             name: data.name,
             receive_email_notification: data.receive_email_notification,
