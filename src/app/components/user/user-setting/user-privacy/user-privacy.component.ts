@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseApp } from '@angular/fire';
 import { FormBuilder } from '@angular/forms';
 import { ReactiveFormData } from '@app/interfaces/reactive-form-data';
 import { UserSettings } from '@app/interfaces/user-settings';
 import { UserSettingsPatch } from '@app/interfaces/user-settings-patch';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
+import { FirebaseService } from '@app/services/firebase/firebase.service';
 import { UserService } from '@app/services/user/user.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class UserPrivacyComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private userService: UserService,
-              private firebaseApp: FirebaseApp) {
+              private firebaseService: FirebaseService) {
   }
 
   ngOnInit() {
@@ -49,16 +49,15 @@ export class UserPrivacyComponent implements OnInit {
     this.form.loading = true;
     // API call
     this.userService.updateProfile({
-      privacy: this.form.form.value
+      privacy: this.form.form.value,
     }).subscribe((data: UserSettingsPatch): void => {
       const userAuth = UserService.user;
       // Update local user data with the new changes from back-end
       userAuth.privacy.fb_ga_web = data.privacy.fb_ga_web;
       userAuth.privacy.fb_perf_web = data.privacy.fb_perf_web;
       // Enable or disable Firebase Performance and Analytics based on updated privacy.
-      this.firebaseApp.performance().dataCollectionEnabled = data.privacy.fb_perf_web;
-      this.firebaseApp.performance().instrumentationEnabled = data.privacy.fb_perf_web;
-      this.firebaseApp.analytics().setAnalyticsCollectionEnabled(data.privacy.fb_ga_web);
+      this.firebaseService.enablePerformance(data.privacy.fb_perf_web);
+      this.firebaseService.enableAnalytics(data.privacy.fb_ga_web);
       UserService.user = userAuth;
       this.form.loading = false;
     }, (error: HttpErrorResponseApi): void => {
