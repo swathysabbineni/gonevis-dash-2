@@ -51,7 +51,7 @@ let enableFirebaseAnalytics: boolean;
 if (environment.name === 'e2e') {
   enableFirebasePerformance = false;
   enableFirebaseAnalytics = false;
-} else if (UserService.user) {
+} else if (UserService.user && UserService.user.privacy) {
   enableFirebasePerformance = UserService.user.privacy.fb_perf_web;
   enableFirebaseAnalytics = UserService.user.privacy.fb_ga_web;
 } else {

@@ -9,7 +9,7 @@ import * as Sentry from '@sentry/browser';
 @Injectable({
   providedIn: 'root',
 })
-export class SentryErrorHandler implements ErrorHandler {
+export class SentryErrorHandler extends ErrorHandler {
 
   static readonly IS_ENABLED = !environment.development;
 
@@ -28,13 +28,19 @@ export class SentryErrorHandler implements ErrorHandler {
         return event;
       },
     });
+    super();
   }
 
   /**
    * Captures an exception event and sends it to Sentry
    */
   handleError(error: any | HttpErrorResponseApi): void {
+    const chunkFailedMessage = /Loading chunk firebase-analytics failed/;
+
+    if (chunkFailedMessage.test(error)) {
+      return;
+    }
     Sentry.captureException(error.originalError || error);
-    throw error;
+    super.handleError(error);
   }
 }
