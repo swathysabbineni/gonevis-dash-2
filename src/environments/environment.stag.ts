@@ -11,4 +11,14 @@ export const environment: Environment = {
   googleAnalytics: '',
   sentry: 'https://b8e92571fb7741a0a6bcae8d6338fc42@sentry.io/1886804',
   cookieDomain: '.gonevis.local',
+  firebase: {
+    apiKey: 'AIzaSyCBRZfnZkP7-nzjSamfvh-Acz1W2LihdFc',
+    authDomain: 'gonevis-com.firebaseapp.com',
+    databaseURL: 'https://gonevis-com.firebaseio.com',
+    projectId: 'gonevis-com',
+    storageBucket: 'gonevis-com.appspot.com',
+    messagingSenderId: '366990068291',
+    appId: '1:366990068291:web:98656b908b17c946da22f6',
+    measurementId: 'G-BF3B1399GS',
+  },
 };

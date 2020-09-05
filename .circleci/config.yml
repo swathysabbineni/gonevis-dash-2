@@ -20,7 +20,6 @@ jobs:
           name: install-npm-wee
           command: |
             npm install
-            ./node_modules/.bin/ngcc --properties es2015 browser module main --async false
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:

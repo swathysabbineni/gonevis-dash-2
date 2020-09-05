@@ -1,0 +1,27 @@
+<!-- Profile -->
+<form [formGroup]="form.form" (ngSubmit)="update()" class="card shadow-lg mx-auto mb-5 mt-5 mt-md-0">
+  <div class="card-body p-lg-5">
+    <!-- Title -->
+    <h4 class="text-center text-uppercase mb-5" translate>PRIVACY</h4>
+    <!-- Firebase Google Analytics -->
+    <div class="form-group">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" formControlName="fb_ga_web" class="custom-control-input" id="fb_ga_web">
+        <label class="custom-control-label h5" for="fb_ga_web" translate>FIREBASE_GOOGLE_ANALYTICS</label>
+        <p class="mat-hint mt-2" [innerHTML]="'FIREBASE_GOOGLE_ANALYTICS_DESCRIPTION' | translate"></p>
+      </div>
+    </div>
+    <!-- Firebase Performance Monitoring -->
+    <div class="form-group">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" formControlName="fb_perf_web" class="custom-control-input" id="fb_perf_web">
+        <label class="custom-control-label h5" for="fb_perf_web" translate>FIREBASE_PERFORMANCE_MONITORING</label>
+        <p class="mat-hint mt-2" translate>FIREBASE_PERFORMANCE_MONITORING_DESCRIPTION</p>
+      </div>
+    </div>
+  </div>
+  <!-- Submit -->
+  <div class="card-body bg-light small px-lg-5">
+    <button class="btn btn-primary float-right" [disabled]="form.loading" translate>SAVE_CHANGES</button>
+  </div>
+</form>

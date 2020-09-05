@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "gonevis-staging": {
+      "hosting": {
+        "gonevis": [
+          "gonevis-staging"
+        ]
+      }
+    }
+  }
+}

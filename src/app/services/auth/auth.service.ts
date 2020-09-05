@@ -3,9 +3,11 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthResponse } from '@app/interfaces/auth-response';
 import { AuthToken } from '@app/interfaces/auth-token';
+import { UserSettings } from '@app/interfaces/user-settings';
 import { RegisterWithBlogResponse } from '@app/interfaces/v1/register-with-blog-response';
 import { ApiService } from '@app/services/api/api.service';
 import { BlogService } from '@app/services/blog/blog.service';
+import { FirebaseService } from '@app/services/firebase/firebase.service';
 import { UserService } from '@app/services/user/user.service';
 import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,7 +23,7 @@ export class AuthService {
   /**
    * Storage version to use to force user to sign in again (should only be increased)
    */
-  static readonly STORAGE_VERSION = 9;
+  static readonly STORAGE_VERSION = 10;
 
   /**
    * Storage key for storage version
@@ -59,6 +61,7 @@ export class AuthService {
   static preventInvalidAuthenticationModal: boolean;
 
   constructor(private http: HttpClient,
+              private firebaseService: FirebaseService,
               private toast: ToastrService,
               private translate: TranslateService,
               private router: Router,
@@ -72,10 +75,12 @@ export class AuthService {
        * Refresh user if authentication version is old
        */
       if (AuthService.STORAGE_VERSION !== Number(localStorage.getItem(AuthService.STORAGE_VERSION_KEY))) {
-        this.userService.getUser().subscribe((): void => {
+        this.userService.getUser().subscribe((data: UserSettings): void => {
           // Store storage version
           localStorage.setItem(AuthService.STORAGE_VERSION_KEY, AuthService.STORAGE_VERSION.toString());
           AuthService.preventInvalidAuthenticationModal = false;
+          this.firebaseService.enablePerformance(data.privacy.fb_perf_web);
+          this.firebaseService.enableAnalytics(data.privacy.fb_ga_web);
         });
       }
       /**
@@ -83,6 +88,21 @@ export class AuthService {
        */
       UserService.user = JSON.parse(localStorage.getItem('user'));
       BlogService.blogs = JSON.parse(localStorage.getItem('user')).sites;
+      if (UserService.user.privacy) {
+        this.firebaseService.enablePerformance(UserService.user.privacy.fb_perf_web);
+        this.firebaseService.enableAnalytics(UserService.user.privacy.fb_ga_web);
+      }
+    } else {
+      if (this.firebaseService.checkPerformanceInLocal() !== null) {
+        this.firebaseService.enablePerformance(this.firebaseService.checkPerformanceInLocal());
+      } else {
+        this.firebaseService.enablePerformance(true);
+      }
+      if (this.firebaseService.checkAnalyticsInLocal() !== null) {
+        this.firebaseService.enableAnalytics(this.firebaseService.checkAnalyticsInLocal());
+      } else {
+        this.firebaseService.enableAnalytics(true);
+      }
     }
   }
 
@@ -135,7 +155,9 @@ export class AuthService {
     noApi?: boolean,
   ): Promise<void> {
     UserService.user = null;
-    localStorage.clear();
+    localStorage.removeItem('user');
+    localStorage.removeItem('sidebar');
+    localStorage.removeItem(AuthService.STORAGE_TOKEN_KEY);
     // Show toast if needed.
     if (toast) {
       this.toast.info(this.translate.instant('TOAST_SIGN_OUT'));
@@ -180,6 +202,9 @@ export class AuthService {
       `${this.api.base.v1}account/login/`, { username, password },
     ).pipe(
       map((data: AuthResponse): string => {
+        // Enable Firebase Performance Monitoring and Analytics.
+        this.firebaseService.enablePerformance(data.user.privacy.fb_perf_web);
+        this.firebaseService.enableAnalytics(data.user.privacy.fb_ga_web);
         // Store user into localstorage
         UserService.user = data.user;
         BlogService.blogs = data.user.sites;

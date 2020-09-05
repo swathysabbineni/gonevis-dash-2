@@ -13,6 +13,12 @@ export interface UserSettingsPatch {
   media?: Media;
   name?: string;
   receive_email_notification?: boolean;
+  privacy?: {
+    fb_ga_mobile: boolean;
+    fb_ga_web: boolean;
+    fb_perf_mobile: boolean;
+    fb_perf_web: boolean;
+  };
   tour?: UserTour;
   picture?: FormData | null;
 }

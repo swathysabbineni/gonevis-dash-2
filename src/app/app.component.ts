@@ -133,7 +133,8 @@ export class AppComponent implements OnInit {
               private toastrService: ToastrService) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+
     /**
      * Set the default language
      */

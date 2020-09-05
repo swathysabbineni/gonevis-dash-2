@@ -217,6 +217,10 @@
             "devServerTarget": "gonevis:serve:e2e",
             "port": 4201
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     }
