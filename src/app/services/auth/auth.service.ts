@@ -79,8 +79,8 @@ export class AuthService {
           // Store storage version
           localStorage.setItem(AuthService.STORAGE_VERSION_KEY, AuthService.STORAGE_VERSION.toString());
           AuthService.preventInvalidAuthenticationModal = false;
-          this.firebaseService.enablePerformance(data.privacy.fb_perf_web, true);
-          this.firebaseService.enableAnalytics(data.privacy.fb_ga_web, true);
+          this.firebaseService.enablePerformance(data.privacy.fb_perf_web);
+          this.firebaseService.enableAnalytics(data.privacy.fb_ga_web);
         });
       }
       /**
@@ -89,19 +89,19 @@ export class AuthService {
       UserService.user = JSON.parse(localStorage.getItem('user'));
       BlogService.blogs = JSON.parse(localStorage.getItem('user')).sites;
       if (UserService.user.privacy) {
-        this.firebaseService.enablePerformance(UserService.user.privacy.fb_perf_web, true);
-        this.firebaseService.enableAnalytics(UserService.user.privacy.fb_ga_web, true);
+        this.firebaseService.enablePerformance(UserService.user.privacy.fb_perf_web);
+        this.firebaseService.enableAnalytics(UserService.user.privacy.fb_ga_web);
       }
     } else {
-      if (this.firebaseService.localPerformance() !== null) {
-        this.firebaseService.enablePerformance(this.firebaseService.localPerformance(), true);
+      if (this.firebaseService.checkPerformanceInLocal() !== null) {
+        this.firebaseService.enablePerformance(this.firebaseService.checkPerformanceInLocal());
       } else {
-        this.firebaseService.enablePerformance(true, true);
+        this.firebaseService.enablePerformance(true);
       }
-      if (this.firebaseService.localAnalytics() !== null) {
-        this.firebaseService.enableAnalytics(this.firebaseService.localAnalytics(), true);
+      if (this.firebaseService.checkAnalyticsInLocal() !== null) {
+        this.firebaseService.enableAnalytics(this.firebaseService.checkAnalyticsInLocal());
       } else {
-        this.firebaseService.enableAnalytics(true, true);
+        this.firebaseService.enableAnalytics(true);
       }
     }
   }
@@ -154,19 +154,10 @@ export class AuthService {
     redirect: string[] = AuthService.REDIRECT_SIGN_OUT,
     noApi?: boolean,
   ): Promise<void> {
-    let firebasePerformance: boolean | null;
-    let firebaseAnalytics: boolean | null;
-    if (UserService.user !== null && UserService.user.privacy) {
-      firebasePerformance = UserService.user.privacy.fb_perf_web;
-      firebaseAnalytics = UserService.user.privacy.fb_ga_web;
-    } else {
-      firebasePerformance = this.firebaseService.localPerformance();
-      firebaseAnalytics = this.firebaseService.localAnalytics();
-    }
     UserService.user = null;
-    localStorage.clear();
-    this.firebaseService.enablePerformance(firebasePerformance !== null ? firebasePerformance : true, true);
-    this.firebaseService.enableAnalytics(firebaseAnalytics !== null ? firebaseAnalytics : true, true);
+    localStorage.removeItem('user');
+    localStorage.removeItem('sidebar');
+    localStorage.removeItem(AuthService.STORAGE_TOKEN_KEY);
     // Show toast if needed.
     if (toast) {
       this.toast.info(this.translate.instant('TOAST_SIGN_OUT'));
@@ -211,9 +202,9 @@ export class AuthService {
       `${this.api.base.v1}account/login/`, { username, password },
     ).pipe(
       map((data: AuthResponse): string => {
-        // Enable Firebase Performance and Analytics.
-        this.firebaseService.enablePerformance(data.user.privacy.fb_perf_web, true);
-        this.firebaseService.enableAnalytics(data.user.privacy.fb_ga_web, true);
+        // Enable Firebase Performance Monitoring and Analytics.
+        this.firebaseService.enablePerformance(data.user.privacy.fb_perf_web);
+        this.firebaseService.enableAnalytics(data.user.privacy.fb_ga_web);
         // Store user into localstorage
         UserService.user = data.user;
         BlogService.blogs = data.user.sites;

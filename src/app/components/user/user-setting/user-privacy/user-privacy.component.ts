@@ -24,7 +24,7 @@ export class UserPrivacyComponent implements OnInit {
               private firebaseService: FirebaseService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Setup privacy form.
     this.form.form = this.formBuilder.group({
       fb_ga_web: [false],
@@ -55,7 +55,7 @@ export class UserPrivacyComponent implements OnInit {
       // Update local user data with the new changes from back-end
       userAuth.privacy.fb_ga_web = data.privacy.fb_ga_web;
       userAuth.privacy.fb_perf_web = data.privacy.fb_perf_web;
-      // Enable or disable Firebase Performance and Analytics based on updated privacy.
+      // Enable or disable Firebase Performance Monitoring and Analytics based on updated privacy.
       this.firebaseService.enablePerformance(data.privacy.fb_perf_web);
       this.firebaseService.enableAnalytics(data.privacy.fb_ga_web);
       UserService.user = userAuth;

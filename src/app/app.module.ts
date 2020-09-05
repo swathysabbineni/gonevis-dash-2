@@ -42,12 +42,12 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
 }
 
-// Enables Firebase Performance.
+// Enables Firebase Performance Monitoring.
 let enableFirebasePerformance: boolean;
 // Enables Firebase Analytics.
 let enableFirebaseAnalytics: boolean;
-// Enable or disable Firebase Performance and Analytics based on user's privacy data.
-// Disable Firebase Performance and Analytics if environment is for testing E2E.
+// Enable or disable Firebase Performance Monitoring and Analytics based on the user's privacy data.
+// Disable Firebase Performance Monitoring and Analytics if environment is for testing E2E.
 if (environment.name === 'e2e') {
   enableFirebasePerformance = false;
   enableFirebaseAnalytics = false;
@@ -58,7 +58,6 @@ if (environment.name === 'e2e') {
   enableFirebasePerformance = true;
   enableFirebaseAnalytics = true;
 }
-console.log(enableFirebaseAnalytics, enableFirebasePerformance);
 
 @NgModule({
   declarations: [

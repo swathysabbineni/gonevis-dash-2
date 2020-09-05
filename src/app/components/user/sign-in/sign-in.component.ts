@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
+import { AngularFirePerformance } from '@angular/fire/performance';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiError } from '@app/interfaces/api-error';
 import { HttpErrorResponseApi } from '@app/models/http-error-response-api';
@@ -7,6 +8,7 @@ import { AuthService } from '@app/services/auth/auth.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
+import Trace = firebase.performance.Trace;
 
 @Component({
   selector: 'app-sign-in',
@@ -33,7 +35,8 @@ export class SignInComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
-              private analytics: AngularFireAnalytics) {
+              private analytics: AngularFireAnalytics,
+              private performance: AngularFirePerformance) {
   }
 
   ngOnInit(): void {
@@ -54,15 +57,20 @@ export class SignInComponent implements OnInit {
   /**
    * Sign user in
    */
-  submit(): void {
+  async submit(): Promise<void> {
+    const trace: Trace = await this.performance.trace('login');
+    trace.start();
+
     this.loading = true;
-    // API call
     this.authService.signIn(this.f.username.value, this.f.password.value).subscribe((): void => {
       this.loading = false;
+
+      trace.stop();
       this.analytics.logEvent('login_success');
     }, (error: HttpErrorResponseApi): void => {
       this.error = error.error;
       this.loading = false;
+      trace.stop();
       this.analytics.logEvent('login_failure');
     });
   }
