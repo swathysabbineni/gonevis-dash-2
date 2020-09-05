@@ -57,7 +57,7 @@ let enableFirebasePerformance: boolean;
 let enableFirebaseAnalytics: boolean;
 // Enable or disable Firebase Performance Monitoring and Analytics based on the user's privacy data.
 // Disable Firebase Performance Monitoring and Analytics if environment is for testing E2E.
-if (environment.name === 'e2e') {
+if (environment.development) {
   enableFirebasePerformance = false;
   enableFirebaseAnalytics = false;
 } else if (UserService.user && UserService.user.privacy) {
