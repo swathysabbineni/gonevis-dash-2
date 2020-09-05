@@ -1,7 +1,12 @@
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireAnalyticsModule, ScreenTrackingService, COLLECTION_ENABLED } from '@angular/fire/analytics';
+import {
+  AngularFireAnalyticsModule,
+  ScreenTrackingService,
+  COLLECTION_ENABLED,
+  APP_VERSION, APP_NAME,
+} from '@angular/fire/analytics';
 import {
   AngularFirePerformanceModule,
   PerformanceMonitoringService,
@@ -30,6 +35,10 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
+console.log(`Release ${environment.version.RELEASE_DATE}`);
+console.log(`ENV ${environment.name}`);
+console.log(`https://github.com/SavandBros/gonevis-dash-2/commit/${environment.version.CIRCLE_SHA1}`);
 
 /**
  * Loads translations from given prefix.
@@ -95,6 +104,8 @@ if (environment.name === 'e2e') {
     AngularFirePerformanceModule,
   ],
   providers: [
+    { provide: APP_VERSION, useValue: environment.version.RELEASE_DATE },
+    { provide: APP_NAME, useValue: `web-${environment.name}` },
     { provide: COLLECTION_ENABLED, useValue: enableFirebaseAnalytics },
     { provide: DATA_COLLECTION_ENABLED, useValue: enableFirebasePerformance },
     { provide: INSTRUMENTATION_ENABLED, useValue: enableFirebasePerformance },

@@ -1,6 +1,8 @@
 import { Environment } from '@app/interfaces/environment';
+import { VERSION } from 'src/environments/version';
 
 export const environment: Environment = {
+  version: VERSION,
   name: 'production',
   development: true,
   api: {

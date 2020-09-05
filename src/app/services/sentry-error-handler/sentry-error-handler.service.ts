@@ -18,6 +18,7 @@ export class SentryErrorHandler extends ErrorHandler {
       dsn: environment.sentry,
       environment: environment.name,
       enabled: SentryErrorHandler.IS_ENABLED,
+      release: environment.version.RELEASE_DATE,
       beforeSend(event: Sentry.Event): Sentry.Event {
         try {
           if (event.extra.__serialized__.preventSentryCapture) {
