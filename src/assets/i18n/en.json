@@ -497,5 +497,7 @@
   "FIREBASE_GOOGLE_ANALYTICS_DESCRIPTION": "Helps us to analyze your interaction with GoNevis, with such data we'll be able to know where GoNevis should be better and simpler or what functionality is being used to most so we can spend more time to make it better. Please visit our <a class='text-primary' href='https://www.gonevis.com/privacy-policy/' target='_blank'>Privacy Policy</a> page to know more about our Privacy Policy.",
   "FIREBASE_PERFORMANCE_MONITORING": "Firebase Performance Monitoring",
   "FIREBASE_PERFORMANCE_MONITORING_DESCRIPTION": "Allows us to measure the performance of GoNevis Dashboard and helps us to optimize and tweak every single aspect of your experience, without this we'll have much less chance of properly be aware of how GoNevis behaves in your browser.",
+  "INVALID_FORMAT": "Invalid format",
+  "EMPTY_FIELD_ERROR": "This field may not be blank",
   "COLLABORATING": "Collaborating"
 }
