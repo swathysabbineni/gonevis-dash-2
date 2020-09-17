@@ -64,7 +64,6 @@ export class SignInComponent implements OnInit {
     this.loading = true;
     this.authService.signIn(this.f.username.value, this.f.password.value).subscribe((): void => {
       this.loading = false;
-
       trace.stop();
       this.analytics.logEvent('login_success');
     }, (error: HttpErrorResponseApi): void => {

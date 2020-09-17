@@ -1,4 +1,7 @@
+import { AppVersion } from '@app/interfaces/app-version';
+
 export interface Environment {
+  version: AppVersion;
   name: 'production' | 'staging' | 'local' | 'e2e';
   development: boolean;
   api: {
