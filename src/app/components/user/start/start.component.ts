@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BlogPlanName } from '@app/enums/blog-plan-name';
 import { TeamRoles } from '@app/enums/team-roles';
@@ -17,8 +17,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-start',
@@ -26,6 +25,11 @@ import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
   styleUrls: ['./start.component.scss'],
 })
 export class StartComponent implements OnInit {
+
+  /**
+   * Regex for domain text.
+   */
+  private static readonly domainRegex: RegExp = new RegExp('^[a-zA-Z0-9\\-]+$');
 
   readonly arrowRight: IconDefinition = faArrowRight;
   readonly envelope: IconDefinition = faEnvelope;
@@ -38,9 +42,9 @@ export class StartComponent implements OnInit {
   step: 'address' | 'theme' | 'register' = 'address';
 
   /**
-   * Domain check form
+   * Domain check control.
    */
-  domainCheckForm: FormGroup;
+  domainControl: FormControl;
 
   /**
    * Register form
@@ -63,11 +67,6 @@ export class StartComponent implements OnInit {
   error: ApiError = {};
 
   /**
-   * Used for debounce (delayed API call on input)
-   */
-  domainChanged: Subject<string> = new Subject<string>();
-
-  /**
    * Templates to pick
    */
   templates: Template[];
@@ -83,12 +82,54 @@ export class StartComponent implements OnInit {
               public authService: AuthService) {
   }
 
+  /**
+   * Validate domain name.
+   *
+   * @param control FormControl to validate.
+   */
+  private static ValidateDomain(control: AbstractControl): { [key: string]: any; } | null {
+    /**
+     * Raise require error.
+     */
+    if ((control.value || '').trim().length === 0) {
+      return { required: true };
+    }
+    /**
+     * Raise format error.
+     */
+    if (StartComponent.domainRegex.test(control.value.trim())) {
+      return null;
+    } else {
+      return { invalidFormat: true };
+    }
+  }
+
   ngOnInit(): void {
     /**
-     * Setup domain check form
+     * Setup domain check control.
      */
-    this.domainCheckForm = this.formBuilder.group({
-      domain: [null, Validators.required],
+    this.domainControl = new FormControl('', [Validators.required, StartComponent.ValidateDomain]);
+    /**
+     * Listen to domain query changes and conditionally check domain name.
+     */
+    this.domainControl.valueChanges
+      .pipe(
+        /**
+         * Allow checking domain only if domain control is valid.
+         */
+        filter((): boolean => {
+          if (this.domainControl.valid) {
+            this.loading = true;
+            return true;
+          }
+          return false;
+        }),
+        /**
+         * Wait 500ms before checking domain.
+         */
+        debounceTime(500),
+      ).subscribe((): void => {
+      this.checkDomain();
     });
     /**
      * Setup register
@@ -96,12 +137,6 @@ export class StartComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.required],
-    });
-    /**
-     * Domain change watch
-     */
-    this.domainChanged.pipe(debounceTime(500), distinctUntilChanged()).subscribe((): void => {
-      this.checkDomain();
     });
     /**
      * Get templates
@@ -116,7 +151,7 @@ export class StartComponent implements OnInit {
    */
   checkDomain(): void {
     this.loading = true;
-    this.blogService.domainCheck(this.domainCheckForm.get('domain').value).subscribe((): void => {
+    this.blogService.domainCheck(this.domainControl.value).subscribe((): void => {
       this.loading = false;
       this.error = {};
     }, error => {
@@ -133,8 +168,8 @@ export class StartComponent implements OnInit {
     this.authService.signUpWithBlog(
       this.registerForm.get('email').value,
       this.registerForm.get('password').value,
-      this.domainCheckForm.get('domain').value,
-      this.domainCheckForm.get('domain').value,
+      this.domainControl.value,
+      this.domainControl.value,
       this.templateSelected.id,
     ).subscribe(() => {
     }, error => {
@@ -166,8 +201,8 @@ export class StartComponent implements OnInit {
   createBlog(): void {
     this.loading = true;
     this.blogService.create(
-      this.domainCheckForm.get('domain').value,
-      this.domainCheckForm.get('domain').value,
+      this.domainControl.value,
+      this.domainControl.value,
     ).subscribe((data: BlogCreate): void => {
       this.loading = false;
       const user: UserAuth = UserService.user;

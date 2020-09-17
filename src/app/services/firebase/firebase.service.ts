@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseApp } from '@angular/fire';
+import { environment } from '@environments/environment';
+
 /** Loading them here because AngularFire imports them dynamically and will be removed in Tree Shaking time. */
 import 'firebase/performance';
 import 'firebase/analytics';
@@ -41,6 +43,10 @@ export class FirebaseService {
    */
   enablePerformance(value: boolean): void {
     localStorage.setItem('fb_perf_web', String(value));
+    // Use Firebase Performance Monitoring only in Production and Staging.
+    if (environment.development) {
+      return;
+    }
     this.firebaseApp.performance().instrumentationEnabled = value;
     this.firebaseApp.performance().dataCollectionEnabled = value;
   }
@@ -52,6 +58,10 @@ export class FirebaseService {
    */
   enableAnalytics(value: boolean): void {
     localStorage.setItem('fb_ga_web', String(value));
+    // Use Firebase Analytics only in Production and Staging.
+    if (environment.development) {
+      return;
+    }
     this.firebaseApp.analytics().setAnalyticsCollectionEnabled(value);
   }
 }

@@ -7,18 +7,26 @@
     <h2 class="text-center font-weight-bold" translate>LETS_CREATE_YOUR_BLOG</h2>
 
     <!-- Content -->
-    <form class="row justify-content-center" [formGroup]="domainCheckForm">
+    <div class="row justify-content-center">
       <div class="col-lg-6">
 
         <!-- Input -->
         <div class="form-group my-5">
           <div class="input-group">
-            <input type="text" class="form-control py-4" formControlName="domain"
-                   [class.is-invalid]="error.domain && loading === false"
-                   [class.is-valid]="!error.domain && loading === false"
-                   (ngModelChange)="domainChanged.next($event)"
+            <input type="text" class="form-control py-4" [formControl]="domainControl"
+                   [class.is-invalid]="(error.domain || domainControl.invalid) && !loading && domainControl.dirty"
+                   [class.is-valid]="(!error.domain && !domainControl.invalid) && !loading && domainControl.dirty"
                    [placeholder]="'ENTER_BLOG_ADDRESS' | translate">
-            <div class="invalid-tooltip">{{ error.domain }}</div>
+            <!-- Errors -->
+            <div class="invalid-tooltip">
+              <!-- Invalid -->
+              <span *ngIf="domainControl.hasError('invalidFormat')" translate>INVALID_FORMAT</span>
+              <!-- Required -->
+              <span *ngIf="domainControl.hasError('required')" translate>EMPTY_FIELD_ERROR</span>
+              <!-- API error -->
+              <span *ngIf="domainControl.valid">{{ error.domain }}</span>
+            </div>
+            <!-- Success -->
             <div class="valid-tooltip" translate>DOMAIN_IS_AVAILABLE</div>
             <div class="input-group-append">
               <span class="input-group-text text-monospace">.gonevis.com</span>
@@ -29,13 +37,13 @@
         <!-- Continue button -->
         <div class="text-center">
           <button class="btn btn-primary" (click)="step = 'theme'" type="button"
-                  [disabled]="loading !== false || error.domain || domainCheckForm.get('domain').invalid">
+                  [disabled]="loading !== false || error.domain || domainControl.invalid">
             <span class="mr-2" translate>PICK_A_THEME</span>
             <fa-icon [fixedWidth]="true" [icon]="arrowRight"></fa-icon>
           </button>
         </div>
       </div>
-    </form>
+    </div>
   </div>
 
   <!-- Step: Theme -->

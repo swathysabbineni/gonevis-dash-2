@@ -6,16 +6,17 @@
     "serve": "ng serve",
     "serve-stag": "ng serve -c stag",
     "serve-prod": "ng serve -c prod",
-    "build": "ng build",
-    "build-staging": "ng build -c staging",
-    "build-production": "ng build -c production",
+    "build": "npm run versionify && ng build",
+    "build-staging": "npm run versionify && ng build -c staging",
+    "build-production": "npm run versionify && ng build -c production",
     "test": "ng test",
     "test-headless": "ng test --no-watch --no-progress --browsers=ChromeHeadless",
     "test-ci": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
     "lint": "ng lint",
-    "e2e": "ng e2e",
+    "e2e": "npm run versionify && ng e2e",
     "postinstall": "ngcc --tsconfig tsconfig.app.json --properties es2015 browser module main --async false",
-    "changelog": "node scripts/changelog.js"
+    "changelog": "node scripts/changelog.js",
+    "versionify": "node scripts/versionify.js"
   },
   "private": true,
   "dependencies": {

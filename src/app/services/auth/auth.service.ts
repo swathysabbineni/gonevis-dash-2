@@ -21,16 +21,6 @@ import { map } from 'rxjs/operators';
 export class AuthService {
 
   /**
-   * Storage version to use to force user to sign in again (should only be increased)
-   */
-  static readonly STORAGE_VERSION = 10;
-
-  /**
-   * Storage key for storage version
-   */
-  static readonly STORAGE_VERSION_KEY = 'version';
-
-  /**
    * Sign in redirect path
    */
   static readonly REDIRECT_SIGN_IN = ['dash'];
@@ -74,15 +64,11 @@ export class AuthService {
       /**
        * Refresh user if authentication version is old
        */
-      if (AuthService.STORAGE_VERSION !== Number(localStorage.getItem(AuthService.STORAGE_VERSION_KEY))) {
-        this.userService.getUser().subscribe((data: UserSettings): void => {
-          // Store storage version
-          localStorage.setItem(AuthService.STORAGE_VERSION_KEY, AuthService.STORAGE_VERSION.toString());
-          AuthService.preventInvalidAuthenticationModal = false;
-          this.firebaseService.enablePerformance(data.privacy.fb_perf_web);
-          this.firebaseService.enableAnalytics(data.privacy.fb_ga_web);
-        });
-      }
+      this.userService.getUser().subscribe((data: UserSettings): void => {
+        AuthService.preventInvalidAuthenticationModal = false;
+        this.firebaseService.enablePerformance(data.privacy.fb_perf_web);
+        this.firebaseService.enableAnalytics(data.privacy.fb_ga_web);
+      });
       /**
        * Update authenticated user and blog data
        */
@@ -212,8 +198,6 @@ export class AuthService {
         if (environment.development) {
           AuthService.token = data.token;
         }
-        // Store storage version
-        localStorage.setItem(AuthService.STORAGE_VERSION_KEY, AuthService.STORAGE_VERSION.toString());
         // Show toast
         if (showToast) {
           this.toast.info(this.translate.instant('TOAST_SIGN_IN'), data.user.name);
